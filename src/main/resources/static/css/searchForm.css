@@ -1,0 +1,108 @@
+#searchFormContainer {
+    background-color: #181818;
+    border-radius: 30px;
+    box-shadow: 0 0 40px darkgoldenrod;
+    border: 0px dashed darkgoldenrod;
+    width: 1500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
+    /* height: auto; */ /* Remove fixed height */
+    /* max-height: 100%; */ /* Remove max height */
+    /* flex-grow: 1; */ /* Remove flex grow */
+
+    /* Dodaj zmianę box shadow po najechaniu myszką */
+    transition: box-shadow 0s ease-in-out;
+}
+
+/* Efekt po najechaniu myszką */
+#searchFormContainer:hover {
+    box-shadow: 0 0 20px moccasin;
+}
+
+#results {
+    width: 100%;
+    margin: 50px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 100%
+
+}
+
+/*.fade-effect {*/
+/*    position: relative;*/
+/*}*/
+
+/*.fade-effect::before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);*/
+/*    pointer-events: none;*/
+/*}*/
+
+/*.row {*/
+/*    flex-basis: 25%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-bottom: 10px;*/
+/*    max-width: 100%;*/
+/*}*/
+
+/*!* Style for labelColumn (40% width within a row) *!*/
+/*.label-column {*/
+/*    flex-basis: 40%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-right: 10px;*/
+/*    max-width: 100%;*/
+/*}*/
+
+/*!* Style for label elements *!*/
+/*label {*/
+/*    width: 100%;*/
+/*    text-align: center;*/
+/*    max-width: 100%;*/
+/*}*/
+
+/*!* Style for inputColumn (60% width within a row) *!*/
+/*.input-column {*/
+/*    flex-basis: 60%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    max-width: 100%;*/
+/*}*/
+
+/*!* Style for input and select elements *!*/
+/*input, select {*/
+/*    width: 100%;*/
+/*    padding: 5px;*/
+/*    box-sizing: border-box;*/
+/*    box-shadow: 0 0 10px moccasin;*/
+/*    border: darkgoldenrod;*/
+/*    background-color: darkgrey;*/
+/*    max-width: 100%;*/
+/*}*/
+
+/*!* Media query for smaller screen widths (adjust as needed) *!*/
+/*@media screen and (max-width: 768px) {*/
+/*    .row {*/
+/*        flex-basis: 50%; !* 2 columns per row *!*/
+/*    }*/
+/*}*/
+
+/*!* Media query for even smaller screen widths (adjust as needed) *!*/
+/*@media screen and (max-width: 480px) {*/
+/*    .row {*/
+/*        flex-basis: 100%; !* 1 column per row *!*/
+/*    }*/
+/*}*/
