@@ -1,0 +1,31 @@
+spring:
+  datasource:
+#    url: jdbc:postgresql://serwer2379308.home.pl/37515270_motobudzet69
+#    username: 37515270_motobudzet69
+#    password: jamajskiHolender69
+    hikari:
+      max-lifetime: 600000
+    url: jdbc:postgresql://localhost:5432/motobudzet
+    username: postgres
+    password: dontgotosql
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 25MB
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        generate_statistics: false
+        show_sql: false
+        hbm2ddl:
+          auto: none
+  banner:
+    location: classpath:banner.txt
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+server:
+  port: 20134

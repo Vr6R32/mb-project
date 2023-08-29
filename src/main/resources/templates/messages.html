@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <title>Moto-Budżet</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/searchForm.css}" />
+    <script type="text/javascript" th:src="@{/js/navBarMainContainerLogo.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/searchForm.js}" ></script>
+</head>
+
+<body>
+<header>
+    <div class="looogo">
+    <a href="/">
+        <img alt="Logo" id="logo" src="">
+    </a>
+    </div>
+    <div class="nav-buttons">
+        <a href="/advertisement/new">Sprzedaj</a>
+        <a href="/messages">Wiadomosci</a>
+        <a href="/account"><span id="principalName" th:text="${principalName}"></span></a>
+        <a href="/logout" th:if="${logout != null}">
+            <span id="logout" th:text="${logout}"></span>
+        </a>
+    </div>
+</header>
+<div class="container-main" id="container-main">
+    <div id="title-container-hidden"></div>
+    <div id="searchFormContainer"></div>
+    <div id="results"></div>
+</div>
+<script>
+    // let nameContent = $("#name").text();
+    let spanElement = document.getElementById("name");
+    let nameContent = spanElement.textContent;
+    console.log(nameContent);
+</script>
+</body>
+</html>
