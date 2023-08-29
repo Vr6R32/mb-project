@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <title>Moto-Budżet</title>
+
+  <meta charset="utf-8">
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+<!--  <meta name="description" content="">-->
+<!--  <meta name="author" content="">-->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
+  <script type="text/javascript" th:src="@{/js/navBarMainContainerLogo.js}" ></script>
+</head>
+<body>
+<header>
+  <div class="looogo">
+    <a href="/">
+      <img alt="Logo" id="logo" src="">
+    </a>
+  </div>
+  <div class="nav-buttons">
+    <a href="/advertisement/new">Sprzedaj</a>
+    <a href="/messages">Wiadomosci</a>
+    <a href="/account"><span id="principalName" th:text="${principalName}"></span></a>
+    <a href="/logout" th:if="${logout != null}">
+      <span id="logout" th:text="${logout}"></span>
+    </a>
+  </div>
+</header>
+<div class="container-main" id="container-main">
+    <div id="registerFormContainer"></div>
+</div>
+<style>
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  /* Stylowanie nagłówka */
+  .form-signin-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: darkgoldenrod;
+  }
+
+  /* Stylowanie formularza */
+  .form-signin {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #181818;
+    border-radius: 5px;
+  }
+
+  /* Stylowanie etykiet i pól tekstowych */
+  .form-signin label {
+    display: block;
+    margin-bottom: 10px;
+    color: darkgoldenrod;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  #registerFormContainer {
+    background-color: #181818;
+    border-radius: 30px;
+    box-shadow: 0 0 40px darkgoldenrod;
+    border: 0px dashed darkgoldenrod;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
+    /* height: auto; */ /* Remove fixed height */
+    /* max-height: 100%; */ /* Remove max height */
+    /* flex-grow: 1;*/
+
+    /* Dodaj zmianę box shadow po najechaniu myszką */
+    transition: box-shadow 0s ease-in-out;
+  }
+
+  #registerFormContainer:hover {
+    box-shadow: 0 0 20px moccasin;
+  }
+
+</style>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+        createLoginForm();
+  });
+
+  const formContainer = document.getElementById("registerFormContainer");
+
+  const createRegisterForm = () => {
+
+    formContainer.innerHTML = '';
+
+
+    const submitForm = () => {
+      const formData = {
+        userName: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+        email: document.getElementById("email").value
+      };
+
+      fetch("/api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
+              .then(response => {
+                return response.text(); // Pobieramy treść ciała odpowiedzi jako tekst
+              })
+              .then(responseText => {
+                if (responseText) {
+                  const responseDiv = document.getElementById("response-message");
+                  responseDiv.textContent = responseText; // Wyświetlamy treść ciała odpowiedzi na stronie
+                  responseDiv.style.display = "block"; // Pokazujemy element div z odpowiedzią
+                }
+              })
+              .catch(error => {
+                console.error("An error occurred:", error);
+              });
+    };
+
+
+    formContainer.style.boxShadow = "0px 0px 30px darkgoldenrod";
+    formContainer.style.width = "400px";
+    formContainer.style.height = "500px";
+    formContainer.style.borderRadius = "30px";
+    formContainer.style.border = "0px dashed moccasin";
+
+
+    const form = document.createElement("form");
+    form.className = "form-signin";
+    form.style.animation = "fade-in 1s ease-in-out forwards";
+
+    const heading = document.createElement("h2");
+    heading.className = "form-signin-heading";
+    heading.textContent = "Please register in";
+
+    const usernameLabel = document.createElement("label");
+    usernameLabel.htmlFor = "username";
+    usernameLabel.className = "sr-only";
+    usernameLabel.textContent = "Username";
+
+    const usernameInput = document.createElement("input");
+    usernameInput.type = "text";
+    usernameInput.id = "username";
+    usernameInput.name = "username";
+    usernameInput.className = "form-control";
+    usernameInput.placeholder = "Username";
+    usernameInput.required = true;
+    usernameInput.autofocus = true;
+
+    const passwordLabel = document.createElement("label");
+    passwordLabel.htmlFor = "password";
+    passwordLabel.className = "sr-only";
+    passwordLabel.textContent = "Password";
+
+    const passwordInput = document.createElement("input");
+    passwordInput.type = "password";
+    passwordInput.id = "password";
+    passwordInput.name = "password";
+    passwordInput.className = "form-control";
+    passwordInput.placeholder = "Password";
+    passwordInput.required = true;
+
+    const emailLabel = document.createElement("label");
+    emailLabel.htmlFor = "Email";
+    emailLabel.className = "sr-only";
+    emailLabel.textContent = "Email";
+
+    const emailInput = document.createElement("input");
+    emailInput.type = "text";
+    emailInput.id = "email";
+    emailInput.name = "email";
+    emailInput.className = "form-control";
+    emailInput.placeholder = "Email";
+    emailInput.required = true;
+
+    const submitButton = document.createElement("button");
+    submitButton.type = "button"; // Zmiana typu na "button"
+    submitButton.textContent = "Submit";
+    submitButton.style.backgroundColor = "darkgoldenrod";
+    submitButton.style.border = "none";
+    submitButton.style.color = "black";
+    submitButton.style.padding = "10px 20px";
+    submitButton.style.borderRadius = "5px";
+    submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
+    submitButton.style.transition = "background-position 0.3s ease-in-out";
+
+    submitButton.addEventListener("mouseover", function () {
+      submitButton.style.boxShadow = '0 0 20px moccasin';
+      submitButton.style.color = "white";
+    });
+
+    // Przywrócenie efektu fade po opuszczeniu przycisku
+    submitButton.addEventListener("mouseout", function () {
+      submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
+      submitButton.style.color = "black";
+    });
+
+    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+
+    submitButton.addEventListener("click", submitForm); // Wywołaj funkcję submitForm po kliknięciu
+
+    const loginLink = document.createElement("p");
+    loginLink.textContent = "Masz już konto ? Zaloguj się!";
+    loginLink.style.textAlign = "center";
+    loginLink.style.cursor = "pointer";
+    loginLink.style.marginTop = "20px";
+    loginLink.style.color = "darkgoldenrod";
+
+    loginLink.addEventListener("mouseover", function () {
+      loginLink.style.textShadow = '0 0 20px darkgoldenrod';
+      loginLink.style.color = "moccasin";
+    });
+
+    // Przywrócenie efektu fade po opuszczeniu przycisku
+    loginLink.addEventListener("mouseout", function () {
+      loginLink.style.color = "darkgoldenrod";
+    });
+
+    loginLink.addEventListener("click", createLoginForm);
+
+    // Dodaj elementy do formularza
+    form.appendChild(heading);
+    form.appendChild(usernameLabel);
+    form.appendChild(usernameInput);
+    form.appendChild(passwordLabel);
+    form.appendChild(passwordInput);
+    form.appendChild(emailLabel);
+    form.appendChild(emailInput);
+    form.appendChild(submitButton);
+    form.appendChild(loginLink);
+
+    // Dodaj formularz do kontenera
+    formContainer.appendChild(form);
+  };
+
+
+  const createLoginForm = () => {
+
+    formContainer.innerHTML = '';
+
+    formContainer.style.boxShadow = "0px 0px 30px darkgoldenrod";
+    formContainer.style.width = "400px";
+    formContainer.style.height = "500px";
+    formContainer.style.borderRadius = "30px";
+    formContainer.style.border = "0px dashed moccasin";
+    formContainer.style.animation = "fade-in 1s ease-in-out forwards";
+
+    const form = document.createElement("form");
+    form.className = "form-signin";
+    form.method = "post";
+    form.action = "/login";
+    form.style.animation = "fade-in 1s ease-in-out forwards";
+
+    const heading = document.createElement("h2");
+    heading.className = "form-signin-heading";
+    heading.textContent = "Please sign in";
+
+    const usernameLabel = document.createElement("label");
+    usernameLabel.htmlFor = "username";
+    usernameLabel.className = "sr-only";
+    usernameLabel.textContent = "Username";
+
+    const usernameInput = document.createElement("input");
+    usernameInput.type = "text";
+    usernameInput.id = "username";
+    usernameInput.name = "username";
+    usernameInput.className = "form-control";
+    usernameInput.placeholder = "Username";
+    usernameInput.required = true;
+    usernameInput.autofocus = true;
+
+    const passwordLabel = document.createElement("label");
+    passwordLabel.htmlFor = "password";
+    passwordLabel.className = "sr-only";
+    passwordLabel.textContent = "Password";
+
+    const passwordInput = document.createElement("input");
+    passwordInput.type = "password";
+    passwordInput.id = "password";
+    passwordInput.name = "password";
+    passwordInput.className = "form-control";
+    passwordInput.placeholder = "Password";
+    passwordInput.required = true;
+
+    const rememberCheckbox = document.createElement("input");
+    rememberCheckbox.type = "checkbox";
+    rememberCheckbox.name = "remember-me";
+
+    const rememberLabel = document.createElement("label");
+    rememberLabel.textContent = "Remember me on this computer.";
+
+    const submitButton = document.createElement("button");
+    submitButton.type = "submit";
+    submitButton.textContent = "Submit";
+    submitButton.style.backgroundColor = "darkgoldenrod";
+    submitButton.style.border = "none";
+    submitButton.style.color = "black";
+    submitButton.style.padding = "10px 20px";
+    submitButton.style.borderRadius = "5px";
+    submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
+    submitButton.style.transition = "background-position 0.3s ease-in-out";
+
+    submitButton.addEventListener("mouseover", function () {
+      submitButton.style.boxShadow = '0 0 20px moccasin';
+      submitButton.style.color = "white";
+    });
+
+    // Przywrócenie efektu fade po opuszczeniu przycisku
+    submitButton.addEventListener("mouseout", function () {
+      submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
+      submitButton.style.color = "black";
+    });
+
+    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+
+    const registerLink = document.createElement("p");
+    registerLink.textContent = "Nie masz jeszcze konta? Zarejestruj się!";
+    registerLink.style.textAlign = "center";
+    registerLink.style.cursor = "pointer";
+    registerLink.style.marginTop = "20px";
+    registerLink.style.color = "darkgoldenrod";
+
+    registerLink.addEventListener("mouseover", function () {
+      registerLink.style.textShadow = '0 0 20px darkgoldenrod';
+      registerLink.style.color = "moccasin";
+    });
+
+    // Przywrócenie efektu fade po opuszczeniu przycisku
+    registerLink.addEventListener("mouseout", function () {
+      registerLink.style.color = "darkgoldenrod";
+    });
+
+    registerLink.addEventListener("click", createRegisterForm);
+
+    form.appendChild(heading);
+    form.appendChild(usernameLabel);
+    form.appendChild(usernameInput);
+    form.appendChild(passwordLabel);
+    form.appendChild(passwordInput);
+    form.appendChild(rememberCheckbox);
+    form.appendChild(rememberLabel);
+    form.appendChild(submitButton);
+    form.appendChild(registerLink);
+
+    formContainer.appendChild(form);
+
+  }
+
+</script>
+</body>
+</html>

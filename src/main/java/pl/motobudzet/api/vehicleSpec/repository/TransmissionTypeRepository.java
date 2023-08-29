@@ -11,11 +11,11 @@ import java.util.Optional;
 @Repository
 public interface TransmissionTypeRepository extends JpaRepository<TransmissionType,Long> {
 
-    @Cacheable("transmission_type_cache_by_name")
+    @Cacheable("transmission_type_cache")
     @Query("select t from TransmissionType t where t.name = ?1")
     Optional<TransmissionType> findByNejm(String transmissionTypeName);
 
-    @Cacheable(value = "transmission_type_cache_by_id")
+    @Cacheable(value = "transmission_type_cache")
     @Query("select t from TransmissionType t where t.id = ?1")
     Optional<TransmissionType> findByAjdi(Long transmissionTypeId);
 

@@ -13,7 +13,7 @@
     max-width: 100%;
     /* height: auto; */ /* Remove fixed height */
     /* max-height: 100%; */ /* Remove max height */
-    /* flex-grow: 1; */ /* Remove flex grow */
+    /* flex-grow: 1;*/
 
     /* Dodaj zmianę box shadow po najechaniu myszką */
     transition: box-shadow 0s ease-in-out;
@@ -31,8 +31,40 @@
     flex-wrap: wrap;
     justify-content: center;
     box-sizing: border-box;
-    max-width: 100%
+    max-width: 100%;
+    opacity: 0; /* Set initial opacity to 0 */
+    animation: fade-in 1s ease-in-out forwards; /* Apply the fade-in animation */
+}
 
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#results2 {
+    width: 100%;
+    margin: 50px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 100%
+}
+
+.info-result-container {
+    display: flex;
+    align-items: center;
+    border: 2px;
+    color: darkgoldenrod;
+    margin-right: 100px; /* Odstęp między kontenerami */
+}
+
+.info-result-container:last-child {
+    margin-right: 0; /* Usuń odstęp dla ostatniego kontenera */
 }
 
 /*.fade-effect {*/
