@@ -1,6 +1,7 @@
 let selectedFiles = []; // Store the selected files references in an array
-
 document.addEventListener('DOMContentLoaded', function () {
+
+
     createForm();
     fetchBrands();
     fetchSpecifications();
@@ -12,6 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
     });
 });
+
+function getUserName(){
+    let userName = document.getElementById('principalName');
+    console.log('Principal Name2:', userName.textContent);
+    return userName.textContent;
+}
 
 function loadFileDrop(){
     const fileDropArea = document.getElementById('fileDropArea');
@@ -213,6 +220,7 @@ function submitForm() {
         engineHorsePower: getValue('engineHorsePower'),
         productionDate: getValue('productionDate'),
         firstRegistrationDate: getValue('firstRegistrationDate'),
+        userName: getUserName()
     };
 
     return fetch('/api/advertisements', {

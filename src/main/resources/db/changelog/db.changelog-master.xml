@@ -11,9 +11,12 @@
     <include file="/db/changelog/changelog-005-insertFuelTypes.xml"/>
     <include file="/db/changelog/changelog-006-insertTransmissionTypes.xml"/>
     <include file="/db/changelog/changelog-007-insertModels.xml"/>
-    <include file="/db/changelog/changelog-008-insertBrandModelRelationship.xml"/>
+    <include file="/db/changelog/changelog-007-userSecurity.xml"/>
+    <include file="/db/changelog/changelog-008-app_user_advertisements_relation.xml"/>
     <include file="/db/changelog/changelog-009-insertAdvertisements.xml"/>
-    <include file="/db/changelog/changelog-010-insertAdvertisementsImages.xml"/>
-    <include file="/db/changelog/changelog-011-userSecurity.xml"/>
+    <include file="/db/changelog/changelog-010-insertBrandModelRelationship.xml"/>
+    <include file="/db/changelog/changelog-011-insertAdvertisementsImages.xml"/>
+    <include file="/db/changelog/changelog-012-insertUserAdvertisementRelation.xml"/>
+
 
 </databaseChangeLog>
