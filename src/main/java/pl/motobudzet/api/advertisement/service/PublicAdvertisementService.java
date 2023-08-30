@@ -38,30 +38,22 @@ public class PublicAdvertisementService {
 
 
     public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
-        return advertisementRepository.findOneByIdWithFetch(uuid).map(this::mapAdvertisementDTO)
+        return advertisementRepository.findOneByIdWithFetch(uuid)
+                .map(advertisement -> mapToAdvertisementDTO(advertisement,true))
                         .orElseThrow(() -> new RuntimeException("id doesn't exist!"));
     }
 
-    public Page<AdvertisementDTO> getAllVerifiedLastUploaded(Integer pageNumber,Integer pageSize) {
+    public Page<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
         int page = getPage(pageNumber);
 
-
-        return advertisementRepository.findAllToVerifyWithoutRelations(PageRequest.of(page,pageSize, LAST_UPLOADED_SORT_PARAMS))
-                .map(this::mapAdvertisementDTO);
-    }
-
-    public Page<AdvertisementDTO> getAllVerifiedWithoutRelations(Integer pageNumber) {
-        int page = getPage(pageNumber);
-
-        return advertisementRepository.findAllVerifiedWithoutRelations(PageRequest.of(page,PAGE_SIZE))
-                .map(this::mapAdvertisementDTO);
+        return advertisementRepository.findAllVerified(PageRequest.of(page,pageSize, LAST_UPLOADED_SORT_PARAMS))
+                .map(advertisement -> mapToAdvertisementDTO(advertisement,false));
     }
 
 //    @CachePut(cacheNames = "advertisements_filter_cache")
     @CacheEvict(cacheNames = "advertisements_filter_cache")
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request) {
 
-        System.out.println(request);
         AppUser user = userCustomService.getByName(request.getUserName());
 
 
@@ -85,7 +77,6 @@ public class PublicAdvertisementService {
                 .user(user)
                 .isVerified(false)
                 .build();
-
 
 
         insertAdvertisementIntoUser(advertisement, user);
@@ -122,9 +113,8 @@ public class PublicAdvertisementService {
         return "advertisement edited!";
     }
 
-    public AdvertisementDTO mapAdvertisementDTO(Advertisement adv){
-        return AdvertisementDTO.builder()
-
+    public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeUserAndUrls) {
+        AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
                 .name(adv.getName())
                 .description(adv.getDescription())
@@ -142,12 +132,42 @@ public class PublicAdvertisementService {
                 .productionDate(adv.getProductionDate())
                 .creationTime(LocalDateTime.now())
                 .isVerified(false)
-                .urlList(adv.getImageUrls())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
-                .user(adv.getUser().getUsername())
-
                 .build();
+
+        if (includeUserAndUrls) {
+                builder.setUser(adv.getUser().getUsername());
+                builder.setUrlList(adv.getImageUrls());
+        }
+
+        return builder;
     }
+
+//    public AdvertisementDTO mapWithRelationsToAdvertisementDTO(Advertisement adv){
+//        return AdvertisementDTO.builder()
+//
+//                .id(adv.getId().toString())
+//                .name(adv.getName())
+//                .description(adv.getDescription())
+//                .model(modelService.getModel(adv.getModel().getId()))
+//                .brand(brandService.getBrand(adv.getBrand().getId()))
+//                .fuelType(specificationService.getFuelType(adv.getFuelType().getId()))
+//                .driveType(specificationService.getDriveType(adv.getDriveType().getId()))
+//                .engineType(specificationService.getEngineType(adv.getEngineType().getId()))
+//                .transmissionType(specificationService.getTransmissionType(adv.getTransmissionType().getId()))
+//                .mileage(adv.getMileage())
+//                .price(adv.getPrice())
+//                .engineCapacity(adv.getEngineCapacity())
+//                .engineHorsePower(adv.getEngineHorsePower())
+//                .firstRegistrationDate(adv.getFirstRegistrationDate())
+//                .productionDate(adv.getProductionDate())
+//                .creationTime(LocalDateTime.now())
+//                .isVerified(false)
+//                .urlList(adv.getImageUrls())
+//                .mainPhotoUrl(adv.getMainPhotoUrl())
+//                .user(adv.getUser().getUsername())
+//                .build();
+//    }
 
     public Advertisement getAdvertisement(String advertisementId) {
         return advertisementRepository.findById(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));

@@ -22,13 +22,8 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/last-uploaded")
-    public Page<AdvertisementDTO> getAllVerifiedLastUploaded(@RequestParam(required = false) Integer pageNumber,@RequestParam(required = false,defaultValue = "3") Integer pageSize) {
-        return publicAdvertisementService.getAllVerifiedLastUploaded(pageNumber,pageSize);
-    }
-
-    @GetMapping("/get-all-verified")
-    public Page<AdvertisementDTO> getAllVerifiedWithoutRelations(@RequestParam(required = false) Integer pageNumber) {
-        return publicAdvertisementService.getAllVerifiedWithoutRelations(pageNumber);
+    public Page<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false,defaultValue = "3") Integer pageSize) {
+        return publicAdvertisementService.findLastUploaded(pageNumber,pageSize);
     }
 
     @GetMapping("/{id}")

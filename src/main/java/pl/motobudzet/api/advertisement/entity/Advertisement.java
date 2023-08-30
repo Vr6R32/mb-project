@@ -56,7 +56,7 @@ public class Advertisement {
     private Brand brand;
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     private Model model;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JsonBackReference
     private AppUser user;
     @ElementCollection(fetch = FetchType.LAZY)
