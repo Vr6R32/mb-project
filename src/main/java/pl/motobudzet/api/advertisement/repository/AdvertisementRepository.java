@@ -1,6 +1,5 @@
 package pl.motobudzet.api.advertisement.repository;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,16 +17,17 @@ import java.util.UUID;
 public interface AdvertisementRepository extends JpaRepository<Advertisement, UUID>, JpaSpecificationExecutor<Advertisement> {
 
     @Query("SELECT a FROM Advertisement a where a.isVerified = true")
-    Page<Advertisement> findAllVerifiedWithoutRelations(Pageable pageable);
+    Page<Advertisement> findAllVerified(Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a where a.isVerified = false")
-    Page<Advertisement> findAllToVerifyWithoutRelations(Pageable pageable);
+//    @Query("SELECT a FROM Advertisement a LEFT JOIN FETCH a.user LEFT JOIN FETCH a.imageUrls where a.isVerified = false")
+    Page<Advertisement> findAllToVerify(Pageable pageable);
 
     @Modifying
     @Query(value = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES (?1, ?2)", nativeQuery = true)
     int insertNewPhoto(UUID id, String name);
 
-    @Cacheable("advertisements_filter_cache")
+
     Page<Advertisement> findAll(Specification spec, Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a " +
@@ -37,6 +37,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.driveType d " +
             "LEFT JOIN FETCH a.engineType e " +
             "LEFT JOIN FETCH a.fuelType f " +
+            "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.transmissionType t WHERE a.id = :uuid")
     Optional<Advertisement> findOneByIdWithFetch(UUID uuid);
 

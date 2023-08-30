@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/favicon.ico").permitAll()
                                 .requestMatchers("/api/spec/**").permitAll()
+                                .requestMatchers("/api/models/**").permitAll()
                                 .requestMatchers("/api/brands/**").permitAll()
                                 .requestMatchers("/api/resources/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api/user").permitAll()

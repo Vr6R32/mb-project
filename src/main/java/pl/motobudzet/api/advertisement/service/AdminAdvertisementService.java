@@ -22,8 +22,8 @@ public class AdminAdvertisementService {
     }
 
     public Page<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
-        return advertisementRepository.findAllToVerifyWithoutRelations(PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE))
-                .map(publicAdvertisementService::mapAdvertisementDTO);
+        return advertisementRepository.findAllToVerify(PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE))
+                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement,false));
     }
 
     public String verifyAndEnableAdvertisement(String id) {

@@ -45,5 +45,6 @@ public class AdvertisementCreateRequest {
     @NotNull(message = "First registration date cannot be empty!")
     @Past(message = "First registration date has to be a date before today date!")
     private LocalDate firstRegistrationDate;
+    private String userName;
 
 }
