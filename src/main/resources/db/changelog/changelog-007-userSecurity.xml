@@ -58,4 +58,32 @@
                                  referencedTableName="app_user" referencedColumnNames="id"
                                  constraintName="fk_user_id"/>
     </changeSet>
+
+    <changeSet id="5" author="michal-k">
+        <sql>
+            INSERT INTO app_user (id, user_name, password, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
+            VALUES
+                (1, 'admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ker@hitman.pl', true, true, true, true),
+                (2, 'user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ke2@hitman.pl', true, true, true, true);
+        </sql>
+    </changeSet>
+
+    <changeSet id="6" author="michal-k">
+        <sql>
+            INSERT INTO roles (id, name)
+            VALUES
+                (1, 'ROLE_ADMIN'),
+                (2, 'ROLE_USER');
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="michal-k">
+        <sql>
+            INSERT INTO user_role_mapping (role_id, user_id)
+            VALUES
+                (1, 1),
+                (2, 2);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

@@ -163,7 +163,8 @@ public class AdvertisementFilteringService {
         }
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort)).map(publicAdvertisementService::mapAdvertisementDTO);
+        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
+                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement,false));
     }
 }
 

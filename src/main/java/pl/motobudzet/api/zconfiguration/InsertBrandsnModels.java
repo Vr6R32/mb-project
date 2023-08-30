@@ -2,16 +2,8 @@ package pl.motobudzet.api.zconfiguration;
 
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.client.RestTemplate;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user.entity.AppUser;
@@ -77,14 +69,14 @@ public class InsertBrandsnModels {
                 .roles(List.of(Role.builder().name("ROLE_USER").build()))
                 .build();
 
-        userRepository.save(admin);
-        userRepository.save(user);
+            userRepository.save(admin);
+            userRepository.save(user);
+
+//        fillBrandDB(admin,user);
     }
 
 
-
-
-    public void fillBrandDB(){
+    public void fillBrandDB(AppUser admin,AppUser user){
 
         EngineType silnikRzedowy = EngineType.builder().name("Rzedowy").build();
         EngineType silnikWidlasty = EngineType.builder().name("Widlasty").build();
@@ -101,7 +93,7 @@ public class InsertBrandsnModels {
 
         TransmissionType manual = TransmissionType.builder().name("Manual").build();
         TransmissionType automat = TransmissionType.builder().name("Automat").build();
-//
+
         transmissionTypeRepository.saveAll(List.of(manual, automat));
         engineTypeRepository.saveAll(List.of(silnikRzedowy, silnikWidlasty, silnikWankla));
         fuelTypeRepository.saveAll(List.of(benzyna, lpg, diesel, elektryczny));
@@ -159,6 +151,7 @@ public class InsertBrandsnModels {
                 .productionDate(2016L)
                 .creationTime(LocalDateTime.now().minusDays(2).minusHours(3))
                 .imageUrls(List.of("rs3.png","rs3-2.jpg"))
+                .user(admin)
                 .build();
         Advertisement ad2 = Advertisement.builder()
                 .name("Audi RS6 500HP SUPERCHARGED")
@@ -178,6 +171,7 @@ public class InsertBrandsnModels {
                 .productionDate(2015L)
                 .creationTime(LocalDateTime.now().minusDays(1).minusHours(4))
                 .imageUrls(List.of("rs6.jpg","rs6-2.jpg"))
+                .user(admin)
                 .build();
         Advertisement ad3 = Advertisement.builder()
                 .name("RSQ8 MANHART ")
@@ -197,6 +191,7 @@ public class InsertBrandsnModels {
                 .productionDate(2022L)
                 .creationTime(LocalDateTime.now().minusDays(5).minusHours(10))
                 .imageUrls(List.of("rsq8.jpg","rsq8-2.jpg"))
+                .user(admin)
                 .build();
         Advertisement ad4 = Advertisement.builder()
                 .name("MERCEDES C63 AMG OKAZJA KOZAK IGLA")
@@ -216,6 +211,7 @@ public class InsertBrandsnModels {
                 .productionDate(2012L)
                 .creationTime(LocalDateTime.now().minusDays(12).minusHours(30))
                 .imageUrls(List.of("c63.jpg","c63-2.jpg"))
+                .user(user)
                 .build();
         Advertisement ad5 = Advertisement.builder()
                 .name("MERCEDES GKLASA")
@@ -235,6 +231,7 @@ public class InsertBrandsnModels {
                 .productionDate(2007L)
                 .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("gklasa.jpg","gklasa-2.jpg"))
+                .user(user)
                 .build();
 
         Advertisement ad6 = Advertisement.builder()
@@ -255,10 +252,17 @@ public class InsertBrandsnModels {
                 .productionDate(2005L)
                 .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("rx8.jpg","rx8-2.jpg"))
+                .user(user)
                 .build();
 
 
-        advertisementRepository.saveAll(List.of(ad1,ad2,ad3,ad4,ad5,ad6));
+        admin.setAdvertisements(List.of(ad1,ad2,ad3));
+        user.setAdvertisements(List.of(ad4,ad5,ad6));
+
+        userRepository.save(admin);
+        userRepository.save(user);
+
+
 
     }
 

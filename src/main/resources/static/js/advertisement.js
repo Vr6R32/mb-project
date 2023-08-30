@@ -41,7 +41,7 @@ fetch('/api/advertisements/' + advertisementId)
         fadeEffect.classList.add('fade-effect-big');
 
         const mainPhoto = document.createElement('img');
-        mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.imageUrls[0];
+        mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[0];
         mainPhoto.alt = 'MainUrlPhoto';
         mainPhoto.id = 'mainUrlPhoto';
 
@@ -118,6 +118,7 @@ fetch('/api/advertisements/' + advertisementId)
 
         const fuelTypeValue = document.createElement('span');
         fuelTypeValue.textContent = advertisement.fuelType.name
+        fuelTypeValue.textContent = advertisement.fuelType.name
         fuelTypeInfo.appendChild(fuelTypeIcon);
         fuelTypeInfo.appendChild(fuelTypeValue);
 
@@ -134,7 +135,7 @@ fetch('/api/advertisements/' + advertisementId)
         let currentPhotoIndex = 0;
 
         const changePhoto = (index) => {
-            mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.imageUrls[index];
+            mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[index];
             mainPhoto.alt = 'MainUrlPhoto';
         };
 
@@ -142,13 +143,13 @@ fetch('/api/advertisements/' + advertisementId)
             if (currentPhotoIndex > 0) {
                 currentPhotoIndex--;
             } else {
-                currentPhotoIndex = advertisement.imageUrls.length - 1;
+                currentPhotoIndex = advertisement.urlList.length - 1;
             }
             changePhoto(currentPhotoIndex);
         };
 
         const nextPhoto = (advertisement) => {
-            if (currentPhotoIndex < advertisement.imageUrls.length - 1) {
+            if (currentPhotoIndex < advertisement.urlList.length - 1) {
                 currentPhotoIndex++;
             } else {
                 currentPhotoIndex = 0;

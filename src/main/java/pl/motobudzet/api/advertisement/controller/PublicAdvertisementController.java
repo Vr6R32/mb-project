@@ -2,15 +2,11 @@ package pl.motobudzet.api.advertisement.controller;
 
 
 import jakarta.validation.Valid;
-import org.hibernate.annotations.Cache;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
 
 import java.util.UUID;
@@ -26,17 +22,12 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/last-uploaded")
-    public Page<AdvertisementDTO> getAllVerifiedLastUploaded(@RequestParam(required = false) Integer pageNumber,@RequestParam(required = false,defaultValue = "3") Integer pageSize) {
-        return publicAdvertisementService.getAllVerifiedLastUploaded(pageNumber,pageSize);
-    }
-
-    @GetMapping("/get-all-verified")
-    public Page<AdvertisementDTO> getAllVerifiedWithoutRelations(@RequestParam(required = false) Integer pageNumber) {
-        return publicAdvertisementService.getAllVerifiedWithoutRelations(pageNumber);
+    public Page<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false,defaultValue = "3") Integer pageSize) {
+        return publicAdvertisementService.findLastUploaded(pageNumber,pageSize);
     }
 
     @GetMapping("/{id}")
-    public Advertisement getByIdWithFetch(@PathVariable UUID id) {
+    public AdvertisementDTO getByIdWithFetch(@PathVariable UUID id) {
         return publicAdvertisementService.findOneByIdWithFetch(id);
     }
 
