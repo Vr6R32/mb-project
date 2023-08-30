@@ -11,12 +11,15 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.user.entity.AppUser;
+import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -30,11 +33,12 @@ public class PublicAdvertisementService {
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
+    private final AppUserCustomService userCustomService;
 
 
 
-    public Advertisement findOneByIdWithFetch(UUID uuid) {
-        return advertisementRepository.findOneByIdWithFetch(uuid)
+    public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
+        return advertisementRepository.findOneByIdWithFetch(uuid).map(this::mapAdvertisementDTO)
                         .orElseThrow(() -> new RuntimeException("id doesn't exist!"));
     }
 
@@ -57,6 +61,10 @@ public class PublicAdvertisementService {
     @CacheEvict(cacheNames = "advertisements_filter_cache")
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request) {
 
+        System.out.println(request);
+        AppUser user = userCustomService.getByName(request.getUserName());
+
+
         Advertisement advertisement = Advertisement.builder()
 
                 .name(request.getName())
@@ -74,14 +82,28 @@ public class PublicAdvertisementService {
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
                 .creationTime(LocalDateTime.now())
+                .user(user)
                 .isVerified(false)
                 .build();
 
 
+
+        insertAdvertisementIntoUser(advertisement, user);
+
         advertisementRepository.saveAndFlush(advertisement);
+
         String id = advertisement.getId().toString();
 
         return ResponseEntity.ok().header("advertisementId",id).body("inserted !");
+    }
+
+    private void insertAdvertisementIntoUser(Advertisement advertisement, AppUser user) {
+        if(user.getAdvertisements()==null){
+            user.setAdvertisements(List.of(advertisement));
+        } else {
+            List<Advertisement> advertisements = user.getAdvertisements();
+            advertisements.add(advertisement);
+        }
     }
 
     public String editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request) {
@@ -120,8 +142,10 @@ public class PublicAdvertisementService {
                 .productionDate(adv.getProductionDate())
                 .creationTime(LocalDateTime.now())
                 .isVerified(false)
-//                .urlList(adv.getImageUrls())
+                .urlList(adv.getImageUrls())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
+                .user(adv.getUser().getUsername())
+
                 .build();
     }
 

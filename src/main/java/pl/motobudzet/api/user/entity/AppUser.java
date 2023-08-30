@@ -1,11 +1,13 @@
 package pl.motobudzet.api.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.motobudzet.api.advertisement.entity.Advertisement;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +35,14 @@ public class AppUser implements UserDetails {
     Boolean accountNotLocked;
     Boolean accountNotExpired;
     Boolean credentialsNotExpired;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @JsonManagedReference
+    @JoinTable(
+            name = "app_user_advertisements",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id")
+    )
+    private List<Advertisement> advertisements;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_role_mapping",
@@ -106,4 +116,5 @@ public class AppUser implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
     }
+
 }

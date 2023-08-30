@@ -32,5 +32,6 @@ public class AdvertisementDTO {
     private LocalDateTime creationTime;
     private boolean isVerified;
     private List<String> urlList;
+    private String user;
 
 }

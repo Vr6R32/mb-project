@@ -2,15 +2,11 @@ package pl.motobudzet.api.advertisement.controller;
 
 
 import jakarta.validation.Valid;
-import org.hibernate.annotations.Cache;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
 
 import java.util.UUID;
@@ -36,7 +32,7 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/{id}")
-    public Advertisement getByIdWithFetch(@PathVariable UUID id) {
+    public AdvertisementDTO getByIdWithFetch(@PathVariable UUID id) {
         return publicAdvertisementService.findOneByIdWithFetch(id);
     }
 

@@ -1,8 +1,13 @@
 package pl.motobudzet.api.advertisement.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.entity.Brand;
 import pl.motobudzet.api.vehicleModel.entity.Model;
 import pl.motobudzet.api.vehicleSpec.entity.DriveType;
@@ -12,7 +17,6 @@ import pl.motobudzet.api.vehicleSpec.entity.TransmissionType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +24,6 @@ import java.util.UUID;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 @Table(name = "advertisement")
 public class Advertisement {
@@ -53,6 +56,9 @@ public class Advertisement {
     private Brand brand;
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     private Model model;
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
+    @JsonBackReference
+    private AppUser user;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
         name = "advertisement_images",

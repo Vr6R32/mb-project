@@ -25,6 +25,7 @@
             <column name="engine_type_id" value="1"/>
             <column name="fuel_type_id" value="3"/>
             <column name="transmission_type_id" value="2"/>
+            <column name="user_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -49,6 +50,7 @@
             <column name="engine_type_id" value="1"/>
             <column name="fuel_type_id" value="3"/>
             <column name="transmission_type_id" value="2"/>
+            <column name="user_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -73,6 +75,7 @@
             <column name="engine_type_id" value="2"/>
             <column name="fuel_type_id" value="2"/>
             <column name="transmission_type_id" value="2"/>
+            <column name="user_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -97,6 +100,7 @@
             <column name="engine_type_id" value="2"/>
             <column name="fuel_type_id" value="1"/>
             <column name="transmission_type_id" value="1"/>
+            <column name="user_id" value="2"/>
         </insert>
     </changeSet>
 
@@ -121,6 +125,7 @@
             <column name="engine_type_id" value="2"/>
             <column name="fuel_type_id" value="4"/>
             <column name="transmission_type_id" value="2"/>
+            <column name="user_id" value="2"/>
         </insert>
     </changeSet>
 
@@ -145,7 +150,10 @@
             <column name="engine_type_id" value="3"/>
             <column name="fuel_type_id" value="2"/>
             <column name="transmission_type_id" value="1"/>
+            <column name="user_id" value="2"/>
         </insert>
     </changeSet>
+
+
 
 </databaseChangeLog>
