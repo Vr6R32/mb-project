@@ -27,7 +27,7 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/{id}")
-    public AdvertisementDTO getByIdWithFetch(@PathVariable UUID id) {
+    public AdvertisementDTO findOneByIdWithFetch(@PathVariable UUID id) {
         return publicAdvertisementService.findOneByIdWithFetch(id);
     }
 
@@ -38,7 +38,7 @@ public class PublicAdvertisementController {
 
     @PutMapping(value = "/{id}", consumes = "application/json")
     public String editExistingAdvertisement(@PathVariable String id,
-                                            @RequestBody AdvertisementCreateRequest request) {
+                                            @RequestBody @Valid AdvertisementCreateRequest request) {
         return publicAdvertisementService.editExistingAdvertisement(id, request);
     }
 

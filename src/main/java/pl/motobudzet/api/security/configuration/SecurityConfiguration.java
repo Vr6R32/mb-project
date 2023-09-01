@@ -94,7 +94,7 @@ public class SecurityConfiguration {
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID", "remember-me")
+                                .deleteCookies("JSESSIONID", "remember-me", "lastVisitedPage")
                                 .logoutSuccessUrl("/")
                 );
 
