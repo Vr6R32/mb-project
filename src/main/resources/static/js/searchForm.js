@@ -8,14 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const formContainer = document.getElementById("searchFormContainer");
 
 
-
-    // const title = document.createElement('h2');
-    // title.textContent = 'Wyszukaj Ogłoszenie';
-    //
-    // titleContainer.style.fontWeight = "bold"
-    // titleContainer.style.color = "darkgoldenrod";
-    // titleContainer.style.marginBottom = "20px";
-    // titleContainer.appendChild(title);
+// const title = document.createElement('h2');
+// title.textContent = 'Wyszukaj Ogłoszenie';
+//
+// titleContainer.style.fontWeight = "bold"
+// titleContainer.style.color = "darkgoldenrod";
+// titleContainer.style.marginBottom = "20px";
+// titleContainer.appendChild(title);
 
 
     const form = document.createElement("form");
@@ -27,9 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.style.maxWidth = "100%";
 
 
-
-
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", function (event) {
         event.preventDefault();
         // Get the form data
         formData = new FormData(event.target);
@@ -54,8 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-
-    // Funkcja do tworzenia wiersza z etykietą i elementem wyboru
+// Funkcja do tworzenia wiersza z etykietą i elementem wyboru
     function createRowWithInputElement(labelText, inputType, inputId, inputName, selectOptions = null) {
         const rowDiv = document.createElement("div");
         rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
@@ -115,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Tworzymy pola formularza - najpierw pola typu select, a następnie pola typu input
+// Tworzymy pola formularza - najpierw pola typu select, a następnie pola typu input
     const driveTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
     const engineTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
     const fuelTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
@@ -164,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
     searchButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
     form.appendChild(searchButton);
 
-    // Dodajemy formularz do kontenera
+// Dodajemy formularz do kontenera
     formContainer.appendChild(form);
     formContainer.style.display = "flex";
     formContainer.style.flexWrap = "wrap";
@@ -196,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Clear previous results and pagination
         resultsDiv.innerHTML = "";
-
 
 
         // Display each advertisement result
@@ -266,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 createInfoContainer('mileage', 'MileageIcon', ad.mileage),
                 createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
                 createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-                createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower+' HP'),
+                createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower + ' HP'),
             ];
 
             // Dodawanie kontenerów do infoContainerFirst
@@ -327,7 +322,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
 
-
         function createSortButton(sortBy) {
             const button = document.createElement("button");
             button.textContent = sortBy;
@@ -382,7 +376,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // adDiv.appendChild(adDetailsButton);
 
 
-
         // Display pagination links if there are multiple pages
         if (data.totalPages > 1) {
             const paginationDiv = document.createElement("div");
@@ -426,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Set the new page number in the formData
             formData.set("pageNumber", pageNumber);
 
-            if(sortOrder==null){
+            if (sortOrder == null) {
                 sortOrder = "asc";
                 sortBy = "price";
             }
@@ -440,6 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         return button;
     }
+
     function executeSearch(formData) {
         // Get the sorting options from the form data
         const sortBy = formData.get("sortBy");
@@ -526,7 +520,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const brandSelect = document.getElementById("brand");
             const modelSelect = document.getElementById("model");
 
-            brandSelect.addEventListener("change", function(event) {
+            brandSelect.addEventListener("change", function (event) {
                 const selectedBrand = event.target.value;
 
                 // Check if a brand is selected before making the model fetch

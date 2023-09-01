@@ -7,7 +7,133 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/searchForm.css}" />
     <script type="text/javascript" th:src="@{/js/navBarMainContainerLogo.js}" ></script>
-    <script type="text/javascript" th:src="@{/js/searchForm.js}" ></script>
+    <style>
+        .left-container {
+            width: 100%; /* Pełna szerokość */
+            max-width: 300px; /* Maksymalna szerokość */
+            min-height: 500px;
+            margin: 0 20px;
+            background-color: #181818;
+            border-radius: 30px;
+            box-shadow: 0 0 40px darkgoldenrod;
+            border: 0px dashed darkgoldenrod;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: box-shadow 0s ease-in-out;
+            flex-basis: calc(33.33% - 20px);
+            /*flex-basis: auto;*/
+
+        }
+        .right-container {
+            width: 100%; /* Pełna szerokość */
+            max-width: 1100px; /* Maksymalna szerokość */
+            min-height: 500px;
+            margin: 0 20px;
+            background-color: #181818;
+            border-radius: 30px;
+            box-shadow: 0 0 40px darkgoldenrod;
+            border: 0px dashed darkgoldenrod;
+            display: flex;
+            flex-direction: column;
+            /*justify-content: center;*/
+            justify-content: flex-start;
+            /*flex-wrap: wrap;*/
+            align-items: center;
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: box-shadow 0s ease-in-out;
+            /*flex-basis: calc(60% - 20px);*/
+            flex-basis: auto;
+        }
+        .header-container-account {
+            width: 100%; /* Pełna szerokość */
+            max-width: 1000px; /* Maksymalna szerokość */
+            height: 40px;
+            margin: 5px;
+            background-color: #181818;
+            /*border-radius: 30px;*/
+            /*box-shadow: 0 0 40px darkgoldenrod;*/
+            border: 0px dashed darkgoldenrod;
+            display: flex;
+            /*flex-wrap: wrap;*/
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: box-shadow 0s ease-in-out;
+            flex-basis: auto;
+        }
+        .title-container-account {
+            width: 100%; /* Pełna szerokość */
+            max-width: 1000px; /* Maksymalna szerokość */
+            height: 100px;
+            margin: 0 20px;
+            background-color: #181818;
+            border-radius: 30px;
+            box-shadow: 0 0 40px darkgoldenrod;
+            border: 0px dashed darkgoldenrod;
+            display: flex;
+            /*flex-wrap: wrap;*/
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: box-shadow 0s ease-in-out;
+            flex-basis: auto;
+        }
+        .line {
+            width: 100%; /* Pełna szerokość */
+            max-width: 1000px; /* Maksymalna szerokość */
+            height: 2px;
+            /*margin: 0 20px;*/
+            background-color: #181818;
+            /*border-radius: 30px;*/
+            box-shadow: 0 0 1px darkgoldenrod;
+            border: 0px dashed darkgoldenrod;
+            display: flex;
+            /*flex-wrap: wrap;*/
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: box-shadow 0s ease-in-out;
+            flex-basis: auto;
+        }
+        .container-main2 {
+            width: 1500px;
+            margin: 150px auto 0;
+            background-color: black;
+            border: 2px solid darkgoldenrod;
+            padding: 20px;
+            display: flex;
+            border-radius: 30px;
+            box-shadow: 0 0 30px moccasin;
+            animation: fade-in-main 1s ease-out;
+            max-width: 100%;
+            /*flex-wrap: wrap;*/
+            align-items: flex-start;
+            justify-content: flex-start; /* Zmiana na flex-start */
+            /*justify-content: space-between;*/
+        }
+
+        .child-element {
+            flex-basis: calc(33.33% - 20px); /* Dla trzech kolumn (zmień wartość na potrzeby) */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            padding: 10px;
+            background-color: white; /* Przykładowy kolor tła dla elementów dziecka */
+            border: 2px solid blue; /* Przykładowa ramka dla elementów dziecka */
+        }
+    </style>
 </head>
 
 <body>
@@ -26,14 +152,208 @@
         </a>
     </div>
 </header>
-<div class="container-main" id="container-main">
-    <div id="title-container-hidden"></div>
-    <div id="searchFormContainer"></div>
-    <div id="results"></div>
+<div class="container-main2" id="container-main2">
+    <div class="left-container" id="left-container"></div>
+    <div class="right-container" id="rightContainer">
+        <div class="header-container-account" id="headerContainer"></div>
+<!--        <div class="line" id="line"></div>-->
+<!--        <div class="title-container-account"></div>-->
+    </div>
 </div>
 <script>
-    // let nameContent = $("#name").text();
-    let spanElement = document.getElementById("name");
+
+    const leftContainer = document.getElementById('left-container');
+
+    const buttonNames = ["Profil", "Ogloszenia", "Wiadomosci", "Ulubione", "Ustawienia"];
+
+    buttonNames.forEach(buttonName => {
+        const settingsButton = document.createElement("button");
+        settingsButton.textContent = buttonName;
+        settingsButton.style.backgroundColor = "darkgoldenrod";
+        settingsButton.style.border = "none";
+        settingsButton.style.marginBottom = "20px";
+        settingsButton.style.width = "150px";
+        settingsButton.style.color = "black";
+        settingsButton.style.padding = "10px 20px";
+        settingsButton.style.borderRadius = "5px";
+        settingsButton.style.boxShadow = "0 0 20px darkgoldenrod";
+        settingsButton.style.transition = "background-position 0.3s ease-in-out";
+        ////////////////////////////////////////////////////////////////////////////////
+        // settingsButton.addEventListener("click", function () {
+        //     window.history.pushState({ page: buttonName }, "", "/account");
+        // });
+
+        settingsButton.addEventListener("click", function () {
+            const expirationDate = new Date();
+            expirationDate.setFullYear(expirationDate.getFullYear() + 1); // Ustawienie ważności na 1 rok od teraz
+
+            // let s = document.cookie = `lastVisitedPage=${buttonName}; expires=${expirationDate.toUTCString()}; path=/`;
+            let s = document.cookie = `lastVisitedPage=${buttonName}`;
+
+            console.log(s);
+        });
+
+        // settingsButton.addEventListener("click", function () {
+        //     localStorage.setItem("lastVisitedPage", buttonName);
+        // });
+        ////////////////////////////////////////////////////////////
+        settingsButton.addEventListener("mouseover", function () {
+            settingsButton.style.boxShadow = '0 0 20px moccasin';
+            settingsButton.style.color = "white";
+        });
+
+        settingsButton.addEventListener("mouseout", function () {
+            settingsButton.style.boxShadow = '0 0 20px darkgoldenrod';
+            settingsButton.style.color = "black";
+        });
+
+        settingsButton.addEventListener("click", function () {
+            window[buttonName](buttonName.toString()); // Call the corresponding function using bracket notation
+        });
+        leftContainer.appendChild(settingsButton);
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const cookies = document.cookie.split("; "); // Pobierz wszystkie cookies i podziel na tablicę
+        let lastVisitedPage = null;
+
+        for (const cookie of cookies) {
+            const [name, value] = cookie.split("="); // Podziel nazwę i wartość cookies
+            if (name === "lastVisitedPage") {
+                lastVisitedPage = value;
+                break;
+            }
+        }
+
+        if (lastVisitedPage) {
+            createHeader(lastVisitedPage);
+            console.log(lastVisitedPage);
+        }
+    });
+
+
+
+    ///////////////////////////////////////////////////////
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const lastVisitedPage = localStorage.getItem("lastVisitedPage");
+    //     if (lastVisitedPage) {
+    //         createHeader(lastVisitedPage);
+    //     }
+    // });
+
+    // window.addEventListener("popstate", function (event) {
+    //     if (event.state && event.state.page) {
+    //         // Tutaj możesz wprowadzić obsługę, jeśli użytkownik wrócił przy użyciu przycisku wstecz
+    //         const lastVisitedPage = event.state.page;
+    //         createHeader(lastVisitedPage);
+    //         // ... Przywróć odpowiedni stan strony ...
+    //     }
+    // });
+    ///////////////////////////////////////////////////////
+    function Profil(buttonName) {
+        createHeader(buttonName);
+    }
+    function Ogloszenia(buttonName) {
+        createHeader(buttonName);
+    }
+    function Wiadomosci(buttonName) {
+        createHeader(buttonName);
+    }
+    function Ulubione(buttonName) {
+        createHeader(buttonName);
+    }
+    function Ustawienia(buttonName) {
+        createHeader(buttonName);
+    }
+
+
+
+
+
+    function createHeader(buttonName){
+
+        let headerContainer = document.getElementById("headerContainer");
+        headerContainer.textContent = buttonName;
+        headerContainer.style.color = "darkgoldenrod";
+        headerContainer.style.fontWeight = "bold";
+        headerContainer.style.fontSize = "32px";
+        headerContainer.style.flexBasis = "auto";
+
+        let hrLine = document.createElement("hr");
+        hrLine.style.boxShadow = "0 20px 50px rgba(255, 105, 180, 1)"; // Kolor cienia różowy, większy rozmiar
+        hrLine.style.height = "10px";
+        hrLine.style.width = "100%";
+        hrLine.style.maxWidth = "100%";
+        hrLine.style.marginLeft = "10px";
+        hrLine.style.marginRight = "10px";
+        hrLine.style.border = "none";
+        hrLine.style.borderTop = "1px solid transparent"; // Rozpoczęcie z przezroczystym kolorem
+        hrLine.style.transformOrigin = "center";
+        hrLine.style.transition = "transform 0.3s ease-in-out, border-top-color 0.3s ease-in-out"; // Dodanie przejścia zmiany koloru obramowania
+        hrLine.style.transform = "scaleX(0)"; // Ustawienie początkowej skali na 0 (ukrycie)
+        hrLine.style.flexBasis = "auto";
+
+
+
+        headerContainer.appendChild(hrLine); // Dodanie linii do headerContainer
+
+        // Trigger the animation after a slight delay to ensure the element is fully added to the DOM
+        setTimeout(() => {
+            hrLine.style.transform = "scaleX(1)"; // Skalowanie linii do pełnej widoczności
+            hrLine.style.borderTopColor = "darkgoldenrod"; // Ustawienie koloru na pożądany kolor
+            // hrLine.style.backgroundImage = "linear-gradient(to left, transparent 0%, darkgoldenrod 50%, transparent 100%)"; // Efekt fade z środka w lewo
+        }, 100);
+    }
+
+    function buttonFloat() {
+        let headerContainer = document.getElementById("headerContainer");
+        headerContainer.textContent = buttonName;
+        headerContainer.style.color = "darkgoldenrod";
+        headerContainer.style.fontWeight = "bold";
+        headerContainer.style.fontSize = "32px";
+
+        const hrContainer = document.createElement("div"); // Create a container for the line
+        // hrContainer.style.position = "relative"; // Make the container relatively positioned
+        hrContainer.style.width = "1000px"; // Set the width of the container
+        hrContainer.style.margin = "0 auto"; // Center align the container
+        hrContainer.style.marginLeft = "10px";
+        hrContainer.style.marginRight = "10px";
+        hrContainer.style.flexBasis = "auto";
+        headerContainer.appendChild(hrContainer); // Append the container to the headerContainer
+
+        const hrLine = document.createElement("hr");
+        hrLine.style.height = "10px";
+        hrLine.style.flexBasis = "auto";
+        hrLine.style.border = "none";
+        hrLine.style.borderTop = "1px solid transparent"; // Start with transparent color
+        hrLine.style.transformOrigin = "center";
+        hrLine.style.transition = "transform 0.3s ease-in-out, border-top-color 0.3s ease-in-out"; // Add border-top-color transition
+        hrLine.style.transform = "scaleX(0)"; // Set initial scale to 0 (hidden)
+
+        hrContainer.appendChild(hrLine); // Append the line to the container
+
+        // Trigger the animation after a slight delay to ensure the element is fully added to the DOM
+        setTimeout(() => {
+            hrLine.style.transform = "scaleX(1)"; // Scale the line to fully visible
+            hrLine.style.borderTopColor = "darkgoldenrod"; // Set the color to the desired color
+        }, 100);
+
+        // let rightContainer = document.getElementById("rightContainer");
+        // rightContainer.innerHTML = "";
+        // console.log('profil');
+        // let line = document.createElement("span");
+        // line.style.position = "absolute"; // Ustawienie pozycji lini jako absolutnej
+        // line.style.bottom = "-5px"; // Przesunięcie lini o 5px w dół
+        // line.style.left = "0"; // Wycentrowanie lini na tekście
+        // line.style.width = "100%"; // Ustawienie szerokości na 100%
+        // line.style.height = "2px"; // Ustawienie wysokości linii
+        // line.style.backgroundColor = "darkgoldenrod"; // Ustawienie koloru linii
+        // line.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)"; // Dodanie cienia do linii
+        // headerContainer.appendChild(line);
+    }
+
+    let spanElement = document.getElementById("principalName");
     let nameContent = spanElement.textContent;
     console.log(nameContent);
 </script>

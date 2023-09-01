@@ -143,32 +143,6 @@ public class PublicAdvertisementService {
         return builder;
     }
 
-//    public AdvertisementDTO mapWithRelationsToAdvertisementDTO(Advertisement adv){
-//        return AdvertisementDTO.builder()
-//
-//                .id(adv.getId().toString())
-//                .name(adv.getName())
-//                .description(adv.getDescription())
-//                .model(modelService.getModel(adv.getModel().getId()))
-//                .brand(brandService.getBrand(adv.getBrand().getId()))
-//                .fuelType(specificationService.getFuelType(adv.getFuelType().getId()))
-//                .driveType(specificationService.getDriveType(adv.getDriveType().getId()))
-//                .engineType(specificationService.getEngineType(adv.getEngineType().getId()))
-//                .transmissionType(specificationService.getTransmissionType(adv.getTransmissionType().getId()))
-//                .mileage(adv.getMileage())
-//                .price(adv.getPrice())
-//                .engineCapacity(adv.getEngineCapacity())
-//                .engineHorsePower(adv.getEngineHorsePower())
-//                .firstRegistrationDate(adv.getFirstRegistrationDate())
-//                .productionDate(adv.getProductionDate())
-//                .creationTime(LocalDateTime.now())
-//                .isVerified(false)
-//                .urlList(adv.getImageUrls())
-//                .mainPhotoUrl(adv.getMainPhotoUrl())
-//                .user(adv.getUser().getUsername())
-//                .build();
-//    }
-
     public Advertisement getAdvertisement(String advertisementId) {
         return advertisementRepository.findById(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
     }
