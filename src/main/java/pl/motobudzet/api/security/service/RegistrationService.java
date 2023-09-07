@@ -38,7 +38,7 @@ public class RegistrationService {
                 .accountNotLocked(true)
                 .accountNotExpired(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(roleRepository.findByName("ROLE_USER").get()))
+                .roles(List.of(roleRepository.findByName("ROLE_ADMIN").get()))
                 .build();
             userRepository.saveAndFlush(newUser);
 

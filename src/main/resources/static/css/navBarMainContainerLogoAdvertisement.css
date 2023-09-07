@@ -15,10 +15,12 @@ header {
     top: 0;
     left: 0;
     right: 0;
+    height: 5vw;
     z-index: 999;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
+    width: 100%; /* Ustaw szerokość na 100% */
     /* OPACITY TYLKO TŁA ! */
     background-color: rgba(0, 0, 0, 0.8);
     /*border-radius: 0 0 100px 100px;*/
@@ -32,21 +34,32 @@ header {
 
 .nav-buttons {
     display: flex;
-    align-items: flex-start;
-
+    /*align-items: flex-start;*/
+    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
+    width: 100%; /* Ustaw szerokość na 100% */
+    /*margin-left: 4%;*/
+    margin-left: 8%;
+    margin-right: 8%;
 }
 
 .nav-buttons a {
+    /*padding: 10px 45px;*/
+    /*margin-left: 20px;*/
     background-image: linear-gradient(to right, #BA8B02 0%, #181818 51%, #BA8B02 100%);
-    padding: 10px 45px;
-    margin-left: 20px;
+    padding: 0.5vw 5%; /* Użyj większej wartości paddingu dla szerszych przycisków */
+    margin-left: 2%;
     color: black;
     text-transform: uppercase;
+    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
     border-radius: 50px 0px 50px 0px;
     text-decoration: none;
-    box-shadow: 0 0 20px moccasin;
+    box-shadow: 0 0 10px moccasin; /* Zmniejsz cień */
     transition: 0.5s;
     background-size: 300% auto;
+    font-size: 1.3vw; /* Użyj mniejszej wielkości czcionki */
+    display: flex; /* Dodaj display:flex */
+    align-items: center; /* Wyśrodkuj tekst w pionie */
+    text-align: center; /* Wyśrodkuj tekst w poziomie */
 
 }
 
@@ -57,7 +70,11 @@ header {
 }
 
 .looogo img {
-    height: 100px; /* Adjust the height as needed */
+    /*margin-left: 2%;*/
+    margin-left: 15%;
+    align-items: center;
+    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
+    height: 6vw; /* Użyj procentowej wysokości względem szerokości okna */
 }
 
 .container-main {

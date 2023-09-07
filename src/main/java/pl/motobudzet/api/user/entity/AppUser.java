@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.user_conversations.entity.Conversation;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +44,7 @@ public class AppUser implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id")
     )
     private List<Advertisement> advertisements;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_role_mapping",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -51,6 +52,16 @@ public class AppUser implements UserDetails {
             uniqueConstraints = @UniqueConstraint(name = "unique_user_role", columnNames = {"user_id", "role_id"})
     )
     private List<Role> roles;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "user_conversations",
+//            joinColumns = @JoinColumn(name = "user_owner_id", referencedColumnName = "id"),
+//            inverseJoinColumns = {
+//                    @JoinColumn(name = "conversation_id", referencedColumnName = "id"),
+//                    @JoinColumn(name = "user_client_id", referencedColumnName = "userClientId")
+//            }
+//    )
+//    private List<Conversation> conversations;
 
     public Long getId() {
         return id;

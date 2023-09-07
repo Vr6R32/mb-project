@@ -17,6 +17,9 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.motobudzet.api.security.filter.AddressLoggingFilter;
 import pl.motobudzet.api.security.service.UserDetailsServiceImpl;
 
@@ -44,6 +47,7 @@ public class SecurityConfiguration {
     @SuppressWarnings("deprecation")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .cors().and()
                 .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -60,7 +64,10 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(HttpMethod.POST,"/api/advertisements/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/api/advertisements/**").authenticated()
+                                .requestMatchers("/account").authenticated()
                                 .requestMatchers("/messages").authenticated()
+                                .requestMatchers("/api/messages/**").authenticated()
+                                .requestMatchers("/api/conversations/**").authenticated()
                                 .requestMatchers("/advertisement/new").authenticated()
 
                                 .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
@@ -94,7 +101,7 @@ public class SecurityConfiguration {
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID", "remember-me", "lastVisitedPage")
+                                .deleteCookies("JSESSIONID", "remember-me", "lastButton")
                                 .logoutSuccessUrl("/")
                 );
 
@@ -107,6 +114,18 @@ public class SecurityConfiguration {
         authentication
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*"); // Odblokuj dostęp ze wszystkich domen (uwaga na bezpieczeństwo w środowisku produkcyjnym)
+        configuration.addAllowedMethod("*"); // Odblokuj wszystkie metody HTTP
+        configuration.addAllowedHeader("*"); // Odblokuj wszystkie nagłówki
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
