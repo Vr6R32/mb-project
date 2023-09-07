@@ -114,6 +114,7 @@ public class PublicAdvertisementService {
     }
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeUserAndUrls) {
+
         AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
                 .name(adv.getName())
