@@ -12,7 +12,6 @@ public class AppUserCustomService {
     private final AppUserRepository userRepository;
 
     public AppUser getByName(String userName){
-        System.out.println(userName);
         return userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User doesnt' exists!"));
     }
 }

@@ -2,7 +2,9 @@ package pl.motobudzet.api.zconfiguration;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
@@ -47,6 +49,8 @@ public class InsertBrandsnModels {
 //    @EventListener(ApplicationReadyEvent.class)
     public void fillUser(){
 
+        Role roleUser = Role.builder().name("ROLE_USER").build();
+        Role roleAdmin = Role.builder().name("ROLE_ADMIN").build();
         AppUser admin = AppUser.builder()
                 .userName("admin")
                 .password(passwordEncoder.encode("admin"))
@@ -55,7 +59,7 @@ public class InsertBrandsnModels {
                 .accountNotExpired(true)
                 .accountNotLocked(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(Role.builder().name("ROLE_ADMIN").build()))
+                .roles(List.of(roleAdmin))
                 .build();
 
         AppUser user = AppUser.builder()
@@ -66,14 +70,15 @@ public class InsertBrandsnModels {
                 .accountNotExpired(true)
                 .accountNotLocked(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(Role.builder().name("ROLE_USER").build()))
+                .roles(List.of(roleUser))
                 .build();
 
             userRepository.save(admin);
             userRepository.save(user);
 
-//        fillBrandDB(admin,user);
+        fillBrandDB(admin,user);
     }
+
 
 
     public void fillBrandDB(AppUser admin,AppUser user){
@@ -152,6 +157,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(2).minusHours(3))
                 .imageUrls(List.of("rs3.png","rs3-2.jpg"))
                 .user(admin)
+                .isVerified(true)
                 .build();
         Advertisement ad2 = Advertisement.builder()
                 .name("Audi RS6 500HP SUPERCHARGED")
@@ -172,6 +178,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(1).minusHours(4))
                 .imageUrls(List.of("rs6.jpg","rs6-2.jpg"))
                 .user(admin)
+                .isVerified(true)
                 .build();
         Advertisement ad3 = Advertisement.builder()
                 .name("RSQ8 MANHART ")
@@ -192,6 +199,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(5).minusHours(10))
                 .imageUrls(List.of("rsq8.jpg","rsq8-2.jpg"))
                 .user(admin)
+                .isVerified(true)
                 .build();
         Advertisement ad4 = Advertisement.builder()
                 .name("MERCEDES C63 AMG OKAZJA KOZAK IGLA")
@@ -212,6 +220,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(12).minusHours(30))
                 .imageUrls(List.of("c63.jpg","c63-2.jpg"))
                 .user(user)
+                .isVerified(true)
                 .build();
         Advertisement ad5 = Advertisement.builder()
                 .name("MERCEDES GKLASA")
@@ -232,6 +241,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("gklasa.jpg","gklasa-2.jpg"))
                 .user(user)
+                .isVerified(true)
                 .build();
 
         Advertisement ad6 = Advertisement.builder()
@@ -253,6 +263,7 @@ public class InsertBrandsnModels {
                 .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("rx8.jpg","rx8-2.jpg"))
                 .user(user)
+                .isVerified(true)
                 .build();
 
 
