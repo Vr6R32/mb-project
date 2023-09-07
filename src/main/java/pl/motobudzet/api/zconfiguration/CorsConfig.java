@@ -15,7 +15,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://motobudzet.pl")
+                        .allowedOrigins(
+                                "http://motobudzet.pl",
+                                "http://localhost",
+                                "http://192.168.100.27"
+                        )
                         .allowedHeaders("*")
                         .allowedMethods("*");
             }
