@@ -6,162 +6,8 @@
     <title>Moto-Budżet</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/searchForm.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myAccountPanel.css}" />
     <script type="text/javascript" th:src="@{/js/navBarMainContainerLogo.js}" ></script>
-    <style>
-
-        .left-container {
-            width: 100%; /* Pełna szerokość */
-            max-width: 300px; /* Maksymalna szerokość */
-            min-height: 500px;
-            margin: 0 20px;
-            background-color: #181818;
-            border-radius: 30px;
-            box-shadow: 0 0 40px darkgoldenrod;
-            border: 0 dashed darkgoldenrod;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex-wrap: wrap;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0s ease-in-out;
-            flex-basis: calc(33.33% - 20px);
-            /*flex-basis: auto;*/
-
-        }
-        .right-container {
-            width: 100%; /* Pełna szerokość */
-            max-width: 1500px; /* Maksymalna szerokość */
-            min-height: 500px;
-            margin: 0 20px;
-            background-color: #181818;
-            border-radius: 30px;
-            box-shadow: 0 0 40px darkgoldenrod;
-            border: 0 dashed darkgoldenrod;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            flex: 1;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0s ease-in-out;
-            flex-basis: auto;
-        }
-        .result-container-right{
-            margin-top: 30px;
-            margin-left: 20px;
-            margin-right: 20px;
-            color: darkgoldenrod;
-            background-color: #181818;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Wyśrodkowanie w poziomie */
-            align-items: center; /* Wyśrodkowanie w pionie */
-            width: 100%;
-            max-width: 100%;
-            max-height: 100%;
-            box-sizing: border-box;
-            flex-basis: auto;
-        }
-
-        #resultContainerRight::-webkit-scrollbar {
-            width: 5px; /* Szerokość paska przewijania */
-        }
-
-        #resultContainerRight::-webkit-scrollbar-thumb {
-            background-color: darkgoldenrod; /* Kolor paska przewijania */
-            border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
-        }
-
-        #resultContainerRight::-webkit-scrollbar-track {
-            background-color: transparent; /* Kolor tła paska przewijania */
-        }
-
-        .header-container-account {
-            width: 100%; /* Pełna szerokość */
-            max-width: 1500px; /* Maksymalna szerokość */
-            height: 40px;
-            margin: 5px;
-            background-color: #181818;
-            /*border-radius: 30px;*/
-            /*box-shadow: 0 0 40px darkgoldenrod;*/
-            border: 0 dashed darkgoldenrod;
-            display: flex;
-            /*flex-wrap: wrap;*/
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0s ease-in-out;
-            flex-basis: auto;
-        }
-        .title-container-account {
-            width: 100%; /* Pełna szerokość */
-            max-width: 1000px; /* Maksymalna szerokość */
-            height: 100px;
-            margin: 0 20px;
-            background-color: #181818;
-            border-radius: 30px;
-            box-shadow: 0 0 40px darkgoldenrod;
-            border: 0 dashed darkgoldenrod;
-            display: flex;
-            /*flex-wrap: wrap;*/
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0s ease-in-out;
-            flex-basis: auto;
-        }
-        .line {
-            width: 100%; /* Pełna szerokość */
-            max-width: 1000px; /* Maksymalna szerokość */
-            height: 2px;
-            /*margin: 0 20px;*/
-            background-color: #181818;
-            /*border-radius: 30px;*/
-            box-shadow: 0 0 1px darkgoldenrod;
-            border: 0 dashed darkgoldenrod;
-            display: flex;
-            /*flex-wrap: wrap;*/
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: box-shadow 0s ease-in-out;
-            flex-basis: auto;
-        }
-        .container-main2 {
-            width: 1500px;
-            margin: 150px auto 0;
-            background-color: black;
-            border: 2px solid darkgoldenrod;
-            padding: 20px;
-            display: flex;
-            border-radius: 30px;
-            box-shadow: 0 0 30px moccasin;
-            animation: fade-in-main 1s ease-out;
-            max-width: 100%;
-            /*flex-wrap: wrap;*/
-            align-items: flex-start;
-            justify-content: flex-start; /* Zmiana na flex-start */
-            /*justify-content: space-between;*/
-        }
-
-        .child-element {
-            flex-basis: calc(33.33% - 20px); /* Dla trzech kolumn (zmień wartość na potrzeby) */
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            padding: 10px;
-            background-color: white; /* Przykładowy kolor tła dla elementów dziecka */
-            border: 2px solid blue; /* Przykładowa ramka dla elementów dziecka */
-        }
-    </style>
 </head>
 
 <body>
@@ -228,10 +74,8 @@
 
     function loadConversations() {
 
-        // let userName = document.getElementById("principalName").textContent;
         let url = `/api/conversations`;
         let resultContainerRight = document.getElementById("resultContainerRight");
-
 
         fetch(url)
             .then((response) => {
@@ -269,21 +113,9 @@
     }
 
     function createResultDiv(conversation,resultContainerRight) {
-        const resultDiv = document.createElement("resultDiv");
-        resultDiv.id = "resultDiv";
-        resultDiv.style.width = "100%";
-        resultDiv.style.maxWidth = "100%";
-        resultDiv.style.boxSizing = "border-box";
-        resultDiv.style.flexBasis = "auto";
-        resultDiv.style.height = "auto";
-        resultDiv.style.backgroundColor = "#181818";
-        resultDiv.style.margin = "0 20px";
-        resultDiv.style.marginBottom = "15px";
-        resultDiv.style.padding = "10px";
-        resultDiv.style.display = "flex";
-        resultDiv.style.borderRadius = "30px";
-        resultDiv.style.cursor = "pointer";
-        resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
+        const resultDiv = document.createElement("messageResultDiv");
+        resultDiv.id = "messageResultDiv";
+
 
         // Add hover effect on mouseover
         resultDiv.onmouseover = () => {
@@ -405,9 +237,9 @@
 
         containers.forEach(container => {
             container.style.width = maxTextWidth + 'px';
-            container.style.maxWidth = "100%";
-            container.style.boxSizing = "border-box";
-            container.style.flexBasis = "auto";
+            // container.style.maxWidth = "100%";
+            // container.style.boxSizing = "border-box";
+            // container.style.flexBasis = "auto";
             advertisementDetails.appendChild(container);
         });
 
@@ -461,6 +293,8 @@
         return resultDiv;
     }
 
+    let currentRow = 1;
+
     function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv) {
 
         let rightContainer = document.getElementById("rightContainer");
@@ -469,17 +303,57 @@
         resultDiv.style.marginTop = '20px';
         resultDiv.style.paddingleft = '20px';
         resultDiv.style.paddingRight = '20px';
-        resultContainerRight.style.paddingTop = '15px';
+        resultContainerRight.style.paddingTop = '0px';
+        resultContainerRight.style.maxHeight = "600px";
 
         const conversationId = conversation.conversationId;
         const url = `/api/messages?conversationId=${conversationId}`;
+        let resultCount = 0;
+
 
         fetch(url)
             .then(response => response.json())
             .then(messages => {
                 messages.forEach(message => {
-                    createMessageContainer(message,resultContainerRight,conversation);
+
+                    createMessageContainer(message,resultContainerRight,conversation,currentRow);
+                    currentRow++;
+                    resultCount++;
                 });
+
+                    if (resultCount > 0) {
+                        resultContainerRight.style.display = 'grid';
+                        resultContainerRight.style.gridTemplateColumns = '49% 1fr 1fr 49%';
+                        resultContainerRight.style.overflowY = 'scroll';
+                        resultContainerRight.style.overflowX = 'hidden';
+                        resultContainerRight.style.paddingBottom = '30px';
+                        resultContainerRight.style.paddingLeft = '20px';
+                        resultContainerRight.style.paddingRight = '20px';
+                        resultContainerRight.style.scrollbarWidth = 'thin';
+                        resultContainerRight.style.scrollbarColor = 'darkgoldenrod transparent';
+
+
+                        // Tworzenie dwóch elementów grid
+                        const grid1 = document.createElement('div');
+                        grid1.style.maxWidth = '100%';
+                        const grid2 = document.createElement('div');
+                        const grid3 = document.createElement('div');
+                        const grid4 = document.createElement('div');
+                        grid4.style.maxWidth = '100%';
+                        grid4.style.textAlign = 'right';
+                        grid4.style.justifyContent = 'flex-end'; // Wyrównujemy do prawej
+
+
+                        // Dodawanie tych gridów jako dzieci do resultContainerRight
+                        resultContainerRight.appendChild(grid1);
+                        resultContainerRight.appendChild(grid2);
+                        resultContainerRight.appendChild(grid3);
+                        resultContainerRight.appendChild(grid4);
+                        // Możesz dodać dodatkowe style dla grid1 i grid2 według potrzeb
+
+
+                        // Teraz możesz umieszczać elementy wewnątrz grid1 i grid2
+                    }
                     createMessageInputContainer(resultContainerRight,conversation);
                     resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
             }
@@ -521,8 +395,8 @@
                 .catch(error => {
                     console.error("Błąd podczas wysyłania wiadomości:", error);
                 });
-
-            createMessageContainer(messageObject,resultContainerRight,conversation);
+            currentRow++;
+            createMessageContainer(messageObject,resultContainerRight,conversation,currentRow);
             resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
 
             // Wyczyść pole tekstowe po wysłaniu
@@ -532,29 +406,30 @@
 
     function createMessageInputContainer(resultContainerRight, conversation) {
 
-        const messageInputDiv = document.createElement("inputDiv");
+        const messageInputDiv = document.createElement("div");
 
-        messageInputDiv.id = 'inputDiv';
-        messageInputDiv.style.width = '600px';
-        messageInputDiv.style.height = '50px';
-        messageInputDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-        messageInputDiv.style.maxWidth = '100%';
-        messageInputDiv.style.boxSizing = 'border-box';
-        messageInputDiv.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+        messageInputDiv.id = 'messageInputDiv';
+        // messageInputDiv.style.width = '600px';
+        // messageInputDiv.style.height = '50px';
+        // messageInputDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+        // messageInputDiv.style.maxWidth = '100%';
+        // messageInputDiv.style.boxSizing = 'border-box';
+        // messageInputDiv.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
 
         // Tworzenie pola tekstowego
         const messageInput = document.createElement("textarea");
 
-        messageInput.style.width = '550px'; // Ustaw szerokość na 500px
-        messageInput.style.height = '40px'; // Ustaw wysokość na 100px
+        messageInput.id = 'messageInputTextAreaDiv';
         messageInput.placeholder = "Wpisz wiadomość...";
-        messageInput.style.color = 'white'; // Ustaw kolor tekstu na biały
-        messageInput.style.resize = 'none';
-        messageInput.style.borderRadius = '10px'; // Dodaj zaokrąglone rogi o promieniu 10px
-        messageInput.style.backgroundColor = '#181818'; // Ustaw tło na kolor #181818
-        messageInput.style.maxWidth = '100%';
-        messageInput.style.boxSizing = 'border-box';
-        messageInput.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+        // messageInput.style.width = '550px'; // Ustaw szerokość na 500px
+        // messageInput.style.height = '40px'; // Ustaw wysokość na 100px
+        // messageInput.style.color = 'white'; // Ustaw kolor tekstu na biały
+        // messageInput.style.resize = 'none';
+        // messageInput.style.borderRadius = '10px'; // Dodaj zaokrąglone rogi o promieniu 10px
+        // messageInput.style.backgroundColor = '#181818'; // Ustaw tło na kolor #181818
+        // messageInput.style.maxWidth = '100%';
+        // messageInput.style.boxSizing = 'border-box';
+        // messageInput.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
 
 
 
@@ -580,43 +455,57 @@
         rightContainer.appendChild(messageInputDiv);
     }
 
-    function createMessageContainer(message,resultContainerRight,conversation){
+    function createMessageContainer(message,resultContainerRight,conversation,currentRow){
 
-        const div = document.createElement("messageContainerDiv");
-        div.style.marginBottom = '30px';
-        div.style.maxWidth = '50%';
-        div.style.display = 'flex'; // Dodaj display:flex, aby elementy wewnątrz div były równo rozłożone
-        div.style.alignItems = 'center'; // Wyrównaj wertykalnie elementy
+        const singleMessageDiv = document.createElement("div");
+        singleMessageDiv.setAttribute('id', 'singleMessageDiv');
+        // singleMessageDiv.style.marginBottom = '30px';
+        singleMessageDiv.style.maxWidth = '100%';
+        // singleMessageDiv.style.display = 'flex'; // Dodaj display:flex, aby elementy wewnątrz div były równo rozłożone
+        // singleMessageDiv.style.flexDirection = 'column'; // Dodaj display:flex, aby elementy wewnątrz div były równo rozłożone
+        // singleMessageDiv.style.alignItems = 'center'; // Wyrównaj wertykalnie elementy
+        //
+        // singleMessageDiv.style.gridRowStart = 'auto'; // Ustaw na 'auto', aby elementy były w osobnych rzędach
+        // singleMessageDiv.style.gridRowEnd = 'auto'; // Ustaw na 'auto', aby elementy były w osobnych rzędach
 
-        if(message.userSender !== conversation.secondUser) {
-            div.style.textAlign = 'right';
-            div.style.marginLeft = 'auto'; // Przesunięcie na prawą stronę
+        singleMessageDiv.style.gridRowStart = currentRow; // Ustaw numer rzędu
+        singleMessageDiv.style.gridRowEnd = currentRow + 1; // Ustaw numer rzędu
+
+        if (message.userSender !== conversation.secondUser) {
+            singleMessageDiv.style.gridColumnStart = '4';
+            singleMessageDiv.style.gridColumnEnd = '4';
+            singleMessageDiv.style.textAlign = 'right';
+            singleMessageDiv.style.display = 'flex';
+            singleMessageDiv.style.flexDirection = 'row'; // Odwracamy kierunek flex
+            singleMessageDiv.style.justifyContent = 'flex-end'; // Wyrównujemy do prawej
         } else {
-            div.style.textAlign = 'left';
-            div.style.marginRight = 'auto'; // Przesunięcie na prawą stronę
+            singleMessageDiv.style.textAlign = 'left';
+            singleMessageDiv.style.gridColumnStart = '1';
+            singleMessageDiv.style.gridColumnEnd = '1';
         }
 
-        const messageElement = document.createElement("messageContainerSingle");
 
-        messageElement.style.border = '2px dashed darkgoldenrod';
-        messageElement.style.padding = '10px';
-        // messageElement.style.marginTop = '10px';
-        // messageElement.style.marginRight = '10px';
-        // messageElement.style.marginLeft = '10px';
-        // messageElement.style.marginBottom = '10px';
-        messageElement.style.borderRadius = '10px'; // Dodaj zaokrągloną ramkę 10px
-        messageElement.style.color = 'white'; // Dodaj zaokrągloną ramkę 10px
-        messageElement.style.overflowWrap = 'break-word'; // Użyj overflow-wrap zamiast word-wrap
-        messageElement.style.textAlign = 'left';
-        messageElement.style.marginRight = 'auto'; // Przesunięcie na prawą stronę
+
+        const messageElement = document.createElement("messageValueSingleDiv");
+
+        messageElement.setAttribute('id', 'singleMessageValueDiv');
         messageElement.textContent = message.message;
+        // messageElement.style.border = '2px dashed darkgoldenrod';
+        // messageElement.style.padding = '10px';
+        // messageElement.style.borderRadius = '10px'; // Dodaj zaokrągloną ramkę 10px
+        // messageElement.style.color = 'white'; // Dodaj zaokrągloną ramkę 10px
+        // messageElement.style.overflowWrap = 'break-word'; // Użyj overflow-wrap zamiast word-wrap
+        // messageElement.style.textAlign = 'left';
+        // messageElement.style.marginRight = 'auto'; // Przesunięcie na prawą stronę
 
 
-        const userNameElement = document.createElement("userNameDiv");
-        userNameElement.style.marginRight = '10px';
-        userNameElement.style.position = 'relative';
-        userNameElement.style.top = "10px";
-        userNameElement.style.flexShrink = '0'; // Nie zmniejszaj rozmiaru userNameElement
+
+        const userNameElement = document.createElement("userNameValueDiv");
+        userNameElement.setAttribute('id', 'userNameValueDiv');
+        // userNameElement.style.marginRight = '10px';
+        // userNameElement.style.position = 'relative';
+        // userNameElement.style.top = "10px";
+        // userNameElement.style.flexShrink = '0'; // Nie zmniejszaj rozmiaru userNameElement
 
         /*
         CHARS
@@ -624,20 +513,22 @@
         */
         userNameElement.innerHTML = "<strong style='font-size: 1.2em;'>" +  message.userSender + " ⤤ </strong>";
 
-        div.appendChild(userNameElement);
-        div.appendChild(messageElement);
-        resultContainerRight.appendChild(div);
+        singleMessageDiv.appendChild(userNameElement);
+        singleMessageDiv.appendChild(messageElement);
+        resultContainerRight.appendChild(singleMessageDiv);
     }
 
     function createInfoContainer(iconPath, altText, value) {
-        const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.alignItems = 'center';
-        container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
-        container.style.textAlign = 'center';
-        container.style.marginRight = '30px';
+        const container = document.createElement('messageInfoContainer');
+        container.setAttribute('id', 'messageInfoContainer');
 
+        // container.style.id = 'messageInfoContainer';
+        // container.style.display = 'flex';
+        // container.style.flexDirection = 'column';
+        // container.style.alignItems = 'center';
+        // container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+        // container.style.textAlign = 'center';
+        // container.style.marginRight = '30px';
 
 
         const icon = document.createElement('img');
@@ -659,25 +550,27 @@
 
         let headerContainer = document.getElementById("headerContainer");
         headerContainer.textContent = buttonName.replace("_", " ");
-        headerContainer.style.color = "darkgoldenrod";
-        headerContainer.style.fontWeight = "bold";
-        headerContainer.style.fontSize = "32px";
-        headerContainer.style.flexBasis = "auto";
+        // headerContainer.style.color = "darkgoldenrod";
+        // headerContainer.style.fontWeight = "bold";
+        // headerContainer.style.fontSize = "32px";
+        // headerContainer.style.flexBasis = "auto";
 
         let hrLine = document.createElement("hr");
-        hrLine.style.boxShadow = "0 0 5px darkgoldenrod"; // Kolor cienia darkgoldenrod, mniejszy rozmiar
-        hrLine.style.height = "1px";
-        hrLine.style.width = "100%";
-        hrLine.style.maxWidth = "100%";
-        hrLine.style.marginLeft = "10px";
-        hrLine.style.marginRight = "10px";
-        hrLine.style.marginBottom = "5px";
-        hrLine.style.border = "none";
-        hrLine.style.borderTop = "1px solid transparent"; // Rozpoczęcie z przezroczystym kolorem
-        hrLine.style.transformOrigin = "center";
-        hrLine.style.transition = "transform 0.3s ease-in-out, border-top-color 0.3s ease-in-out"; // Dodanie przejścia zmiany koloru obramowania
-        hrLine.style.transform = "scaleX(0)"; // Ustawienie początkowej skali na 0 (ukrycie)
-        hrLine.style.flexBasis = "auto";
+        hrLine.setAttribute('id', 'headerLine');
+
+        // hrLine.style.boxShadow = "0 0 5px darkgoldenrod"; // Kolor cienia darkgoldenrod, mniejszy rozmiar
+        // hrLine.style.height = "1px";
+        // hrLine.style.width = "100%";
+        // hrLine.style.maxWidth = "100%";
+        // hrLine.style.marginLeft = "10px";
+        // hrLine.style.marginRight = "10px";
+        // hrLine.style.marginBottom = "5px";
+        // hrLine.style.border = "none";
+        // hrLine.style.borderTop = "1px solid transparent"; // Rozpoczęcie z przezroczystym kolorem
+        // hrLine.style.transformOrigin = "center";
+        // hrLine.style.transition = "transform 0.3s ease-in-out, border-top-color 0.3s ease-in-out"; // Dodanie przejścia zmiany koloru obramowania
+        // hrLine.style.transform = "scaleX(0)"; // Ustawienie początkowej skali na 0 (ukrycie)
+        // hrLine.style.flexBasis = "auto";
 
 
         headerContainer.appendChild(hrLine); // Dodanie linii do headerContainer
@@ -693,9 +586,9 @@
     }
 
     function cleanMessages() {
-        let childConversationMessageInputElement = document.getElementById('inputDiv');
+        let childConversationMessageInputElement = document.getElementById('messageInputDiv');
 
-        let childConversationResultElements = document.querySelectorAll('#rightContainer [id^="resultDiv"]');
+        let childConversationResultElements = document.querySelectorAll('#rightContainer [id^="messageResultDiv"]');
 
         childConversationResultElements.forEach(element => {
             element.parentNode.removeChild(element);
@@ -707,6 +600,8 @@
 
         let resultContainerRight = document.getElementById("resultContainerRight");
         resultContainerRight.innerHTML = "";
+
+        resultContainerRight.style.display = 'flex';
     }
 
     function createButtons() {
@@ -715,16 +610,17 @@
 
         buttonNames.forEach(buttonName => {
             const settingsButton = document.createElement("button");
+            settingsButton.setAttribute('id', 'menuPanelButton');
             settingsButton.textContent = buttonName.replace("_", " ");
-            settingsButton.style.backgroundColor = "darkgoldenrod";
-            settingsButton.style.border = "none";
-            settingsButton.style.marginBottom = "20px";
-            settingsButton.style.width = "150px";
-            settingsButton.style.color = "black";
-            settingsButton.style.padding = "10px 20px";
-            settingsButton.style.borderRadius = "5px";
-            settingsButton.style.boxShadow = "0 0 20px darkgoldenrod";
-            settingsButton.style.transition = "background-position 0.3s ease-in-out";
+            // settingsButton.style.backgroundColor = "darkgoldenrod";
+            // settingsButton.style.border = "none";
+            // settingsButton.style.marginBottom = "20px";
+            // settingsButton.style.width = "150px";
+            // settingsButton.style.color = "black";
+            // settingsButton.style.padding = "10px 20px";
+            // settingsButton.style.borderRadius = "5px";
+            // settingsButton.style.boxShadow = "0 0 20px darkgoldenrod";
+            // settingsButton.style.transition = "background-position 0.3s ease-in-out";
 
             // settingsButton.addEventListener("click", function () {
             //     let lastButton = document.cookie = `lastButton=${buttonName}`;
