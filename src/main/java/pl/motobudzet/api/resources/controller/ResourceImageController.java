@@ -1,6 +1,7 @@
 package pl.motobudzet.api.resources.controller;
 
 
+import jakarta.servlet.Servlet;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -40,6 +41,11 @@ public class ResourceImageController {
     @GetMapping(value = "/fuelType",produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getFuel() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "fuel.png");
+    }
+
+    @GetMapping(value = "/price",produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getPrice() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "price.png");
     }
 
     @GetMapping(value = "/mileage", produces = MediaType.IMAGE_PNG_VALUE)
