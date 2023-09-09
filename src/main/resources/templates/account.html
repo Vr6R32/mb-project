@@ -221,7 +221,7 @@
             createInfoContainer('mileage', 'MileageIcon', conversation.advertisement.mileage),
             createInfoContainer('productionDate', 'ProductionDateIcon', conversation.advertisement.productionDate),
             createInfoContainer('fuelType', 'FuelTypeIcon', conversation.advertisement.fuelType),
-            createInfoContainer('engineHorsePower', 'EngineIcon', conversation.advertisement.engineHorsePower + 'HP'),
+            createInfoContainer('engineHorsePower', 'EngineIcon', conversation.advertisement.engineHorsePower + ' HP'),
         ];
 
         if (conversation.fuelType !== 'ELEKTRYCZNY') {
@@ -230,6 +230,8 @@
                 createInfoContainer('transmissionType/' + conversation.advertisement.transmissionType, 'transmissionIcon', conversation.advertisement.transmissionType)
             );
         }
+
+        containers.push(createInfoContainer('price', 'PriceIcon', conversation.advertisement.price + ',-'));
 
         const maxTextWidth = Math.max(
             ...containers.map(container => container.querySelector('span').offsetWidth)
@@ -499,7 +501,6 @@
         // messageElement.style.marginRight = 'auto'; // Przesunięcie na prawą stronę
 
 
-
         const userNameElement = document.createElement("userNameValueDiv");
         userNameElement.setAttribute('id', 'userNameValueDiv');
         // userNameElement.style.marginRight = '10px';
@@ -516,6 +517,28 @@
         singleMessageDiv.appendChild(userNameElement);
         singleMessageDiv.appendChild(messageElement);
         resultContainerRight.appendChild(singleMessageDiv);
+
+        calculateSenderNamePosition(singleMessageDiv,userNameElement);
+
+    }
+
+    function calculateSenderNamePosition(singleMessageDiv, userNameElement) {
+        // Pobierz wysokość elementu singleMessageDiv
+        const clientHeight = singleMessageDiv.offsetHeight;
+
+        // Oblicz top na podstawie reguł opisanych w pytaniu
+        let topValue = "10px"; // Domyślnie 10px
+
+        if (clientHeight > 42) {
+            // Oblicz, ile 18px liniowych przekracza 42px
+            const additionalTop = Math.floor((clientHeight - 42) / 18) * 9;
+
+            // Dodaj dodatkowe top do wartości początkowej
+            topValue = (10 + additionalTop) + "px";
+        }
+
+        userNameElement.style.top = topValue;
+        console.log(clientHeight);
     }
 
     function createInfoContainer(iconPath, altText, value) {
