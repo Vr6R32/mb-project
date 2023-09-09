@@ -44,7 +44,7 @@
 #userNameValueDiv {
     margin-right: 10px;
     position: relative;
-    top: 10px;
+    /*top: 10px;*/
     flex-shrink: 0;
 }
 
