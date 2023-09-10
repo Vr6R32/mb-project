@@ -3,6 +3,7 @@ package pl.motobudzet.api.user_conversations.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.kafka.service.KafkaService;
+import pl.motobudzet.api.kafka.service.KafkaServiceInterface;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
@@ -26,7 +27,7 @@ public class MessageService {
     private final AppUserCustomService userCustomService;
     private final ConversationService conversationService;
     private final ConversationMessagesRepository messagesRepository;
-    private final KafkaService kafkaService;
+    private final KafkaServiceInterface kafkaService;
 
     public String sendMessage(String message, Long conversationId, String messageSender) {
 
