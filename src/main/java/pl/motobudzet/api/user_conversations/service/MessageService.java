@@ -2,7 +2,7 @@ package pl.motobudzet.api.user_conversations.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
+import pl.motobudzet.api.kafka.service.KafkaService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
@@ -12,19 +12,21 @@ import pl.motobudzet.api.user_conversations.repository.ConversationMessagesRepos
 import pl.motobudzet.api.user_conversations.utils.MessageMapper;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.user_conversations.utils.UserAuthorization.*;
+import static pl.motobudzet.api.user_conversations.utils.UserAuthorization.authorizeMessageGetAccess;
+import static pl.motobudzet.api.user_conversations.utils.UserAuthorization.authorizeMessagePostAccess;
 
 @Service
 @RequiredArgsConstructor
 public class MessageService {
 
-    private final PublicAdvertisementService advertisementService;
     private final AppUserCustomService userCustomService;
     private final ConversationService conversationService;
     private final ConversationMessagesRepository messagesRepository;
+    private final KafkaService kafkaService;
 
     public String sendMessage(String message, Long conversationId, String messageSender) {
 
@@ -52,6 +54,7 @@ public class MessageService {
             conversation.setLastMessage(newMessage);
             messagesRepository.save(newMessage);
         }
+        kafkaService.sendMessageNotification(message);
         return "Message Sent!";
     }
 
