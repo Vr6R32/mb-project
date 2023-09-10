@@ -15,7 +15,7 @@ public interface ConversationRepository extends JpaRepository<Conversation,Long>
 
     Optional<Conversation> findConversationByAdvertisement_IdAndUserOwner_IdAndUserClient_Id(UUID advertisementId,Long userOwnerId,Long userClientId);
 
-    @Query("select c from Conversation c left joinó fetch c.advertisement left join fetch c.userClient left join fetch c.userOwner where c.userOwner.id = ?1 ")
+    @Query("select c from Conversation c left join fetch c.advertisement left join fetch c.userClient left join fetch c.userOwner where c.userOwner.id = ?1 ")
     List<Conversation> findAllByUserOwnerId(Long id);
     @Query("select c from Conversation c left join fetch c.advertisement left join fetch c.userClient left join fetch c.userOwner where c.userClient.id = ?1")
     List<Conversation> findAllByUserClientId(Long id);
