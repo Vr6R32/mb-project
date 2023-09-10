@@ -9,14 +9,14 @@ import static pl.motobudzet.api.kafka.configuration.KafkaTopicConfig.MESSAGE_NOT
 
 @Service
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "mailing.module.enabled", havingValue = "true")
-public class KafkaService implements KafkaServiceInterface {
+@ConditionalOnProperty(name = "mailing.module.enabled", havingValue = "false")
+public class KafkaServiceFake implements KafkaServiceInterface {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public void sendMessageNotification(String message) {
-        kafkaTemplate.send(MESSAGE_NOTIFY_TOPIC, message);
+        System.out.println("Kafka fake message notification  ! ;)");
     }
 }
 
