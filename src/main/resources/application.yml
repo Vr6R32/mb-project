@@ -1,4 +1,6 @@
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
   datasource:
 #    url: jdbc:postgresql://serwer2379308.home.pl/37515270_motobudzet69
 #    username: 37515270_motobudzet69
@@ -12,6 +14,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 25MB
+
   jpa:
     properties:
       hibernate:
