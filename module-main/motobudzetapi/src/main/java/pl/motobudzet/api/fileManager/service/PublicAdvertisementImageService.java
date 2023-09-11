@@ -30,8 +30,8 @@ import java.util.UUID;
 public class PublicAdvertisementImageService {
 
     public static final int PHOTO_TARGET_WIDTH = 1920;
-    public static final String PUBLIC_FILE_PATH = "files/public/";
-    public static final String PRIVATE_FILE_PATH = "files/private/";
+    public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
+    public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png");
 
     private final AdvertisementRepository advertisementRepository;

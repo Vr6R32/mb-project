@@ -10,10 +10,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static pl.motobudzet.api.fileManager.service.PublicAdvertisementImageService.PUBLIC_FILE_PATH;
+
 @Service
 public class ResourceImageService {
 
-    public static final String PUBLIC_FILE_PATH = "files/public/";
 
     public Resource getAdvertisementPhoto(String imageUrl) {
         File originalImageFile = new File(PUBLIC_FILE_PATH + imageUrl);
