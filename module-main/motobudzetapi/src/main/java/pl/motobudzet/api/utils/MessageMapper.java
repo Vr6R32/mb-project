@@ -1,4 +1,4 @@
-package pl.motobudzet.api.user_conversations.utils;
+package pl.motobudzet.api.utils;
 
 import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;

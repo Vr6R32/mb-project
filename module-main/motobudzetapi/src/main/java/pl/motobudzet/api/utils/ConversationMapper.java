@@ -1,4 +1,4 @@
-package pl.motobudzet.api.user_conversations.utils;
+package pl.motobudzet.api.utils;
 
 import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
 import pl.motobudzet.api.user_conversations.dto.ConversationDTO;

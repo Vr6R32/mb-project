@@ -12,7 +12,7 @@ const createRegisterForm = () => {
 
     const submitForm = () => {
         const formData = {
-            userName: document.getElementById("username").value,
+            userName: document.getElementById("newusername").value,
             password: document.getElementById("password").value,
             email: document.getElementById("email").value
         };
@@ -30,8 +30,12 @@ const createRegisterForm = () => {
             .then(responseText => {
                 if (responseText) {
                     const responseDiv = document.getElementById("response-message");
-                    responseDiv.textContent = responseText; // Wyświetlamy treść ciała odpowiedzi na stronie
-                    responseDiv.style.display = "block"; // Pokazujemy element div z odpowiedzią
+                    if (responseDiv) {
+                        responseDiv.textContent = responseText; // Wyświetlamy treść ciała odpowiedzi na stronie
+                        responseDiv.style.display = "block"; // Pokazujemy element div z odpowiedzią
+                    } else {
+                        console.log(responseText); // Jeśli element nie istnieje, logujemy odpowiedź
+                    }
                 }
             })
             .catch(error => {
@@ -62,7 +66,7 @@ const createRegisterForm = () => {
 
     const usernameInput = document.createElement("input");
     usernameInput.type = "text";
-    usernameInput.id = "username";
+    usernameInput.id = "newusername";
     usernameInput.name = "username";
     usernameInput.className = "form-control";
     usernameInput.placeholder = "Username";

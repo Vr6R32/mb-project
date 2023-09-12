@@ -29,7 +29,8 @@ public class AdvertisementDTO {
     private Long engineHorsePower;
     private Long productionDate;
     private LocalDate firstRegistrationDate;
-    private LocalDateTime creationTime;
+    private String creationDate;
+    private String creationTime;
     private boolean isVerified;
     private List<String> urlList;
     private String user;
