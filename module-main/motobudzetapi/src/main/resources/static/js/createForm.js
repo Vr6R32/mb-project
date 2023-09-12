@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function getUserName(){
-    let userName = document.getElementById('principalName');
+    let userName = document.getElementById('username');
     console.log('Principal Name2:', userName.textContent);
     return userName.textContent;
 }

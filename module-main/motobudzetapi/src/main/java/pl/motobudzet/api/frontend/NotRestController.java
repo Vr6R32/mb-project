@@ -57,11 +57,4 @@ public class NotRestController {
         model.addAttribute("loadFunction", "Ulubione");
         return "account";
     }
-
-    @GetMapping("register")
-    public String register(Model model, Principal principal) {
-        ModelUtils.setButtonsAttributes(model, principal);
-        return "register";
-    }
-
 }

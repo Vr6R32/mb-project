@@ -13,6 +13,7 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
+import pl.motobudzet.api.utils.MessageDateTimeExtractor;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
@@ -114,6 +115,11 @@ public class PublicAdvertisementService {
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeUserAndUrls) {
 
+        LocalDateTime messageSendDateTime = adv.getCreationTime();
+
+        String creationDate = MessageDateTimeExtractor.extractDate(messageSendDateTime);
+        String creationTime = MessageDateTimeExtractor.extractTime(messageSendDateTime);
+
         AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
                 .name(adv.getName())
@@ -130,8 +136,7 @@ public class PublicAdvertisementService {
                 .engineHorsePower(adv.getEngineHorsePower())
                 .firstRegistrationDate(adv.getFirstRegistrationDate())
                 .productionDate(adv.getProductionDate())
-                .creationTime(LocalDateTime.now())
-                .isVerified(false)
+                .creationDate(creationDate)
                 .mainPhotoUrl(adv.getMainPhotoUrl())
                 .build();
 

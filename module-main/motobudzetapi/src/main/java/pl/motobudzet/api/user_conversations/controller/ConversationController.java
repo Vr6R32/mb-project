@@ -21,9 +21,13 @@ public class ConversationController {
 //    }
 
     @PostMapping("create")
-    public String createConversation(@RequestParam String advertisementId, Principal principal) {
-        conversationService.createConversation(advertisementId, principal.getName());
-        return null;
+    public Long createConversation(@RequestParam String advertisementId, Principal principal) {
+        return conversationService.createConversation(advertisementId, principal.getName());
+    }
+
+    @GetMapping("id")
+    public Long getConversationIdByAdvertisementIdAndSender(@RequestParam String advertisementId,Principal principal){
+        return conversationService.findConversationIdByAdvIdAndSender(advertisementId, principal.getName());
     }
 
     @GetMapping("seller/{ownerName}")
