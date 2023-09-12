@@ -61,11 +61,11 @@
 
     <changeSet id="5" author="michal-k">
         <sql>
-            INSERT INTO app_user (id, user_name, password, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
+            INSERT INTO app_user (user_name, password, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
             VALUES
-                (1, 'admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ker@hitman.pl', true, true, true, true),
-                (2, 'user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ke2@hitman.pl', true, true, true, true),
-                (3, 'admin2', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ke2ds@hitman.pl', true, true, true, true);
+                ('admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ker@hitman.pl', true, true, true, true),
+                ('user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ke2@hitman.pl', true, true, true, true),
+                ('admin2', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ke2ds@hitman.pl', true, true, true, true);
         </sql>
     </changeSet>
 

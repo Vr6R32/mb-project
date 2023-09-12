@@ -19,7 +19,7 @@ public class RegistrationLoginController {
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request) {
-        System.out.println(request);
+//        System.out.println(request);
         return registrationService.register(request);
     }
 }

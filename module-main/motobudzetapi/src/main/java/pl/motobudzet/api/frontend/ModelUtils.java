@@ -8,7 +8,7 @@ public class ModelUtils {
 
     private static final String LOGOUT_BUTTON = "logout";
     private static final String LOGOUT_BUTTON_VALUE = "WYLOGUJ";
-    private static final String USER_LOGGED_BUTTON = "principalName";
+    private static final String USER_LOGGED_BUTTON = "username";
     private static final String USER_NOT_LOGGED_BUTTON_VALUE = "KONTO";
 
     public static void setButtonsAttributes(Model model, Principal principal) {

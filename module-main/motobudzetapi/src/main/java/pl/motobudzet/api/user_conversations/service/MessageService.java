@@ -9,15 +9,15 @@ import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
 import pl.motobudzet.api.user_conversations.entity.Conversation;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
 import pl.motobudzet.api.user_conversations.repository.ConversationMessagesRepository;
-import pl.motobudzet.api.user_conversations.utils.MessageMapper;
+import pl.motobudzet.api.utils.MessageMapper;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.user_conversations.utils.UserAuthorization.authorizeMessageGetAccess;
-import static pl.motobudzet.api.user_conversations.utils.UserAuthorization.authorizeMessagePostAccess;
+import static pl.motobudzet.api.utils.UserAuthorization.authorizeMessageGetAccess;
+import static pl.motobudzet.api.utils.UserAuthorization.authorizeMessagePostAccess;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +28,16 @@ public class MessageService {
     private final ConversationMessagesRepository messagesRepository;
     private final KafkaServiceInterface kafkaService;
 
-    public String sendMessage(String message, Long conversationId, String messageSender) {
+    public String sendMessage(String message,String advertisementId, Long conversationId, String messageSender) {
 
         AppUser userSender = userCustomService.getByName(messageSender);
         Conversation conversation = conversationService.findConversationById(conversationId);
         String userNameClient = conversation.getUserClient().getUsername();
         String userNameOwner = conversation.getUserOwner().getUsername();
+
+//        if(conversation==null){
+//            conversationService.createConversation(advertisementId,messageSender);
+//        }
 
 
         if (authorizeMessagePostAccess(messageSender, userNameOwner, userNameClient)) {

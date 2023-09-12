@@ -1,162 +1,331 @@
 const currentURL = window.location.href;
 const advertisementId = extractAdvertisementId(currentURL);
+let isMouseOverMessageIcon = false; // Zmienna flagi
+let advertisement = null;
+let currentPhotoIndex = 0;
+document.addEventListener("DOMContentLoaded", function () {
+        fetchAdvertisement();
+});
 
 function extractAdvertisementId(currentURL) {
     const urlParts = currentURL.split('/');
-    const advertisementId = urlParts[urlParts.length - 1];
-    console.log('advertisementId:', advertisementId); // Dodaj ten log
-    return advertisementId;
+    return urlParts[urlParts.length - 1];
 }
 
-fetch('/api/advertisements/' + advertisementId)
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('container-main');
-        // container.style.display = 'flex';
-        // container.style.textAlign = 'left';
-        const advertisement = data; // Używamy pojedynczego obiektu, nie listy
+function createHeaderTitle(advertisement,container,owner) {
 
-        const subContainer = document.createElement('div');
-        subContainer.classList.add('sub-container-big');
-        subContainer.style.color = 'darkgoldenrod';
-        subContainer.style.textAlign = 'center';
+        let loggedUser = document.getElementById('username').textContent;
 
         const titleContainer = document.createElement('div');
+        titleContainer.setAttribute('id', 'titleDiv');
         titleContainer.classList.add('title-container');
         titleContainer.style.color = 'darkgoldenrod';
-        titleContainer.style.textAlign = 'center';
-
-        const title = document.createElement('h2');
-        title.textContent = advertisement.name;
-
-        // const description = document.createElement('p');
-        // description.textContent = advertisement.description;
-
-        titleContainer.appendChild(title);
-        // titleContainer.appendChild(description);
+        titleContainer.style.textAlign = 'center'
+        titleContainer.style.marginTop = '-30px'; // Przesunięcie o 10 pikseli w górę
 
 
+        const titleDiv = document.createElement('div');
+        titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
+        titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
 
-        const fadeEffect = document.createElement('div');
-        fadeEffect.classList.add('fade-effect-big');
+        titleContainer.appendChild(titleDiv);
 
-        const mainPhoto = document.createElement('img');
-        mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[0];
-        mainPhoto.alt = 'MainUrlPhoto';
-        mainPhoto.id = 'mainUrlPhoto';
+        const titleMidColumn = document.createElement('h2');
+        titleMidColumn.style.gridColumn = '2';
+        titleMidColumn.textContent = advertisement.name;
+        titleMidColumn.style.fontSize = '32px';
+        titleMidColumn.style.fontWeight = 'bold';
 
-        fadeEffect.appendChild(mainPhoto);
-        subContainer.appendChild(fadeEffect);
+        const titleRightColumn = document.createElement('h2');
+        titleRightColumn.style.gridColumn = '3';
+        titleRightColumn.style.justifyContent = 'space-between';
 
-        const arrowContainer = document.createElement('div');
-        arrowContainer.style.display = 'flex';
-        arrowContainer.style.justifyContent = 'center';
-        arrowContainer.style.marginTop = '10px';
+        const heartIcon = document.createElement('img');
+        heartIcon.setAttribute('id', 'hearticon');
+        heartIcon.src = '/api/resources/heartEmpty';
+        heartIcon.alt = 'HeartIcon';
 
-        const previousArrow = document.createElement('span');
-        previousArrow.textContent = '←';
-        previousArrow.style.cursor = 'pointer';
-        previousArrow.style.fontSize = '36px';
-        previousArrow.style.marginRight = '10px';
-        previousArrow.addEventListener('click', () => previousPhoto(advertisement));
+        const messageIcon = document.createElement('img');
+        messageIcon.setAttribute('id', 'msgicon');
+        messageIcon.src = '/api/resources/messageClosed';
+        messageIcon.alt = 'MessageIcon';
+        messageIcon.style.marginBottom = '3px';
+        messageIcon.style.marginRight = '15px';
 
-        const nextArrow = document.createElement('span');
-        nextArrow.textContent = '→';
-        nextArrow.style.cursor = 'pointer';
-        nextArrow.style.fontSize = '36px';
-        nextArrow.addEventListener('click', () => nextPhoto(advertisement));
 
-        arrowContainer.appendChild(previousArrow);
-        arrowContainer.appendChild(nextArrow);
+        messageIcon.addEventListener('mouseenter', () => {
+                if (!isMouseOverMessageIcon) {
+                        messageIcon.src = '/api/resources/messageOpen';
+                        messageIcon.style.cursor = 'pointer';
+                }
+        });
 
-        subContainer.appendChild(arrowContainer);
+        messageIcon.addEventListener('mouseleave', () => {
+                if (!isMouseOverMessageIcon) {
+                        messageIcon.src = '/api/resources/messageClosed';
+                        messageIcon.style.cursor = 'auto';
+                }
+        });
 
-        const infoContainer = document.createElement('div');
-        infoContainer.style.display = 'flex';
-        infoContainer.style.alignItems = 'center';
-        infoContainer.style.justifyContent = 'center';
-        infoContainer.style.marginTop = '50px';
+        messageIcon.addEventListener('click', () => {
+                createMessageBox(messageIcon,loggedUser);
+                isMouseOverMessageIcon = true; // Zablokuj działanie mouseleave
+                messageIcon.src = '/api/resources/messageOpen';
+        });
 
-        const mileageInfo = document.createElement('div');
-        mileageInfo.style.display = 'flex';
-        mileageInfo.style.flexDirection = 'column';
-        mileageInfo.style.alignItems = 'center';
-        mileageInfo.style.marginRight = '30px';
 
-        const mileageIcon = document.createElement('img');
-        mileageIcon.src = '/api/resources/mileage';
-        mileageIcon.alt = 'MileageIcon';
 
-        const mileageValue = document.createElement('span');
-        mileageValue.textContent = advertisement.mileage;
-        mileageInfo.appendChild(mileageIcon);
-        mileageInfo.appendChild(mileageValue);
+        if (loggedUser!==owner){
+            titleRightColumn.appendChild(messageIcon);
+            titleRightColumn.appendChild(heartIcon);
+        }
 
-        const productionDateInfo = document.createElement('div');
-        productionDateInfo.style.display = 'flex';
-        productionDateInfo.style.flexDirection = 'column';
-        productionDateInfo.style.alignItems = 'center';
+        titleDiv.appendChild(titleMidColumn);
+        titleDiv.appendChild(titleRightColumn);
+        container.appendChild(titleContainer);
+}
 
-        const productionDateIcon = document.createElement('img');
-        productionDateIcon.src = '/api/resources/productionDate';
-        productionDateIcon.alt = 'ProductionDateIcon';
 
-        const productionDateValue = document.createElement('span');
-        productionDateValue.textContent = advertisement.productionDate;
-        productionDateInfo.appendChild(productionDateIcon);
-        productionDateInfo.appendChild(productionDateValue);
 
-        const fuelTypeInfo = document.createElement('div');
-        fuelTypeInfo.style.display = 'flex';
-        fuelTypeInfo.style.flexDirection = 'column';
-        fuelTypeInfo.style.alignItems = 'center';
-        fuelTypeInfo.style.marginLeft = '30px';
+function createMessageBox(messageIcon,loggedUser) {
 
-        const fuelTypeIcon = document.createElement('img');
-        fuelTypeIcon.src = '/api/resources/fuelType';
-        fuelTypeIcon.alt = 'FuelTypeIcon';
 
-        const fuelTypeValue = document.createElement('span');
-        fuelTypeValue.textContent = advertisement.fuelType.name
-        fuelTypeValue.textContent = advertisement.fuelType.name
-        fuelTypeInfo.appendChild(fuelTypeIcon);
-        fuelTypeInfo.appendChild(fuelTypeValue);
+        // Stwórz overlay, czyli zaciemnione tło
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
 
-        infoContainer.appendChild(mileageInfo);
-        infoContainer.appendChild(productionDateInfo);
-        infoContainer.appendChild(fuelTypeInfo);
+        // Stwórz okno dialogowe
+        const dialogBox = document.createElement('div');
+        dialogBox.setAttribute('id','dialogBox')
+        dialogBox.style.position = 'fixed';
+        dialogBox.style.top = '50%';
+        dialogBox.style.left = '50%';
+        dialogBox.style.height = '250px';
+        dialogBox.style.width = '600px';
+        dialogBox.style.transform = 'translate(-50%, -50%)';
+        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+        // dialogBox.style.backgroundColor = '#181818';
+        dialogBox.style.borderRadius = '15px';
+        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
+        dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
+        dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+        dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
+        dialogBox.style.display = 'flex';
+        dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
 
-        subContainer.appendChild(infoContainer);
+        const headerTitle = document.createElement('dialogBox');
+        headerTitle.setAttribute('id', 'dialogBoxTitle');
+        headerTitle.textContent = 'Napisz wiadomość do sprzedającego';
+        headerTitle.style.color = 'darkgoldenrod';
+        headerTitle.style.fontSize = '32px';
+        headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
+        headerTitle.style.marginTop = '15px'
+        // headerTitle.style.marginBottom = '15px'
 
-            container.appendChild(titleContainer);
-            container.appendChild(subContainer);
+        // Stwórz obszar tekstowy
+        const textArea = document.createElement('textarea');
+        // textArea.style.backgroundColor = '#181818';
+        textArea.style.backgroundColor = 'transparent'; // Czarny kolor z przeźroczystością
 
-        // Obsługa zmiany zdjęcia po kliknięciu strzałki
-        let currentPhotoIndex = 0;
+        textArea.style.color = 'white';
+        textArea.style.borderRadius = '10px';
+        textArea.style.width = '100%';
+        textArea.style.height = '100px';
+        textArea.style.width = '500px';
+        textArea.style.resize = 'none';
 
-        const changePhoto = (index) => {
-            mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[index];
-            mainPhoto.alt = 'MainUrlPhoto';
-        };
+        const sendButton = document.createElement("button");
+        // settingsButton.setAttribute('id', 'menuPanelButton');
+        sendButton.textContent = 'Wyślij';
+        sendButton.style.backgroundColor = "darkgoldenrod";
+        sendButton.style.border = "none";
+        sendButton.style.marginBottom = "20px";
+        sendButton.style.width = "150px";
+        sendButton.style.color = "black";
+        sendButton.style.marginTop = "20px";
+        sendButton.style.padding = "10px 20px";
+        sendButton.style.borderRadius = "5px";
+        sendButton.style.boxShadow = "0 0 20px darkgoldenrod";
+        sendButton.style.transition = "background-position 0.3s ease-in-out";
 
-        const previousPhoto = (advertisement) => {
-            if (currentPhotoIndex > 0) {
-                currentPhotoIndex--;
-            } else {
-                currentPhotoIndex = advertisement.urlList.length - 1;
-            }
-            changePhoto(currentPhotoIndex);
-        };
+        sendButton.addEventListener("mouseover", function () {
+                sendButton.style.boxShadow = '0 0 20px moccasin';
+                sendButton.style.color = "white";
+        });
 
-        const nextPhoto = (advertisement) => {
-            if (currentPhotoIndex < advertisement.urlList.length - 1) {
-                currentPhotoIndex++;
-            } else {
-                currentPhotoIndex = 0;
-            }
-            changePhoto(currentPhotoIndex);
-        };
-    })
-    .catch(error => {
-        console.error('Błąd pobierania danych:', error);
+        sendButton.addEventListener("mouseout", function () {
+                sendButton.style.boxShadow = '0 0 20px darkgoldenrod';
+                sendButton.style.color = "black";
+        });
+        sendButton.addEventListener("click", function () {
+                checkConversationId(textArea.value);
+        });
+        textArea.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkConversationId(textArea.value);
+        }
     });
+
+        if(loggedUser === 'KONTO'){
+            headerTitle.textContent = 'Musisz się zalogować !';
+            dialogBox.appendChild(headerTitle);
+         } else {
+            dialogBox.appendChild(headerTitle);
+            dialogBox.appendChild(textArea);
+            dialogBox.appendChild(sendButton);
+        }
+        // Dodaj okno dialogowe do overlay
+        overlay.appendChild(dialogBox);
+
+        // Dodaj overlay do dokumentu
+        document.body.appendChild(overlay);
+
+        textArea.focus();
+
+
+        // Dodaj obsługę zdarzenia do zamknięcia okna dialogowego
+        overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                        document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
+                        isMouseOverMessageIcon = false; // Odblokuj działanie mouseleave
+                        messageIcon.src = '/api/resources/messageClosed';
+                }
+        });
+}
+function sendNewMessage(messageValue, advertisementId, conversationId) {
+    // Stwórz obiekt FormData z danymi formularza
+    const formData = new FormData();
+    formData.append("message", messageValue);
+    formData.append("conversationId", conversationId);
+    formData.append("advertisementId", advertisementId);
+
+    // Wysłanie danych jako żądanie POST z danymi formularza
+    fetch("/api/messages", {
+        method: "POST",
+        body: formData,
+        headers: {
+            // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                // Jeśli odpowiedź jest OK (status 200), nie parsujemy jej jako JSON
+                let dialogBox = document.getElementById('dialogBox');
+                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
+                dialogBox.innerHTML = '';
+                dialogBoxTitle.textContent = "Wiadomość wysłana pomyślnie.";
+                dialogBox.appendChild(dialogBoxTitle);
+            } else {
+                let dialogBox = document.getElementById('dialogBox');
+                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
+                dialogBox.innerHTML = '';
+                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + response.status;
+                dialogBox.appendChild(dialogBoxTitle);
+                console.error();
+            }
+        })
+        .catch(error => {
+            console.error("Błąd podczas wysyłania wiadomości:", error);
+        });
+}
+
+function createNewConversation() {
+    const formData = new FormData();
+    formData.append("advertisementId", advertisementId);
+
+    // Zwróć obietnicę
+    return fetch("/api/conversations/create", {
+        method: "POST",
+        body: formData,
+        headers: {
+            // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
+        }
+    })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            return response;
+        })
+        .catch(error => {
+            console.error("Błąd podczas wysyłania wiadomości:", error);
+        });
+}
+
+function checkConversationId(messageValue) {
+    let conversationId = null;
+    let loggedUser = document.getElementById('username').textContent;
+
+    fetch("/api/conversations/id?advertisementId=" + advertisementId)
+        .then(response => {
+            if (response.status === 200) {
+                return response.text(); // Jeśli odpowiedź jest OK, odczytaj ją jako tekst
+            } else {
+                throw new Error('Błąd na serwerze: ' + response.statusText);
+            }
+        })
+        .then(data => {
+            conversationId = parseInt(data); // Przekształć odpowiedź w numer konwersacji
+            if (conversationId < 0) {
+                createNewConversation()
+                    .then(result => {
+                        if (result) {
+                            console.log(result);
+                            sendNewMessage(messageValue, advertisementId, result);
+                        } else {
+                            console.error('NIE MOZESZ WYSYLAC WIADOMOSCI SAM DO SIEBIE !');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Błąd createNewConversation:', error);
+                    });
+            } else {
+                sendNewMessage(messageValue, advertisementId, conversationId);
+            }
+        })
+        .catch(error => {
+            console.error('Błąd:', error);
+        });
+}
+
+
+function fetchAdvertisement(){
+        fetch('/api/advertisements/' + advertisementId)
+            .then(response => response.json())
+            .then(data => {
+                    const container = document.getElementById('container-main');
+                    advertisement = data; // Używamy pojedynczego obiektu, nie listy
+                    createHeaderTitle(advertisement,container,advertisement.user);
+                    createAdvertisementResultDiv(container);
+            })
+            .catch(error => {
+                    console.error('Błąd pobierania danych:', error);
+            });
+}
+
+function previousPhoto(mainPhoto)  {
+    if (currentPhotoIndex > 0) {
+        currentPhotoIndex--;
+    } else {
+        currentPhotoIndex = advertisement.urlList.length - 1;
+    }
+    changePhoto(currentPhotoIndex,mainPhoto);
+}
+
+function nextPhoto(mainPhoto)  {
+    if (currentPhotoIndex < advertisement.urlList.length - 1) {
+        currentPhotoIndex++;
+    } else {
+        currentPhotoIndex = 0;
+    }
+    changePhoto(currentPhotoIndex,mainPhoto);
+}
+function changePhoto(index,mainPhoto) {
+    mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[index];
+}
+
