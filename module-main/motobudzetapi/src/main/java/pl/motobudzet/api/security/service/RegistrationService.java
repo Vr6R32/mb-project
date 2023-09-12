@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.security.util.RequestCredentialsValidation;
+import pl.motobudzet.api.utils.RegistrationRequestValidation;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.repository.AppUserRepository;
@@ -18,12 +18,11 @@ public class RegistrationService {
 
     private final AppUserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final RequestCredentialsValidation requestCredentialsValidation;
     private final PasswordEncoder passwordEncoder;
 
     public ResponseEntity<String> register(RegistrationRequest request) {
 
-        requestCredentialsValidation.validate(request);
+        RegistrationRequestValidation.validate(request,userRepository);
 
         AppUser newUser = AppUser.builder()
                 .userName(request.getUserName())
@@ -33,16 +32,10 @@ public class RegistrationService {
                 .accountNotLocked(true)
                 .accountNotExpired(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(roleRepository.findByName("ROLE_ADMIN").get()))
+                .roles(List.of(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found!"))))
                 .build();
         userRepository.saveAndFlush(newUser);
 
         return ResponseEntity.ok().header("Location", newUser.getId().toString()).body("Registered !");
     }
-
-//    private Collection < ? extends GrantedAuthority> mapRolesToAuthorities(Collection <Role> roles) {
-//        return roles.stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName()))
-//                .collect(Collectors.toList());
-//    }
 }

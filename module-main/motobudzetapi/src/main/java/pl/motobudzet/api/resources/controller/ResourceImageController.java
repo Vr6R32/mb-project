@@ -70,6 +70,27 @@ public class ResourceImageController {
         return new FileSystemResource(PRIVATE_FILE_PATH + "logo.png");
     }
 
+    @GetMapping(value = "/heartEmpty", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getHeartEmpty() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "heartEmpty.png");
+    }
+
+    @GetMapping(value = "/heartFull", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getHeartFull() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "heartFull.png");
+    }
+
+    @GetMapping(value = "/messageClosed", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getMessageClosed() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "messageClosed.png");
+    }
+
+    @GetMapping(value = "/messageOpen", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getMessageOpen() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "messageOpen.png");
+    }
+
+
     @GetMapping(value = "/advertisementPhoto/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getOriginalPhoto(@PathVariable String imageUrl) {
 

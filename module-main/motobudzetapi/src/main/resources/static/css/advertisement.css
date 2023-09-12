@@ -1,0 +1,34 @@
+#advertisementResultDiv {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-basis: auto;
+    height: auto;
+    background-color: black;
+    margin: 0 20px;
+    margin-bottom: 15px;
+    padding: 10px;
+    display: grid;
+    border-radius: 30px;
+    cursor: default;
+    animation: fade-in 1s ease-in-out forwards;
+}
+
+#advertisementInfoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    text-align: center;
+    margin-right: 20px;
+    /*width: max-content;*/
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-basis: auto;
+}
+#userNameValueDiv {
+    margin-right: 10px;
+    position: relative;
+    /*top: 10px;*/
+    flex-shrink: 0;
+}

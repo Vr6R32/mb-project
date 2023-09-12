@@ -11,8 +11,9 @@ import pl.motobudzet.api.user_conversations.entity.Conversation;
 import pl.motobudzet.api.user_conversations.repository.ConversationRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-import static pl.motobudzet.api.user_conversations.utils.ConversationMapper.mapConversationToDTO;
+import static pl.motobudzet.api.utils.ConversationMapper.mapConversationToDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -29,22 +30,29 @@ public class ConversationService {
 //
 //    }
 
-    public void createConversation(String advertisementId, String client) {
+    public Long createConversation(String advertisementId, String client) {
+
         AppUser userClient = userCustomService.getByName(client);
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
-        Conversation conversation = Conversation.builder()
-                .advertisement(advertisement)
-                .userOwner(advertisement.getUser())
-                .userClient(userClient)
-                .build();
-        conversationRepository.save(conversation);
+
+        if(advertisement.getUser().getUsername().equals(client)){
+            return null;
+        }
+
+        else {
+            Conversation conversation = Conversation.builder()
+                    .advertisement(advertisement)
+                    .userOwner(advertisement.getUser())
+                    .userClient(userClient)
+                    .build();
+            return conversationRepository.saveAndFlush(conversation).getId();
+        }
     }
 
 
     public Conversation findConversationById(Long conversationId) {
         return conversationRepository
-                .findById(conversationId)
-                .orElseThrow(() -> new RuntimeException("conversation didnt found !"));
+                .findById(conversationId).orElse(null);
     }
 
 //    public Conversation findConversation(String advertisementId,Long userOwnerId,Long userClientId){
@@ -69,5 +77,9 @@ public class ConversationService {
         AppUser user = userCustomService.getByName(userName);
         List<Conversation> conversationList = conversationRepository.findAllConversationsByUserId(user.getId());
         return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, userName, advertisementService)).toList();
+    }
+
+    public Long findConversationIdByAdvIdAndSender(String advertisementId, String name) {
+        return conversationRepository.findByUserClientIdAndAdvertisementId(UUID.fromString(advertisementId), name).orElse( -1L);
     }
 }

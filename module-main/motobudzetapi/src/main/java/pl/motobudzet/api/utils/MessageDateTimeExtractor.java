@@ -1,4 +1,4 @@
-package pl.motobudzet.api.user_conversations.utils;
+package pl.motobudzet.api.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +13,6 @@ public class MessageDateTimeExtractor {
         LocalDate date = messageDateTime.toLocalDate();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return date.format(dateFormatter);
-
     }
 
     public static String extractTime(LocalDateTime messageDateTime) {

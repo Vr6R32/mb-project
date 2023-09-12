@@ -28,4 +28,7 @@ public interface ConversationRepository extends JpaRepository<Conversation,Long>
             "WHERE c.userOwner.id = ?1 OR c.userClient.id = ?1 " +
             "ORDER BY c.lastMessage.messageSendDateTime DESC ")
     List<Conversation> findAllConversationsByUserId(Long id);
+
+    @Query("select c.id from Conversation c where c.advertisement.id = ?1 and c.userClient.userName = ?2")
+    Optional<Long> findByUserClientIdAndAdvertisementId(UUID advertisementId, String name);
 }
