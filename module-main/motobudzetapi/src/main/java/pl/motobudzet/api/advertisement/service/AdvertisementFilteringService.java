@@ -155,12 +155,8 @@ public class AdvertisementFilteringService {
 
         }
 
-        if (sortBy == null) {
-            sortBy = "price";
-        }
-        if (sortOrder == null) {
-            sortOrder = "DESC";
-        }
+        System.out.println(sortOrder);
+        System.out.println(sortBy);
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
         return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
