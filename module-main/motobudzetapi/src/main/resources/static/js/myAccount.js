@@ -18,6 +18,7 @@ function Profil(buttonName) {
 }
 function Ogloszenia(buttonName) {
     createHeader(buttonName);
+    loadUserAdvertisements();
 }
 function Wiadomosci(buttonName) {
     createHeader(buttonName);
@@ -25,6 +26,7 @@ function Wiadomosci(buttonName) {
 }
 function Ulubione(buttonName) {
     createHeader(buttonName);
+    loadFavourites();
 }
 function Ustawienia(buttonName) {
     createHeader(buttonName);
@@ -33,6 +35,70 @@ function UkryjMenu(buttonName) {
     let leftContainer = document.getElementById('left-container');
     leftContainer.remove();
 }
+
+function loadUserAdvertisements(){
+    fetchAdvertisements();
+}
+
+let row = 1;
+let resultCount = 0;
+
+function fetchAdvertisements(){
+    let loggedUser = document.getElementById('username').textContent;
+    fetch('/api/advertisements/user/' + loggedUser)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('resultContainerRight');
+            if (data.length === 0) {
+                container.textContent = "Nie masz jeszcze żadnych ogłoszeń";
+            } else {
+                    data.forEach(advertisementData => {
+                        createUserAdvertisementsResultDiv(advertisementData,container);
+                        row++;
+                        resultCount++
+                    });
+                if(resultCount>5){
+                    container.style.maxHeight = "950x";
+                    container.style.overflowY = "auto";
+                    container.style.overflowX = "hidden";
+                    container.style.paddingBottom = "30px"; // Dodaj dolny padding
+                    container.style.paddingLeft = "20px"; // Dodaj dolny padding
+                    container.style.paddingRight = "20px"; // Dodaj dolny padding
+                    container.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
+                    container.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Błąd pobierania danych:', error);
+        });
+}
+
+
+// function createAdvertisementDetailsContainer(iconPath, altText, value) {
+//     const container = document.createElement('advertisementInfoContainer');
+//     container.setAttribute('id', 'advertisementInfoContainer');
+//     container.style.color = 'darkgoldenrod';
+//
+//     const icon = document.createElement('img');
+//     icon.src = `/api/resources/${iconPath}`;
+//     icon.alt = altText;
+//     icon.style.marginBottom = '2px';
+//
+//     const valueElement = document.createElement('span');
+//     valueElement.textContent = value;
+//
+//     container.appendChild(icon);
+//     container.appendChild(valueElement);
+//
+//     return container;
+// }
+
+function loadFavourites(){
+
+}
+
+let conversationRow = 1;
 
 function loadConversations() {
 
@@ -54,14 +120,14 @@ function loadConversations() {
                 data.forEach(conversation => {
                     const resultDiv = createResultDiv(conversation,resultContainerRight);
                     resultCount++;
+                    conversationRow++
                     resultContainerRight.appendChild(resultDiv);
                 });
             }
-            if(resultCount>0){
-                resultContainerRight.style.maxHeight = "600px";
+            if(resultCount>5){
+                resultContainerRight.style.maxHeight = "950px";
                 resultContainerRight.style.overflowY = "auto";
                 resultContainerRight.style.overflowX = "hidden";
-                resultContainerRight.style.paddingTop = "120px"; // Dodaj górny padding
                 resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
                 resultContainerRight.style.paddingLeft = "20px"; // Dodaj dolny padding
                 resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding

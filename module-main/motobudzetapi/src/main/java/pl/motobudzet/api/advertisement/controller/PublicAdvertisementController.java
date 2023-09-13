@@ -9,6 +9,8 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,5 +43,8 @@ public class PublicAdvertisementController {
                                             @RequestBody @Valid AdvertisementCreateRequest request) {
         return publicAdvertisementService.editExistingAdvertisement(id, request);
     }
-
+    @GetMapping(value = "user/{username}")
+    public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username, Principal principal){
+        return publicAdvertisementService.getAllUserAdvertisements(username,principal.getName());
+    }
 }
