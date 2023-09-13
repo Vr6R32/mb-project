@@ -2,6 +2,31 @@ function createResultDiv(conversation,resultContainerRight) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
 
+
+    // Tworzenie dwóch elementów grid
+    resultContainerRight.style.display = 'grid';
+    resultContainerRight.style.gridTemplateColumns = '100%';
+    resultContainerRight.style.overflowY = 'scroll';
+    resultContainerRight.style.overflowX = 'hidden';
+    resultContainerRight.style.paddingBottom = '30px';
+    resultContainerRight.style.paddingTop = '30px';
+    resultContainerRight.style.paddingLeft = '20px';
+    resultContainerRight.style.paddingRight = '20px';
+    resultContainerRight.style.scrollbarWidth = 'thin';
+    resultContainerRight.style.scrollbarColor = 'darkgoldenrod transparent';
+
+    // Tworzenie dwóch elementów grid
+    const grid1 = document.createElement('div');
+    grid1.style.maxWidth = '100%';
+    // grid4.style.textAlign = 'right';
+    // grid4.style.justifyContent = 'flex-end'; // Wyrównujemy do prawej
+
+
+    // Dodawanie tych gridów jako dzieci do resultContainerRight
+    resultContainerRight.appendChild(grid1);
+
+
+
     // Add hover effect on mouseover
     resultDiv.onmouseover = () => {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
@@ -96,7 +121,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
 
     const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetails.style.width = '100%'; // Dopasowanie do szerokości resultDiv
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
@@ -173,7 +198,10 @@ function createResultDiv(conversation,resultContainerRight) {
     conversationDetailsDiv.appendChild(conversationDetailsHeader);
     conversationDetailsDiv.appendChild(conversationDetailsMain);
 
+    resultDiv.style.gridColumn = 1;
 
+    resultDiv.style.gridRowStart = conversationRow; // Ustaw numer rzędu
+    resultDiv.style.gridRowEnd = conversationRow + 1; // Ustaw numer rzędu
 
     resultDiv.appendChild(conversationDetailsDiv);
 
@@ -338,7 +366,7 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
     singleMessageDiv.appendChild(messageElement);
     resultContainerRight.appendChild(singleMessageDiv);
 
-    calculateSenderNamePosition(singleMessageDiv,userNameElement);
+    // calculateSenderNamePosition(singleMessageDiv,userNameElement);
 
 }
 
