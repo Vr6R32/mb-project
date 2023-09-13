@@ -1,14 +1,14 @@
-package pl.motobudzet.api.security.service;
+package pl.motobudzet.api.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.utils.RegistrationRequestValidation;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.repository.AppUserRepository;
 import pl.motobudzet.api.user.repository.RoleRepository;
+import pl.motobudzet.api.utils.RegistrationRequestValidation;
 
 import java.util.List;
 

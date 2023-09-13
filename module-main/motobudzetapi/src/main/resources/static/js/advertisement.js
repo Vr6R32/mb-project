@@ -301,7 +301,7 @@ function fetchAdvertisement(){
                     const container = document.getElementById('container-main');
                     advertisement = data; // Używamy pojedynczego obiektu, nie listy
                     createHeaderTitle(advertisement,container,advertisement.user);
-                    createAdvertisementResultDiv(container);
+                    createAdvertisementResultDiv(container,advertisement);
             })
             .catch(error => {
                     console.error('Błąd pobierania danych:', error);

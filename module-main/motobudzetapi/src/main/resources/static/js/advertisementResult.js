@@ -1,4 +1,4 @@
-function createAdvertisementResultDiv(mainContainer) {
+function createAdvertisementResultDiv(mainContainer,advertisement) {
     const resultDiv = document.createElement("advertisementResultDiv");
     resultDiv.id = "advertisementResultDiv";
 
@@ -8,6 +8,7 @@ function createAdvertisementResultDiv(mainContainer) {
     imageDiv.style.display = 'flex';
     imageDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
 
+    console.log(advertisement);
 
     const mainPhoto = document.createElement('img');
     mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[0];
@@ -35,9 +36,7 @@ function createAdvertisementResultDiv(mainContainer) {
     fadeEffect.classList.add('fade-effect-big');
 
 
-    // fadeEffect.appendChild(previousArrow);
     fadeEffect.appendChild(mainPhoto);
-    // fadeEffect.appendChild(nextArrow);
     imageDiv.appendChild(previousArrow)
     imageDiv.appendChild(fadeEffect)
     imageDiv.appendChild(nextArrow)
@@ -75,8 +74,8 @@ function createAdvertisementResultDiv(mainContainer) {
     dateElement.style.marginLeft = 'auto'; // Wyrównaj od prawej krawędzi
     dateElement.style.whiteSpace = 'nowrap'; // T
 
-    mainContainer.appendChild(dateElement);
-    mainContainer.insertBefore(dateElement, titleDiv);
+    // mainContainer.appendChild(dateElement);
+    // mainContainer.insertBefore(dateElement, titleDiv);
 
     advertisementDetailsHeader.appendChild(nameElement);
     // advertisementDetailsHeader.appendChild(dateElement);
