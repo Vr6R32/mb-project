@@ -34,4 +34,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "END FROM AppUser a")
     String checkUsernameAndEmailAvailability(String userName, String email);
 
+    @Query("select a.id from AppUser a where a.userName = ?1")
+    Optional<Long> getAppUserIdByUserName(String username);
+
 }

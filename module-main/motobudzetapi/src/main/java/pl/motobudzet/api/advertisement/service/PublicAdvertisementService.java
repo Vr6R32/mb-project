@@ -20,6 +20,7 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -157,5 +158,14 @@ public class PublicAdvertisementService {
             pageNumber = 0;
         }
         return Math.max(pageNumber, 0);
+    }
+
+    public List<AdvertisementDTO> getAllUserAdvertisements(String username, String loggedUser) {
+        if(username.equals(loggedUser)){
+            Long userNameId = userCustomService.getUserIdByUserName(username);
+            return advertisementRepository.findAllAdvertisementsByUserId(userNameId)
+                    .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
+        }
+        return Collections.emptyList();
     }
 }

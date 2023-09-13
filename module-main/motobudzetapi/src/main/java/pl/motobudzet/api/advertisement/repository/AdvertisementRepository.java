@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,7 +30,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
     int insertNewPhoto(UUID id, String name);
 
 
-    Page<Advertisement> findAll(Specification spec, Pageable pageable);
+//    Page<Advertisement> findAll(Specification spec, Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a " +
             "LEFT JOIN FETCH a.imageUrls " +
@@ -40,6 +42,17 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.transmissionType t WHERE a.id = :uuid")
     Optional<Advertisement> findOneByIdWithFetch(UUID uuid);
+
+    @Query("SELECT a FROM Advertisement a " +
+            "LEFT JOIN FETCH a.imageUrls " +
+            "LEFT JOIN FETCH a.brand b " +
+            "LEFT JOIN FETCH a.model m " +
+            "LEFT JOIN FETCH a.driveType d " +
+            "LEFT JOIN FETCH a.engineType e " +
+            "LEFT JOIN FETCH a.fuelType f " +
+            "LEFT JOIN FETCH a.user u " +
+            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 ORDER BY a.creationTime DESC")
+    List<Advertisement> findAllAdvertisementsByUserId(Long userNameId);
 
 //    List<String> findAdvertisementGallery(UUID id);
 //    @Query("SELECT a.imageUrls FROM Advertisement a where a.id = :id")
