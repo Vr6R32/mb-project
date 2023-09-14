@@ -22,20 +22,29 @@ public class RegistrationService {
 
     public ResponseEntity<String> register(RegistrationRequest request) {
 
-        RegistrationRequestValidation.validate(request,userRepository);
+        String validateResponse = RegistrationRequestValidation.validate(request, userRepository);
 
-        AppUser newUser = AppUser.builder()
-                .userName(request.getUserName())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
-                .accountEnabled(true)
-                .accountNotLocked(true)
-                .accountNotExpired(true)
-                .credentialsNotExpired(true)
-                .roles(List.of(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found!"))))
-                .build();
-        userRepository.saveAndFlush(newUser);
+        if (!validateResponse.equals("Both username and email are available")) {
+            return ResponseEntity.badRequest()
+                    .body(validateResponse);
+        } else {
+            AppUser newUser = AppUser.builder()
+                    .userName(request.getUserName())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .email(request.getEmail())
+                    .accountEnabled(true)
+                    .accountNotLocked(true)
+                    .accountNotExpired(true)
+                    .credentialsNotExpired(true)
+                    .roles(List.of(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found!"))))
+                    .build();
+            userRepository.saveAndFlush(newUser);
 
-        return ResponseEntity.ok().header("Location", newUser.getId().toString()).body("Registered !");
+            return ResponseEntity.ok()
+                    .headers(httpHeaders -> {
+                        httpHeaders.set("registered", "true");
+                    })
+                    .body("Zarejerstrowano pomyślnie !");
+        }
     }
 }

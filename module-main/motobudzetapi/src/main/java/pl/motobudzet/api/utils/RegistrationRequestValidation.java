@@ -10,15 +10,14 @@ public class RegistrationRequestValidation {
     private RegistrationRequestValidation() {
     }
 
-    public static void validate(RegistrationRequest request, AppUserRepository userRepository) {
+    public static String validate(RegistrationRequest request, AppUserRepository userRepository) {
 
         String result = userRepository.checkUsernameAndEmailAvailability(request.getUserName(), request.getEmail());
 
         switch (result) {
-            case "Username is already taken" -> throw new RuntimeException("Username is already taken!");
-            case "Email is already taken" -> throw new RuntimeException("Email is already taken!");
-            case "Both username and email are available" -> {
-            }
+            case "Username is already taken" -> result = "Nazwa użytkownika jest już zajęta!";
+            case "Email is already taken" -> result = "Podany adres email jest już zajęty!";
         }
+        return result;
     }
 }
