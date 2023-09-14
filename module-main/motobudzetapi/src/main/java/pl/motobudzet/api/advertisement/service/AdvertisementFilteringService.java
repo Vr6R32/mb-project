@@ -155,13 +155,6 @@ public class AdvertisementFilteringService {
 
         }
 
-        if (sortBy == null) {
-            sortBy = "price";
-        }
-        if (sortOrder == null) {
-            sortOrder = "DESC";
-        }
-
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
         return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
                 .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
