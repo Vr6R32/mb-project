@@ -42,14 +42,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 20px; /* Dodaj padding, aby uzyskać odstęp od krawędzi */
     box-sizing: border-box;
     max-width: 100%;
-    /* height: auto; */ /* Remove fixed height */
-    /* max-height: 100%; */ /* Remove max height */
-    /* flex-grow: 1;*/
-
-    /* Dodaj zmianę box shadow po najechaniu myszką */
+    height: 100vh; /* Ustaw wysokość na 100% widoku (viewport height) */
+    margin: 0 auto; /* Wycentruj w poziomie */
     transition: box-shadow 0s ease-in-out;
 }
 
