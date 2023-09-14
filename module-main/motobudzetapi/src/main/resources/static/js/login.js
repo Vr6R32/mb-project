@@ -4,11 +4,69 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+function createDialogBox(message){
+    if(!document.getElementById('overlayId')){
+        const overlay = document.createElement('div');
+        overlay.setAttribute('id', 'overlayId');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+
+
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
+            }
+        });
+
+        // Stwórz okno dialogowe
+        const dialogBox = document.createElement('div');
+        dialogBox.setAttribute('id','dialogBox')
+        dialogBox.style.position = 'fixed';
+        dialogBox.style.top = '50%';
+        dialogBox.style.left = '50%';
+        dialogBox.style.height = '250px';
+        dialogBox.style.width = '600px';
+        dialogBox.style.transform = 'translate(-50%, -50%)';
+        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+        dialogBox.style.borderRadius = '15px';
+        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
+        dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
+        dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+        dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
+        dialogBox.style.display = 'flex';
+        dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
+
+        const headerTitle = document.createElement('dialogBox');
+        headerTitle.setAttribute('id', 'dialogBoxTitle');
+        headerTitle.textContent = message;
+        headerTitle.style.color = 'darkgoldenrod';
+        headerTitle.style.fontSize = '32px';
+        headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
+        headerTitle.style.marginTop = '15px'
+
+        dialogBox.appendChild(headerTitle);
+        overlay.appendChild(dialogBox);
+        document.body.appendChild(overlay);
+    }
+}
+
 const createRegisterForm = () => {
     let formContainer = document.getElementById("registerFormContainer");
 
     formContainer.innerHTML = '';
 
+    const addEnterKeyListener = (element)=> {
+        element.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !document.getElementById('overlayId')) {
+                event.preventDefault(); // Zapobiegaj domyślnemu zachowaniu Enter (np. przeładowanie strony)
+                submitForm(); // Wywołaj funkcję submitForm
+            }
+        });
+    }
 
     const submitForm = () => {
         const formData = {
@@ -28,21 +86,13 @@ const createRegisterForm = () => {
                 return response.text(); // Pobieramy treść ciała odpowiedzi jako tekst
             })
             .then(responseText => {
-                if (responseText) {
-                    const responseDiv = document.getElementById("response-message");
-                    if (responseDiv) {
-                        responseDiv.textContent = responseText; // Wyświetlamy treść ciała odpowiedzi na stronie
-                        responseDiv.style.display = "block"; // Pokazujemy element div z odpowiedzią
-                    } else {
-                        console.log(responseText); // Jeśli element nie istnieje, logujemy odpowiedź
-                    }
+                console.log(responseText);
+                createDialogBox(responseText);
+                if(responseText==='Zarejerstrowano pomyślnie !'){
+                    resetForm(); // Resetuj pola formularza po pomyślnym wysłaniu
                 }
             })
-            .catch(error => {
-                console.error("An error occurred:", error);
-            });
     };
-
 
     formContainer.style.boxShadow = "0px 0px 30px darkgoldenrod";
     formContainer.style.width = "400px";
@@ -57,34 +107,39 @@ const createRegisterForm = () => {
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
-    heading.textContent = "Please register in";
+    heading.textContent = "Zarejerstruj się";
 
     const usernameLabel = document.createElement("label");
     usernameLabel.htmlFor = "username";
     usernameLabel.className = "sr-only";
-    usernameLabel.textContent = "Username";
+    usernameLabel.textContent = "Nazwa użytkownika";
 
     const usernameInput = document.createElement("input");
     usernameInput.type = "text";
     usernameInput.id = "newusername";
     usernameInput.name = "username";
+    usernameInput.style.width = "283px";
     usernameInput.className = "form-control";
     usernameInput.placeholder = "Username";
     usernameInput.required = true;
     usernameInput.autofocus = true;
+    addEnterKeyListener(usernameInput);
 
     const passwordLabel = document.createElement("label");
     passwordLabel.htmlFor = "password";
     passwordLabel.className = "sr-only";
-    passwordLabel.textContent = "Password";
+    passwordLabel.textContent = "Hasło";
 
     const passwordInput = document.createElement("input");
+    passwordInput.setAttribute('id', 'password');
     passwordInput.type = "password";
-    passwordInput.id = "password";
     passwordInput.name = "password";
+    passwordInput.style.width = "283px";
     passwordInput.className = "form-control";
     passwordInput.placeholder = "Password";
     passwordInput.required = true;
+    addEnterKeyListener(passwordInput);
+
 
     const emailLabel = document.createElement("label");
     emailLabel.htmlFor = "Email";
@@ -95,15 +150,23 @@ const createRegisterForm = () => {
     emailInput.type = "text";
     emailInput.id = "email";
     emailInput.name = "email";
+    emailInput.style.width = "283px";
     emailInput.className = "form-control";
     emailInput.placeholder = "Email";
     emailInput.required = true;
+    addEnterKeyListener(emailInput);
+
+    const submitButtonDiv = document.createElement('div');
+    submitButtonDiv.style.display = 'flex';
+    submitButtonDiv.style.justifyContent = 'center';
+
 
     const submitButton = document.createElement("button");
     submitButton.type = "button"; // Zmiana typu na "button"
-    submitButton.textContent = "Submit";
+    submitButton.textContent = "Zarejerstruj";
     submitButton.style.backgroundColor = "darkgoldenrod";
     submitButton.style.border = "none";
+    submitButton.style.width = "150px";
     submitButton.style.color = "black";
     submitButton.style.padding = "10px 20px";
     submitButton.style.borderRadius = "5px";
@@ -144,6 +207,8 @@ const createRegisterForm = () => {
 
     loginLink.addEventListener("click", createLoginForm);
 
+    submitButtonDiv.appendChild(submitButton);
+
     // Dodaj elementy do formularza
     form.appendChild(heading);
     form.appendChild(usernameLabel);
@@ -152,11 +217,19 @@ const createRegisterForm = () => {
     form.appendChild(passwordInput);
     form.appendChild(emailLabel);
     form.appendChild(emailInput);
-    form.appendChild(submitButton);
+    form.appendChild(submitButtonDiv);
     form.appendChild(loginLink);
 
     // Dodaj formularz do kontenera
     formContainer.appendChild(form);
+
+    const resetForm = () => {
+        document.getElementById("newusername").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
+        createLoginForm();
+    };
+
 };
 
 
@@ -180,12 +253,12 @@ const createLoginForm = () => {
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
-    heading.textContent = "Please sign in";
+    heading.textContent = "Zaloguj się";
 
     const usernameLabel = document.createElement("label");
     usernameLabel.htmlFor = "username";
     usernameLabel.className = "sr-only";
-    usernameLabel.textContent = "Username";
+    usernameLabel.textContent = "Nazwa użytkownika";
 
     const usernameInput = document.createElement("input");
     usernameInput.type = "text";
@@ -199,7 +272,7 @@ const createLoginForm = () => {
     const passwordLabel = document.createElement("label");
     passwordLabel.htmlFor = "password";
     passwordLabel.className = "sr-only";
-    passwordLabel.textContent = "Password";
+    passwordLabel.textContent = "Hasło";
 
     const passwordInput = document.createElement("input");
     passwordInput.type = "password";
@@ -209,23 +282,33 @@ const createLoginForm = () => {
     passwordInput.placeholder = "Password";
     passwordInput.required = true;
 
+    const checkBoxDiv = document.createElement('div');
+    checkBoxDiv.style.display = 'flex';
+
     const rememberCheckbox = document.createElement("input");
     rememberCheckbox.type = "checkbox";
     rememberCheckbox.name = "remember-me";
+    rememberCheckbox.style.marginBottom = '15px';
+    rememberCheckbox.style.marginRight = '10px';
 
     const rememberLabel = document.createElement("label");
-    rememberLabel.textContent = "Remember me on this computer.";
+    rememberLabel.textContent = "Zapamiętaj mnie na tym urządzeniu.";
+
 
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
-    submitButton.textContent = "Submit";
+    submitButton.textContent = "Zaloguj";
     submitButton.style.backgroundColor = "darkgoldenrod";
     submitButton.style.border = "none";
+    submitButton.style.width = "150px";
+    submitButton.style.margin = "auto";
+    submitButton.style.display = "block";
     submitButton.style.color = "black";
     submitButton.style.padding = "10px 20px";
     submitButton.style.borderRadius = "5px";
     submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
     submitButton.style.transition = "background-position 0.3s ease-in-out";
+
 
     submitButton.addEventListener("mouseover", function () {
         submitButton.style.boxShadow = '0 0 20px moccasin';
@@ -259,13 +342,15 @@ const createLoginForm = () => {
 
     registerLink.addEventListener("click", createRegisterForm);
 
+    checkBoxDiv.appendChild(rememberCheckbox);
+    checkBoxDiv.appendChild(rememberLabel);
+
     form.appendChild(heading);
     form.appendChild(usernameLabel);
     form.appendChild(usernameInput);
     form.appendChild(passwordLabel);
     form.appendChild(passwordInput);
-    form.appendChild(rememberCheckbox);
-    form.appendChild(rememberLabel);
+    form.appendChild(checkBoxDiv);
     form.appendChild(submitButton);
     form.appendChild(registerLink);
 
