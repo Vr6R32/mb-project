@@ -38,8 +38,6 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {
-        System.out.println(sortOrder);
-        System.out.println(sortBy);
         return advertisementFilteringService.findAllPublicWithFilters(pageNumber, brand, model, fuelType, driveType, engineType, transmissionType, priceMin, priceMax,
                 mileageFrom, mileageTo, engineCapacityFrom,
                 engineCapacityTo, engineHorsePowerFrom,
