@@ -399,7 +399,7 @@ function displayResults(data) {
 
 
         const adImage = document.createElement("img");
-        adImage.src = `/api/resources/advertisementPhoto/miniature/${ad.mainPhotoUrl}`;
+        adImage.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
         adImage.style.height = "200px";
         adImage.style.width = "150px";
         adImage.style.objectFit = "cover";
