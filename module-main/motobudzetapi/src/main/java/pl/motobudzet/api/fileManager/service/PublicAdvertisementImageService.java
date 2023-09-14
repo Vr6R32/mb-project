@@ -34,156 +34,8 @@ public class PublicAdvertisementImageService {
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png");
 
-    private final AdvertisementRepository advertisementRepository;
     private final PublicAdvertisementService advertisementService;
 
-    @Transactional
-    public ResponseEntity<String> uploadPublicAdvertisementImagesWithoutLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
-
-        System.out.println(mainPhotoUrl);
-
-        Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
-
-        int rowAffected = 0;
-
-        for (MultipartFile file : files) {
-
-            if (file.isEmpty()) {
-                return new ResponseEntity<>("can't upload empty file!", HttpStatus.BAD_REQUEST);
-            }
-
-            if (!fileTypeAllowed.contains(file.getContentType())) {
-                return new ResponseEntity<>("can't upload that file type!", HttpStatus.BAD_REQUEST);
-            }
-
-            String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
-
-            saveFileWithoutLogo(file, fileName);
-
-            rowAffected++;
-            if (advertisement.getMainPhotoUrl() == null) {
-                advertisement.setMainPhotoUrl(fileName);
-                advertisementRepository.save(advertisement);
-            }
-            advertisementRepository.insertNewPhoto(UUID.fromString(advertisementId), fileName);
-        }
-        String redirectUrl = "/id/" + advertisement.getId();
-        if (rowAffected > 0) {
-            return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
-        } else if (rowAffected > 1) {
-            return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
-        } else {
-            return new ResponseEntity<>("failed to insert image", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private void saveFileWithoutLogo(MultipartFile file, String fileName) {
-
-        Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
-
-        try {
-            // Zapisywanie pliku
-            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-            // Sprawdzenie rozmiaru obrazu
-            BufferedImage image = ImageIO.read(file.getInputStream());
-            int originalWidth = image.getWidth();
-            int originalHeight = image.getHeight();
-            int maxWidth = 2560;
-            int maxHeight = 2560;
-
-            // Jeśli którykolwiek z wymiarów przekracza maksymalny rozmiar, przeskaluj proporcjonalnie
-            if (originalWidth > maxWidth || originalHeight > maxHeight) {
-                double widthRatio = (double) originalWidth / maxWidth;
-                double heightRatio = (double) originalHeight / maxHeight;
-                double scaleRatio = Math.max(widthRatio, heightRatio);
-
-                int newWidth = (int) (originalWidth / scaleRatio);
-                int newHeight = (int) (originalHeight / scaleRatio);
-
-                BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
-                Graphics2D g = resizedImage.createGraphics();
-                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                g.drawImage(image, 0, 0, newWidth, newHeight, null);
-                g.dispose();
-
-                // Nadpisanie oryginalnego pliku przeskalowanym obrazem
-                ImageIO.write(resizedImage, "jpg", targetPath.toFile());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save the file.", e);
-        }
-    }
-
-    @Transactional
-    public ResponseEntity<String> uploadPublicAdvertisementImageWithoutLogoSingle(String advertisementId, MultipartFile file) {
-
-        Optional<Advertisement> advertisementById = advertisementRepository.findById(UUID.fromString(advertisementId));
-
-        if (advertisementById.isEmpty()) {
-            return new ResponseEntity<>("advertisement id doesn't exist!", HttpStatus.BAD_REQUEST);
-        }
-
-        if (file.isEmpty()) {
-            return new ResponseEntity<>("can't upload empty file!", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!fileTypeAllowed.contains(file.getContentType())) {
-            return new ResponseEntity<>("can't upload that file type!", HttpStatus.BAD_REQUEST);
-        }
-
-        Advertisement advertisement = advertisementById.get();
-
-        String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
-
-        saveFileWithoutLogo(file, fileName);
-
-        int rowsAffected = advertisementRepository.insertNewPhoto(UUID.fromString(advertisementId), fileName);
-
-        if (rowsAffected > 0) {
-            return new ResponseEntity<>("image sent!", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("failed to insert image.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public void saveFileWithLogoSingle(MultipartFile file) {
-
-        String fileName = "test";
-
-        Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
-
-        try {
-            // Zapisywanie pliku
-            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-            // Dodawanie logo
-            BufferedImage image = ImageIO.read(file.getInputStream());
-
-            // Wczytaj logo z pliku (załóżmy, że jest to plik "logo.png" w katalogu resources)
-            InputStream logoInputStream = getClass().getResourceAsStream("/logo.png");
-            BufferedImage logo = ImageIO.read(logoInputStream);
-
-            int logoWidth = logo.getWidth();
-            int logoHeight = logo.getHeight();
-
-            // Ustaw pozycję logo w rogu zdjęcia (dolny prawy róg)
-            int x = image.getWidth() - logoWidth - 10; // 10 to margines
-            int y = image.getHeight() - logoHeight - 10; // 10 to margines
-
-            // Tworzenie nowego obrazu, na którym zostanie umieszczone logo
-            BufferedImage imageWithLogo = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = imageWithLogo.createGraphics();
-            g.drawImage(image, 0, 0, null);
-            g.drawImage(logo, x, y, null);
-            g.dispose();
-
-            // Zapisz obraz z logo
-            ImageIO.write(imageWithLogo, "jpg", targetPath.toFile());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save the file.", e);
-        }
-    }
 
     @Transactional
     public ResponseEntity<String> uploadAndProcessImagesWithLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
@@ -204,9 +56,10 @@ public class PublicAdvertisementImageService {
 
             String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
 
-            processAndSaveImageWithLogo(file, fileName, advertisement);
+            int inserted = processAndSaveImageWithLogo(file, fileName, advertisement);
 
-            rowAffected++;
+            rowAffected += inserted;
+
         }
 
         String redirectUrl = "/id/" + advertisement.getId();
@@ -217,7 +70,7 @@ public class PublicAdvertisementImageService {
         }
     }
 
-    private void processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
+    private int processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
 
         try {
@@ -283,9 +136,9 @@ public class PublicAdvertisementImageService {
             // Aktualizacja głównego URL zdjęcia
             if (advertisement.getMainPhotoUrl() == null) {
                 advertisement.setMainPhotoUrl(fileName);
-                advertisementRepository.save(advertisement);
+                advertisementService.saveAdvertisement(advertisement);
             }
-            advertisementRepository.insertNewPhoto(advertisement.getId(), fileName);
+            return advertisementService.insertPhotoToAdvertisement(advertisement.getId(), fileName);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save the file.", e);
         }

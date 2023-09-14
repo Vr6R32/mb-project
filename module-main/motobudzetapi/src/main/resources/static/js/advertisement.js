@@ -326,6 +326,6 @@ function nextPhoto(mainPhoto)  {
     changePhoto(currentPhotoIndex,mainPhoto);
 }
 function changePhoto(index,mainPhoto) {
-    mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[index];
+    mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
 

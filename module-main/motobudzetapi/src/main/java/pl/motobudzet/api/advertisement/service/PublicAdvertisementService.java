@@ -168,4 +168,12 @@ public class PublicAdvertisementService {
         }
         return Collections.emptyList();
     }
+
+    public void saveAdvertisement(Advertisement advertisement) {
+        advertisementRepository.save(advertisement);
+    }
+
+    public int insertPhotoToAdvertisement(UUID id, String fileName) {
+        return advertisementRepository.insertNewPhoto(id, fileName);
+    }
 }

@@ -148,7 +148,8 @@ function getLastUploaded(pageNumber){
 
 
                 const mainPhoto = document.createElement('img');
-                mainPhoto.src = '/api/resources/advertisementPhoto/miniature/' + advertisement.mainPhotoUrl;
+                mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
+                mainPhoto.style.height = '300px';
                 mainPhoto.alt = 'MainUrlPhoto';
                 mainPhoto.id = 'mainUrlPhoto';
 
