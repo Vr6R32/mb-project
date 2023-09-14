@@ -17,9 +17,7 @@ import static pl.motobudzet.api.fileManager.service.PublicAdvertisementImageServ
 @RestController
 public class ResourceImageController {
 
-
     private final ResourceImageService resourceImageService;
-
 
     public ResourceImageController(ResourceImageService resourceImageService) {
         this.resourceImageService = resourceImageService;
@@ -90,41 +88,10 @@ public class ResourceImageController {
         return new FileSystemResource(PRIVATE_FILE_PATH + "messageOpen.png");
     }
 
-
     @GetMapping(value = "/advertisementPhoto/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<Resource> getOriginalPhoto(@PathVariable String imageUrl) {
+    public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {
 
         Resource photoResource = resourceImageService.getAdvertisementPhoto(imageUrl);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(photoResource);
-    }
-
-    @GetMapping(value = "/advertisementPhoto/miniature/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<Resource> getMiniaturePhoto400x300(@PathVariable String imageUrl) {
-
-        Resource photoResource = resourceImageService.getAdvertisementPhotoMiniature400x300(imageUrl);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(photoResource);
-    }
-
-    @GetMapping(value = "/advertisementPhoto/miniature/150/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<Resource> getMiniaturePhoto150x150(@PathVariable String imageUrl) {
-
-        Resource photoResource = resourceImageService.getAdvertisementPhotoMiniature150x150(imageUrl);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(photoResource);
-    }
-
-    @GetMapping(value = "/advertisementPhoto/half/miniature/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<Resource> getHalfMiniaturePhoto(@PathVariable String imageUrl) {
-
-        Resource photoResource = resourceImageService.getAdvertisementPhotoHalfMiniature(imageUrl);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

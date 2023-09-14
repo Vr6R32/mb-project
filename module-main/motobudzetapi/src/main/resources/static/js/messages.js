@@ -56,7 +56,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
 
     const photoElement = document.createElement("img");
-    photoElement.src = `/api/resources/advertisementPhoto/miniature/${conversation.advertisement.mainPhotoUrl}`;
+    photoElement.src = `/api/resources/advertisementPhoto/${conversation.advertisement.mainPhotoUrl}`;
     photoElement.style.height = "150px";
     photoElement.style.width = "100px";
     photoElement.style.objectFit = "cover";

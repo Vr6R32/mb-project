@@ -11,7 +11,8 @@ function createAdvertisementResultDiv(mainContainer,advertisement) {
     console.log(advertisement);
 
     const mainPhoto = document.createElement('img');
-    mainPhoto.src = '/api/resources/advertisementPhoto/half/miniature/' + advertisement.urlList[0];
+    mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[0];
+    mainPhoto.style.height = '675px';
     mainPhoto.alt = 'MainUrlPhoto';
     mainPhoto.id = 'mainUrlPhoto';
     mainPhoto.style.color = 'black';
