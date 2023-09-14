@@ -1,14 +1,21 @@
-let formData;
+let formData = new FormData();
 let sortOrder = "asc"; // Set the default sort order to "asc" (ascending) or "desc" (descending) as you prefer
-let sortBy = "price"; // Set the default sort by parameter to "price" (or any other default value you prefer)
-
+let sortingBy = "price"; // Set the default sort by parameter to "price" (or any other default value you prefer)
+let urlSearchParams = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     let mainContainer = document.getElementById('container-main');
     createSearchFormContainer(mainContainer);
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
+    // const brandSelect = document.getElementById("brand");
+    // brandSelect.value = '1';
+
 });
+
+
+
+
 
 function getParametersFromCurrentUrl() {
     // Pobieramy aktualny URL z okna przeglądarki
@@ -22,21 +29,101 @@ function getParametersFromCurrentUrl() {
         const queryString = currentUrl.substring(indexOfQuestionMark + 1);
 
         // Tworzymy obiekt URLSearchParams z parametrami URL
-        const urlSearchParams = new URLSearchParams(queryString);
+        urlSearchParams = new URLSearchParams(queryString);
 
         // Sprawdzamy, czy istnieją jakieś parametry w URL
         if (urlSearchParams.toString() !== "") {
             console.log("Parametry istnieją w URL:", urlSearchParams.toString());
-            executeSearch(null, urlSearchParams);
-        } else {
-            console.log("Brak parametrów w URL.");
+            // Tworzymy nowy obiekt FormData
+            // Przechodzimy przez każdy parametr w URLSearchParams i dodajemy go do formData
+            urlSearchParams.forEach((value, key) => {
+                formData.set(key, value);
+            });
+
+            executeSearch(formData);
+            setFormValuesFromUrlParams(urlSearchParams);
+
         }
-    } else {
-        console.log("Brak znaku '?' w URL, więc nie ma parametrów do pobrania.");
     }
 }
-// Przykład użycia
+function setFormValuesFromUrlParams(urlSearchParams) {
 
+    if (urlSearchParams.has("sortBy")) {
+        sortingBy = urlSearchParams.get("sortBy");
+    }
+    if (urlSearchParams.has("sortOrder")) {
+        sortOrder = urlSearchParams.get("sortOrder");
+    }
+    if (urlSearchParams.has("priceMin")) {
+        let priceMin = document.getElementById("priceMin");
+        priceMin.value = urlSearchParams.get("priceMin");
+    }
+    if (urlSearchParams.has("priceMax")) {
+        let priceMax = document.getElementById("priceMax");
+        priceMax.value = urlSearchParams.get("priceMax");
+    }
+    if (urlSearchParams.has("mileageFrom")) {
+        let mileageFrom = document.getElementById("mileageFrom");
+        mileageFrom.value = urlSearchParams.get("mileageFrom");
+    }
+    if (urlSearchParams.has("mileageTo")) {
+        let mileageTo = document.getElementById("mileageTo");
+        mileageTo.value = urlSearchParams.get("mileageTo");
+    }
+    if (urlSearchParams.has("engineCapacityFrom")) {
+        let engineCapacityFrom = document.getElementById("engineCapacityFrom");
+        engineCapacityFrom.value = urlSearchParams.get("engineCapacityFrom");
+    }
+    if (urlSearchParams.has("engineCapacityTo")) {
+        let engineCapacityTo = document.getElementById("engineCapacityTo");
+        engineCapacityTo.value = urlSearchParams.get("engineCapacityTo");
+    }
+    if (urlSearchParams.has("engineHorsePowerFrom")) {
+        let engineHorsePowerFrom = document.getElementById("engineHorsePowerFrom");
+        engineHorsePowerFrom.value = urlSearchParams.get("engineHorsePowerFrom");
+    }
+    if (urlSearchParams.has("engineHorsePowerTo")) {
+        let engineHorsePowerTo = document.getElementById("engineHorsePowerTo");
+        engineHorsePowerTo.value = urlSearchParams.get("engineHorsePowerTo");
+    }
+    if (urlSearchParams.has("productionDateFrom")) {
+        let productionDateFrom = document.getElementById("productionDateFrom");
+        productionDateFrom.value = urlSearchParams.get("productionDateFrom");
+    }
+    if (urlSearchParams.has("productionDateTo")) {
+        let productionDateTo = document.getElementById("productionDateTo");
+        productionDateTo.value = urlSearchParams.get("productionDateTo");
+    }
+}
+
+setTimeout(function setInputSelect() {
+    if(urlSearchParams){
+        let formObj = document.getElementById('advertisementFilterForm');
+        let brand = formObj.querySelector('#brand');
+        let driveType = formObj.querySelector('#driveType');
+        let engineType = formObj.querySelector('#engineType');
+        let fuelType = formObj.querySelector('#fuelType');
+        let transmissionType = formObj.querySelector('#transmissionType');
+        brand.value = urlSearchParams.get("brand");
+        driveType.value = urlSearchParams.get("driveType");
+        engineType.value = urlSearchParams.get("engineType");
+        fuelType.value = urlSearchParams.get("fuelType");
+        transmissionType.value = urlSearchParams.get("transmissionType");
+    }
+}, 200);
+
+setTimeout(function setModelSelect() {
+    if (urlSearchParams) {
+        fetch(`/api/models/${urlSearchParams.get("brand")}`)
+            .then(response => response.json())
+            .then(data => {
+                populateSelectOptions(data, "model");
+                let formObj = document.getElementById('advertisementFilterForm');
+                let model = formObj.querySelector('#model');
+                model.value = urlSearchParams.get("model");
+            });
+    }
+}, 300); // Drugi setTimeout z opóźnieniem 1000 ms (1 sekunda)
 
 
 function fetchAllSpecifications() {
@@ -80,7 +167,7 @@ function fetchAllSpecifications() {
                         });
                 } else {
                     // If no brand is selected, clear model options
-                    modelSelect.innerHTML = `<option value="">------</option>`;
+                    modelSelect.innerHTML = `<option value=""> </option>`;
                 }
             });
 
@@ -91,7 +178,7 @@ function fetchAllSpecifications() {
 }
 
 
-function createSearchFormContainer(mainContainer) {
+async function createSearchFormContainer(mainContainer) {
     const formContainer = document.createElement("div");
     formContainer.setAttribute('id', 'searchFormContainer');
     mainContainer.insertBefore(formContainer, mainContainer.firstChild);
@@ -180,6 +267,7 @@ function createSearchForm(formContainer) {
         executeSearch(formData,null);
 
     });
+
 }
 
 function createRowWithInputElement(labelText, inputType, inputId, inputName, selectOptions = null) {
@@ -214,7 +302,7 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
 
     const inputElement = inputType === "select" ? document.createElement("select") : document.createElement("input");
     inputElement.type = inputType;
-    inputElement.id = inputId;
+    inputElement.setAttribute('id',inputId);
     inputElement.name = inputName;
     inputElement.style.width = "100%"; // Szerokość pola - 100% kolumny pól
     inputElement.style.padding = "5px";
@@ -244,6 +332,8 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
 
     inputColumn.appendChild(inputElement);
     rowDiv.appendChild(inputColumn);
+
+
 
     return rowDiv;
 }
@@ -383,11 +473,11 @@ function displayResults(data) {
 // Display sort buttons if there are results
     if (data.content.length > 0) {
         const sortDiv = document.createElement("div");
+        sortDiv.setAttribute('id', 'sortButtonDiv');
         sortDiv.className = "sort-buttons";
 
         // List of sortable parameters
         const sortableParams = ["price", "mileage", "engineCapacity", "engineHorsePower", "productionDate"];
-
         // Create and append sort buttons for each sortable parameter
         sortableParams.forEach(sortBy => {
             const sortButton = createSortButton(sortBy);
@@ -417,7 +507,6 @@ function displayResults(data) {
             }
             paginationDiv.appendChild(pageButton);
         }
-
         // Add next page button
         if (!data.last) {
             const nextPageButton = createPaginationButton(data.number + 1, "Next", formData);
@@ -463,10 +552,10 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     button.textContent = label;
 
 
-
     button.addEventListener("click", function () {
         // Get the current form data
-        const formData = new FormData(document.getElementById("advertisementFilterForm"));
+        // const formData = new FormData(document.getElementById("advertisementFilterForm"));
+
 
         // Set the new page number in the formData
         formData.set("pageNumber", pageNumber);
@@ -479,60 +568,54 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
         // Set the sorting parameters in the formData
         formData.set("sortBy", sortBy);
         formData.set("sortOrder", sortOrder);
-
         // Call the search function with updated data
         executeSearch(formData);
     });
     return button;
 }
-
+let clickedButton = "";
 function createSortButton(sortBy) {
     const button = document.createElement("button");
     // button.textContent = sortBy;
 
-    console.log(sortBy)
-    console.log(sortOrder);
-
     switch (sortBy) {
         case 'price':
-            button.textContent = 'Cena' + (sortBy === 'price' ? (sortOrder === 'asc' ? ' 🢃' : ' 🢁') : '');
+            button.textContent = 'Cena';
             break;
         case 'mileage':
-            button.textContent = 'Przebieg' + (sortBy === 'mileage' ? (sortOrder === 'asc' ? ' 🢃' : ' 🢁') : '');
+            button.textContent = 'Przebieg';
             break;
         case 'engineCapacity':
-            button.textContent = 'Pojemność silnika' + (sortBy === 'engineCapacity' ? (sortOrder === 'asc' ? ' 🢃' : ' 🢁') : '');
+            button.textContent = 'Pojemność silnika';
             break;
         case 'engineHorsePower':
-            button.textContent = 'Moc silnika' + (sortBy === 'engineHorsePower' ? (sortOrder === 'asc' ? ' 🢃' : ' 🢁') : '');
+            button.textContent = 'Moc silnika';
             break;
         case 'productionDate':
-            button.textContent = 'Data produkcji' + (sortBy === 'productionDate' ? (sortOrder === 'asc' ? ' 🢃' : ' 🢁') : '');
+            button.textContent = 'Data produkcji' + (sortOrder === 'asc' ? ' 🢁' : ' 🢃');
             break;
         default:
             button.textContent = 'Inny tekst';
             break;
     }
 
+    clickedButton = "";
+
     button.style.marginBottom = '10px';
     button.addEventListener("click", function () {
-        // Set the new sortBy parameter
-        // formData.set("sortBy", sortBy);
         sortOrder = sortOrder === "desc" ? "asc" : "desc";
         formData.set("sortOrder", sortOrder);
-
-        // Call the search function with updated data
+        formData.set("sortBy", sortBy);
+        formData.set("pageNumber", "0");
+        clickedButton = button.textContent;
+        sortingBy = sortBy;
         executeSearch(formData);
+        // Call the search function with updatedw data
     });
 
     return button;
 }
-
-function updateSortButtons(){
-
-}
-
-function executeSearch(formData,searchParam) {
+function executeSearch(formData) {
 
     let searchParams;
     // Remove the sortBy and sortOrder parameters from formData to avoid confusion
@@ -542,27 +625,25 @@ function executeSearch(formData,searchParam) {
             if (value) {
                 searchParams.append(key, value);
             }
-            const newUrl = window.location.pathname + "?" + searchParams.toString();
-            // Update the URL without reloading the page
-            history.pushState(null, null, newUrl);
+            // formData.get("pageNumber")
+            sortingBy = formData.get("sortBy");
+            sortOrder = formData.get("sortOrder");
 
-        });
-    } else if (searchParam) {
-        searchParams = new URLSearchParams(searchParam);
-        formData = new FormData();
-        searchParams.forEach((value, key) => {
-            formData.set(value, key);
+
+            const newUrl = window.location.pathname + "?" + searchParams.toString();
+            history.pushState(null, null, newUrl);
         });
     }
 
 
-        // Make the GET request to the API endpoint with the sorting parameters
+
+    // Make the GET request to the API endpoint with the sorting parameters
     fetch("/api/advertisements/filter/search?" + searchParams.toString())
         .then(response => response.json())
         .then(data => {
             // Display the results and pagination with sorting parameters
-            displayResults(data, sortBy, sortOrder);
-            updatePaginationButtons(data, sortBy, sortOrder);
+            displayResults(data, sortingBy, sortOrder);
+            updatePaginationButtons(data, sortingBy, sortOrder);
             // updateSortButtons(data, sortBy, sortOrder);
         })
         .catch(error => console.error("Error fetching data:", error));
@@ -594,11 +675,12 @@ function createInfoContainer(iconPath, altText, value) {
 function populateSelectOptions(options, selectId) {
     const selectElement = document.getElementById(selectId);
     // Clear existing options
-    selectElement.innerHTML = `<option value="">------</option>`;
+    selectElement.innerHTML = `<option value=""> </option>`;
     options.forEach(option => {
         const optionElement = document.createElement("option");
         optionElement.value = option.name;
         optionElement.textContent = option.name;
         selectElement.appendChild(optionElement);
+
     });
 }
