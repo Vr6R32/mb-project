@@ -35,7 +35,7 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false) Long engineHorsePowerTo,
             @RequestParam(required = false) Long productionDateFrom,
             @RequestParam(required = false) Long productionDateTo,
-            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {
         return advertisementFilteringService.findAllPublicWithFilters(pageNumber, brand, model, fuelType, driveType, engineType, transmissionType, priceMin, priceMax,
