@@ -365,59 +365,131 @@ function displayResults(data) {
 
     // Display each advertisement result
     data.content.forEach(ad => {
-        const adDiv = document.createElement("div");
-        adDiv.style.width = "100%";
-        adDiv.style.height = "200px";
-        adDiv.style.backgroundColor = "#181818";
+
+        const resultDiv = document.createElement("messageResultDiv");
+
+        resultDiv.id = "messageResultDiv";
+        resultDiv.style.width = "100%";
+        resultDiv.style.height = "200px";
+        resultDiv.style.backgroundColor = "#181818";
         // adDiv.style.backgroundColor = "black";
-        adDiv.style.marginBottom = "20px";
-        adDiv.style.padding = "10px";
-        adDiv.style.display = "flex";
-        adDiv.style.alignItems = "center";
-        adDiv.style.justifyContent = "flex-start";
-        adDiv.style.borderRadius = "30px"; // Add rounded corners
-        adDiv.style.boxShadow = "0 0 40px darkgoldenrod"; // Add initial box shadow
-        adDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
-        adDiv.style.maxWidth = "100%";
-        adDiv.style.opacity = 0; // Set initial opacity to 0
-        adDiv.style.animation = "fade-in 1s ease-in-out forwards";
+        resultDiv.style.color = 'darkgoldenrod';
+        resultDiv.style.marginBottom = "20px";
+        resultDiv.style.padding = "10px";
+        resultDiv.style.display = "flex";
+        resultDiv.style.alignItems = "center";
+        resultDiv.style.justifyContent = "flex-start";
+        resultDiv.style.borderRadius = "30px"; // Add rounded corners
+        resultDiv.style.boxShadow = "0 0 40px darkgoldenrod"; // Add initial box shadow
+        resultDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
+        resultDiv.style.maxWidth = "100%";
+        resultDiv.style.opacity = 0; // Set initial opacity to 0
+        resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
 
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
-        adDiv.onclick = () => {
+        resultDiv.onclick = () => {
             window.location.href = `/id/${ad.id}`;
         };
 
         // Add hover effect on mouseover
-        adDiv.onmouseover = () => {
-            adDiv.style.boxShadow = "0 0 20px moccasin";
+        resultDiv.onmouseover = () => {
+            resultDiv.style.boxShadow = "0 0 20px moccasin";
         };
 
         // Remove hover effect on mouseout
-        adDiv.onmouseout = () => {
-            adDiv.style.boxShadow = "0 0 40px darkgoldenrod";
+        resultDiv.onmouseout = () => {
+            resultDiv.style.boxShadow = "0 0 40px darkgoldenrod";
         };
 
 
-        const adImage = document.createElement("img");
-        adImage.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
-        adImage.style.height = "200px";
-        adImage.style.width = "150px";
-        adImage.style.objectFit = "cover";
+        const photoElement = document.createElement("img");
+        photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
+        photoElement.style.height = "150px";
+        photoElement.style.width = "100px";
+        photoElement.style.objectFit = "cover";
 
         const fadeEffect = document.createElement('div');
         fadeEffect.classList.add('fade-effect-miniature-search');
-        fadeEffect.appendChild(adImage);
+        fadeEffect.appendChild(photoElement);
 
-        adDiv.appendChild(fadeEffect);
+        resultDiv.appendChild(fadeEffect);
 
-        const infoContainerFirst = document.createElement('div');
-        infoContainerFirst.style.display = 'flex';
-        infoContainerFirst.style.alignItems = 'flex-start'; // Dla umieszczenia po lewej stronie
-        infoContainerFirst.style.color = 'darkgoldenrod';
-        // infoContainerFirst.style.maxWidth = '100%';
-        // infoContainerFirst.style.display = 'grid';
-        // infoContainerFirst.style.gridTemplateColumns = '1fr 1fr 1fr'; // Trzy kolumny
-        // infoContainerFirst.style.gridGap = '10px'; // Odstęp między elementami
+        const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
+        conversationDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        conversationDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
+        conversationDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
+        conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        conversationDetailsHeader.style.boxSizing = "border-box";
+        conversationDetailsHeader.style.flexBasis = "auto";
+
+        const headerTitleOwnerName = document.createElement('div');
+        headerTitleOwnerName.style.display = 'column';
+        headerTitleOwnerName.style.width = '100%';
+        headerTitleOwnerName.style.position = 'relative';
+        headerTitleOwnerName.style.bottom = '20px';
+        // headerTitleOwnerName.style.marginBottom = '50px';
+
+
+        const nameElement = document.createElement("div");
+        nameElement.textContent = ad.name;
+        nameElement.style.color = "white"; // Dostosuj kolor tekstu
+        nameElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+        nameElement.style.textAlign = 'left';
+
+        const ownerName = document.createElement("div");
+        ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
+        ownerName.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        ownerName.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        ownerName.style.textAlign = 'left';
+
+
+        headerTitleOwnerName.appendChild(nameElement);
+        // headerTitleOwnerName.appendChild(ownerName);
+
+        conversationDetailsHeader.appendChild(headerTitleOwnerName);
+
+        const dateElement = document.createElement("div");
+        dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
+        dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        dateElement.style.position = 'relative'; // Dostosuj rozmiar tekstu
+        dateElement.style.bottom = '60px'; // Dostosuj rozmiar tekstu
+        dateElement.style.textAlign = 'right';
+        dateElement.style.marginRight = '15px';
+        dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        conversationDetailsHeader.appendChild(dateElement);
+
+
+        ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////HEADER//////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
+
+
+        const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
+        conversationDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        conversationDetailsDiv.style.flexBasis = 'auto';
+        conversationDetailsDiv.style.display = 'flex-start';
+        conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+
+
+        const conversationDetailsMain = document.createElement("conversationDetailsMain");
+        conversationDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        conversationDetailsMain.style.flexBasis = 'auto';
+        conversationDetailsMain.style.display = 'grid';
+        conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+
+
+        // const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
+        // conversationDetailsSecondUser.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        // conversationDetailsSecondUser.style.flexBasis = 'auto';
+        // conversationDetailsSecondUser.innerHTML = "Konwersacja z → <strong style='font-size: 1.4em;'>" + conversation.secondUser + "</strong>";
+
+
+        const advertisementDetails = document.createElement("conversationDetailsBottom");
+        advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+        advertisementDetails.style.flexBasis = 'auto';
+        advertisementDetails.style.display = 'flex';
+        advertisementDetails.style.marginTop = '15px';
 
 
         const containers = [
@@ -428,19 +500,23 @@ function displayResults(data) {
         ];
 
         // Dodawanie kontenerów do infoContainerFirst
-        containers.forEach(container => {
-            infoContainerFirst.appendChild(container);
-        });
+        // containers.forEach(container => {
+        //     advertisementDetails.appendChild(container);
+        // });
 
-        if (ad.fuelType !== 'ELEKTRYCZNY') {
+        containers.push(createInfoContainer('price', 'PriceIcon', ad.price + ',-'));
+
+        if (ad.fuelType !== 'ELEKTRYK') {
             containers.push(
                 createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
                 createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType)
             );
         }
 
+
+
         containers.forEach(container => {
-            infoContainerFirst.appendChild(container);
+            advertisementDetails.appendChild(container);
         });
 
         const maxTextWidth = Math.max(
@@ -452,9 +528,23 @@ function displayResults(data) {
             container.style.width = maxTextWidth + '65px';
         });
 
-        adDiv.appendChild(infoContainerFirst);
+        // const conversationLastMessage = document.createElement("conversationLastMessage");
+        // conversationLastMessage.style.width = '100%'; // Dostosowanie do szerokości
+        // conversationLastMessage.style.overflow = 'hidden'; // Ukrywa nadmiarowy tekst
+        // conversationLastMessage.style.textOverflow = 'ellipsis'; // Dodaje trzy kropki na końcu, gdy tekst jest zbyt długi
+        // conversationLastMessage.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
 
-        resultsDiv.appendChild(adDiv);
+
+        conversationDetailsMain.appendChild(advertisementDetails);
+        // conversationDetailsMain.appendChild(conversationLastMessage);
+
+        conversationDetailsDiv.appendChild(conversationDetailsHeader);
+        conversationDetailsDiv.appendChild(conversationDetailsMain);
+
+        resultDiv.appendChild(conversationDetailsDiv);
+
+
+        resultsDiv.appendChild(resultDiv);
         const searchFormContainer = document.getElementById('searchFormContainer');
 
 // Sprawdzamy, czy istnieje "searchFormContianer"
@@ -475,6 +565,39 @@ function displayResults(data) {
         const sortDiv = document.createElement("div");
         sortDiv.setAttribute('id', 'sortButtonDiv');
         sortDiv.className = "sort-buttons";
+
+        const actualSortParam = document.createElement('div');
+
+        let sortingByView = sortingBy;
+
+        switch (sortingBy) {
+            case 'price':
+                sortingByView = 'Ceny';
+                break;
+            case 'mileage':
+                sortingByView = 'Przebiegu';
+                break;
+            case 'engineCapacity':
+                sortingByView = 'Pojemności silnika';
+                break;
+            case 'engineHorsePower':
+                sortingByView = 'Mocy silnika';
+                break;
+            case 'productionDate':
+                sortingByView = 'Daty produkcji';
+                break;
+            default :
+                sortingByView = 'Ceny';
+                break;
+        }
+
+        actualSortParam.textContent = (sortOrder !== 'desc' ? 'Sortowanie według ' + sortingByView + ' rosnąco 🢁' : 'Sortowanie według ' + sortingByView + ' malejąco 🢃');
+        actualSortParam.style.color = 'darkgoldenrod';
+        actualSortParam.style.display = 'flex';
+        actualSortParam.style.justifyContent = 'center';
+        actualSortParam.style.marginBottom = '15px';
+
+        sortDiv.appendChild(actualSortParam);
 
         // List of sortable parameters
         const sortableParams = ["price", "mileage", "engineCapacity", "engineHorsePower", "productionDate"];
@@ -592,7 +715,7 @@ function createSortButton(sortBy) {
             button.textContent = 'Moc silnika';
             break;
         case 'productionDate':
-            button.textContent = 'Data produkcji' + (sortOrder === 'asc' ? ' 🢁' : ' 🢃');
+            button.textContent = 'Data produkcji';
             break;
         default:
             button.textContent = 'Inny tekst';
@@ -684,3 +807,4 @@ function populateSelectOptions(options, selectId) {
 
     });
 }
+
