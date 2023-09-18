@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/", "index", "/css/*", "/js/*").permitAll()
                                 .requestMatchers("/id/**").permitAll()
                                 .requestMatchers("/register").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/favicon.ico").permitAll()
                                 .requestMatchers("/api/spec/**").permitAll()
                                 .requestMatchers("/api/models/**").permitAll()
