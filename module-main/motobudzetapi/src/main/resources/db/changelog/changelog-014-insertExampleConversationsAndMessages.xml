@@ -43,7 +43,7 @@
             <column name="message_read_date_time" value="2023-09-06 11:46:15.738883"/>
             <column name="message_send_date_time" value="2023-09-06 11:45:45.145693"/>
             <column name="message_sender_id" valueNumeric="1"/>
-            <column name="message" value="zajebista furka sciska mnie"/>
+            <column name="message" value="fajne autko ile dałoby rade zejść z ceny?"/>
         </insert>
     </changeSet>
 

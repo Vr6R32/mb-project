@@ -124,8 +124,7 @@ function loadConversations() {
                     resultContainerRight.appendChild(resultDiv);
                 });
             }
-            if(resultCount>5){
-                resultContainerRight.style.maxHeight = "950px";
+                resultContainerRight.style.maxHeight = "900px";
                 resultContainerRight.style.overflowY = "auto";
                 resultContainerRight.style.overflowX = "hidden";
                 resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
@@ -133,7 +132,6 @@ function loadConversations() {
                 resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding
                 resultContainerRight.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
                 resultContainerRight.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
-            }
         })
         .catch((error) => {
             console.error("Fetch error:", error);
