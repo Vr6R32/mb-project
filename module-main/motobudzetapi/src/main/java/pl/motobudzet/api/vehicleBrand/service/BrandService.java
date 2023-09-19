@@ -49,7 +49,6 @@ public class BrandService {
     public ResponseEntity<String> deleteBrand(String brandName) {
 
         brandRepository.deleteByName(brandName.toUpperCase());
-
         return new ResponseEntity<>("delete succes !", HttpStatus.ACCEPTED);
     }
 
