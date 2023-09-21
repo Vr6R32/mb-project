@@ -19,6 +19,7 @@
     <include file="/db/changelog/changelog-012-insertUserAdvertisementRelation.xml"/>
     <include file="/db/changelog/changelog-013-createUserMessagesTables.xml"/>
     <include file="/db/changelog/changelog-014-insertExampleConversationsAndMessages.xml"/>
+    <include file="/db/changelog/changelog-015-insertFavouritesTableEntity.xml"/>
 
 
 </databaseChangeLog>
