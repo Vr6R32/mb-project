@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.motobudzet.api.security.service.UserDetailsServiceImpl.mapRolesToAuthorities;
+
 @Entity
 @Setter
 @Getter
@@ -51,16 +53,6 @@ public class AppUser implements UserDetails {
             uniqueConstraints = @UniqueConstraint(name = "unique_user_role", columnNames = {"user_id", "role_id"})
     )
     private List<Role> roles;
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-//    @JoinTable(
-//            name = "user_conversations",
-//            joinColumns = @JoinColumn(name = "user_owner_id", referencedColumnName = "id"),
-//            inverseJoinColumns = {
-//                    @JoinColumn(name = "conversation_id", referencedColumnName = "id"),
-//                    @JoinColumn(name = "user_client_id", referencedColumnName = "userClientId")
-//            }
-//    )
-//    private List<Conversation> conversations;
 
     public Long getId() {
         return id;
@@ -121,10 +113,5 @@ public class AppUser implements UserDetails {
         return this.accountEnabled;
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
 
 }

@@ -69,8 +69,9 @@ public class SecurityConfiguration {
                                 .requestMatchers("/messages").authenticated()
                                 .requestMatchers("/favourites").authenticated()
                                 .requestMatchers("/api/messages/**").authenticated()
-                                .requestMatchers("/api/conversations/**").authenticated()
                                 .requestMatchers("/advertisement/new").authenticated()
+                                .requestMatchers("/api/conversations/**").authenticated()
+                                .requestMatchers("/api/users/favourites/**").authenticated()
 
                                 .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
                                 .anyRequest().hasRole("ADMIN")
