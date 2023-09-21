@@ -57,7 +57,7 @@ function fetchAdvertisements(){
                         row++;
                         resultCount++
                     });
-                if(resultCount>5){
+                if(resultCount>0){
                     container.style.maxHeight = "950x";
                     container.style.overflowY = "auto";
                     container.style.overflowX = "hidden";
@@ -94,8 +94,79 @@ function fetchAdvertisements(){
 //     return container;
 // }
 
-function loadFavourites(){
+function loadFavourites() {
+    let loggedUser = document.getElementById('username').textContent;
+    fetch('/api/users/favourites/' + loggedUser, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Błąd podczas pobierania ulubionego statusu');
+            }
+            return response.text(); // Odczytaj dane jako tekst
+        })
+        .then(data => {
+            // Usuń nawiasy kwadratowe z początku i końca ciągu znaków
 
+            data = data.slice(1, -1);
+            // Podziel ciąg znaków na tablicę po przecinkach i usuń spacje
+            const uuidArray = data.split(',').map(item => item.trim());
+
+            const uuidList = [];
+
+            uuidArray.forEach(item => {
+                uuidList.push(item);
+            });
+
+            if (data.length < 1) {
+                let resultContainerRight = document.getElementById('resultContainerRight');
+                resultContainerRight.textContent = "Nie masz jeszcze żadnych ogłoszeń";
+                return;
+            }
+            fetchFavouriteIds(uuidList)
+        })
+        .catch(error => {
+            // Obsłuż błąd
+            console.error('Błąd: ' + error.message);
+        });
+}
+
+function fetchFavouriteIds(uuidList) {
+    let loggedUser = document.getElementById('username').textContent;
+
+    fetch('/api/advertisements/favourites/' + loggedUser, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(uuidList), // Przekazujemy listę jako ciało żądania
+    })
+        .then(response => {
+            if (!response.ok) {
+                let resultContainerRight = document.getElementById('resultContainerRight');
+                resultContainerRight.textContent = "Nie masz jeszcze żadnych ogłoszeń";
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            let resultContainerRight = document.getElementById('resultContainerRight');
+
+
+
+            data.forEach(advertisement => {
+                createUserAdvertisementsResultDiv(advertisement,resultContainerRight);
+                row++;
+                resultCount++
+            });
+        })
+        .catch(error => {
+            // Obsłuż błąd
+            console.error('Błąd: ' + error.message);
+        });
 }
 
 let conversationRow = 1;

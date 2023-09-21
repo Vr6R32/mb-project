@@ -16,6 +16,8 @@ function createHeaderTitle(advertisement,container,owner) {
 
         let loggedUser = document.getElementById('username').textContent;
 
+
+
         const titleContainer = document.createElement('div');
         titleContainer.setAttribute('id', 'titleDiv');
         titleContainer.classList.add('title-container');
@@ -42,8 +44,38 @@ function createHeaderTitle(advertisement,container,owner) {
 
         const heartIcon = document.createElement('img');
         heartIcon.setAttribute('id', 'hearticon');
-        heartIcon.src = '/api/resources/heartEmpty';
         heartIcon.alt = 'HeartIcon';
+        updateHeartIconSrc(loggedUser,heartIcon);
+
+
+    heartIcon.addEventListener('click', () => {
+        // Wyślij żądanie POST na adres "api/users/favourites"
+
+        fetch('/api/users/favourites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Ustaw nagłówek na JSON, jeśli wymagane
+            },
+            body: JSON.stringify({ userName: loggedUser, advertisementId: advertisementId }),
+
+        })
+            .then(response => {
+                if (response.ok) {
+                    if (heartIcon.src.endsWith('heartEmpty')) {
+                        heartIcon.src = '/api/resources/heartFull';
+                    } else {
+                        heartIcon.src = '/api/resources/heartEmpty';
+                    }
+                } else {
+                    // Obsłuż błąd, np. wyświetl komunikat dla użytkownika
+                    console.error('Błąd podczas wysyłania żądania POST');
+                }
+            })
+            .catch(error => {
+                // Obsłuż błąd sieciowy
+                console.error('Błąd sieciowy: ' + error);
+            });
+    });
 
         const messageIcon = document.createElement('img');
         messageIcon.setAttribute('id', 'msgicon');
@@ -84,6 +116,38 @@ function createHeaderTitle(advertisement,container,owner) {
         titleDiv.appendChild(titleRightColumn);
         container.appendChild(titleContainer);
 }
+
+
+function updateHeartIconSrc(loggedUser, heartIcon) {
+    const queryParams = new URLSearchParams({
+        userName: loggedUser,
+        advertisementId: advertisementId,
+    });
+
+    fetch('/api/users/favourites?' + queryParams.toString(), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Błąd podczas pobierania ulubionego statusu');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.toString() === "true") {
+                heartIcon.src = '/api/resources/heartFull';
+            } else if (data.toString() === "false") {
+                heartIcon.src = '/api/resources/heartEmpty';
+            }
+        })
+        .catch(error => {
+            heartIcon.src = '/api/resources/heartEmpty';
+        });
+}
+
 
 
 
@@ -294,6 +358,8 @@ function checkConversationId(messageValue) {
 }
 
 
+
+
 function fetchAdvertisement(){
         fetch('/api/advertisements/' + advertisementId)
             .then(response => response.json())
@@ -302,6 +368,7 @@ function fetchAdvertisement(){
                     advertisement = data; // Używamy pojedynczego obiektu, nie listy
                     createHeaderTitle(advertisement,container,advertisement.user);
                     createAdvertisementResultDiv(container,advertisement);
+
             })
             .catch(error => {
                     console.error('Błąd pobierania danych:', error);

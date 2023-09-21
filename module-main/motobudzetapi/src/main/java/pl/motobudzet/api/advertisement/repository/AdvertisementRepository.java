@@ -30,6 +30,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
     int insertNewPhoto(UUID id, String name);
 
 
+    @Query("SELECT a FROM Advertisement a WHERE a.id IN ?1")
+    List<Advertisement> getAllAdvertisementsByListOfIds(List<UUID> uuidList);
+
 //    Page<Advertisement> findAll(Specification spec, Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a " +
