@@ -38,6 +38,15 @@ public class PublicAdvertisementService {
     private final AppUserCustomService userCustomService;
 
 
+    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList){
+        if (username.equals(loggedUser)){
+            List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
+            return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()
+                    .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
+        }
+        return Collections.emptyList();
+    }
+
     public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
         return advertisementRepository.findOneByIdWithFetch(uuid)
                 .map(advertisement -> mapToAdvertisementDTO(advertisement, true))

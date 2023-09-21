@@ -23,6 +23,13 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
     // Dodawanie tych gridów jako dzieci do resultContainerRight
     container.appendChild(grid1);
 
+    resultDiv.addEventListener("click", () => {
+        // Pobierz ID reklamy
+        const advertisementId = advertisement.id;
+
+        // Przenieś na stronę /id/advertisement.id
+        window.location.href = `/id/${advertisementId}`;
+    });
 
     // Add hover effect on mouseover
     resultDiv.onmouseover = () => {

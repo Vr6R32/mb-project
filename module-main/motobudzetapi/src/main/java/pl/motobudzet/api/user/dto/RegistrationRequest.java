@@ -10,8 +10,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
-@AllArgsConstructor
 @Builder
 public class RegistrationRequest {
     @NotEmpty(message = "Nazwa użytkownika nie może być pusta !")

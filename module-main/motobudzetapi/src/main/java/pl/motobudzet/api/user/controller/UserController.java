@@ -13,13 +13,12 @@ import pl.motobudzet.api.user.dto.RegistrationRequest;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/user")
-public class RegistrationLoginController {
+public class UserController {
 
     private final RegistrationService registrationService;
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request) {
-//        System.out.println(request);
         return registrationService.register(request);
     }
 }

@@ -1,6 +1,7 @@
 package pl.motobudzet.api.advertisement.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +47,10 @@ public class PublicAdvertisementController {
     @GetMapping(value = "user/{username}")
     public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username, Principal principal){
         return publicAdvertisementService.getAllUserAdvertisements(username,principal.getName());
+    }
+//    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    @PostMapping(value = "favourites/{username}")
+    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(@PathVariable String username, Principal principal, @RequestBody List<String> uuidStringList){
+        return publicAdvertisementService.getAllUserFavouritesAdvertisements(username,principal.getName(),uuidStringList);
     }
 }
