@@ -15,9 +15,12 @@ form input[type="number"],
 form input[type="date"],
 form textarea {
     width: 500px; /* Set a fixed width for select and input fields to ensure consistency */
-    background-color: darkgrey; /* Set gray background color */
-    box-shadow: 0 0 10px moccasin;
-    border: aquamarine;
+    background-color: black; /* Set gray background color */
+    border-radius: 10px;
+    border: 0;
+    color: white;
+    /*box-shadow: 0 0 10px moccasin;*/
+    /*border: aquamarine;*/
     text-align: center; /* Center-align text inside the form fields */
 }
 #fileDropArea {
@@ -27,7 +30,8 @@ form textarea {
     width: 300px;
     align-items: center;
     cursor: pointer;
-    color: darkgoldenrod;
+    color: white;
+    border-radius: 10px;
     border: 2px dashed darkgoldenrod;
     /* Add border style */
     background-color: #181818;
