@@ -18,20 +18,14 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<String> sendMessage(@RequestParam String message,
-                                      @RequestParam String advertisementId,
-                                      @RequestParam Long conversationId,
-                                      Principal principal) {
-        String response = messageService.sendMessage(message, advertisementId, conversationId, principal.getName());
-        return new ResponseEntity<>(response, HttpStatus.OK); // Tutaj dodajemy 's' jako zawartość odpowiedzi
+    public ResponseEntity<String> sendMessage(@RequestParam String message, @RequestParam Long conversationId, Principal principal) {
+        String response = messageService.sendMessage(message,conversationId, principal.getName());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
-    public List<ConversationMessageDTO> getAllMessages(@RequestParam Long conversationId,
-                                                       Principal principal) {
+    public List<ConversationMessageDTO> getAllMessages(@RequestParam Long conversationId, Principal principal) {
         return messageService.getAllMessages(conversationId, principal.getName());
     }
-
-
 }
 
