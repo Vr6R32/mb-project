@@ -2,6 +2,7 @@ package pl.motobudzet.api.user_conversations.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
 import pl.motobudzet.api.kafka.service.KafkaServiceInterface;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
@@ -28,38 +29,51 @@ public class MessageService {
     private final ConversationMessagesRepository messagesRepository;
     private final KafkaServiceInterface kafkaService;
 
-    public String sendMessage(String message,String advertisementId, Long conversationId, String messageSender) {
+    public String sendMessage(String message,Long conversationId, String messageSenderName) {
 
-        AppUser userSender = userCustomService.getByName(messageSender);
         Conversation conversation = conversationService.findConversationById(conversationId);
-        String userNameClient = conversation.getUserClient().getUsername();
-        String userNameOwner = conversation.getUserOwner().getUsername();
+        AppUser conversationUserClient = conversation.getUserClient();
+        AppUser conversationUserOwner = conversation.getUserOwner();
 
-//        if(conversation==null){
-//            conversationService.createConversation(advertisementId,messageSender);
-//        }
+        AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
+        AppUser messageSender = userCustomService.getByName(messageSenderName);
 
-
-        if (authorizeMessagePostAccess(messageSender, userNameOwner, userNameClient)) {
+        if (authorizeMessagePostAccess(messageSenderName, conversationUserOwner.getUsername(), conversationUserClient.getUsername())) {
             ConversationMessage newMessage = ConversationMessage.builder()
                     .conversation(conversation)
                     .message(message)
                     .messageSendDateTime(LocalDateTime.now())
-                    .messageSender(userSender)
+                    .messageSender(messageSender)
                     .build();
 
-            if (conversation.getConversationMessages() == null) {
-                conversation.setConversationMessages(List.of(newMessage));
-            } else {
-                List<ConversationMessage> conversationMessageList = conversation.getConversationMessages();
-                conversationMessageList.add(newMessage);
-                conversation.setConversationMessages(conversationMessageList);
-            }
-            conversation.setLastMessage(newMessage);
+            updateConversation(conversation, newMessage);
             messagesRepository.save(newMessage);
         }
-        kafkaService.sendMessageNotification(message);
+
+        sendEmailMessageNotificationToKafka(message,emailNotificationReceiver,messageSender,conversation);
         return "Message Sent!";
+    }
+
+    private void updateConversation(Conversation conversation, ConversationMessage newMessage) {
+        if (conversation.getConversationMessages() == null) {
+            conversation.setConversationMessages(List.of(newMessage));
+        } else {
+            List<ConversationMessage> conversationMessageList = conversation.getConversationMessages();
+            conversationMessageList.add(newMessage);
+            conversation.setConversationMessages(conversationMessageList);
+        }
+        conversation.setLastMessage(newMessage);
+    }
+
+    private void sendEmailMessageNotificationToKafka(String message,AppUser emailNotificationReceiver,AppUser messageSender,Conversation conversation) {
+        EmailMessageRequest emailMessageRequest = EmailMessageRequest.builder()
+                .message(message)
+                .senderName(messageSender.getUsername())
+                .receiverEmail(emailNotificationReceiver.getEmail())
+                .advertisementTitle(conversation.getAdvertisement().getName())
+                .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
+                .build();
+        kafkaService.sendMessageNotification(emailMessageRequest);
     }
 
     public List<ConversationMessageDTO> getAllMessages(Long conversationId, String loggedUser) {

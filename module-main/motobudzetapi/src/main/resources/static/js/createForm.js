@@ -83,6 +83,9 @@ function createForm() {
         if (element.type === 'select' && element.onchange) {
             input.setAttribute('onchange', element.onchange);
         }
+        if (element.type === 'select') {
+            input.style.textAlign = 'center';
+        }
 
         form.appendChild(label);
         form.appendChild(input);

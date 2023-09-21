@@ -3,22 +3,23 @@ package pl.motobudzet.mailingmodule.kafka.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.user.entity.AppUser;
-import pl.motobudzet.mailingmodule.mailSender.service.MailSenderService;
+import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
+import pl.motobudzet.mailingmodule.mailSender.service.JavaMailSenderService;
+import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
+//import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
+
+import static pl.motobudzet.api.kafka.configuration.KafkaTopicConfig.MESSAGE_NOTIFY_TOPIC;
 
 
 @Service
 @RequiredArgsConstructor
 public class KafkaMessageNotificationService {
 
-    private final MailSenderService mailSenderService;
+//    private final JavaMailSenderService javaMailSenderService;
+    private final SpringMailSenderService springMailSenderService;
 
-    AppUser appUser;
-    public static final String MESSAGE_NOTIFY_TOPIC = "messageNotify1";
-
-    @KafkaListener(topics = MESSAGE_NOTIFY_TOPIC, groupId = "groupid1")
-    void listener(String data) {
-
-        mailSenderService.sendMessageNotificationEmail(data);
+    @KafkaListener(topics = MESSAGE_NOTIFY_TOPIC, groupId = "groupid1",containerFactory = "factory")
+    void listener(EmailMessageRequest request) {
+        springMailSenderService.sendMessageNotificationHtml(request);
     }
 }
