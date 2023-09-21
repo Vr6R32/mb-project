@@ -228,7 +228,6 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         const formData = new FormData();
         formData.append("message", messageText);
         formData.append("conversationId", conversationId);
-        formData.append("advertisementId", advertisementIde);
 
         // Wysłanie danych jako żądanie POST z danymi formularza
         fetch("/api/messages", {

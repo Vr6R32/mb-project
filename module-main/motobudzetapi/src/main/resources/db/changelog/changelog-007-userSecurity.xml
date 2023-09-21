@@ -63,8 +63,8 @@
         <sql>
             INSERT INTO app_user (user_name, password, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
             VALUES
-                ('admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ker@hitman.pl', true, true, true, true),
-                ('user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ke2@hitman.pl', true, true, true, true),
+                ('admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'kowalkowski.michal24@gmail.com', true, true, true, true),
+                ('user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ind00rsm0k3rs@gmail.com', true, true, true, true),
                 ('admin2', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ke2ds@hitman.pl', true, true, true, true);
         </sql>
     </changeSet>
