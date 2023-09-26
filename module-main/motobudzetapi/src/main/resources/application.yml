@@ -2,9 +2,9 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
   datasource:
-#    url: jdbc:postgresql://serwer2379308.home.pl/37515270_motobudzet69
-#    username: 37515270_motobudzet69
-#    password: jamajskiHolender69
+#    url:
+#    username:
+#    password:
     hikari:
       max-lifetime: 600000
     url: jdbc:postgresql://localhost:5432/motobudzet
