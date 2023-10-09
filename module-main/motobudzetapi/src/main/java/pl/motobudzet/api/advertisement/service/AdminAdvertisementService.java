@@ -7,6 +7,10 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 
 @Service
 public class AdminAdvertisementService {

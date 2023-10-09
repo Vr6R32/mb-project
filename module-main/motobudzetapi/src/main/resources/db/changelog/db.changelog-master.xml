@@ -20,6 +20,7 @@
     <include file="/db/changelog/changelog-013-createUserMessagesTables.xml"/>
     <include file="/db/changelog/changelog-014-insertExampleConversationsAndMessages.xml"/>
     <include file="/db/changelog/changelog-015-insertFavouritesTableEntity.xml"/>
+    <include file="/db/changelog/changelog-016-insertCitiesAndStates.xml"/>
 
 
 </databaseChangeLog>
