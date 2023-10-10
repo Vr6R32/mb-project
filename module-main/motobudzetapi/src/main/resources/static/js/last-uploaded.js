@@ -1,10 +1,14 @@
 let prevPageButton = null;
-
+let advertisements;
+let currentMinIndex = 0;
+let currentMaxIndex = 3;
+const resultsPerPage = 3; // Liczba wyników na stronie
 
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById('container-main');
     // document.body.style.cursor = 'crosshair';
     getLastUploaded(0);
+
 
     const title = document.createElement('h2');
     title.textContent = 'Ostatnio Dodane';
@@ -50,17 +54,28 @@ document.addEventListener("DOMContentLoaded", function () {
     container.appendChild(titleContainer);
 
     prevPageButton.addEventListener('click', () => {
-        if (pageNumber > 0) {
-            pageNumber--;
-            // clearAdvertisements(container);
-            getLastUploaded(pageNumber);
+        if (currentMinIndex > 0) {
+            clearAdvertisements(container);
+            currentMinIndex -= resultsPerPage; // Przesuń się o 3 wyniki wstecz
+            currentMaxIndex -= resultsPerPage;
+            displayLastUploaded(currentMinIndex, currentMaxIndex);
         }
     });
 
     nextPageButton.addEventListener('click', () => {
-        pageNumber++;
-        // clearAdvertisements(container);
-        getLastUploaded(pageNumber);
+        // Sprawdź, czy currentMaxIndex nie przekracza rozmiaru listy reklam
+        if (currentMaxIndex < advertisements.length) {
+            clearAdvertisements(container);
+            currentMinIndex += resultsPerPage; // Przesuń się o 3 wyniki do przodu
+            currentMaxIndex += resultsPerPage;
+
+            // Jeśli currentMaxIndex przekracza advertisements.size, ogranicz go do advertisements.size
+            if (currentMaxIndex > advertisements.length) {
+                currentMaxIndex = advertisements.length;
+            }
+
+            displayLastUploaded(currentMinIndex, currentMaxIndex);
+        }
     });
 
     function addHoverEffect(buttonElement) {
@@ -109,221 +124,224 @@ function getLastUploaded(pageNumber){
 
     fetch('/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
 
-
         .then(response => response.json())
         .then(data => {
-            const container = document.getElementById('results2');
-            const advertisements = data.content;
-
-
-            advertisements.forEach(advertisement => {
-                const subContainer = document.createElement('div');
-                subContainer.classList.add('sub-container-miniature');
-                subContainer.style.color = 'darkgoldenrod';
-                subContainer.style.textAlign = 'center';
-
-                subContainer.addEventListener('mouseout', () => {
-                    const computedStyle = getComputedStyle(subContainer);
-                    subContainer.style.boxShadow = '0 0 40px darkgoldenrod';
-                });
-
-                subContainer.addEventListener('mouseover', () => {
-                    subContainer.style.boxShadow = '0 0 20px moccasin';
-                });
-
-                const fadeEffect = document.createElement('div');
-                fadeEffect.classList.add('fade-effect-miniature');
-
-                const titleContainerMiniature = document.createElement('div');
-                titleContainerMiniature.classList.add('title-container-miniature');
-                titleContainerMiniature.style.color = 'darkgoldenrod';
-                titleContainerMiniature.style.textAlign = 'center';
-
-                subContainer.appendChild(titleContainerMiniature)
-
-                const title = document.createElement('h2');
-                title.textContent = advertisement.brand + '  ' + advertisement.model;
-                titleContainerMiniature.appendChild(title);
-
-
-
-                const mainPhoto = document.createElement('img');
-                mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
-                mainPhoto.style.height = '300px';
-                mainPhoto.alt = 'MainUrlPhoto';
-                mainPhoto.id = 'mainUrlPhoto';
-
-                fadeEffect.appendChild(mainPhoto);
-                subContainer.appendChild(fadeEffect);
-
-                mainPhoto.addEventListener('mouseover', () => {
-                    mainPhoto.style.cursor = 'crosshair';
-                });
-
-                mainPhoto.addEventListener('mouseout', () => {
-                    mainPhoto.style.cursor = 'default';
-                });
-
-                mainPhoto.addEventListener('click', () => {
-                    window.location.href = '/id/' + advertisement.id;
-                });
-
-
-
-
-                const infoContainerFirst = document.createElement('div');
-                infoContainerFirst.style.display = 'flex';
-                infoContainerFirst.style.alignItems = 'center';
-                infoContainerFirst.style.justifyContent = 'space-evenly';
-                infoContainerFirst.style.justifyContent = 'center';
-                infoContainerFirst.style.marginTop = '30px';
-
-                const infoContainerSecond = document.createElement('div');
-                infoContainerSecond.style.display = 'flex';
-                infoContainerSecond.style.alignItems = 'center';
-                infoContainerSecond.style.justifyContent = 'space-evenly';
-                infoContainerSecond.style.justifyContent = 'center';
-                infoContainerSecond.style.marginTop = '30px';
-
-
-                const mileageInfo = document.createElement('div');
-                mileageInfo.style.display = 'flex';
-                mileageInfo.style.flexDirection = 'column';
-                mileageInfo.style.alignItems = 'center';
-                mileageInfo.style.marginRight = '30px';
-
-                const mileageIcon = document.createElement('img');
-                mileageIcon.src = '/api/resources/mileage';
-                mileageIcon.alt = 'MileageIcon';
-                mileageIcon.style.marginBottom = '2px';
-
-                const mileageValue = document.createElement('span');
-                mileageValue.textContent = advertisement.mileage;
-                mileageInfo.appendChild(mileageIcon);
-                mileageInfo.appendChild(mileageValue);
-
-                const productionDateInfo = document.createElement('div');
-                productionDateInfo.style.display = 'flex';
-                productionDateInfo.style.flexDirection = 'column';
-                productionDateInfo.style.alignItems = 'center';
-
-                const productionDateIcon = document.createElement('img');
-                productionDateIcon.src = '/api/resources/productionDate';
-                productionDateIcon.alt = 'ProductionDateIcon';
-                productionDateIcon.style.marginBottom = '2px';
-
-
-                const productionDateValue = document.createElement('span');
-                productionDateValue.textContent = advertisement.productionDate
-                productionDateInfo.appendChild(productionDateIcon);
-                productionDateInfo.appendChild(productionDateValue);
-
-                const fuelTypeInfo = document.createElement('div');
-                fuelTypeInfo.style.display = 'flex';
-                fuelTypeInfo.style.flexDirection = 'column';
-                fuelTypeInfo.style.alignItems = 'center';
-                fuelTypeInfo.style.marginLeft = '30px';
-
-                const fuelTypeIcon = document.createElement('img');
-                fuelTypeIcon.src = '/api/resources/fuelType';
-                fuelTypeIcon.alt = 'FuelTypeIcon';
-                fuelTypeIcon.style.marginBottom = '2px';
-
-                const fuelTypeValue = document.createElement('span');
-                fuelTypeValue.textContent = advertisement.fuelType;
-                fuelTypeInfo.appendChild(fuelTypeIcon);
-                fuelTypeInfo.appendChild(fuelTypeValue);
-
-////////////////////////////////////////////////////////
-
-                const transmissionInfo = document.createElement('div');
-                transmissionInfo.style.display = 'flex';
-                transmissionInfo.style.flexDirection = 'column';
-                transmissionInfo.style.alignItems = 'center';
-
-                const transmissionIcon = document.createElement('img');
-                transmissionIcon.src = '/api/resources/transmissionType/' + advertisement.transmissionType;
-                transmissionIcon.alt = 'TransmissionIcon';
-                transmissionIcon.style.marginBottom = '2px';
-
-                const transmissionValue = document.createElement('span');
-                transmissionValue.textContent = advertisement.transmissionType;
-                transmissionInfo.appendChild(transmissionIcon);
-                transmissionInfo.appendChild(transmissionValue);
-
-                const engineInfo = document.createElement('div');
-                engineInfo.style.display = 'flex';
-                engineInfo.style.flexDirection = 'column';
-                engineInfo.style.alignItems = 'center';
-                engineInfo.style.marginRight = '30px';
-
-                const engineIcon = document.createElement('img');
-                engineIcon.src = '/api/resources/engineType/' + advertisement.engineType;
-                engineIcon.alt = 'EngineIcon';
-                engineIcon.style.marginBottom = '2px';
-
-                const engineValue = document.createElement('span');
-                engineValue.textContent = advertisement.engineType;
-                engineInfo.appendChild(engineIcon);
-                engineInfo.appendChild(engineValue);
-
-
-                const engineHorsePowerInfo = document.createElement('div');
-                engineHorsePowerInfo.style.display = 'flex';
-                engineHorsePowerInfo.style.flexDirection = 'column';
-                engineHorsePowerInfo.style.alignItems = 'center';
-                engineHorsePowerInfo.style.marginLeft = '30px';
-
-                const engineHorsePowerIcon = document.createElement('img');
-                engineHorsePowerIcon.src = '/api/resources/engineHorsePower';
-                engineHorsePowerIcon.alt = 'EngineIcon';
-                engineHorsePowerIcon.style.marginBottom = '2px';
-
-                const engineHorsePowerValue = document.createElement('span');
-                engineHorsePowerValue.textContent = advertisement.engineHorsePower + ' KM';
-                engineHorsePowerInfo.appendChild(engineHorsePowerIcon);
-                engineHorsePowerInfo.appendChild(engineHorsePowerValue);
-
-                const itemMarginSide = '10px';
-                const itemMarginBottom = '10px';
-
-
-                // [mileageInfo, productionDateInfo, fuelTypeInfo].forEach(item => {
-                //     item.style.marginLeft = itemMarginSide;
-                //     item.style.marginRight = itemMarginSide;
-                //     item.style.marginBottom = itemMarginSide;
-                // });
-                //
-                // [engineInfo, transmissionInfo, engineHorsePowerInfo].forEach(item => {
-                //     item.style.marginLeft = itemMarginSide;
-                //     item.style.marginRight = itemMarginSide;
-                //     item.style.marginBottom = itemMarginSide;
-                // });
-
-
-
-                infoContainerFirst.appendChild(mileageInfo);
-                infoContainerFirst.appendChild(productionDateInfo);
-                infoContainerFirst.appendChild(fuelTypeInfo);
-
-                infoContainerSecond.appendChild(engineInfo)
-                infoContainerSecond.appendChild(transmissionInfo)
-                infoContainerSecond.appendChild(engineHorsePowerInfo)
-
-
-                subContainer.appendChild(infoContainerFirst);
-                subContainer.appendChild(infoContainerSecond);
-
-
-                container.appendChild(subContainer);
-
-
-
-            });
+            advertisements = data.content;
+            displayLastUploaded(currentMinIndex,currentMaxIndex);
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
         });
+}
+
+function displayLastUploaded(min,max){
+
+    const container = document.getElementById('results2');
+
+    advertisements.slice(min,max).forEach(advertisement => {
+        const subContainer = document.createElement('div');
+        subContainer.classList.add('sub-container-miniature');
+        subContainer.style.color = 'darkgoldenrod';
+        subContainer.style.textAlign = 'center';
+
+        subContainer.addEventListener('mouseout', () => {
+            const computedStyle = getComputedStyle(subContainer);
+            subContainer.style.boxShadow = '0 0 40px darkgoldenrod';
+        });
+
+        subContainer.addEventListener('mouseover', () => {
+            subContainer.style.boxShadow = '0 0 20px moccasin';
+        });
+
+        const fadeEffect = document.createElement('div');
+        fadeEffect.classList.add('fade-effect-miniature');
+
+        const titleContainerMiniature = document.createElement('div');
+        titleContainerMiniature.classList.add('title-container-miniature');
+        titleContainerMiniature.style.color = 'darkgoldenrod';
+        titleContainerMiniature.style.textAlign = 'center';
+
+        subContainer.appendChild(titleContainerMiniature)
+
+        const title = document.createElement('h2');
+        title.textContent = advertisement.brand + '  ' + advertisement.model;
+        titleContainerMiniature.appendChild(title);
+
+
+
+        const mainPhoto = document.createElement('img');
+        mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
+        mainPhoto.style.height = '300px';
+        mainPhoto.alt = 'MainUrlPhoto';
+        mainPhoto.id = 'mainUrlPhoto';
+
+        fadeEffect.appendChild(mainPhoto);
+        subContainer.appendChild(fadeEffect);
+
+        mainPhoto.addEventListener('mouseover', () => {
+            mainPhoto.style.cursor = 'crosshair';
+        });
+
+        mainPhoto.addEventListener('mouseout', () => {
+            mainPhoto.style.cursor = 'default';
+        });
+
+        mainPhoto.addEventListener('click', () => {
+            window.location.href = '/id/' + advertisement.id;
+        });
+
+
+
+
+        const infoContainerFirst = document.createElement('div');
+        infoContainerFirst.style.display = 'flex';
+        infoContainerFirst.style.alignItems = 'center';
+        infoContainerFirst.style.justifyContent = 'space-evenly';
+        infoContainerFirst.style.justifyContent = 'center';
+        infoContainerFirst.style.marginTop = '30px';
+
+        const infoContainerSecond = document.createElement('div');
+        infoContainerSecond.style.display = 'flex';
+        infoContainerSecond.style.alignItems = 'center';
+        infoContainerSecond.style.justifyContent = 'space-evenly';
+        infoContainerSecond.style.justifyContent = 'center';
+        infoContainerSecond.style.marginTop = '30px';
+
+
+        const mileageInfo = document.createElement('div');
+        mileageInfo.style.display = 'flex';
+        mileageInfo.style.flexDirection = 'column';
+        mileageInfo.style.alignItems = 'center';
+        mileageInfo.style.marginRight = '30px';
+
+        const mileageIcon = document.createElement('img');
+        mileageIcon.src = '/api/resources/mileage';
+        mileageIcon.alt = 'MileageIcon';
+        mileageIcon.style.marginBottom = '2px';
+
+        const mileageValue = document.createElement('span');
+        mileageValue.textContent = advertisement.mileage;
+        mileageInfo.appendChild(mileageIcon);
+        mileageInfo.appendChild(mileageValue);
+
+        const productionDateInfo = document.createElement('div');
+        productionDateInfo.style.display = 'flex';
+        productionDateInfo.style.flexDirection = 'column';
+        productionDateInfo.style.alignItems = 'center';
+
+        const productionDateIcon = document.createElement('img');
+        productionDateIcon.src = '/api/resources/productionDate';
+        productionDateIcon.alt = 'ProductionDateIcon';
+        productionDateIcon.style.marginBottom = '2px';
+
+
+        const productionDateValue = document.createElement('span');
+        productionDateValue.textContent = advertisement.productionDate
+        productionDateInfo.appendChild(productionDateIcon);
+        productionDateInfo.appendChild(productionDateValue);
+
+        const fuelTypeInfo = document.createElement('div');
+        fuelTypeInfo.style.display = 'flex';
+        fuelTypeInfo.style.flexDirection = 'column';
+        fuelTypeInfo.style.alignItems = 'center';
+        fuelTypeInfo.style.marginLeft = '30px';
+
+        const fuelTypeIcon = document.createElement('img');
+        fuelTypeIcon.src = '/api/resources/fuelType';
+        fuelTypeIcon.alt = 'FuelTypeIcon';
+        fuelTypeIcon.style.marginBottom = '2px';
+
+        const fuelTypeValue = document.createElement('span');
+        fuelTypeValue.textContent = advertisement.fuelType;
+        fuelTypeInfo.appendChild(fuelTypeIcon);
+        fuelTypeInfo.appendChild(fuelTypeValue);
+
+////////////////////////////////////////////////////////
+
+        const transmissionInfo = document.createElement('div');
+        transmissionInfo.style.display = 'flex';
+        transmissionInfo.style.flexDirection = 'column';
+        transmissionInfo.style.alignItems = 'center';
+
+        const transmissionIcon = document.createElement('img');
+        transmissionIcon.src = '/api/resources/transmissionType/' + advertisement.transmissionType;
+        transmissionIcon.alt = 'TransmissionIcon';
+        transmissionIcon.style.marginBottom = '2px';
+
+        const transmissionValue = document.createElement('span');
+        transmissionValue.textContent = advertisement.transmissionType;
+        transmissionInfo.appendChild(transmissionIcon);
+        transmissionInfo.appendChild(transmissionValue);
+
+        const engineInfo = document.createElement('div');
+        engineInfo.style.display = 'flex';
+        engineInfo.style.flexDirection = 'column';
+        engineInfo.style.alignItems = 'center';
+        engineInfo.style.marginRight = '30px';
+
+        const engineIcon = document.createElement('img');
+        engineIcon.src = '/api/resources/engineType/' + advertisement.engineType;
+        engineIcon.alt = 'EngineIcon';
+        engineIcon.style.marginBottom = '2px';
+
+        const engineValue = document.createElement('span');
+        engineValue.textContent = advertisement.engineType;
+        engineInfo.appendChild(engineIcon);
+        engineInfo.appendChild(engineValue);
+
+
+        const engineHorsePowerInfo = document.createElement('div');
+        engineHorsePowerInfo.style.display = 'flex';
+        engineHorsePowerInfo.style.flexDirection = 'column';
+        engineHorsePowerInfo.style.alignItems = 'center';
+        engineHorsePowerInfo.style.marginLeft = '30px';
+
+        const engineHorsePowerIcon = document.createElement('img');
+        engineHorsePowerIcon.src = '/api/resources/engineHorsePower';
+        engineHorsePowerIcon.alt = 'EngineIcon';
+        engineHorsePowerIcon.style.marginBottom = '2px';
+
+        const engineHorsePowerValue = document.createElement('span');
+        engineHorsePowerValue.textContent = advertisement.engineHorsePower + ' KM';
+        engineHorsePowerInfo.appendChild(engineHorsePowerIcon);
+        engineHorsePowerInfo.appendChild(engineHorsePowerValue);
+
+        const itemMarginSide = '10px';
+        const itemMarginBottom = '10px';
+
+
+        // [mileageInfo, productionDateInfo, fuelTypeInfo].forEach(item => {
+        //     item.style.marginLeft = itemMarginSide;
+        //     item.style.marginRight = itemMarginSide;
+        //     item.style.marginBottom = itemMarginSide;
+        // });
+        //
+        // [engineInfo, transmissionInfo, engineHorsePowerInfo].forEach(item => {
+        //     item.style.marginLeft = itemMarginSide;
+        //     item.style.marginRight = itemMarginSide;
+        //     item.style.marginBottom = itemMarginSide;
+        // });
+
+
+
+        infoContainerFirst.appendChild(mileageInfo);
+        infoContainerFirst.appendChild(productionDateInfo);
+        infoContainerFirst.appendChild(fuelTypeInfo);
+
+        infoContainerSecond.appendChild(engineInfo)
+        infoContainerSecond.appendChild(transmissionInfo)
+        infoContainerSecond.appendChild(engineHorsePowerInfo)
+
+
+        subContainer.appendChild(infoContainerFirst);
+        subContainer.appendChild(infoContainerSecond);
+
+
+        container.appendChild(subContainer);
+
+
+
+    });
 }
 
 
