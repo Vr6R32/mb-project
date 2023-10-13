@@ -11,6 +11,30 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+
+CREATE TABLE IF NOT EXISTS city_states (
+                                           id serial PRIMARY KEY,
+                                           name varchar(50) DEFAULT NULL
+);
+
+INSERT INTO city_states (id,name) VALUES
+                                   (1,'DOLNOŚLĄSKIE'),
+                                   (2,'KUJAWSKO-POMORSKIE'),
+                                   (3,'LUBELSKIE'),
+                                   (4,'LUBUSKIE'),
+                                   (5,'ŁÓDZKIE'),
+                                   (6,'MAŁOPOLSKIE'),
+                                   (7,'MAZOWIECKIE'),
+                                   (8,'OPOLSKIE'),
+                                   (9,'PODKARPACKIE'),
+                                   (10,'PODLASKIE'),
+                                   (11,'POMORSKIE'),
+                                   (12,'ŚLĄSKIE'),
+                                   (13,'ŚWIĘTOKRZYSKIE'),
+                                   (14,'WARMIŃSKO-MAZURSKIE'),
+                                   (15,'WIELKOPOLSKIE'),
+                                   (16,'ZACHODNIOPOMORSKIE');
+
 -- Zrzut struktury tabela pogoda.miasta
 CREATE TABLE IF NOT EXISTS cities (
                                       id SERIAL PRIMARY KEY,
@@ -943,28 +967,7 @@ INSERT INTO cities (state_id, name, n_latitude, e_longitude) VALUES
 /*!40000 ALTER TABLE `miasta` ENABLE KEYS */;
 
 -- Zrzut struktury tabela pogoda.woje
-CREATE TABLE IF NOT EXISTS city_states (
-    id serial PRIMARY KEY,
-    name varchar(50) DEFAULT NULL
-);
 
-INSERT INTO city_states (name) VALUES
-    ('DOLNOŚLĄSKIE'),
-    ('KUJAWSKO-POMORSKIE'),
-    ('LUBELSKIE'),
-    ('LUBUSKIE'),
-    ('ŁÓDZKIE'),
-    ('MAŁOPOLSKIE'),
-    ('MAZOWIECKIE'),
-    ('OPOLSKIE'),
-    ('PODKARPACKIE'),
-    ('PODLASKIE'),
-    ('POMORSKIE'),
-    ('ŚLĄSKIE'),
-    ('ŚWIĘTOKRZYSKIE'),
-    ('WARMIŃSKO-MAZURSKIE'),
-    ('WIELKOPOLSKIE'),
-    ('ZACHODNIOPOMORSKIE');
 -- /*!40000 ALTER TABLE `woje` ENABLE KEYS */;
 --
 -- /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

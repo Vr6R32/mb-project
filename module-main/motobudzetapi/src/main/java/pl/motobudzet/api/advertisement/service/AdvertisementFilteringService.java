@@ -1,6 +1,8 @@
 package pl.motobudzet.api.advertisement.service;
 
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,9 +12,16 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.locationCity.entity.City;
+import pl.motobudzet.api.locationCity.service.CityService;
+import pl.motobudzet.api.locationState.entity.CityState;
+import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static pl.motobudzet.api.advertisement.service.PublicAdvertisementService.PAGE_SIZE;
 
@@ -25,16 +34,19 @@ public class AdvertisementFilteringService {
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
+    private final CityService cityService;
+    private final CityStateService cityStateService;
 
 
     public Page<AdvertisementDTO> findAllPublicWithFilters(Integer pageNumber,
                                                            String brand, String model, String fuelType,
                                                            String driveType, String engineType, String transmissionType,
+                                                           String city, String cityState,
                                                            Long priceMin, Long priceMax, Long mileageFrom,
                                                            Long mileageTo, Long engineCapacityFrom,
                                                            Long engineCapacityTo, Long engineHorsePowerFrom,
                                                            Long engineHorsePowerTo, Long productionDateFrom,
-                                                           Long productionDateTo,
+                                                           Long productionDateTo, Integer distanceFrom,
                                                            String sortBy, String sortOrder) {
 
         Specification<Advertisement> specification = Specification.where(null);
@@ -48,6 +60,23 @@ public class AdvertisementFilteringService {
                     criteriaBuilder.equal(root.get("brand"), brandService.getBrand(brand)));
         }
 
+        if (city != null && distanceFrom != null) {
+            List<City> cityList = cityService.getCityNeighbourCitiesByDistance(city,distanceFrom);
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    root.get("city").in(cityList)
+            );
+        }
+        else if (cityState != null && !cityState.isEmpty()) {
+            specification = specification.and((root, query, criteriaBuilder) -> {
+                Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
+                return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
+            });
+        }
+        else  if (city != null && !city.isEmpty()) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))
+            );
+        }
         if (model != null && !model.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("model"), modelService.getModel(model)));

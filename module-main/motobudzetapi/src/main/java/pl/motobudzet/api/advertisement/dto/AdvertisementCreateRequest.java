@@ -49,6 +49,10 @@ public class AdvertisementCreateRequest {
     @NotNull(message = "First registration date cannot be empty!")
     @Past(message = "First registration date has to be a date before today date!")
     private LocalDate firstRegistrationDate;
+    @NotNull(message = "City cannot be empty!")
+    private String city;
+    @NotNull(message = "City state cannot be empty!")
+    private String cityState;
     private String userName;
 
 }

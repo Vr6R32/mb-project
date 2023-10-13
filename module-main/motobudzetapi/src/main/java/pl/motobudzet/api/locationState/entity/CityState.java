@@ -25,7 +25,8 @@ public class CityState {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "cityState")
+    @OneToMany(mappedBy = "cityState",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<City> cities;
+
 }

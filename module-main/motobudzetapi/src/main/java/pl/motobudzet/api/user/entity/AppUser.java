@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.locationCity.entity.City;
+import pl.motobudzet.api.locationState.entity.CityState;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,12 +33,13 @@ public class AppUser implements UserDetails {
     @Column(nullable = false)
     String password;
     @Column(nullable = false, unique = true)
-    @Schema(description = "Pictogram URL | ecommerceName -> ProductEnergyClassRestDto.pictogramUrt", nullable = true)
     String email;
     Boolean accountEnabled;
     Boolean accountNotLocked;
     Boolean accountNotExpired;
     Boolean credentialsNotExpired;
+    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    private City city;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JsonManagedReference
     @JoinTable(

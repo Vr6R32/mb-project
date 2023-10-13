@@ -2,6 +2,7 @@ package pl.motobudzet.api.locationCity.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.locationCity.dto.CityDTO;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.repository.CityRepository;
 import pl.motobudzet.api.utils.CoordinateExtractor;
@@ -18,8 +19,16 @@ import static pl.motobudzet.api.utils.DistanceCalculator.calculateDistance;
 public class CityService {
 
     private final CityRepository cityRepository;
-    public List<City> getAllCities() {
-        return cityRepository.getAllCitiesWithCityStates();
+    public List<CityDTO> getAllCities() {
+        return cityRepository.getAllCitiesWithCityStates().stream().map(this::mapToCityDTO).collect(Collectors.toList());
+    }
+
+    private CityDTO mapToCityDTO(City city) {
+        return CityDTO.builder()
+                .cityId(String.valueOf(city.getId()))
+                .cityName(city.getName())
+                .cityStateId(String.valueOf(city.getCityState().getId()))
+                .build();
     }
 
     public double calculateCityDistance(String cityOne, String cityTwo) {
@@ -38,6 +47,7 @@ public class CityService {
         Double mainLongitude = mainLocation.getELongitude();
 
         List<City> neighborCities = new LinkedList<>();
+        neighborCities.add(mainLocation);
 
         for (City city : allCitiesWithCityStates) {
             if (!city.getName().equals(mainCity)) {
@@ -49,5 +59,16 @@ public class CityService {
         }
 
         return neighborCities;
+    }
+
+    public City getCityByName(String name) {
+        return cityRepository.getCityByName(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+    }
+
+    public City getCityByNameWithout(String name) {
+        return cityRepository.getCityByNameWithout(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+    }
+    public City getCityByAjdi(Long city) {
+        return cityRepository.getCityByAjdi(city).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 }

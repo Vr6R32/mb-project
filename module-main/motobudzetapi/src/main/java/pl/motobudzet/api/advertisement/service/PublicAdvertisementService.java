@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.MileageUnit;
+import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.locationCity.service.CityService;
+import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.utils.MessageDateTimeExtractor;
@@ -20,6 +24,7 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +41,8 @@ public class PublicAdvertisementService {
     private final BrandService brandService;
     private final ModelService modelService;
     private final AppUserCustomService userCustomService;
-
+    private final CityService cityService;
+    private final CityStateService cityStateService;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList){
         if (username.equals(loggedUser)){
@@ -62,12 +68,10 @@ public class PublicAdvertisementService {
 
     //    @CachePut(cacheNames = "advertisements_filter_cache")
     @CacheEvict(cacheNames = "advertisements_filter_cache")
-    public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request) {
+    public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request,String user) {
 
-        System.out.println(request.getPriceUnit());
-        System.out.println(request.getMileageUnit());
 
-        AppUser user = userCustomService.getByName(request.getUserName());
+        AppUser currentUser = userCustomService.getByName(user);
 
 
         Advertisement advertisement = Advertisement.builder()
@@ -81,18 +85,21 @@ public class PublicAdvertisementService {
                 .engineType(specificationService.getEngineType(request.getEngineType()))
                 .transmissionType(specificationService.getTransmissionType(request.getTransmissionType()))
                 .mileage(request.getMileage())
+                .mileageUnit(MileageUnit.valueOf(request.getMileageUnit()))
                 .price(request.getPrice())
+                .priceUnit(PriceUnit.valueOf(request.getPriceUnit()))
                 .engineCapacity(request.getEngineCapacity())
                 .engineHorsePower(request.getEngineHorsePower())
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
-                .creationTime(LocalDateTime.now())
-                .user(user)
+                .creationTime(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))
+                .city(currentUser.getCity())
+                .user(currentUser)
                 .isVerified(false)
                 .build();
 
 
-        insertAdvertisementIntoUser(advertisement, user);
+        insertAdvertisementIntoUser(advertisement, currentUser);
 
         advertisementRepository.saveAndFlush(advertisement);
 
@@ -128,10 +135,10 @@ public class PublicAdvertisementService {
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeUserAndUrls) {
 
-        LocalDateTime messageSendDateTime = adv.getCreationTime();
+        LocalDateTime advCreationTime = adv.getCreationTime();
 
-        String creationDate = MessageDateTimeExtractor.extractDate(messageSendDateTime);
-        String creationTime = MessageDateTimeExtractor.extractTime(messageSendDateTime);
+        String creationDate = MessageDateTimeExtractor.extractDate(advCreationTime);
+        String creationTime = MessageDateTimeExtractor.extractTime(advCreationTime);
 
         AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
@@ -144,12 +151,18 @@ public class PublicAdvertisementService {
                 .engineType(specificationService.getEngineType(adv.getEngineType().getId()))
                 .transmissionType(specificationService.getTransmissionType(adv.getTransmissionType().getId()))
                 .mileage(adv.getMileage())
+                .mileageUnit(String.valueOf(adv.getMileageUnit()))
                 .price(adv.getPrice())
+                .priceUnit(String.valueOf(adv.getPriceUnit()))
                 .engineCapacity(adv.getEngineCapacity())
                 .engineHorsePower(adv.getEngineHorsePower())
                 .firstRegistrationDate(adv.getFirstRegistrationDate())
                 .productionDate(adv.getProductionDate())
                 .creationDate(creationDate)
+//                .city(cityService.getCityByName(adv.getCity().getName()))
+//                .cityState(cityStateService.findCityStateByName(adv.getCity().getCityState().getName()))
+//                .city(cityService.getCityByAjdi(adv.getCity().getId()).getName())
+//                .cityState(cityStateService.findCityStateByAjdi(cityService.getCityByAjdi(adv.getCity().getId()).getCityState().getId()).getName())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
                 .build();
 

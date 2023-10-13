@@ -2,8 +2,10 @@ package pl.motobudzet.api.advertisement.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
@@ -35,8 +37,9 @@ public class PublicAdvertisementController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<String> createNewAdvertisement(@RequestBody @Valid AdvertisementCreateRequest request) {
-        return publicAdvertisementService.createNewAdvertisement(request);
+    public ResponseEntity<String> createNewAdvertisement(@RequestBody @Valid AdvertisementCreateRequest request, HttpServletRequest httpServletRequest) {
+        String user = httpServletRequest.getUserPrincipal().getName();
+        return publicAdvertisementService.createNewAdvertisement(request,user);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")

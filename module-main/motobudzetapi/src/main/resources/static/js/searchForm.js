@@ -535,9 +535,22 @@ function displayResults(data) {
         advertisementDetails.style.display = 'flex';
         advertisementDetails.style.marginTop = '15px';
 
-        let pln = document.createElement('span');
-        pln.style.color = 'darkgoldenrod';
-        pln.textContent = 'PLN';
+        let priceUnitValue = document.createElement('span');
+        priceUnitValue.style.color = 'darkgoldenrod';
+        priceUnitValue.textContent = ad.priceUnit;
+
+        let mileageUnitValue = document.createElement('span');
+        mileageUnitValue.style.color = 'darkgoldenrod';
+        mileageUnitValue.textContent = ad.mileageUnit;
+
+        let horsePower = document.createElement('span');
+        horsePower.style.color = 'darkgoldenrod';
+        horsePower.textContent = 'HP';
+
+        let productionYear = document.createElement('span');
+        productionYear.style.color = 'darkgoldenrod';
+        productionYear.textContent = 'ROK';
+
 
         function formatPrice(price) {
             // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
@@ -547,14 +560,17 @@ function displayResults(data) {
         const containers = [
             createInfoContainer('price', 'PriceIcon', formatPrice(ad.price)),
             createInfoContainer('mileage', 'MileageIcon', formatPrice(ad.mileage)),
+            createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
             createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
             createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-            createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower + 'HP'),
             createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
             createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
         ];
 
-        containers[0].appendChild(pln);
+        containers[0].appendChild(priceUnitValue);
+        containers[1].appendChild(mileageUnitValue);
+        containers[2].appendChild(horsePower);
+        containers[3].appendChild(productionYear);
 
         // Dodawanie kontenerów do infoContainerFirst
         // containers.forEach(container => {

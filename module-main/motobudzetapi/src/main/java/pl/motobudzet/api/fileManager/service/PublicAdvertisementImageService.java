@@ -52,8 +52,6 @@ public class PublicAdvertisementImageService {
                 return new ResponseEntity<>("can't upload that file type!", HttpStatus.BAD_REQUEST);
             }
 
-            System.out.println(file.getOriginalFilename());
-
             String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
 
             int inserted = processAndSaveImageWithLogo(file, fileName, advertisement);

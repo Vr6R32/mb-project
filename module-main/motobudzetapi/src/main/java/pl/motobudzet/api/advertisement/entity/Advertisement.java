@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import pl.motobudzet.api.advertisement.model.MileageUnit;
+import pl.motobudzet.api.advertisement.model.PriceUnit;
+import pl.motobudzet.api.locationCity.entity.City;
+import pl.motobudzet.api.locationState.entity.CityState;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.entity.Brand;
 import pl.motobudzet.api.vehicleModel.entity.Model;
@@ -40,10 +44,16 @@ public class Advertisement {
     private Long productionDate;
     private LocalDate firstRegistrationDate;
     private LocalDateTime creationTime;
+    @Enumerated(EnumType.STRING)
+    private MileageUnit mileageUnit;
+    @Enumerated(EnumType.STRING)
+    private PriceUnit priceUnit;
     private Long mileage;
     private Long price;
     private Long engineCapacity;
     private Long engineHorsePower;
+    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    private City city;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private EngineType engineType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

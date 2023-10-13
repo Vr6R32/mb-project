@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.MileageUnit;
+import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.entity.Role;
@@ -191,7 +193,9 @@ public class InsertBrandsnModels {
                 .transmissionType(automat)
                 .mainPhotoUrl("rsq8.jpg")
                 .mileage(83342L)
+                .mileageUnit(MileageUnit.KM)
                 .price(821000L)
+                .priceUnit(PriceUnit.USD)
                 .engineCapacity(4197L)
                 .engineHorsePower(800L)
                 .firstRegistrationDate(LocalDate.of(2006,12,24))

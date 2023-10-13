@@ -18,7 +18,20 @@ import java.util.UUID;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, UUID>, JpaSpecificationExecutor<Advertisement> {
 
-    @Query("SELECT a FROM Advertisement a where a.isVerified = true")
+
+    @Query("SELECT a FROM Advertisement a " +
+            "LEFT JOIN FETCH a.imageUrls " +
+            "LEFT JOIN FETCH a.brand b " +
+            "LEFT JOIN FETCH a.model m " +
+            "LEFT JOIN FETCH a.driveType d " +
+            "LEFT JOIN FETCH a.engineType e " +
+            "LEFT JOIN FETCH a.fuelType f " +
+            "LEFT JOIN FETCH a.user u " +
+            "LEFT JOIN FETCH a.transmissionType t" +
+            "LEFT JOIN FETCH a.city c" +
+            "LEFT JOIN FETCH a.city.cityState cs")
+    Page<Advertisement> findAllCustom(Specification specification, Pageable pageable);
+    @Query("SELECT a FROM Advertisement a left join fetch a.city ac left join fetch ac.cityState acs where a.isVerified = true")
     Page<Advertisement> findAllVerified(Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a where a.isVerified = false")

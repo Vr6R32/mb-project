@@ -4,6 +4,40 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+
+
+    <changeSet id="create_city_states_table" author="michal-k">
+        <createTable tableName="city_states">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="test" author="michal-k">
+        <createTable tableName="cities">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="e_longitude" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="n_latitude" type="double precision">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk8akwkumky4alc0edjtn1ypr1o" referencedTableName="city_states" referencedColumnNames="id"/>
+            </column>
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
     <changeSet id="1" author="michal-k">
         <createTable tableName="brand">
             <column name="id" type="bigserial" autoIncrement="true">
@@ -95,6 +129,7 @@
             <column name="brand_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="city_id" type="bigint"/>
             <column name="model_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -107,7 +142,13 @@
             <column name="engine_horse_power" type="bigint"/>
             <column name="first_registration_date" type="date"/>
             <column name="mileage" type="bigint"/>
+            <column name="mileage_unit" type="varchar(255)">
+                <constraints/>
+            </column>
             <column name="price" type="bigint"/>
+            <column name="price_unit" type="varchar(255)">
+                <constraints/>
+            </column>
             <column name="production_date" type="bigint"/>
             <column name="description" type="varchar(60000)"/>
             <column name="drive_type_id" type="bigint">
@@ -123,6 +164,48 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="brand_id"
+                                 referencedTableName="brand"
+                                 referencedColumnNames="id"
+                                 constraintName="fksmrjb6imcn6lfd82wh045ntu5"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="city_id"
+                                 referencedTableName="cities"
+                                 referencedColumnNames="id"
+                                 constraintName="fkl1p9vos2flnbm4bepw7y7u8on"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="drive_type_id"
+                                 referencedTableName="drive_type"
+                                 referencedColumnNames="id"
+                                 constraintName="fknj8gdmre6khpjsoy6kdkbj7ai"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="engine_type_id"
+                                 referencedTableName="engine_type"
+                                 referencedColumnNames="id"
+                                 constraintName="fklxhcfot1h4t04dec4e4175haj"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="fuel_type_id"
+                                 referencedTableName="fuel_type"
+                                 referencedColumnNames="id"
+                                 constraintName="fk1c97ccvnaal9aw8v5viwdlw5v"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="model_id"
+                                 referencedTableName="model"
+                                 referencedColumnNames="id"
+                                 constraintName="fk4cbs20m6gc5aueipii0cu0nfc"/>
+
+        <addForeignKeyConstraint baseTableName="advertisement"
+                                 baseColumnNames="transmission_type_id"
+                                 referencedTableName="transmission_type"
+                                 referencedColumnNames="id"
+                                 constraintName="fkc2bcd874c4023wdmehxjqgvps"/>
     </changeSet>
 
     <changeSet id="9" author="michal-k">

@@ -18,6 +18,9 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="city_id" type="bigint">
+                <!-- Constraints can be added later with the foreign key -->
+            </column>
             <column name="account_enabled" type="boolean"/>
             <column name="account_not_expired" type="boolean"/>
             <column name="account_not_locked" type="boolean"/>
@@ -57,6 +60,12 @@
         <addForeignKeyConstraint baseTableName="user_role_mapping" baseColumnNames="user_id"
                                  referencedTableName="app_user" referencedColumnNames="id"
                                  constraintName="fk_user_id"/>
+    </changeSet>
+
+    <changeSet id="test" author="michal-k">
+        <addForeignKeyConstraint baseTableName="app_user" baseColumnNames="city_id"
+                                 referencedTableName="cities" referencedColumnNames="id"
+                                 constraintName="fk_city_id"/>
     </changeSet>
 
     <changeSet id="5" author="michal-k">

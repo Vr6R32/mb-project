@@ -32,23 +32,23 @@
 
 <changeSet id="3" author="michal-k">
     <sql>
-        INSERT INTO city_states (name) VALUES
-    ('DOLNOŚLĄSKIE'),
-    ('KUJAWSKO-POMORSKIE'),
-    ('LUBELSKIE'),
-    ('LUBUSKIE'),
-    ('ŁÓDZKIE'),
-    ('MAŁOPOLSKIE'),
-    ('MAZOWIECKIE'),
-    ('OPOLSKIE'),
-    ('PODKARPACKIE'),
-    ('PODLASKIE'),
-    ('POMORSKIE'),
-    ('ŚLĄSKIE'),
-    ('ŚWIĘTOKRZYSKIE'),
-    ('WARMIŃSKO-MAZURSKIE'),
-    ('WIELKOPOLSKIE'),
-    ('ZACHODNIOPOMORSKIE');
+        INSERT INTO city_states (id,name) VALUES
+        (1,'DOLNOŚLĄSKIE'),
+        (2,'KUJAWSKO-POMORSKIE'),
+        (3,'LUBELSKIE'),
+        (4,'LUBUSKIE'),
+        (5,'ŁÓDZKIE'),
+        (6,'MAŁOPOLSKIE'),
+        (7,'MAZOWIECKIE'),
+        (8,'OPOLSKIE'),
+        (9,'PODKARPACKIE'),
+        (10,'PODLASKIE'),
+        (11,'POMORSKIE'),
+        (12,'ŚLĄSKIE'),
+        (13,'ŚWIĘTOKRZYSKIE'),
+        (14,'WARMIŃSKO-MAZURSKIE'),
+        (15,'WIELKOPOLSKIE'),
+        (16,'ZACHODNIOPOMORSKIE');
     </sql>
 </changeSet>
 

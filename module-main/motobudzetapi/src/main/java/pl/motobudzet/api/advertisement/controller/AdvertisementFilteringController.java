@@ -25,6 +25,8 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false) String driveType,
             @RequestParam(required = false) String engineType,
             @RequestParam(required = false) String transmissionType,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String cityState,
             @RequestParam(required = false) Long priceMin,
             @RequestParam(required = false) Long priceMax,
             @RequestParam(required = false) Long mileageFrom,
@@ -35,14 +37,15 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false) Long engineHorsePowerTo,
             @RequestParam(required = false) Long productionDateFrom,
             @RequestParam(required = false) Long productionDateTo,
+            @RequestParam(required = false) Integer distanceFrom,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {
-        return advertisementFilteringService.findAllPublicWithFilters(pageNumber, brand, model, fuelType, driveType, engineType, transmissionType, priceMin, priceMax,
+        return advertisementFilteringService.findAllPublicWithFilters(pageNumber, brand, model, fuelType, driveType, engineType, transmissionType,city,cityState, priceMin, priceMax,
                 mileageFrom, mileageTo, engineCapacityFrom,
                 engineCapacityTo, engineHorsePowerFrom,
                 engineHorsePowerTo, productionDateFrom,
-                productionDateTo, sortBy, sortOrder);
+                productionDateTo, distanceFrom, sortBy, sortOrder);
     }
 }
 

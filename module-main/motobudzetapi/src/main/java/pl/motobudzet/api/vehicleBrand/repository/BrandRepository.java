@@ -25,6 +25,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Query("select b from Brand b where b.id = ?1")
     Optional<Brand> findByAjdi(Long brandId);
 
+    @Cacheable(value = "vehicle_brand_cache_by_name")
     Optional<Brand> findByName(String name);
 
     void deleteByName(String name);

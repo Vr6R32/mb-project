@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.motobudzet.api.locationCity.dto.CityDTO;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.service.CityService;
 
@@ -19,7 +20,7 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping
-    List<City> getAllCities(){
+    List<CityDTO> getAllCities(){
         return cityService.getAllCities();
     }
     @GetMapping("distance")
