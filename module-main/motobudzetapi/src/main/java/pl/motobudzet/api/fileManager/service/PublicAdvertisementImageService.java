@@ -62,7 +62,7 @@ public class PublicAdvertisementImageService {
 
         }
 
-        String redirectUrl = "/id/" + advertisement.getId();
+        String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         if (rowAffected > 0) {
             return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
         } else {

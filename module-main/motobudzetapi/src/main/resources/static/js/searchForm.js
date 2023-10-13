@@ -264,7 +264,7 @@ function createSearchForm(formContainer) {
         // Get the form data
         formData = new FormData(event.target);
 
-        executeSearch(formData,null);
+        executeSearch(formData);
 
     });
 
@@ -300,6 +300,7 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     inputColumn.style.alignItems = "center";
     inputColumn.style.maxWidth = "100%";
 
+
     const inputElement = inputType === "select" ? document.createElement("select") : document.createElement("input");
     inputElement.type = inputType;
     inputElement.setAttribute('id',inputId);
@@ -310,7 +311,8 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     inputElement.style.backgroundColor = "black";
     inputElement.style.color = "white";
     inputElement.style.maxWidth = "100%";
-    inputElement.style.border = "none"; // Usunięcie ramki
+    // inputElement.style.border = "1px dashed goldenrod"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
+    inputElement.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
     inputElement.style.borderRadius = "5px"; // Zaokrąglone rogi
 
     // if (inputType === "number") {
@@ -343,6 +345,7 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
 function displayResults(data) {
     // This function will be responsible for displaying the results and pagination
     let mainContainer = document.getElementById('container-main');
+    const searchFormContainer = document.getElementById('searchFormContainer');
 
     // Usuwamy istniejący element o id "results", jeśli istnieje
     let existingResultsDiv = document.getElementById('results');
@@ -362,6 +365,21 @@ function displayResults(data) {
     // Clear previous results and pagination
     resultsDiv.innerHTML = "";
 
+    if(data.content.length === 0){
+        let emptySearchDiv = document.createElement('div');
+        emptySearchDiv.textContent = 'Brak wyników wyszukiwania dla podanych filtrów';
+        emptySearchDiv.style.color = 'white';
+        resultsDiv.appendChild(emptySearchDiv);
+        if (searchFormContainer) {
+            mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
+        } else {
+            // Jeśli "searchFormContianer" nie istnieje, dodajemy "resultsDiv" jako pierwsze dziecko
+            mainContainer.appendChild(resultsDiv);
+        }
+        return;
+    }
+
+
 
     // Display each advertisement result
     data.content.forEach(ad => {
@@ -371,7 +389,8 @@ function displayResults(data) {
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "200px";
-        resultDiv.style.backgroundColor = "#181818";
+        resultDiv.style.backgroundColor = "#000000";
+        // resultDiv.style.backgroundColor = "#181818";
         // adDiv.style.backgroundColor = "black";
         resultDiv.style.color = 'darkgoldenrod';
         resultDiv.style.marginBottom = "20px";
@@ -388,7 +407,7 @@ function displayResults(data) {
 
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
         resultDiv.onclick = () => {
-            window.location.href = `/id/${ad.id}`;
+            window.location.href = `/id?advertisementId=${ad.id}`;
         };
 
         // Add hover effect on mouseover
@@ -404,13 +423,20 @@ function displayResults(data) {
 
         const photoElement = document.createElement("img");
         photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
-        photoElement.style.height = "150px";
-        photoElement.style.width = "100px";
+        photoElement.style.height = "200px";
+        let maxPhotoWidth = 300;
         photoElement.style.objectFit = "cover";
+        photoElement.onload = () => {
+            if (photoElement.width > maxPhotoWidth) {
+                maxPhotoWidth = photoElement.width;
+            }
+        };
+
 
         const fadeEffect = document.createElement('div');
         fadeEffect.classList.add('fade-effect-miniature-search');
         fadeEffect.appendChild(photoElement);
+        fadeEffect.style.width = maxPhotoWidth + 'px';
 
         resultDiv.appendChild(fadeEffect);
 
@@ -421,20 +447,33 @@ function displayResults(data) {
         conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         conversationDetailsHeader.style.boxSizing = "border-box";
         conversationDetailsHeader.style.flexBasis = "auto";
+        // conversationDetailsHeader.style.position = 'relative';
+        // conversationDetailsHeader.style.bottom = '30px';
 
-        const headerTitleOwnerName = document.createElement('div');
-        headerTitleOwnerName.style.display = 'column';
-        headerTitleOwnerName.style.width = '100%';
-        headerTitleOwnerName.style.position = 'relative';
-        headerTitleOwnerName.style.bottom = '20px';
+        const headerTitleNameDiv = document.createElement('div');
+        headerTitleNameDiv.style.display = 'column';
+        headerTitleNameDiv.style.width = '100%';
+        headerTitleNameDiv.style.position = 'relative';
+        headerTitleNameDiv.style.bottom = '10px';
+
+        // const headerTitleModelBrand = document.createElement('div');
+        // headerTitleModelBrand.style.display = 'column';
+        // headerTitleModelBrand.style.width = '100%';
+        // headerTitleModelBrand.style.position = 'relative';
+        // headerTitleModelBrand.style.bottom = '50px';
         // headerTitleOwnerName.style.marginBottom = '50px';
 
+        const titleElement = document.createElement("div");
+        titleElement.textContent = ad.name;
+        titleElement.style.color = "white"; // Dostosuj kolor tekstu
+        titleElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+        titleElement.style.textAlign = 'left';
 
-        const nameElement = document.createElement("div");
-        nameElement.textContent = ad.name;
-        nameElement.style.color = "white"; // Dostosuj kolor tekstu
-        nameElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
-        nameElement.style.textAlign = 'left';
+        const modelBrandElement = document.createElement("div");
+        modelBrandElement.textContent = ad.brand + ' ' + ad.model;
+        modelBrandElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+        modelBrandElement.style.textAlign = 'left';
 
         const ownerName = document.createElement("div");
         ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
@@ -443,17 +482,19 @@ function displayResults(data) {
         ownerName.style.textAlign = 'left';
 
 
-        headerTitleOwnerName.appendChild(nameElement);
+        headerTitleNameDiv.appendChild(titleElement);
+        headerTitleNameDiv.appendChild(modelBrandElement);
         // headerTitleOwnerName.appendChild(ownerName);
 
-        conversationDetailsHeader.appendChild(headerTitleOwnerName);
+        conversationDetailsHeader.appendChild(headerTitleNameDiv);
+        // conversationDetailsHeader.appendChild(headerTitleModelBrand);
 
         const dateElement = document.createElement("div");
         dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
         dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
         dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
         dateElement.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        dateElement.style.bottom = '60px'; // Dostosuj rozmiar tekstu
+        dateElement.style.bottom = '20px'; // Dostosuj rozmiar tekstu
         dateElement.style.textAlign = 'right';
         dateElement.style.marginRight = '15px';
         dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
@@ -470,6 +511,7 @@ function displayResults(data) {
         conversationDetailsDiv.style.flexBasis = 'auto';
         conversationDetailsDiv.style.display = 'flex-start';
         conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+        conversationDetailsDiv.style.marginBottom = '30px';
 
 
         const conversationDetailsMain = document.createElement("conversationDetailsMain");
@@ -477,6 +519,8 @@ function displayResults(data) {
         conversationDetailsMain.style.flexBasis = 'auto';
         conversationDetailsMain.style.display = 'grid';
         conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+        // conversationDetailsMain.style.position = 'relative';
+        // conversationDetailsMain.style.bottom = '20px';
 
 
         // const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
@@ -491,27 +535,40 @@ function displayResults(data) {
         advertisementDetails.style.display = 'flex';
         advertisementDetails.style.marginTop = '15px';
 
+        let pln = document.createElement('span');
+        pln.style.color = 'darkgoldenrod';
+        pln.textContent = 'PLN';
+
+        function formatPrice(price) {
+            // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
 
         const containers = [
-            createInfoContainer('mileage', 'MileageIcon', ad.mileage),
+            createInfoContainer('price', 'PriceIcon', formatPrice(ad.price)),
+            createInfoContainer('mileage', 'MileageIcon', formatPrice(ad.mileage)),
             createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
             createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-            createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower + ' HP'),
+            createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower + 'HP'),
+            createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
+            createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
         ];
+
+        containers[0].appendChild(pln);
 
         // Dodawanie kontenerów do infoContainerFirst
         // containers.forEach(container => {
         //     advertisementDetails.appendChild(container);
         // });
 
-        containers.push(createInfoContainer('price', 'PriceIcon', ad.price + ',-'));
 
-        if (ad.fuelType !== 'ELEKTRYK') {
-            containers.push(
-                createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
-                createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType)
-            );
-        }
+        //
+        // if (ad.fuelType !== 'ELEKTRYK') {
+        //     containers.push(
+        //         createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
+        //         createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType)
+        //     );
+        // }
 
 
 
@@ -545,9 +602,9 @@ function displayResults(data) {
 
 
         resultsDiv.appendChild(resultDiv);
-        const searchFormContainer = document.getElementById('searchFormContainer');
 
-// Sprawdzamy, czy istnieje "searchFormContianer"
+
+        // Sprawdzamy, czy istnieje "searchFormContianer"
         if (searchFormContainer) {
             // Jeśli "searchFormContianer" istnieje, dodajemy "resultsDiv" po nim
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
@@ -617,7 +674,7 @@ function displayResults(data) {
 
         // Add previous page button
         if (!data.first) {
-            const prevPageButton = createPaginationButton(data.number - 1, "Previous", formData);
+            const prevPageButton = createPaginationButton(data.number - 1, "<", formData);
             paginationDiv.appendChild(prevPageButton);
         }
 
@@ -632,7 +689,7 @@ function displayResults(data) {
         }
         // Add next page button
         if (!data.last) {
-            const nextPageButton = createPaginationButton(data.number + 1, "Next", formData);
+            const nextPageButton = createPaginationButton(data.number + 1, ">", formData);
             paginationDiv.appendChild(nextPageButton);
         }
 
@@ -649,7 +706,7 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
 
     // Add previous page button
     if (!data.first) {
-        const prevPageButton = createPaginationButton(data.number - 1, "Previous", sortBy, sortOrder);
+        const prevPageButton = createPaginationButton(data.number - 1, "<", sortBy, sortOrder);
         paginationDiv.appendChild(prevPageButton);
     }
 
@@ -665,14 +722,47 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
 
     // Add next page button
     if (!data.last) {
-        const nextPageButton = createPaginationButton(data.number + 1, "Next", sortBy, sortOrder);
+        const nextPageButton = createPaginationButton(data.number + 1, ">", sortBy, sortOrder);
         paginationDiv.appendChild(nextPageButton);
     }
+}
+
+function extractSortParam() {
+    const urlParams = new URLSearchParams(document.location.search);
+    return urlParams.get('sortBy');
+}
+
+function extractPageNumber() {
+    const urlParams = new URLSearchParams(document.location.search);
+    return Number(urlParams.get('pageNumber'));
 }
 
 function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     const button = document.createElement("button");
     button.textContent = label;
+
+
+
+    button.style.backgroundColor = "black";
+    button.style.color = "white";
+    button.style.border = "1px solid darkgoldenrod";
+    button.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
+    button.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
+    button.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    button.style.borderRadius = '15px';
+    button.style.marginRight = '3px';
+
+    let currentPageNumber = extractPageNumber();
+
+    if(currentPageNumber+1 === label){
+        button.style.boxShadow = '0 0 20px moccasin';
+    }
+
+
+    // if(pageNumber+1 === label){
+    //     button.style.color = 'green';
+    // }
+
 
 
     button.addEventListener("click", function () {
@@ -701,8 +791,34 @@ function createSortButton(sortBy) {
     const button = document.createElement("button");
     // button.textContent = sortBy;
 
+    button.style.backgroundColor = "black";
+    button.style.color = "white";
+    button.style.border = "1px solid darkgoldenrod";
+    button.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
+    button.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
+    button.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    button.style.borderRadius = '15px';
+    button.style.marginRight = '10px';
+
+    if(extractSortParam() === sortBy){
+        button.style.boxShadow = '0 0 20px moccasin';
+    }
+
+
+
+    // let currentPageNumber = extractPageNumber();
+    //
+    // if(sortingByView === sortBy){
+    //     button.style.boxShadow = '0 0 20px moccasin';
+    // }
+
+
+
     switch (sortBy) {
         case 'price':
+            if(extractSortParam() === null){
+                button.style.boxShadow = '0 0 20px moccasin';
+            }
             button.textContent = 'Cena';
             break;
         case 'mileage':
@@ -722,9 +838,10 @@ function createSortButton(sortBy) {
             break;
     }
 
+
     clickedButton = "";
 
-    button.style.marginBottom = '10px';
+    button.style.marginBottom = '20px';
     button.addEventListener("click", function () {
         sortOrder = sortOrder === "desc" ? "asc" : "desc";
         formData.set("sortOrder", sortOrder);
@@ -781,6 +898,7 @@ function createInfoContainer(iconPath, altText, value) {
     container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
     container.style.textAlign = 'center';
     container.style.marginRight = '30px';
+    container.style.color = 'white';
     const icon = document.createElement('img');
     icon.src = `/api/resources/${iconPath}`;
     icon.alt = altText;

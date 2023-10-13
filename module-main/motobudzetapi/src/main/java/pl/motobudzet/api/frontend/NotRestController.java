@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -18,8 +19,8 @@ public class NotRestController {
     }
 
     //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/id/{advertisementId}")
-    public String advertisement(@PathVariable String advertisementId, Model model, Principal principal) {
+    @GetMapping("/id")
+    public String advertisement(@RequestParam String advertisementId, Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "advertisement";
     }

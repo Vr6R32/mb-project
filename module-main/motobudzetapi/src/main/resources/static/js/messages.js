@@ -127,21 +127,27 @@ function createResultDiv(conversation,resultContainerRight) {
     advertisementDetails.style.marginTop = '15px';
 
 
-    const containers = [
-        createInfoContainer('mileage', 'MileageIcon', conversation.advertisement.mileage),
-        createInfoContainer('productionDate', 'ProductionDateIcon', conversation.advertisement.productionDate),
-        createInfoContainer('fuelType', 'FuelTypeIcon', conversation.advertisement.fuelType),
-        createInfoContainer('engineHorsePower', 'EngineIcon', conversation.advertisement.engineHorsePower + ' HP'),
-    ];
+    let pln = document.createElement('span');
+    pln.style.color = 'darkgoldenrod';
+    pln.textContent = 'PLN';
 
-    if (conversation.fuelType !== 'ELEKTRYCZNY') {
-        containers.push(
-            createInfoContainer('engineType/' + conversation.advertisement.engineType, 'transmissionIcon', conversation.advertisement.engineType),
-            createInfoContainer('transmissionType/' + conversation.advertisement.transmissionType, 'transmissionIcon', conversation.advertisement.transmissionType)
-        );
+    function formatPrice(price) {
+        // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
-    containers.push(createInfoContainer('price', 'PriceIcon', conversation.advertisement.price + ',-'));
+    const containers = [
+        createInfoContainer('price', 'PriceIcon', formatPrice(conversation.advertisement.price)),
+        createInfoContainer('mileage', 'MileageIcon', formatPrice(conversation.advertisement.mileage)),
+        createInfoContainer('productionDate', 'ProductionDateIcon', conversation.advertisement.productionDate),
+        createInfoContainer('fuelType', 'FuelTypeIcon', conversation.advertisement.fuelType),
+        createInfoContainer('engineHorsePower', 'EngineIcon', conversation.advertisement.engineHorsePower + 'HP'),
+        createInfoContainer('engineType/' + conversation.advertisement.engineType, 'transmissionIcon', conversation.advertisement.engineType),
+        createInfoContainer('transmissionType/' + conversation.advertisement.transmissionType, 'transmissionIcon', conversation.advertisement.transmissionType),
+    ];
+
+    containers[0].appendChild(pln);
+
 
     const maxTextWidth = Math.max(
         ...containers.map(container => container.querySelector('span').offsetWidth)
@@ -175,7 +181,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
 
     const conversationDeliveryDateTime = document.createElement("deliveryDateTime");
-    conversationDeliveryDateTime.style.color = "white"; // Dostosuj kolor tekstu
+    conversationDeliveryDateTime.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
     conversationDeliveryDateTime.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
     conversationDeliveryDateTime.style.textAlign = "right"; // Dostosuj rozmiar tekstu
 
@@ -391,6 +397,7 @@ function calculateSenderNamePosition(singleMessageDiv, userNameElement) {
 function createInfoContainer(iconPath, altText, value) {
     const container = document.createElement('messageInfoContainer');
     container.setAttribute('id', 'messageInfoContainer');
+    container.style.color = 'white';
 
     // container.style.id = 'messageInfoContainer';
     // container.style.display = 'flex';

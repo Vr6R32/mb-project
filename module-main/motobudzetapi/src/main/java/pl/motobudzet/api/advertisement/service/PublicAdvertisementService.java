@@ -64,6 +64,9 @@ public class PublicAdvertisementService {
     @CacheEvict(cacheNames = "advertisements_filter_cache")
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request) {
 
+        System.out.println(request.getPriceUnit());
+        System.out.println(request.getMileageUnit());
+
         AppUser user = userCustomService.getByName(request.getUserName());
 
 

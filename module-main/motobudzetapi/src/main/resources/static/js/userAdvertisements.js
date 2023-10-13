@@ -1,5 +1,5 @@
 
-function createUserAdvertisementsResultDiv(advertisement,container) {
+function createUserAdvertisementsResultDiv(ad,container) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
 
@@ -25,10 +25,10 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
 
     resultDiv.addEventListener("click", () => {
         // Pobierz ID reklamy
-        const advertisementId = advertisement.id;
+        const advertisementId = ad.id;
 
         // Przenieś na stronę /id/advertisement.id
-        window.location.href = `/id/${advertisementId}`;
+        window.location.href = `/id?advertisementId=${advertisementId}`;
     });
 
     // Add hover effect on mouseover
@@ -46,14 +46,21 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
 
 
     const photoElement = document.createElement("img");
-    photoElement.src = `/api/resources/advertisementPhoto/${advertisement.mainPhotoUrl}`;
-    photoElement.style.height = "150px";
-    photoElement.style.width = "100px";
+    photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
+    photoElement.style.height = "200px";
+    let maxPhotoWidth = 300;
     photoElement.style.objectFit = "cover";
+    photoElement.onload = () => {
+        if (photoElement.width > maxPhotoWidth) {
+            maxPhotoWidth = photoElement.width;
+        }
+    };
+
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-miniature-search');
     fadeEffect.appendChild(photoElement);
+    fadeEffect.style.width = maxPhotoWidth + 'px';
 
     resultDiv.appendChild(fadeEffect);
 
@@ -64,24 +71,58 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
     conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
     conversationDetailsHeader.style.boxSizing = "border-box";
     conversationDetailsHeader.style.flexBasis = "auto";
+    // conversationDetailsHeader.style.position = 'relative';
+    // conversationDetailsHeader.style.bottom = '30px';
 
-    const nameElement = document.createElement("div");
-    nameElement.textContent = advertisement.name;
-    nameElement.style.color = "white"; // Dostosuj kolor tekstu
-    nameElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
-    nameElement.style.textAlign = 'left';
+    const headerTitleNameDiv = document.createElement('div');
+    headerTitleNameDiv.style.display = 'column';
+    headerTitleNameDiv.style.width = '100%';
+    headerTitleNameDiv.style.position = 'relative';
+    headerTitleNameDiv.style.bottom = '10px';
+
+    // const headerTitleModelBrand = document.createElement('div');
+    // headerTitleModelBrand.style.display = 'column';
+    // headerTitleModelBrand.style.width = '100%';
+    // headerTitleModelBrand.style.position = 'relative';
+    // headerTitleModelBrand.style.bottom = '50px';
+    // headerTitleOwnerName.style.marginBottom = '50px';
+
+    const titleElement = document.createElement("div");
+    titleElement.textContent = ad.name;
+    titleElement.style.color = "white"; // Dostosuj kolor tekstu
+    titleElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+    titleElement.style.textAlign = 'left';
+
+    const modelBrandElement = document.createElement("div");
+    modelBrandElement.textContent = ad.brand + ' ' + ad.model;
+    modelBrandElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+    modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+    modelBrandElement.style.textAlign = 'left';
+
+    const ownerName = document.createElement("div");
+    ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
+    ownerName.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+    ownerName.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+    ownerName.style.textAlign = 'left';
 
 
-    conversationDetailsHeader.appendChild(nameElement);
+    headerTitleNameDiv.appendChild(titleElement);
+    headerTitleNameDiv.appendChild(modelBrandElement);
+    // headerTitleOwnerName.appendChild(ownerName);
 
-        const dateElement = document.createElement("div");
-        dateElement.textContent = 'Utworzone dnia ' + advertisement.creationDate;
-        dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        dateElement.style.textAlign = 'right';
-        dateElement.style.marginRight = '15px';
-        dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-        conversationDetailsHeader.appendChild(dateElement);
+    conversationDetailsHeader.appendChild(headerTitleNameDiv);
+    // conversationDetailsHeader.appendChild(headerTitleModelBrand);
+
+    const dateElement = document.createElement("div");
+    dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
+    dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+    dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+    dateElement.style.position = 'relative'; // Dostosuj rozmiar tekstu
+    dateElement.style.bottom = '20px'; // Dostosuj rozmiar tekstu
+    dateElement.style.textAlign = 'right';
+    dateElement.style.marginRight = '15px';
+    dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    conversationDetailsHeader.appendChild(dateElement);
 
 
     ///////////////////////////////////////////////////////////////////////
@@ -94,6 +135,7 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
     conversationDetailsDiv.style.flexBasis = 'auto';
     conversationDetailsDiv.style.display = 'flex-start';
     conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+    conversationDetailsDiv.style.marginTop = '15px';
 
 
     const conversationDetailsMain = document.createElement("conversationDetailsMain");
@@ -101,6 +143,8 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
     conversationDetailsMain.style.flexBasis = 'auto';
     conversationDetailsMain.style.display = 'grid';
     conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+    // conversationDetailsMain.style.position = 'relative';
+    // conversationDetailsMain.style.bottom = '20px';
 
 
     // const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
@@ -110,27 +154,33 @@ function createUserAdvertisementsResultDiv(advertisement,container) {
 
 
     const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
 
 
-    const containers = [
-        createInfoContainer('mileage', 'MileageIcon', advertisement.mileage),
-        createInfoContainer('productionDate', 'ProductionDateIcon', advertisement.productionDate),
-        createInfoContainer('fuelType', 'FuelTypeIcon', advertisement.fuelType),
-        createInfoContainer('engineHorsePower', 'EngineIcon', advertisement.engineHorsePower + ' HP'),
-    ];
+    let pln = document.createElement('span');
+    pln.style.color = 'darkgoldenrod';
+    pln.textContent = 'PLN';
 
-    if (advertisement.fuelType !== 'ELEKTRYCZNY') {
-        containers.push(
-            createInfoContainer('engineType/' + advertisement.engineType, 'transmissionIcon', advertisement.engineType),
-            createInfoContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
-        );
+    function formatPrice(price) {
+        // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
-    containers.push(createInfoContainer('price', 'PriceIcon', advertisement.price + ',-'));
+    const containers = [
+        createInfoContainer('price', 'PriceIcon', formatPrice(ad.price)),
+        createInfoContainer('mileage', 'MileageIcon', formatPrice(ad.mileage)),
+        createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
+        createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
+        createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower + 'HP'),
+        createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
+        createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
+    ];
+
+    containers[0].appendChild(pln);
+
 
     const maxTextWidth = Math.max(
         ...containers.map(container => container.querySelector('span').offsetWidth)

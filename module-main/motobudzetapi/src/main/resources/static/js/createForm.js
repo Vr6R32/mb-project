@@ -52,7 +52,7 @@ function createForm() {
     form.id = 'advertisementForm';
 
     const formElements = [
-        { label: 'Nazwa:', type: 'text', id: 'name', name: 'name', required: true },
+        { label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true },
         { label: 'Opis:', type: 'textarea', id: 'description', name: 'description', required: true },
         { label: 'Marka:', type: 'select', id: 'brand', name: 'brand', onchange: 'fetchModels(this.value)', required: true },
         { label: 'Model:', type: 'select', id: 'model', name: 'model', required: true },
@@ -60,8 +60,26 @@ function createForm() {
         { label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true },
         { label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true },
         { label: 'Rodzaj skrzyni biegów:', type: 'select', id: 'transmissionType', name: 'transmissionType', required: true },
-        { label: 'Przebieg (w kilometrach):', type: 'number', id: 'mileage', name: 'mileage', required: true },
-        { label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true },
+        {
+            label: 'Przebieg:',
+            type: 'number',
+            id: 'mileage',
+            name: 'mileage',
+            required: true,
+            additionalSelect: {
+                label: 'Jednostka:',
+                id: 'mileageUnit',
+                name: 'mileageUnit',
+                options: ['KM', 'MIL']
+            }
+        },
+        { label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true ,
+            additionalSelect: {
+                label: 'Jednostka:',
+                id: 'priceUnit',
+                name: 'priceUnit',
+                options: ['PLN', 'EUR', 'USD']
+            }},
         { label: 'Pojemność silnika (w cm³):', type: 'number', id: 'engineCapacity', name: 'engineCapacity', required: true },
         { label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true },
         { label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true },
@@ -72,8 +90,11 @@ function createForm() {
         const label = document.createElement('label');
         label.setAttribute('for', element.id);
         label.textContent = element.label;
+        // label.style.color = 'white';
+        label.style.fontWeight = 'bold';
 
         const input = document.createElement(element.type === 'textarea' ? 'textarea' : (element.type === 'select' ? 'select' : 'input'));
+        input.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
         input.type = element.type;
         input.id = element.id;
         input.name = element.name;
@@ -87,9 +108,51 @@ function createForm() {
             input.style.textAlign = 'center';
         }
 
-        form.appendChild(label);
-        form.appendChild(input);
-        form.appendChild(document.createElement('br'));
+        if (element.additionalSelect) {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex'; // Use flex layout
+            wrapper.style.alignItems = 'center'; // Align items vertically centered
+            wrapper.style.gap = '10px'; // Gap between items
+            wrapper.style.justifyContent = 'space-between'; // Distribute space evenly between the items
+            wrapper.style.width = '500px'; // Same width as other form fields
+
+
+
+            const additionalSelectLabel = document.createElement('label');
+            additionalSelectLabel.setAttribute('for', element.additionalSelect.id);
+            additionalSelectLabel.textContent = element.additionalSelect.label;
+
+            const additionalSelectInput = document.createElement('select');
+            additionalSelectInput.id = element.additionalSelect.id;
+            additionalSelectInput.name = element.additionalSelect.name;
+            additionalSelectInput.style.width = '50px'; // Set width
+
+            element.additionalSelect.options.forEach(optionValue => {
+                const option = document.createElement('option');
+                option.value = optionValue;
+                option.textContent = optionValue;
+                additionalSelectInput.appendChild(option);
+            });
+
+            // Set a flex-grow property to make mileage input take up remaining width
+            // input.style.flexGrow = '1';
+            // For the mileage input
+            input.style.flex = '1'; // This will allow it to grow and take up the remaining space
+
+            additionalSelectInput.style.flex = 'none'; // This will prevent it from growing and it will only take up necessary space
+
+
+            form.appendChild(label);
+            // wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(additionalSelectInput);
+            form.appendChild(wrapper);
+            form.appendChild(document.createElement('br'));
+        } else {
+            form.appendChild(label);
+            form.appendChild(input);
+            form.appendChild(document.createElement('br'));
+        }
     });
 
     const submitButton = document.createElement('input');
@@ -218,7 +281,9 @@ function submitForm() {
         engineType: getValue('engineType'),
         transmissionType: getValue('transmissionType'),
         mileage: getValue('mileage'),
+        mileageUnit: getValue('mileageUnit'),
         price: getValue('price'),
+        priceUnit: getValue('priceUnit'),
         engineCapacity: getValue('engineCapacity'),
         engineHorsePower: getValue('engineHorsePower'),
         productionDate: getValue('productionDate'),

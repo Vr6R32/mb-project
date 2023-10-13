@@ -1,16 +1,21 @@
-const currentURL = window.location.href;
-const advertisementId = extractAdvertisementId(currentURL);
+let advertisementId = null;
 let isMouseOverMessageIcon = false; // Zmienna flagi
 let advertisement = null;
 let currentPhotoIndex = 0;
 document.addEventListener("DOMContentLoaded", function () {
+        extractAdvertisementId();
         fetchAdvertisement();
 });
 
-function extractAdvertisementId(currentURL) {
-    const urlParts = currentURL.split('/');
-    return urlParts[urlParts.length - 1];
+function extractAdvertisementId() {
+    const urlParams = new URLSearchParams(document.location.search);
+    advertisementId = urlParams.get('advertisementId');
 }
+
+// function extractAdvertisementId(currentURL) {
+//     const urlParts = currentURL.split('/');
+//     return urlParts[urlParts.length - 1];
+// }
 
 function createHeaderTitle(advertisement,container,owner) {
 
@@ -365,10 +370,10 @@ function fetchAdvertisement(){
             .then(response => response.json())
             .then(data => {
                     const container = document.getElementById('container-main');
+                    // container.style.width = '1050px';
                     advertisement = data; // Używamy pojedynczego obiektu, nie listy
                     createHeaderTitle(advertisement,container,advertisement.user);
                     createAdvertisementResultDiv(container,advertisement);
-
             })
             .catch(error => {
                     console.error('Błąd pobierania danych:', error);

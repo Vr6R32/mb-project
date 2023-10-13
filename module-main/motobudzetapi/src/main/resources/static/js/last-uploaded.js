@@ -1,21 +1,16 @@
 let prevPageButton = null;
 let advertisements;
 let currentMinIndex = 0;
-let currentMaxIndex = 3;
-const resultsPerPage = 3; // Liczba wyników na stronie
+let currentMaxIndex = 4;
+const resultsPerPage = 4; // Liczba wyników na stronie
 
-document.addEventListener("DOMContentLoaded", function () {
+function createLastUploadedHeader() {
     const container = document.getElementById('container-main');
     // document.body.style.cursor = 'crosshair';
-    getLastUploaded(0);
 
 
     const title = document.createElement('h2');
     title.textContent = 'Ostatnio Dodane';
-
-
-    let pageNumber = 0;
-
 
     // Create the independent title container
     const titleContainer = document.createElement('div');
@@ -47,11 +42,21 @@ document.addEventListener("DOMContentLoaded", function () {
     arrowButtonContainer.appendChild(prevPageButton);
     arrowButtonContainer.appendChild(nextPageButton);
 
+    titleContainer.style.marginTop = '15px';
+
     titleContainer.appendChild(prevPageButton);
     titleContainer.appendChild(title);
     titleContainer.appendChild(nextPageButton);
 
-    container.appendChild(titleContainer);
+    let lastUploadedResults = document.getElementById('results2');
+    container.insertBefore(titleContainer,lastUploadedResults);
+    return {container, prevPageButton, nextPageButton};
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
+    getLastUploaded(0);
+
 
     prevPageButton.addEventListener('click', () => {
         if (currentMinIndex > 0) {
@@ -146,7 +151,7 @@ function displayLastUploaded(min,max){
 
         subContainer.addEventListener('mouseout', () => {
             const computedStyle = getComputedStyle(subContainer);
-            subContainer.style.boxShadow = '0 0 40px darkgoldenrod';
+            subContainer.style.boxShadow = '0 0 20px darkgoldenrod';
         });
 
         subContainer.addEventListener('mouseover', () => {
@@ -187,7 +192,7 @@ function displayLastUploaded(min,max){
         });
 
         mainPhoto.addEventListener('click', () => {
-            window.location.href = '/id/' + advertisement.id;
+            window.location.href = '/id?advertisementId=' + advertisement.id;
         });
 
 

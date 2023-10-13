@@ -17,12 +17,24 @@ form textarea {
     width: 500px; /* Set a fixed width for select and input fields to ensure consistency */
     background-color: black; /* Set gray background color */
     border-radius: 10px;
-    border: 0;
+    border: 0px;
     color: white;
     /*box-shadow: 0 0 10px moccasin;*/
     /*border: aquamarine;*/
     text-align: center; /* Center-align text inside the form fields */
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 #fileDropArea {
     padding: 20px;
     text-align: center;
@@ -34,7 +46,8 @@ form textarea {
     border-radius: 10px;
     border: 2px dashed darkgoldenrod;
     /* Add border style */
-    background-color: #181818;
+    /*background-color: #181818;*/
+    background-color: black;
     /* Add background color */
     margin-bottom: 10px;
 }

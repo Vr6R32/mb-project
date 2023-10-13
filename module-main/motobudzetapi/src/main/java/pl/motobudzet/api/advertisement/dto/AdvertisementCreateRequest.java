@@ -34,8 +34,12 @@ public class AdvertisementCreateRequest {
     private String transmissionType;
     @NotNull(message = "Mileage cannot be empty!")
     private Long mileage;
+    @NotNull(message = "Mileage cannot be empty!")
+    private String mileageUnit;
     @NotNull(message = "Price cannot be empty!")
     private Long price;
+    @NotNull(message = "Price cannot be empty!")
+    private String priceUnit;
     @NotNull(message = "Engine capacity cannot be empty!")
     private Long engineCapacity;
     @NotNull(message = "Engine horse power cannot be empty!")

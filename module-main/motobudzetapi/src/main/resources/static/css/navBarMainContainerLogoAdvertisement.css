@@ -81,11 +81,12 @@ header {
     width: 1500px;
     margin: 150px auto 0;
     background-color: black;
-    border: 2px solid darkgoldenrod;
+    /*border: 2px solid darkgoldenrod;*/
+    border: 0px solid darkgoldenrod;
     padding: 20px;
     display: flex;
     border-radius: 30px;
-    box-shadow: 0 0 30px moccasin;
+    box-shadow: 0 0 0px moccasin;
     flex-wrap: wrap;
     justify-content: center;
     animation: fade-in-main 1s ease-out;
@@ -108,15 +109,16 @@ header {
 
 
 .container-main .sub-container-miniature {
-    box-shadow: 0 0 40px darkgoldenrod;
+    box-shadow: 0 0 20px darkgoldenrod;
     overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
     border-radius: 30px;
-    width: 400px;
+    width: 330px;
     height: 550px;
-    margin: 40px;
+    margin: 20px;
     position: relative;
 
     background-color: #181818;
+    background-color: #000000;
     /*border: 1px solid darkgoldenrod;*/
     animation: fade-in-miniature 1s ease-out;
     /*animation: scroll-from-left 1s ease-out;*/
@@ -206,7 +208,8 @@ header {
     border-radius: 30px;
     width: 400px;
     height: 60px;
-    background-color: #181818;
+    background-color: #000000;
+    /*background-color: #181818;*/
     /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
@@ -225,7 +228,8 @@ header {
     align-items: center;
     justify-self: center;
     justify-items: center;
-    background-color: #181818;
+    background-color: black;
+    /*background-color: #181818;*/
     /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
@@ -293,9 +297,9 @@ header {
     height: 100%;
     background: radial-gradient(
             ellipse at center,
-            rgba(24, 24, 24, 0.0) 0%,
-            rgba(24, 24, 24, 1) 70%,
-            rgba(24, 24, 24, 1) 90%
+            rgba(0, 0, 0, 0.0) 0%,
+            rgba(0, 0, 0, 1) 70%,
+            rgba(0, 0, 0, 1) 90%
     );
     background-size: 100% 100%;
     /*background-color: rgba(24, 24, 24, 1);*/
@@ -309,12 +313,14 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(
-            ellipse at center,
-            rgba(24, 24, 24, 0.0) 0%,
-            rgba(24, 24, 24, 1) 75%,
-            rgba(24, 24, 24, 1) 90%
-    );
+    /*background: radial-gradient(*/
+    /*        ellipse at center,*/
+    /*        rgba(0, 0, 0, 0.0) 0%,*/
+    /*        rgba(0, 0, 0, 1) 75%,*/
+    /*        rgba(0, 0, 0, 1) 90%*/
+    /*);*/
+    background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,1) 87%);
+
     background-size: 100% 100%;
     /*background-color: rgba(24, 24, 24, 1);*/
     pointer-events: none;

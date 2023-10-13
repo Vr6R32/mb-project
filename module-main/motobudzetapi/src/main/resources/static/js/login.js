@@ -1,6 +1,12 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     createLoginForm();
+    let containerMain = document.getElementById('container-main');
+    containerMain.style.minHeight = '1000px';
+    containerMain.style.justifyContent = 'center';
+    containerMain.style.alignItems = 'center';
+    containerMain.style.border = '0px';
+    containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
 });
 
 
@@ -99,10 +105,13 @@ const createRegisterForm = () => {
     formContainer.style.height = "500px";
     formContainer.style.borderRadius = "30px";
     formContainer.style.border = "0px dashed moccasin";
+    formContainer.style.position = 'relative';
+    formContainer.style.bottom = '150px';
 
 
     const form = document.createElement("form");
     form.className = "form-signin";
+    form.style.backgroundColor = 'black';
     form.style.animation = "fade-in 1s ease-in-out forwards";
 
     const heading = document.createElement("h2");
@@ -244,10 +253,13 @@ const createLoginForm = () => {
     formContainer.style.borderRadius = "30px";
     formContainer.style.border = "0px dashed moccasin";
     formContainer.style.animation = "fade-in 1s ease-in-out forwards";
+    formContainer.style.position = 'relative';
+    formContainer.style.bottom = '150px';
 
     const form = document.createElement("form");
     form.className = "form-signin";
     form.method = "post";
+    form.style.backgroundColor = 'black';
     form.action = "/login";
     form.style.animation = "fade-in 1s ease-in-out forwards";
 

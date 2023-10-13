@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     @Cacheable(value = "vehicle_brand_cache_search_form")
-    @Query(value = "select b from Brand b left join fetch b.modelList")
+    @Query(value = "select b from Brand b left join fetch b.modelList ORDER BY b.name asc")
     List<Brand> findAllBrandWithModel();
 
     @Cacheable(value = "vehicle_brand_cache_search_form_model")
