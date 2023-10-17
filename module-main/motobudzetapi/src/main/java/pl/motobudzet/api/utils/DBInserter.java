@@ -16,7 +16,7 @@ public class DBInserter {
 
     private final CityRepository cityRepository;
 
-//    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
     public void insertCoordinates(){
         List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
 

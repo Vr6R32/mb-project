@@ -5,7 +5,8 @@
     flex-basis: auto;
     height: auto;
     /*background-color: #181818;*/
-    background-color: #000000;
+    /*background-color: #000000;*/
+    background-color: rgba(0, 0, 0, 0.9);
     margin-bottom: 15px;
     padding: 10px;
     display: flex;
@@ -134,7 +135,8 @@
     min-height: 500px;
     margin: 0 20px;
     /*background-color: #181818;*/
-    background-color: #000000;
+    /*background-color: #000000;*/
+    background-color: rgba(0, 0, 0, 0.9);
     border-radius: 30px;
     box-shadow: 0 0 40px darkgoldenrod;
     border: 0 dashed darkgoldenrod;
@@ -222,7 +224,8 @@
 .container-main2 {
     width: 1500px;
     margin: 150px auto 0;
-    background-color: black;
+    /*background-color: black;*/
+    background-color: transparent;
     border: 0px solid darkgoldenrod;
     padding: 20px;
     display: flex;

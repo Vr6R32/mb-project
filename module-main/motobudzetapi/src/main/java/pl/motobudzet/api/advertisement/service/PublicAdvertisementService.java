@@ -159,7 +159,9 @@ public class PublicAdvertisementService {
                 .firstRegistrationDate(adv.getFirstRegistrationDate())
                 .productionDate(adv.getProductionDate())
                 .creationDate(creationDate)
-//                .city(cityService.getCityByName(adv.getCity().getName()))
+                .city(cityService.getCityById(adv.getCity().getId()).getName())
+//                .city(cityService.getCityByName(adv.getCity().getName()).getName())
+
 //                .cityState(cityStateService.findCityStateByName(adv.getCity().getCityState().getName()))
 //                .city(cityService.getCityByAjdi(adv.getCity().getId()).getName())
 //                .cityState(cityStateService.findCityStateByAjdi(cityService.getCityByAjdi(adv.getCity().getId()).getCityState().getId()).getName())

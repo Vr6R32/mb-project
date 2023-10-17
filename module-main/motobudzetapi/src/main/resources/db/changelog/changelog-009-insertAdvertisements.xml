@@ -26,6 +26,9 @@
             <column name="fuel_type_id" value="3"/>
             <column name="transmission_type_id" value="2"/>
             <column name="user_id" value="1"/>
+            <column name="city_id" value="1"/>
+            <column name="price_unit" value="PLN"/>
+            <column name="mileage_unit" value="KM"/>
         </insert>
     </changeSet>
 
@@ -51,6 +54,9 @@
             <column name="fuel_type_id" value="3"/>
             <column name="transmission_type_id" value="2"/>
             <column name="user_id" value="1"/>
+            <column name="city_id" value="152"/>
+            <column name="price_unit" value="PLN"/>
+            <column name="mileage_unit" value="KM"/>
         </insert>
     </changeSet>
 
@@ -76,6 +82,9 @@
             <column name="fuel_type_id" value="2"/>
             <column name="transmission_type_id" value="2"/>
             <column name="user_id" value="1"/>
+            <column name="city_id" value="742"/>
+            <column name="price_unit" value="PLN"/>
+            <column name="mileage_unit" value="KM"/>
         </insert>
     </changeSet>
 
@@ -101,6 +110,9 @@
             <column name="fuel_type_id" value="1"/>
             <column name="transmission_type_id" value="1"/>
             <column name="user_id" value="2"/>
+            <column name="city_id" value="312"/>
+            <column name="price_unit" value="PLN"/>
+            <column name="mileage_unit" value="KM"/>
         </insert>
     </changeSet>
 
@@ -126,6 +138,9 @@
             <column name="fuel_type_id" value="4"/>
             <column name="transmission_type_id" value="2"/>
             <column name="user_id" value="2"/>
+            <column name="city_id" value="642"/>
+            <column name="price_unit" value="EUR"/>
+            <column name="mileage_unit" value="MIL"/>
         </insert>
     </changeSet>
 
@@ -151,6 +166,9 @@
             <column name="fuel_type_id" value="2"/>
             <column name="transmission_type_id" value="1"/>
             <column name="user_id" value="2"/>
+            <column name="city_id" value="134"/>
+            <column name="price_unit" value="USD"/>
+            <column name="mileage_unit" value="KM"/>
         </insert>
     </changeSet>
 

@@ -27,8 +27,47 @@ function hideNavBar () {
 }
 
 
+
+function getDeviceScreenInfo(){
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    console.log(`Szerokość ekranu: ${screenWidth}px`);
+    console.log(`Wysokość ekranu: ${screenHeight}px`);
+
+    const availableScreenWidth = window.screen.availWidth;
+    const availableScreenHeight = window.screen.availHeight;
+
+    console.log(`Dostępna szerokość ekranu: ${availableScreenWidth}px`);
+    console.log(`Dostępna wysokość ekranu: ${availableScreenHeight}px`);
+
+    const pixelsPerInch = window.screen.pixelDensity;
+
+    console.log(`Piksele na cal (PPI): ${pixelsPerInch}`);
+
+    const colorDepth = window.screen.colorDepth;
+
+    console.log(`Głębia kolorów: ${colorDepth} bitów`);
+
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    console.log(`Szerokość okna przeglądarki: ${windowWidth}px`);
+    console.log(`Wysokość okna przeglądarki: ${windowHeight}px`);
+
+}
+
 window.addEventListener('scroll', hideNavBar);
 window.addEventListener("load", getAndDisplayLogo);
+// window.addEventListener("load", getDeviceScreenInfo);
+
+window.addEventListener('resize', () => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    console.log(`Nowa szerokość okna przeglądarki: ${windowWidth}px`);
+    console.log(`Nowa wysokość okna przeglądarki: ${windowHeight}px`);
+});
 
 
 // function getAndDisplayConstruction() {

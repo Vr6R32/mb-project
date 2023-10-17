@@ -1,6 +1,7 @@
 #searchFormContainer {
     /*background-color: black;*/
-    background-color: #000000;
+    /*background-color: #000000;*/
+    background-color: rgba(0, 0, 0, 0.9);
     /*background-color: #181818;*/
     border-radius: 30px;
     box-shadow: 0 0 40px darkgoldenrod;
@@ -78,6 +79,21 @@ input[type=number] {
 
 .info-result-container:last-child {
     margin-right: 0; /* Usuń odstęp dla ostatniego kontenera */
+}
+
+
+
+#suggestionsList::-webkit-scrollbar {
+    width: 5px; /* Szerokość paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-thumb {
+    background-color: darkgoldenrod; /* Kolor paska przewijania */
+    border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-track {
+    background-color: transparent; /* Kolor tła paska przewijania */
 }
 
 /*.fade-effect {*/

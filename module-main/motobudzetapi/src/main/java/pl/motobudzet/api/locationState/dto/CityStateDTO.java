@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class CityStateDTO {
     private String id;
-    private String stateName;
+    private String name;
 }

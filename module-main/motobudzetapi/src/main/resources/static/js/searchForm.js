@@ -94,6 +94,14 @@ function setFormValuesFromUrlParams(urlSearchParams) {
         let productionDateTo = document.getElementById("productionDateTo");
         productionDateTo.value = urlSearchParams.get("productionDateTo");
     }
+    if (urlSearchParams.has("city")) {
+        let city = document.getElementById("city");
+        city.value = urlSearchParams.get("city");
+    }
+    if (urlSearchParams.has("distanceFrom")) {
+        let distanceFrom = document.getElementById("distanceFrom");
+        distanceFrom.value = urlSearchParams.get("distanceFrom");
+    }
 }
 
 setTimeout(function setInputSelect() {
@@ -104,11 +112,13 @@ setTimeout(function setInputSelect() {
         let engineType = formObj.querySelector('#engineType');
         let fuelType = formObj.querySelector('#fuelType');
         let transmissionType = formObj.querySelector('#transmissionType');
+        let cityState = formObj.querySelector('#cityState');
         brand.value = urlSearchParams.get("brand");
         driveType.value = urlSearchParams.get("driveType");
         engineType.value = urlSearchParams.get("engineType");
         fuelType.value = urlSearchParams.get("fuelType");
         transmissionType.value = urlSearchParams.get("transmissionType");
+        cityState.value = urlSearchParams.get("cityState");
     }
 }, 200);
 
@@ -142,6 +152,10 @@ function fetchAllSpecifications() {
     fetch("/api/spec/transmissionTypes")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "transmissionType"));
+
+    fetch("/api/cities/states")
+        .then(response => response.json())
+        .then(data => populateSelectOptions(data, "cityState"));
 
     fetch("/api/brands")
         .then(response => response.json())
@@ -220,6 +234,11 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("Moc do:", "number", "engineHorsePowerTo", "engineHorsePowerTo"));
     form.appendChild(createRowWithInputElement("Rok Produkcji od:", "number", "productionDateFrom", "productionDateFrom"));
     form.appendChild(createRowWithInputElement("Rok Produkcji do:", "number", "productionDateTo", "productionDateTo"));
+    form.appendChild(createRowWithInputElement("Miasto:", "text", "city", "city"));
+    form.appendChild(createRowWithInputElement("Województwo:", "select", "cityState", "cityState"));
+    form.appendChild(createRowWithInputElement("Odległość:", "number", "distanceFrom", "distanceFrom"));
+    form.appendChild(createRowWithInputElement("Anglik:", "select", "jaj", "jaj"));
+
 
     // function setStyleForElements(elements, styleName, styleValue) {
     //     for (let i = 0; i < elements.length; i++) {
@@ -332,12 +351,127 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
         });
     }
 
+    if (inputId === 'city') {
+
+        const inputContainer = document.createElement("div");
+        inputContainer.style.position = "relative"; // Ustawiamy pozycję na "relative", aby umożliwić pozycjonowanie względem tego kontenera
+
+        inputColumn.style.position = 'relative';
+
+        const suggestionsList = document.createElement('ul');
+        suggestionsList.id = 'suggestionsList';
+        suggestionsList.style.listStyleType = 'none';
+        suggestionsList.style.padding = '0';
+        suggestionsList.style.margin = '0';
+        suggestionsList.style.position = 'absolute';
+        suggestionsList.style.backgroundColor = 'black';
+        suggestionsList.style.color = 'white';
+        suggestionsList.style.border = '1px solid #ccc';
+        suggestionsList.style.borderRadius = '5px';
+        suggestionsList.style.maxHeight = '150px';
+        suggestionsList.style.minWidth = '200px';
+        suggestionsList.style.overflowY = 'auto';
+        suggestionsList.style.display = 'none';
+        suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
+        // suggestionsList.style.marginTop = '200px';
+        // suggestionsList.style.bottom = "-30px";
+        suggestionsList.style.top = "100%";
+
+        suggestionsList.style.scrollbarWidth = 'thin';
+        suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
+        suggestionsList.style.WebkitScrollbar = 'thin';
+        suggestionsList.style.WebkitScrollbarTrack = 'transparent';
+        suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
+        suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
+
+
+        // Dodaj obsługę kliknięcia na propozycję miasta
+        suggestionsList.addEventListener('click', function (event) {
+            if (event.target && event.target.nodeName === 'LI') {
+                inputElement.value = event.target.textContent;
+                suggestionsList.style.display = 'none';
+            }
+        });
+
+        // Dodaj listę propozycji do pola miasta
+        inputContainer.appendChild(inputElement);
+        inputColumn.appendChild(suggestionsList);
+        rowDiv.appendChild(inputContainer);
+
+        // Obsługa wprowadzania tekstu w polu miasta
+        let timeoutId;
+        const debounceDelay = 200; // Opóźnienie dynamiczne (1 sekunda)
+
+        inputElement.addEventListener("input", function () {
+            // Anuluje poprzednie żądanie, jeśli istnieje
+            clearTimeout(timeoutId);
+
+            // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
+            const partialCityName = inputElement.value;
+
+            // Ustawia nowe opóźnienie
+            timeoutId = setTimeout(function () {
+                // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
+                fetch(`/api/cities?partialName=${partialCityName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
+                        updateCitySuggestions(data);
+                    })
+                    .catch(error => {
+                        console.error("Błąd podczas pobierania propozycji miast:", error);
+                    });
+            }, debounceDelay); // Odczekuje 1 sekundę po zakończeniu wpisywania użytkownika
+        });
+    }
+
     inputColumn.appendChild(inputElement);
     rowDiv.appendChild(inputColumn);
 
 
 
     return rowDiv;
+}
+
+document.addEventListener('click', function(event) {
+    const suggestionsList = document.getElementById('suggestionsList');
+
+    // Sprawdza, czy istnieje lista propozycji i czy kliknięcie miało miejsce poza nią
+    if (suggestionsList && !suggestionsList.contains(event.target)) {
+        suggestionsList.style.display = 'none';
+    }
+});
+
+function updateCitySuggestions(suggestions) {
+    // Pobierz pole tekstowe i stwórz listę propozycji miast
+    const cityInput = document.getElementById('city');
+    const cityStateInput = document.getElementById('cityState');
+    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
+
+    // Usuń wszystkie istniejące propozycje z listy
+    while (suggestionsList.firstChild) {
+        suggestionsList.removeChild(suggestionsList.firstChild);
+    }
+
+    // Wyświetl nowe propozycje
+    suggestions.forEach(suggestion => {
+        const suggestionItem = document.createElement('li');
+        suggestionItem.textContent = suggestion.cityName;
+        suggestionItem.addEventListener('click', function () {
+            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
+            cityInput.value = suggestion.name;
+            cityStateInput.value = suggestion.cityStateName;
+            suggestionsList.innerHTML = '';
+        });
+        suggestionsList.appendChild(suggestionItem);
+    });
+
+    // Jeśli nie ma propozycji, ukryj listę
+    if (suggestions.length === 0) {
+        suggestionsList.style.display = 'none';
+    } else {
+        suggestionsList.style.display = 'block';
+    }
 }
 
 
@@ -389,7 +523,8 @@ function displayResults(data) {
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "200px";
-        resultDiv.style.backgroundColor = "#000000";
+        resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 0.9)';
+        // resultDiv.style.backgroundColor = "#000000";
         // resultDiv.style.backgroundColor = "#181818";
         // adDiv.style.backgroundColor = "black";
         resultDiv.style.color = 'darkgoldenrod';
@@ -402,7 +537,7 @@ function displayResults(data) {
         resultDiv.style.boxShadow = "0 0 40px darkgoldenrod"; // Add initial box shadow
         resultDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
         resultDiv.style.maxWidth = "100%";
-        resultDiv.style.opacity = 0; // Set initial opacity to 0
+        // resultDiv.style.opacity = 0; // Set initial opacity to 0
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
 
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
@@ -424,6 +559,7 @@ function displayResults(data) {
         const photoElement = document.createElement("img");
         photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
+        photoElement.style.backgroundColor = 'rgba(0, 0, 0, 0.9)'
         let maxPhotoWidth = 300;
         photoElement.style.objectFit = "cover";
         photoElement.onload = () => {

@@ -19,7 +19,7 @@ public class CityController {
 
     private final CityService cityService;
 
-    @GetMapping
+    @GetMapping("all")
     List<CityDTO> getAllCities(){
         return cityService.getAllCities();
     }
@@ -31,5 +31,13 @@ public class CityController {
     List<City> getCityNeighbourCitiesByDistance(@RequestParam String mainCity , Integer distanceMax){
         return cityService.getCityNeighbourCitiesByDistance(mainCity,distanceMax);
     }
+    @GetMapping("test")
+    public City findById(@RequestParam Long id){
+        return cityService.getCityById(id);
+    }
 
+    @GetMapping
+    List<CityDTO> getCityByPartialName(@RequestParam String partialName){
+        return cityService.getCityByPartialName(partialName);
+    }
 }

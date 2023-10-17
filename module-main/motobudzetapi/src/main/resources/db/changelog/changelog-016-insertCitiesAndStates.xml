@@ -2387,6 +2387,12 @@
 </changeSet>
 
 
+<!--    <changeSet id="ext" author="michal-k">-->
+<!--        <sql>-->
+<!--            CREATE EXTENSION unaccent;-->
+<!--        </sql>-->
+<!--    </changeSet>-->
+
 
 
 

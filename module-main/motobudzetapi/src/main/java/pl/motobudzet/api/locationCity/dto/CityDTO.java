@@ -9,4 +9,5 @@ public class CityDTO {
     private String cityId;
     private String cityName;
     private String cityStateId;
+    private String cityStateName;
 }

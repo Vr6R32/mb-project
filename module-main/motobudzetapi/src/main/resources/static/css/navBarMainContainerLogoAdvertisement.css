@@ -1,8 +1,16 @@
 
 body {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 1);
     margin: 0;
     padding: 0;
+    background-image: url('a32.jpg'); /* Zmień ścieżkę do obrazu zgodnie z rzeczywistą lokalizacją obrazu w projekcie */
+    /*background-size: cover; !* Skaluje obraz do rozmiarów elementu nadrzędnego *!*/
+    /*background-size: 80% 80%;*/
+    background-size: 1920px auto;
+    background-position: center center; /* Ustala położenie obrazu tła na środek */
+    background-repeat: no-repeat; /* Zapobiega powtarzaniu się obrazu */
+    background-attachment: fixed; /* Obraz tła będzie nieruchomy podczas przewijania */
+
 }
 /*OPACITY IDAC DO BOTTOM STRONY*/
 header.header-hidden {
@@ -80,11 +88,13 @@ header {
 .container-main {
     width: 1500px;
     margin: 150px auto 0;
-    background-color: black;
+    /*background-color: black;*/
+    background-color: transparent;
     /*border: 2px solid darkgoldenrod;*/
     border: 0px solid darkgoldenrod;
     padding: 20px;
     display: flex;
+    /*opacity: 0.9;*/
     border-radius: 30px;
     box-shadow: 0 0 0px moccasin;
     flex-wrap: wrap;
@@ -155,16 +165,31 @@ header {
     }
 }
 
+/*@keyframes fade-in-main {*/
+/*    from {*/
+/*        opacity: 0;*/
+/*        transform: translateY(200px);*/
+/*    }*/
+/*    to {*/
+/*        !*opacity: 0.9;*!*/
+/*        opacity: 1;*/
+/*        transform: translateY(0);*/
+/*    }*/
+/*}*/
+
 @keyframes fade-in-main {
     from {
-        opacity: 0;
-        transform: translateY(200px);
+        /*background-color: rgba(0, 0, 0, 0);*/
+                transform: translateY(200px);
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        /*background-color: rgba(0, 0, 0, 0.7);*/
+                transform: translateY(0);
     }
 }
+
+
+
 @keyframes fade-in-miniature {
     from {
         opacity: 0;
@@ -198,6 +223,7 @@ header {
     height: 70px;
     margin: 40px;
     background-color: black;
+    background-color: rgba(0, 0, 0, 0.9);
     /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
@@ -228,7 +254,8 @@ header {
     align-items: center;
     justify-self: center;
     justify-items: center;
-    background-color: black;
+    /*background-color: black;*/
+    background-color: rgba(0, 0, 0, 0.9);
     /*background-color: #181818;*/
     /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
@@ -283,6 +310,7 @@ header {
     position: relative;
     overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
     display: flex;
+    background-color: transparent;
     justify-content: center;
     align-items: center;
 }

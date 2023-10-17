@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.minHeight = '1000px';
     containerMain.style.justifyContent = 'center';
     containerMain.style.alignItems = 'center';
+    containerMain.style.backgroundColor = 'transparent';
     containerMain.style.border = '0px';
     containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
 });

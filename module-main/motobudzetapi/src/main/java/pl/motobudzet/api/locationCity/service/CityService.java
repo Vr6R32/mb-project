@@ -28,6 +28,7 @@ public class CityService {
                 .cityId(String.valueOf(city.getId()))
                 .cityName(city.getName())
                 .cityStateId(String.valueOf(city.getCityState().getId()))
+                .cityStateName(city.getCityState().getName())
                 .build();
     }
 
@@ -68,7 +69,11 @@ public class CityService {
     public City getCityByNameWithout(String name) {
         return cityRepository.getCityByNameWithout(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
-    public City getCityByAjdi(Long city) {
-        return cityRepository.getCityByAjdi(city).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+    public City getCityById(Long city) {
+        return cityRepository.getCityById(city).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+    }
+
+    public List<CityDTO> getCityByPartialName(String partialName) {
+        return cityRepository.findByPartialName(partialName).stream().map(this::mapToCityDTO).collect(Collectors.toList());
     }
 }

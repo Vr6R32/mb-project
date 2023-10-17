@@ -27,7 +27,7 @@ public class CityStateService {
     public CityStateDTO mapToCityStateDTO(CityState cityState) {
         return CityStateDTO.builder()
                 .id(String.valueOf(cityState.getId()))
-                .stateName(cityState.getName())
+                .name(cityState.getName())
                 .build();
     }
 

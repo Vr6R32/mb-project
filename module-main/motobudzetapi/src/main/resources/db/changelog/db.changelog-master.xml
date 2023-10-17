@@ -13,6 +13,7 @@
     <include file="/db/changelog/changelog-007-insertModels.xml"/>
     <include file="/db/changelog/changelog-007-userSecurity.xml"/>
     <include file="/db/changelog/changelog-008-app_user_advertisements_relation.xml"/>
+    <include file="/db/changelog/changelog-016-insertCitiesAndStates.xml"/>
     <include file="/db/changelog/changelog-009-insertAdvertisements.xml"/>
     <include file="/db/changelog/changelog-010-insertBrandModelRelationship.xml"/>
     <include file="/db/changelog/changelog-011-insertAdvertisementsImages.xml"/>
@@ -20,7 +21,6 @@
     <include file="/db/changelog/changelog-013-createUserMessagesTables.xml"/>
     <include file="/db/changelog/changelog-014-insertExampleConversationsAndMessages.xml"/>
     <include file="/db/changelog/changelog-015-insertFavouritesTableEntity.xml"/>
-    <include file="/db/changelog/changelog-016-insertCitiesAndStates.xml"/>
 
 
 </databaseChangeLog>

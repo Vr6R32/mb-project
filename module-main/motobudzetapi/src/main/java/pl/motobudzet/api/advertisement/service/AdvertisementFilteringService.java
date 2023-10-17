@@ -1,6 +1,7 @@
 package pl.motobudzet.api.advertisement.service;
 
 
+import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,6 @@ public class AdvertisementFilteringService {
 //        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
 //                criteriaBuilder.equal(root.get("isVerified"), false));
 
-
         if (brand != null && !brand.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("brand"), brandService.getBrand(brand)));
@@ -66,17 +66,18 @@ public class AdvertisementFilteringService {
                     root.get("city").in(cityList)
             );
         }
-        else if (cityState != null && !cityState.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) -> {
-                Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
-                return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
-            });
-        }
         else  if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))
             );
         }
+        else if (cityState != null && !cityState.isEmpty() && city == null) {
+            specification = specification.and((root, query, criteriaBuilder) -> {
+                Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
+                return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
+            });
+        }
+
         if (model != null && !model.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("model"), modelService.getModel(model)));
