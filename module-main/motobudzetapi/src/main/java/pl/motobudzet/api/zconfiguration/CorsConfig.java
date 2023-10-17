@@ -21,7 +21,8 @@ public class CorsConfig {
                                 "http://192.168.100.27"
                         )
                         .allowedHeaders("*")
-                        .allowedMethods("*");
+                        .allowedMethods("*")
+                        .allowCredentials(true)               .exposedHeaders("Access-Control-Allow-Origin");
             }
         };
     }
