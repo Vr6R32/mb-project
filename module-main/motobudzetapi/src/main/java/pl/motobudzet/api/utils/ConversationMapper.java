@@ -23,7 +23,7 @@ public class ConversationMapper {
 
         ConversationDTO.ConversationDTOBuilder builder = ConversationDTO.builder()
                 .conversationId(conversation.getId())
-                .advertisement(advertisementService.mapToAdvertisementDTO(conversation.getAdvertisement(), false))
+                .advertisement(advertisementService.mapToAdvertisementDTO(conversation.getAdvertisement(),false))
                 .secondUser(secondUserName);
 
         if (conversationLastMessage != null) {

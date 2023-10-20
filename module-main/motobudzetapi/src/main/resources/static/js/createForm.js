@@ -1,4 +1,5 @@
 let selectedFiles = []; // Store the selected files references in an array
+
 document.addEventListener('DOMContentLoaded', function () {
 
 
@@ -6,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchBrands();
     fetchSpecifications();
     loadFileDrop();
+    fetchUserDetails();
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
     });
@@ -13,6 +15,39 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
     });
 });
+
+function fetchUserDetails() {
+    fetch("http://localhost:20134/api/user/details")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            let citySelect = document.getElementById('city');
+            let cityStateSelect = document.getElementById('cityState');
+
+            // Tworzymy nowy element option
+            let optionCity = document.createElement('option');
+            optionCity.value = data.cityName; // Ustawiamy wartość na cityStateName
+            optionCity.textContent = data.cityName; // Ustawiamy tekst widoczny dla użytkownika
+
+            let optionState = document.createElement('option');
+            optionState.value = data.cityStateName; // Ustawiamy wartość na cityStateName
+            optionState.textContent = data.cityStateName; // Ustawiamy tekst widoczny dla użytkownika
+
+            // Dodajemy nowy element option do elementu select
+            citySelect.appendChild(optionCity);
+            cityStateSelect.appendChild(optionState);
+
+            console.log(data); // Tutaj masz dostęp do danych z
+        })
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error.message);
+        });
+}
+
 
 function getUserName(){
     let userName = document.getElementById('username');
@@ -84,6 +119,36 @@ function createForm() {
         { label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true },
         { label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true },
         { label: 'Data pierwszej rejestracji:', type: 'date', id: 'firstRegistrationDate', name: 'firstRegistrationDate', required: true },
+        {
+            label: 'Lokalizacja:',
+            type: 'select',
+            id: 'city',
+            name: 'city',
+            required: true,
+            additionalSelect: {
+                label: 'Województwo:',
+                id: 'cityState',
+                name: 'cityState',
+                options: [
+                    'DOLNOŚLĄSKIE',
+                    'KUJAWSKO-POMORSKIE',
+                    'LUBELSKIE',
+                    'LUBUSKIE',
+                    'ŁÓDZKIE',
+                    'MAŁOPOLSKIE',
+                    'MAZOWIECKIE',
+                    'OPOLSKIE',
+                    'PODKARPACKIE',
+                    'PODLASKIE',
+                    'POMORSKIE',
+                    'ŚLĄSKIE',
+                    'ŚWIĘTOKRZYSKIE',
+                    'WARMIŃSKO-MAZURSKIE',
+                    'WIELKOPOLSKIE',
+                    'ZACHODNIOPOMORSKIE'
+                ]
+            }
+        },
     ];
 
     formElements.forEach(element => {
@@ -108,6 +173,8 @@ function createForm() {
             input.style.textAlign = 'center';
         }
 
+
+
         if (element.additionalSelect) {
             const wrapper = document.createElement('div');
             wrapper.style.display = 'flex'; // Use flex layout
@@ -122,10 +189,16 @@ function createForm() {
             additionalSelectLabel.setAttribute('for', element.additionalSelect.id);
             additionalSelectLabel.textContent = element.additionalSelect.label;
 
+
+
             const additionalSelectInput = document.createElement('select');
             additionalSelectInput.id = element.additionalSelect.id;
             additionalSelectInput.name = element.additionalSelect.name;
             additionalSelectInput.style.width = '50px'; // Set width
+
+            if(element.additionalSelect.id === 'cityState'){
+                additionalSelectInput.style.width = '50%'; // Set width
+            }
 
             element.additionalSelect.options.forEach(optionValue => {
                 const option = document.createElement('option');
@@ -288,6 +361,8 @@ function submitForm() {
         engineHorsePower: getValue('engineHorsePower'),
         productionDate: getValue('productionDate'),
         firstRegistrationDate: getValue('firstRegistrationDate'),
+        city: getValue('city'),
+        cityState: getValue('cityState'),
         userName: getUserName()
     };
 

@@ -2,6 +2,7 @@ package pl.motobudzet.api.user_conversations.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.kafka.async.SpringMailSenderService;
 import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
 import pl.motobudzet.api.kafka.service.KafkaServiceInterface;
 import pl.motobudzet.api.user.entity.AppUser;
@@ -28,6 +29,7 @@ public class MessageService {
     private final ConversationService conversationService;
     private final ConversationMessagesRepository messagesRepository;
     private final KafkaServiceInterface kafkaService;
+    private final SpringMailSenderService springMailSenderService;
 
     public String sendMessage(String message,Long conversationId, String messageSenderName) {
 
@@ -50,7 +52,7 @@ public class MessageService {
             messagesRepository.save(newMessage);
         }
 
-        sendEmailMessageNotificationToKafka(message,emailNotificationReceiver,messageSender,conversation);
+        sendEmailMessageNotificationAsync(message,emailNotificationReceiver,messageSender,conversation);
         return "Message Sent!";
     }
 
@@ -75,6 +77,18 @@ public class MessageService {
                 .build();
         kafkaService.sendMessageNotification(emailMessageRequest);
     }
+
+    private void sendEmailMessageNotificationAsync(String message,AppUser emailNotificationReceiver,AppUser messageSender,Conversation conversation) {
+        EmailMessageRequest emailMessageRequest = EmailMessageRequest.builder()
+                .message(message)
+                .senderName(messageSender.getUsername())
+                .receiverEmail(emailNotificationReceiver.getEmail())
+                .advertisementTitle(conversation.getAdvertisement().getName())
+                .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
+                .build();
+        springMailSenderService.sendMessageNotificationHtml(emailMessageRequest);
+    }
+
 
     public List<ConversationMessageDTO> getAllMessages(Long conversationId, String loggedUser) {
         List<ConversationMessage> conversationMessagesList = messagesRepository.getAllMessages(conversationId);

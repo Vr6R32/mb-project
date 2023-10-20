@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.service.AdvertisementFilteringService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/advertisements/filter")
 public class AdvertisementFilteringController {
@@ -37,7 +39,7 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false) Long engineHorsePowerTo,
             @RequestParam(required = false) Long productionDateFrom,
             @RequestParam(required = false) Long productionDateTo,
-            @RequestParam(required = false) Integer distanceFrom,
+            @RequestParam(required = false,defaultValue = "0") Integer distanceFrom,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {

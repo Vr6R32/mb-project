@@ -1,14 +1,16 @@
 package pl.motobudzet.api.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.motobudzet.api.user.dto.AppUserDTO;
+import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.RegistrationService;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
+import pl.motobudzet.api.user.service.UserCredentialsService;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,9 +18,19 @@ import pl.motobudzet.api.user.dto.RegistrationRequest;
 public class UserController {
 
     private final RegistrationService registrationService;
+    private final UserCredentialsService userCredentialsService;
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request) {
         return registrationService.register(request);
+    }
+    @GetMapping
+    public ResponseEntity<String> activateAccount(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request){
+        return registrationService.activateAccount(activationCode,response,request);
+    }
+    @GetMapping("details")
+    public AppUserDTO getUserDetails(HttpServletRequest request){
+        String userName = request.getUserPrincipal().getName();
+        return userCredentialsService.getUserDetails(userName);
     }
 }

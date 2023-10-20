@@ -4,13 +4,18 @@
     box-sizing: border-box;
     flex-basis: auto;
     height: auto;
-    background-color: black;
+    background-color: rgba(0,0,0, 0.9);
+    /*background-color: transparent;*/
     margin: 0 20px;
     margin-bottom: 15px;
     padding: 10px;
     display: grid;
     border-radius: 30px;
     cursor: default;
+    animation: fade-in 1s ease-in-out forwards;
+}
+
+#titleDiv {
     animation: fade-in 1s ease-in-out forwards;
 }
 

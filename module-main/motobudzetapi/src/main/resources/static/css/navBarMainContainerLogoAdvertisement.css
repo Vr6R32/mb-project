@@ -263,6 +263,19 @@ header {
 
 
 
+/*.fade-effect-big {*/
+/*    margin: 15px auto 0;*/
+/*    margin-left: 15px;*/
+/*    margin-right: 15px;*/
+/*    position: relative;*/
+/*    !*background-color: rgba(0,0,0, 0.9);*!*/
+/*    !*background-color: transparent;*!*/
+/*    overflow: hidden; !* Ukrycie zawartości poza zaokrąglonymi krawędziami *!*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
 .fade-effect-big {
     margin: 15px auto 0;
     margin-left: 15px;
@@ -272,24 +285,33 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    clip-path: ellipse(50% 50% at 50% 50%); /* Wycinanie obszaru w kształcie elipsy */
+        /*background: radial-gradient(*/
+        /*        ellipse at center,*/
+        /*        transparent 0%,      !* Przezroczyste rogi *!*/
+        /*        transparent 69%,     !* Przezroczyste rogi *!*/
+        /*        rgba(0, 0, 0, 0) 70%, !* Przezroczystość na 70% *!*/
+        /*        rgba(0, 0, 0, 1) 72.1% !* Przyciemnienie od 72.1% promienia *!*/
+        /*);*/
 }
 
-.fade-effect-big::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-            ellipse at center,
-            rgba(0, 0, 0, 0) 0%, /* Przezroczyste rogi */
-            rgba(0, 0, 0, 0) 69%, /* Przezroczyste rogi */
-            rgba(0, 0, 0, 1) 72.1% /* Przyciemnienie od 70.1% promienia */
-    );
-    background-size: 100% 100%;
-    pointer-events: none;
-}
+/*.fade-effect-big::before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background: radial-gradient(*/
+/*            ellipse at center,*/
+/*            transparent 0%,      !* Przezroczyste rogi *!*/
+/*            transparent 69%,     !* Przezroczyste rogi *!*/
+/*            rgba(0, 0, 0, 0) 70%, !* Przezroczystość na 70% *!*/
+/*            rgba(0, 0, 0, 1) 72.1% !* Przyciemnienie od 72.1% promienia *!*/
+/*    );*/
+/*    background-size: 100% 100%;*/
+/*    pointer-events: none;*/
+/*}*/
 .fade-effect-miniature {
     margin: 15px auto 0;
     margin-left: 15px;

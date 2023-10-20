@@ -34,6 +34,8 @@ public class AppUser implements UserDetails {
     String password;
     @Column(nullable = false, unique = true)
     String email;
+
+    String registerCode;
     Boolean accountEnabled;
     Boolean accountNotLocked;
     Boolean accountNotExpired;

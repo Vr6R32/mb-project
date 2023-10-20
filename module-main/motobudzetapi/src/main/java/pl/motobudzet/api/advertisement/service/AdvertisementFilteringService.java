@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,8 +22,8 @@ import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.PublicAdvertisementService.PAGE_SIZE;
 
@@ -185,8 +186,25 @@ public class AdvertisementFilteringService {
 
         }
 
+        //        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
+        //                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
+
+        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        List<UUID> uuidList = advertisementSpecificationIds.getContent();
+
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
+        List<Advertisement> advertisementDetails = uuidList.stream()
+                .map(uuid -> fetchedAdvertisementDetails.stream()
+                        .filter(adv -> adv.getId().equals(uuid))
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
                 .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 }

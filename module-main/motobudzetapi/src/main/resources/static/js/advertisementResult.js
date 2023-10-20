@@ -7,6 +7,7 @@ function createAdvertisementResultDiv(mainContainer,advertisement) {
     imageDiv.style.justifyContent = 'space-between'; // Wyrównanie elementów na krańcach w poziomie
     imageDiv.style.display = 'flex';
     imageDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    // imageDiv.style.backgroundColor = 'transparent';
 
     console.log(advertisement);
 
@@ -15,8 +16,9 @@ function createAdvertisementResultDiv(mainContainer,advertisement) {
     mainPhoto.style.height = '675px';
     mainPhoto.alt = 'MainUrlPhoto';
     mainPhoto.id = 'mainUrlPhoto';
-    mainPhoto.style.color = 'black';
-    mainPhoto.style.backgroundColor = 'black'; // Ustawienie tła na czarny
+    // mainPhoto.style.color = 'black';
+    // mainPhoto.style.backgroundColor = 'rgba(0,0,0, 0.9)'; // Ustawienie tła na czarny
+    mainPhoto.style.backgroundColor = 'transparent'; // Ustawienie tła na czarny
     mainPhoto.style.width = '100%'; // Ustawienie tła na czarny
 
     const previousArrow = document.createElement('span');
@@ -35,6 +37,7 @@ function createAdvertisementResultDiv(mainContainer,advertisement) {
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-big');
+    fadeEffect.style.backgroundColor = 'transparent';
 
 
     fadeEffect.appendChild(mainPhoto);

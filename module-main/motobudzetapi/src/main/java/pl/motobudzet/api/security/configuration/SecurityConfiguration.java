@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/cities/**").permitAll()
                                 .requestMatchers("/api/brands/**").permitAll()
                                 .requestMatchers("/api/resources/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/user").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
 

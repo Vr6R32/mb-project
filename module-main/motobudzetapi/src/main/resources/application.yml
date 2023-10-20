@@ -1,4 +1,21 @@
 spring:
+  mail:
+    host: serwer2379308.home.pl
+    port: 587
+    username: info@motobudzet.pl
+    password: dontgotosql
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+            auth: true
+            starttls:
+              enable: true
+            connectiontimeout: 5000
+            timeout: 3000
+            writetimeout: 5000
   kafka:
     bootstrap-servers: localhost:9092
   datasource:

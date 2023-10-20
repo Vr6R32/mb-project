@@ -27,8 +27,8 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/last-uploaded")
-    public Page<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
-        return publicAdvertisementService.findLastUploaded(pageNumber, pageSize);
+    public List<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
+        return publicAdvertisementService.findLastUploaded(pageNumber,pageSize);
     }
 
     @GetMapping("/{id}")

@@ -34,6 +34,7 @@ function createHeaderTitle(advertisement,container,owner) {
         const titleDiv = document.createElement('div');
         titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
         titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
+        titleDiv.style.backgroundColor = 'rgba(0,0,0, 0.9)'
 
         titleContainer.appendChild(titleDiv);
 

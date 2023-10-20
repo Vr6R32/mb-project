@@ -1,5 +1,6 @@
 package pl.motobudzet.api.vehicleSpec.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.vehicleSpec.entity.DriveType;
 import pl.motobudzet.api.vehicleSpec.entity.EngineType;
@@ -32,6 +33,7 @@ public class SpecificationService {
         return driveTypeRepository.findAllCached();
     }
 
+    @Cacheable(value = "engine_type_cache_all")
     public List<EngineType> getEngineTypes() {
         return engineTypeRepository.findAllCached();
     }

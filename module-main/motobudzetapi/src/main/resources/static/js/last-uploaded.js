@@ -131,7 +131,7 @@ function getLastUploaded(pageNumber){
 
         .then(response => response.json())
         .then(data => {
-            advertisements = data.content;
+            advertisements = data;
             displayLastUploaded(currentMinIndex,currentMaxIndex);
         })
         .catch(error => {

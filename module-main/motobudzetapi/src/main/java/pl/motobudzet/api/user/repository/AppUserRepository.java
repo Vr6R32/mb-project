@@ -12,6 +12,15 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("select a from AppUser a left join fetch a.roles where a.userName = ?1")
     Optional<AppUser> findByUserName(String userName);
 
+
+    @Query("select a from AppUser a " +
+            "left join fetch a.roles " +
+            "left join fetch a.city c " +
+            "left join fetch c.cityState cs" +
+            "left join fetch a.roles " +
+            " where a.userName = ?1")
+    Optional<AppUser> findByUserNameForDto(String userName);
+
 //    @Query("select a from AppUser a left join fetch a.roles where a.email = ?1")
 //    Optional<AppUser> findByEmail(String email);
 //
@@ -36,5 +45,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select a.id from AppUser a where a.userName = ?1")
     Optional<Long> getAppUserIdByUserName(String username);
+
+    @Query("select a from AppUser a where a.registerCode = ?1")
+    Optional<AppUser> getAppUserByRegisterCode(String activationCode);
 
 }

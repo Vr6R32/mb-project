@@ -19,12 +19,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="city_id" type="bigint">
-                <!-- Constraints can be added later with the foreign key -->
             </column>
             <column name="account_enabled" type="boolean"/>
             <column name="account_not_expired" type="boolean"/>
             <column name="account_not_locked" type="boolean"/>
             <column name="credentials_not_expired" type="boolean"/>
+            <column name="register_code" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
@@ -70,11 +70,11 @@
 
     <changeSet id="5" author="michal-k">
         <sql>
-            INSERT INTO app_user (user_name, password, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
+            INSERT INTO app_user (user_name, password, city_id, email, account_enabled, account_not_locked, account_not_expired, credentials_not_expired)
             VALUES
-                ('admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'kowalkowski.michal24@gmail.com', true, true, true, true),
-                ('user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', 'ind00rsm0k3rs@gmail.com', true, true, true, true),
-                ('admin2', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', 'ke2ds@hitman.pl', true, true, true, true);
+                ('admin', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', '1', 'kowalkowski.michal24@gmail.com', true, true, true, true),
+                ('user', '$2a$10$pBjYzhQj2IRUc7rQ80E0R.FqB/nkKXkrsZFaIlR/lsMn23jY3YQYK', '2', 'ind00rsm0k3rs@gmail.com', true, true, true, true),
+                ('admin2', '$2a$10$rVVgq/yduh.i2/yxz0s05enNxwG/4Cj/SuPE1j7vrn7hn/f.uwkbG', '3', 'ke2ds@hitman.pl', true, true, true, true);
         </sql>
     </changeSet>
 

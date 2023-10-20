@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
@@ -27,7 +28,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,11 +62,25 @@ public class PublicAdvertisementService {
                 .orElseThrow(() -> new RuntimeException("id doesn't exist!"));
     }
 
-    public Page<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
-        int page = getPage(pageNumber);
+    public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
 
-        return advertisementRepository.findAllVerified(PageRequest.of(page, pageSize, LAST_UPLOADED_SORT_PARAMS))
-                .map(advertisement -> mapToAdvertisementDTO(advertisement, false));
+        Specification<Advertisement> isVerifiedSpecification = (root, query, cb) -> cb.equal(root.get("isVerified"), true);
+        Specification<Advertisement> specification = Specification.where(isVerifiedSpecification);
+
+        PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize ,LAST_UPLOADED_SORT_PARAMS);
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        List<UUID> uuidList = advertisementSpecificationIds.getContent();
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
+        List<Advertisement> advertisementDetails = uuidList.stream()
+                .map(uuid -> fetchedAdvertisementDetails.stream()
+                        .filter(adv -> adv.getId().equals(uuid))
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
+
+        return advertisementDetails.stream()
+                .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).collect(Collectors.toList());
     }
 
     //    @CachePut(cacheNames = "advertisements_filter_cache")
@@ -133,7 +150,7 @@ public class PublicAdvertisementService {
         return "advertisement edited!";
     }
 
-    public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeUserAndUrls) {
+    public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
 
         LocalDateTime advCreationTime = adv.getCreationTime();
 
@@ -144,12 +161,21 @@ public class PublicAdvertisementService {
                 .id(adv.getId().toString())
                 .name(adv.getName())
                 .description(adv.getDescription())
-                .model(modelService.getModel(adv.getModel().getId()))
-                .brand(brandService.getBrand(adv.getBrand().getId()))
-                .fuelType(specificationService.getFuelType(adv.getFuelType().getId()))
-                .driveType(specificationService.getDriveType(adv.getDriveType().getId()))
-                .engineType(specificationService.getEngineType(adv.getEngineType().getId()))
-                .transmissionType(specificationService.getTransmissionType(adv.getTransmissionType().getId()))
+//                .model(modelService.getModel(adv.getModel().getId()))
+//                .brand(brandService.getBrand(adv.getBrand().getId()))
+//                .fuelType(specificationService.getFuelType(adv.getFuelType().getId()))
+//                .driveType(specificationService.getDriveType(adv.getDriveType().getId()))
+//                .engineType(specificationService.getEngineType(adv.getEngineType().getId()))
+//                .transmissionType(specificationService.getTransmissionType(adv.getTransmissionType().getId()))
+//                .city(cityService.getCityById(adv.getCity().getId()).getName())
+                .model(adv.getModel().getName())
+                .brand(adv.getBrand().getName())
+                .fuelType(adv.getFuelType().getName())
+                .driveType(adv.getDriveType().getName())
+                .engineType(adv.getEngineType().getName())
+                .transmissionType(adv.getTransmissionType().getName())
+                .user(adv.getUser().getUsername())
+                .city(adv.getCity().getName())
                 .mileage(adv.getMileage())
                 .mileageUnit(String.valueOf(adv.getMileageUnit()))
                 .price(adv.getPrice())
@@ -159,7 +185,6 @@ public class PublicAdvertisementService {
                 .firstRegistrationDate(adv.getFirstRegistrationDate())
                 .productionDate(adv.getProductionDate())
                 .creationDate(creationDate)
-                .city(cityService.getCityById(adv.getCity().getId()).getName())
 //                .city(cityService.getCityByName(adv.getCity().getName()).getName())
 
 //                .cityState(cityStateService.findCityStateByName(adv.getCity().getCityState().getName()))
@@ -168,8 +193,7 @@ public class PublicAdvertisementService {
                 .mainPhotoUrl(adv.getMainPhotoUrl())
                 .build();
 
-        if (includeUserAndUrls) {
-            builder.setUser(adv.getUser().getUsername());
+        if (includeImageUrls) {
             builder.setUrlList(adv.getImageUrls());
         }
 
