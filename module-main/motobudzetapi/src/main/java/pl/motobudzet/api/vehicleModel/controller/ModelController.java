@@ -25,7 +25,7 @@ public class ModelController {
     }
 
     @GetMapping("/{brandName}")
-    public ResponseEntity<List<ModelDTO>> findAllModelsFromSpecifiedBrand(@PathVariable String brandName) {
+    public List<ModelDTO> findAllModelsFromSpecifiedBrand(@PathVariable String brandName) {
         return modelService.findAllModelsFromSpecifiedBrand(brandName);
     }
 

@@ -48,14 +48,12 @@ public class ModelService {
         return new ResponseEntity<>("model inserted!", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<List<ModelDTO>> findAllModelsFromSpecifiedBrand(String brandName) {
-
-        List<ModelDTO> modelList = brandRepository.findModelsByBrandName(brandName.toUpperCase())
-                .stream().map(model -> ModelDTO.builder().name(model.getName()).build())
+    public List<ModelDTO> findAllModelsFromSpecifiedBrand(String brandName) {
+        return brandRepository.findModelsByBrandName(
+                brandName.toUpperCase())
+                .stream()
+                .map(model -> ModelDTO.builder().name(model.getName()).build())
                 .collect(Collectors.toList());
-
-        return new ResponseEntity<>(modelList, HttpStatus.OK);
-
     }
 
     public ResponseEntity<String> deleteModel(String modelName) {

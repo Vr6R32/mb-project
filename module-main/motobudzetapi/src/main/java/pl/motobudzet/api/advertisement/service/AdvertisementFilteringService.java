@@ -1,7 +1,9 @@
 package pl.motobudzet.api.advertisement.service;
 
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +40,7 @@ public class AdvertisementFilteringService {
     private final ModelService modelService;
     private final CityService cityService;
     private final CityStateService cityStateService;
-
+    private final EntityManager entityManager;
 
     public Page<AdvertisementDTO> findAllPublicWithFilters(Integer pageNumber,
                                                            String brand, String model, String fuelType,

@@ -24,11 +24,96 @@ form textarea {
     text-align: center; /* Center-align text inside the form fields */
 }
 
+.ql-editor::-webkit-scrollbar {
+    width: 5px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+    background-color: darkgoldenrod;
+    border-radius: 10px;
+}
+
+.ql-editor::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+#suggestionsList::-webkit-scrollbar {
+    width: 5px; /* Szerokość paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-thumb {
+    background-color: darkgoldenrod; /* Kolor paska przewijania */
+    border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-track {
+    background-color: transparent; /* Kolor tła paska przewijania */
+}
+
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.quill-container {
+    overflow: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.ql-toolbar {
+    margin-bottom: 10px; /* lub inna wartość według preferencji */
+    border-radius: 8px;
+    /*border: 0px solid rgba(255, 255, 255, 0.5);*/
+    border: none !important;
+}
+
+/*.ql-toolbar .ql-picker-label,*/
+/*.ql-toolbar .ql-picker-item,*/
+.ql-toolbar .ql-button {
+    color: #ffffff; /* jaśniejszy szary kolor */
+}
+
+.ql-toolbar .ql-picker-options {
+    background-color: black !important;
+    border: 1px solid white !important;
+}
+
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item {
+    color: white !important;
+}
+
+
+.ql-toolbar .ql-button svg .ql-stroke {
+    stroke: white !important;
+}
+
+.ql-toolbar .ql-button svg .ql-fill {
+    fill: white !important;
+}
+
+.ql-toolbar .ql-button svg *,
+.ql-toolbar .ql-picker-label svg *,
+.ql-toolbar .ql-picker-item svg * {
+    stroke: white !important;
+    fill: white !important;
+}
+.ql-toolbar .ql-button.ql-active svg,
+.ql-toolbar .ql-button:hover svg,
+.ql-toolbar .ql-button svg,
+.ql-toolbar .ql-picker.ql-active .ql-picker-label svg,
+.ql-toolbar .ql-picker.ql-expanded .ql-picker-label svg,
+.ql-toolbar .ql-picker-label svg,
+.ql-toolbar .ql-picker-options .ql-picker-item:hover svg,
+.ql-toolbar .ql-picker-item.ql-selected svg,
+.ql-toolbar .ql-picker-item svg {
+    stroke: white !important;
+    fill: white !important;
+    color: white !important;
+}
+
 
 /* Firefox */
 input[type=number] {

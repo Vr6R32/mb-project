@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
 });
 
-
 function createDialogBox(message){
     if(!document.getElementById('overlayId')){
         const overlay = document.createElement('div');

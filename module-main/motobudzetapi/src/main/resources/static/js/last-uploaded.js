@@ -11,6 +11,11 @@ function createLastUploadedHeader() {
 
     const title = document.createElement('h2');
     title.textContent = 'Ostatnio Dodane';
+    // title.style.textShadow = '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
+    // title.style.textShadow = 'black 0px 0px';
+    title.style.fontSize = '32px';
+    title.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+
 
     // Create the independent title container
     const titleContainer = document.createElement('div');
@@ -32,12 +37,16 @@ function createLastUploadedHeader() {
     const prevPageButton = document.createElement('buttonPrev');
     prevPageButton.textContent = '←';
     prevPageButton.id = 'prevPageButton';
-    prevPageButton.style.fontSize = '54px';
+    prevPageButton.style.fontSize = '72px';
+    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+
 
     const nextPageButton = document.createElement('buttonNext');
     nextPageButton.textContent = '→';
     nextPageButton.id = 'nextPageButton';
-    nextPageButton.style.fontSize = '54px';
+    nextPageButton.style.fontSize = '72px';
+    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+
 
     arrowButtonContainer.appendChild(prevPageButton);
     arrowButtonContainer.appendChild(nextPageButton);

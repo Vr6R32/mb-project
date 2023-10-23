@@ -1,13 +1,20 @@
 let selectedFiles = []; // Store the selected files references in an array
+let descriptionContent;
+let quill;
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    window.onload = function() {
+        window.scrollTo(0, 0);
+    }
 
     createForm();
     fetchBrands();
     fetchSpecifications();
     loadFileDrop();
     fetchUserDetails();
+
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
     });
@@ -15,9 +22,15 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
     });
 });
+document.addEventListener('click', function(event) {
+    let suggestionsList = document.getElementById('suggestionsList');
+    if (!suggestionsList.contains(event.target)) {
+        suggestionsList.style.display = 'none';
+    }
+});
 
 function fetchUserDetails() {
-    fetch("http://localhost:20134/api/user/details")
+    fetch("/api/user/details")
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -25,23 +38,22 @@ function fetchUserDetails() {
             return response.json();
         })
         .then(data => {
-            let citySelect = document.getElementById('city');
-            let cityStateSelect = document.getElementById('cityState');
+            setTimeout(() => { // Dodanie opóźnienia tutaj
+                let cityTextarea = document.getElementById('city');
+                let cityStateSelect = document.getElementById('cityState');
 
-            // Tworzymy nowy element option
-            let optionCity = document.createElement('option');
-            optionCity.value = data.cityName; // Ustawiamy wartość na cityStateName
-            optionCity.textContent = data.cityName; // Ustawiamy tekst widoczny dla użytkownika
+                // Tworzymy nowy element option
+                cityTextarea.value = data.cityName;
 
-            let optionState = document.createElement('option');
-            optionState.value = data.cityStateName; // Ustawiamy wartość na cityStateName
-            optionState.textContent = data.cityStateName; // Ustawiamy tekst widoczny dla użytkownika
+                let optionState = document.createElement('option');
+                optionState.value = data.cityStateName; // Ustawiamy wartość na cityStateName
+                optionState.textContent = data.cityStateName; // Ustawiamy tekst widoczny dla użytkownika
 
-            // Dodajemy nowy element option do elementu select
-            citySelect.appendChild(optionCity);
-            cityStateSelect.appendChild(optionState);
+                // Dodajemy nowy element option do elementu select
+                cityStateSelect.appendChild(optionState);
 
-            console.log(data); // Tutaj masz dostęp do danych z
+                console.log(data); // Tutaj masz dostęp do danych z
+            }, 1000); // 2000ms (2 sekundy) opóźnienia
         })
         .catch(error => {
             console.error("There was a problem with the fetch operation:", error.message);
@@ -63,6 +75,78 @@ function loadFileDrop(){
         e.preventDefault();
     });
 }
+
+function createDescriptionEditor() {
+    let horizontalContainer = document.getElementById('half-container-horizontal');
+    let input = document.createElement('div'); // zamiast 'textarea'
+    input.id = "editor";
+
+    let label = document.createElement('div');
+    label.textContent = 'Opis Ogłoszenia:'
+    label.style.marginTop = '15px';
+    label.style.marginBottom = '15px';
+    label.style.color = 'darkgoldenrod';
+    label.style.width = '1300px';
+    label.style.textAlign = 'center';
+    label.style.fontSize = '18px';
+
+    input.style.scrollbarWidth = 'thin';
+    input.style.scrollbarColor = 'darkgoldenrod transparent';
+    input.style.WebkitScrollbar = 'thin';
+    input.style.WebkitScrollbarTrack = 'transparent';
+    input.style.WebkitScrollbarThumb = 'darkgoldenrod';
+    input.style.WebkitScrollbarThumbHover = 'goldenrod';
+
+
+    // Stylizacja dla textarea
+    input.style.width = '1200px';
+    input.style.maxWidth = '100%';
+    input.style.marginBottom = '10px';
+    input.style.marginLeft = '30px';
+    input.style.marginRight = '30px';
+    input.style.height = '700px';
+    input.style.backgroundColor = 'black';
+    input.style.borderRadius = '10px';
+    // input.style.border = '0px';
+    // input.style.color = 'white';
+    // input.style.textAlign = 'center';
+    input.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
+    input.style.overflowY = 'auto'; // Dodane
+
+    // Dodanie elementów do kontenera
+    horizontalContainer.appendChild(label);
+    horizontalContainer.appendChild(input);
+    horizontalContainer.appendChild(document.createElement('br'));
+
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],
+        // ['blockquote', 'code-block'],
+        [{ 'header': 1 }, { 'header': 2 }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': [] }],
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+        ['clean']
+    ];
+
+    quill = new Quill('#editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow'
+    });
+
+    quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
+    quill.format(0, quill.getLength(), 'color', '#fff');
+
+
+}
+
 function createForm() {
 
     const titleContainer = document.getElementById('title-container-hidden');
@@ -88,7 +172,7 @@ function createForm() {
 
     const formElements = [
         { label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true },
-        { label: 'Opis:', type: 'textarea', id: 'description', name: 'description', required: true },
+        // { label: 'Opis ogłoszenia:', type: 'div', id: 'description', name: 'description', required: true },
         { label: 'Marka:', type: 'select', id: 'brand', name: 'brand', onchange: 'fetchModels(this.value)', required: true },
         { label: 'Model:', type: 'select', id: 'model', name: 'model', required: true },
         { label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true },
@@ -121,7 +205,7 @@ function createForm() {
         { label: 'Data pierwszej rejestracji:', type: 'date', id: 'firstRegistrationDate', name: 'firstRegistrationDate', required: true },
         {
             label: 'Lokalizacja:',
-            type: 'select',
+            type: 'text',
             id: 'city',
             name: 'city',
             required: true,
@@ -171,6 +255,89 @@ function createForm() {
         }
         if (element.type === 'select') {
             input.style.textAlign = 'center';
+        }
+
+
+        if (element.id === 'city') {
+
+            const inputContainer = document.createElement("div");
+            inputContainer.style.position = "relative"; // Ustawiamy pozycję na "relative", aby umożliwić pozycjonowanie względem tego kontenera
+            inputContainer.setAttribute('autocomplete', 'off');
+
+
+            input.style.position = 'relative';
+            input.setAttribute('autocomplete', 'off');
+
+            const suggestionsList = document.createElement('ul');
+
+            suggestionsList.style.right = '25px';
+            suggestionsList.style.top = '45px';
+
+            suggestionsList.id = 'suggestionsList';
+            suggestionsList.setAttribute('autocomplete', 'off');
+            suggestionsList.style.listStyleType = 'none';
+            suggestionsList.style.padding = '0';
+            suggestionsList.style.margin = '0';
+            suggestionsList.style.position = 'absolute';
+            suggestionsList.style.backgroundColor = 'black';
+            suggestionsList.style.color = 'white';
+            suggestionsList.style.border = '1px solid #ccc';
+            suggestionsList.style.borderRadius = '5px';
+            suggestionsList.style.maxHeight = '150px';
+            suggestionsList.style.minWidth = '200px';
+            suggestionsList.style.overflowY = 'auto';
+            suggestionsList.style.display = 'none';
+            suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
+            // suggestionsList.style.marginTop = '200px';
+            // suggestionsList.style.bottom = "-30px";
+            // suggestionsList.style.top = "100%";
+
+            suggestionsList.style.scrollbarWidth = 'thin';
+            suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
+            suggestionsList.style.WebkitScrollbar = 'thin';
+            suggestionsList.style.WebkitScrollbarTrack = 'transparent';
+            suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
+            suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
+
+
+            // Dodaj obsługę kliknięcia na propozycję miasta
+            suggestionsList.addEventListener('click', function (event) {
+                if (event.target && event.target.nodeName === 'LI') {
+                    input.value = event.target.textContent;
+                    suggestionsList.style.display = 'none';
+                }
+            });
+
+            // Dodaj listę propozycji do pola miasta
+            inputContainer.appendChild(input);
+            inputContainer.appendChild(suggestionsList);
+            form.appendChild(inputContainer);
+
+            // Obsługa wprowadzania tekstu w polu miasta
+            let timeoutId;
+            const debounceDelay = 200;
+
+            input.addEventListener("input", function () {
+                // Anuluje poprzednie żądanie, jeśli istnieje
+                clearTimeout(timeoutId);
+
+                // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
+                const partialCityName = input.value;
+
+                // Ustawia nowe opóźnienie
+                timeoutId = setTimeout(function () {
+                    // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
+                    fetch(`/api/cities?partialName=${partialCityName}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
+                            updateCitySuggestions(data); // przekazujemy listę sugestii jako drugi argument
+                        })
+                        .catch(error => {
+                            console.error("Błąd podczas pobierania propozycji miast:", error);
+                        });
+                }, debounceDelay);
+            });
         }
 
 
@@ -228,11 +395,35 @@ function createForm() {
         }
     });
 
+    let horizontalContainer = document.getElementById('half-container-horizontal');
+
+    createDescriptionEditor();
+
     const submitButton = document.createElement('input');
     submitButton.type = 'button';
     submitButton.value = 'Wyślij';
+    submitButton.style.marginBottom = '15px';
     submitButton.onclick = submitFormWithFiles;
-    form.appendChild(submitButton);
+    submitButton.style.backgroundColor = "black";
+    submitButton.style.color = "white";
+    submitButton.style.border = "1px solid darkgoldenrod";
+    submitButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
+    submitButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
+    submitButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    submitButton.style.borderRadius = '15px';
+    submitButton.style.marginRight = '3px';
+
+    submitButton.addEventListener("mouseover", ev => {
+        submitButton.style.boxShadow = '0 0 20px moccasin';
+        }
+    )
+
+
+    submitButton.addEventListener("mouseout", ev => {
+        submitButton.style.boxShadow = 'none';
+        }
+    )
+    horizontalContainer.appendChild(submitButton);
 
     formContainer.appendChild(form);
 
@@ -258,6 +449,38 @@ function createForm() {
 
     photoContainer.appendChild(fileDropArea);
 
+}
+
+function updateCitySuggestions(suggestions) {
+    // Pobierz pole tekstowe i stwórz listę propozycji miast
+    const cityInput = document.getElementById('city');
+    const cityStateInput = document.getElementById('cityState');
+    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
+
+    // Usuń wszystkie istniejące propozycje z listy
+    while (suggestionsList.firstChild) {
+        suggestionsList.removeChild(suggestionsList.firstChild);
+    }
+
+    // Wyświetl nowe propozycje
+    suggestions.forEach(suggestion => {
+        const suggestionItem = document.createElement('li');
+        suggestionItem.textContent = suggestion.cityName;
+        suggestionItem.addEventListener('click', function () {
+            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
+            cityInput.value = suggestion.name;
+            cityStateInput.value = suggestion.cityStateName;
+            suggestionsList.innerHTML = '';
+        });
+        suggestionsList.appendChild(suggestionItem);
+    });
+
+    // Jeśli nie ma propozycji, ukryj listę
+    if (suggestions.length === 0) {
+        suggestionsList.style.display = 'none';
+    } else {
+        suggestionsList.style.display = 'block';
+    }
 }
 
 function fetchBrands() {
@@ -344,9 +567,13 @@ function submitFormWithFiles() {
 }
 
 function submitForm() {
+
+    quill.format(0, quill.getLength(), 'color', '#fff');
+    descriptionContent = quill.container.firstChild.innerHTML;
+
     const formData = {
         name: getValue('name'),
-        description: getValue('description'),
+        description: descriptionContent,
         brand: getValue('brand'),
         model: getValue('model'),
         fuelType: getValue('fuelType'),
@@ -365,6 +592,8 @@ function submitForm() {
         cityState: getValue('cityState'),
         userName: getUserName()
     };
+
+
 
     return fetch('/api/advertisements', {
         method: 'POST',
@@ -450,6 +679,68 @@ function uploadFiles(advertisementId) {
         });
 }
 
+function createDropDeleteZone(){
+    const deleteZone = document.createElement('div');
+    deleteZone.id = 'deleteZone';
+    deleteZone.style.width = '100px';
+    deleteZone.style.height = '100px';
+    deleteZone.style.border = '2px dashed red';
+    deleteZone.style.textAlign = 'center';
+    deleteZone.style.lineHeight = '100px';  // Center the text vertically
+    deleteZone.style.cursor = 'pointer';
+    deleteZone.innerText = 'Drop to delete';
+
+    deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
+    deleteZone.addEventListener('drop', handleDeleteZoneDrop);
+    deleteZone.addEventListener('mouseover', function() {
+        this.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+    });
+    deleteZone.addEventListener('mouseout', function() {
+        this.style.backgroundColor = '';
+    });
+
+    let thumbnailzone = document.getElementById('half-container-big2');
+
+    thumbnailzone.appendChild(deleteZone);
+}
+
+function handleDeleteZoneDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+}
+
+function handleDeleteZoneDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+
+    if (dragSrcElement) {
+        // Określ indeks miniaturki, która została przeciągnięta
+        const thumbnailsContainer = document.getElementById('thumbnails');
+        const thumbnails = thumbnailsContainer.getElementsByClassName('thumbnail');
+        const sourceIndex = Array.from(thumbnails).indexOf(dragSrcElement);
+
+        console.log("Source Index:", sourceIndex); // Dodajemy debugowanie
+        // console.log("Dragged Element:", dragSrcElement); // Wyświetlamy przeciągnięty element
+
+        // Usuń miniaturkę z DOM
+        dragSrcElement.remove();
+
+        // Usuń odpowiadający jej plik z selectedFiles
+        if (sourceIndex > -1) {
+            selectedFiles.splice(sourceIndex, 1);
+        } else {
+            console.warn("Could not find the dragged thumbnail in the list.");
+        }
+
+        dragSrcElement = null; // Resetuj źródłowy element przeciągania
+    }
+
+    return false;
+}
 
 function handleFileDrop(e) {
     e.preventDefault();
@@ -523,6 +814,10 @@ async function showThumbnails(files) {
     const maxThumbnails = 15;
     const numThumbnailsToShow = Math.min(files.length, maxThumbnails);
 
+    if(files.length > 1){
+        createDropDeleteZone(files);
+    }
+
     for (let i = 0; i < numThumbnailsToShow; i++) {
         const file = files[i];
         const thumbnailElement = document.createElement('img');
@@ -562,6 +857,8 @@ function handleDragStart(e) {
     e.dataTransfer.setData('text/html', this.innerHTML);
 }
 
+
+
 function handleDragOver(e) {
     if (e.preventDefault) {
         e.preventDefault();
@@ -597,10 +894,25 @@ function handleDrop(e) {
 
         }
 
+        if(targetIndex > sourceIndex){
+            // Swap the positions of the two dragged thumbnails only
+            thumbnailsContainer.insertBefore(dragSrcElement, thumbnails[targetIndex].nextSibling);
+            thumbnailsContainer.insertBefore(this, dragSrcElement);
+
+            // Update the selectedFiles array to reflect the new order of files
+            const filesCopy = selectedFiles.slice();
+            const movedFileSource = filesCopy[sourceIndex];
+            filesCopy[sourceIndex] = filesCopy[targetIndex];
+            filesCopy[targetIndex] = movedFileSource;
+
+            selectedFiles = filesCopy;
+        }
+
     }
 
     return false;
 }
+
 
 
 function resetFileDropArea() {

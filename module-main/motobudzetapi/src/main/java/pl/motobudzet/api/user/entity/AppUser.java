@@ -13,6 +13,7 @@ import pl.motobudzet.api.locationState.entity.CityState;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.security.service.UserDetailsServiceImpl.mapRolesToAuthorities;
@@ -49,7 +50,7 @@ public class AppUser implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id")
     )
-    private List<Advertisement> advertisements;
+    private Set<Advertisement> advertisements;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_role_mapping",

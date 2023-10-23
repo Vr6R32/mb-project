@@ -1,11 +1,15 @@
 package pl.motobudzet.api.advertisement.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
@@ -26,10 +30,7 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PublicAdvertisementService {
 
-    public static final int PAGE_SIZE = 3;
+    public static final int PAGE_SIZE = 10;
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "creationTime");
     private final AdvertisementRepository advertisementRepository;
     private final SpecificationService specificationService;
@@ -46,6 +47,7 @@ public class PublicAdvertisementService {
     private final AppUserCustomService userCustomService;
     private final CityService cityService;
     private final CityStateService cityStateService;
+    private final EntityManager entityManager;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList){
         if (username.equals(loggedUser)){
@@ -63,6 +65,24 @@ public class PublicAdvertisementService {
     }
 
     public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
+
+
+//        String jpql =
+//                "SELECT a FROM Advertisement a " +
+//                "LEFT JOIN FETCH a.imageUrls " +
+//                "LEFT JOIN FETCH a.brand b " +
+//                "LEFT JOIN FETCH a.model m " +
+//                "LEFT JOIN FETCH a.driveType d " +
+//                "LEFT JOIN FETCH a.engineType e " +
+//                "LEFT JOIN FETCH a.fuelType f " +
+//                "LEFT JOIN FETCH a.user u " +
+//                "LEFT JOIN FETCH a.transmissionType t " +
+//                "left join fetch a.city ac " +
+//                "left join fetch ac.cityState acs " +
+//                "where a.isVerified = true";
+//        TypedQuery<Advertisement> query = entityManager.createQuery(jpql, Advertisement.class);
+//        query.setMaxResults(12);
+//        return query.getResultList().stream().map(advertisement -> mapToAdvertisementDTO(advertisement,false)).toList();
 
         Specification<Advertisement> isVerifiedSpecification = (root, query, cb) -> cb.equal(root.get("isVerified"), true);
         Specification<Advertisement> specification = Specification.where(isVerifiedSpecification);
@@ -127,10 +147,11 @@ public class PublicAdvertisementService {
 
     private void insertAdvertisementIntoUser(Advertisement advertisement, AppUser user) {
         if (user.getAdvertisements() == null) {
-            user.setAdvertisements(List.of(advertisement));
+            user.setAdvertisements(Set.of(advertisement));
         } else {
-            List<Advertisement> advertisements = user.getAdvertisements();
+            Set<Advertisement> advertisements = user.getAdvertisements();
             advertisements.add(advertisement);
+            advertisement.setUser(user);
         }
     }
 
@@ -176,6 +197,7 @@ public class PublicAdvertisementService {
                 .transmissionType(adv.getTransmissionType().getName())
                 .user(adv.getUser().getUsername())
                 .city(adv.getCity().getName())
+                .cityState(adv.getCity().getCityState().getName())
                 .mileage(adv.getMileage())
                 .mileageUnit(String.valueOf(adv.getMileageUnit()))
                 .price(adv.getPrice())
@@ -226,5 +248,31 @@ public class PublicAdvertisementService {
 
     public int insertPhotoToAdvertisement(UUID id, String fileName) {
         return advertisementRepository.insertNewPhoto(id, fileName);
+    }
+    @Modifying
+    @Transactional
+    public int insertNewPhotos(UUID id, List<String> names) {
+        String baseQuery = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES ";
+        List<Object[]> params = new ArrayList<>();
+
+        StringBuilder values = new StringBuilder();
+        for (String name : names) {
+            values.append("(?, ?),");
+            params.add(new Object[]{id, name});
+        }
+
+        // Usuń ostatni przecinek
+        if (values.length() > 0) {
+            values.setLength(values.length() - 1);
+        }
+
+        Query query = entityManager.createNativeQuery(baseQuery + values.toString());
+        for (int i = 0; i < params.size(); i++) {
+            Object[] paramSet = params.get(i);
+            query.setParameter((i * 2) + 1, paramSet[0]);
+            query.setParameter((i * 2) + 2, paramSet[1]);
+        }
+
+        return query.executeUpdate();
     }
 }

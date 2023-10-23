@@ -19,10 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -41,7 +39,8 @@ public class PublicAdvertisementImageService {
     public ResponseEntity<String> uploadAndProcessImagesWithLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
-        int rowAffected = 0;
+        List<String> fileNames = new ArrayList<>();
+
 
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
@@ -54,11 +53,16 @@ public class PublicAdvertisementImageService {
 
             String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
 
-            int inserted = processAndSaveImageWithLogo(file, fileName, advertisement);
+            String processedFile = processAndSaveImageWithLogo(file, fileName, advertisement);
 
-            rowAffected += inserted;
+            fileNames.add(processedFile);
+//            rowAffected += inserted;
 
         }
+
+//        advertisementService.insertPhotoToAdvertisement(advertisement.getId(), fileName);
+
+        int rowAffected = advertisementService.insertNewPhotos(UUID.fromString(advertisementId), fileNames);
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         if (rowAffected > 0) {
@@ -68,7 +72,7 @@ public class PublicAdvertisementImageService {
         }
     }
 
-    private int processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
+    private String processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
 
         try {
@@ -136,7 +140,7 @@ public class PublicAdvertisementImageService {
                 advertisement.setMainPhotoUrl(fileName);
                 advertisementService.saveAdvertisement(advertisement);
             }
-            return advertisementService.insertPhotoToAdvertisement(advertisement.getId(), fileName);
+            return fileName;
         } catch (IOException e) {
             throw new RuntimeException("Failed to save the file.", e);
         }

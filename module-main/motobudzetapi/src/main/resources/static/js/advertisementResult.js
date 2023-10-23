@@ -150,6 +150,24 @@ function createAdvertisementResultDiv(mainContainer,advertisement) {
     resultDiv.appendChild(advertisementDetailsDiv);
 
     mainContainer.appendChild(resultDiv);
+
+
+    let descriptionContainer = document.createElement('div');
+    let descriptionElement = document.createElement('div');
+    descriptionElement.innerHTML = advertisement.description;
+    descriptionContainer.appendChild(descriptionElement);
+
+    let descContainer = document.createElement('div');
+    descContainer.className = "ql-editor";
+    descContainer.style.width = '1400px';
+    descContainer.style.maxWidth = '100%';
+    descContainer.style.margin = '0 auto'; // Wyśrodkowanie w poziomie
+
+
+    descContainer.style.backgroundColor = 'black';
+    descContainer.appendChild(descriptionContainer);
+
+    document.body.appendChild(descContainer);
     return resultDiv;
 }
 

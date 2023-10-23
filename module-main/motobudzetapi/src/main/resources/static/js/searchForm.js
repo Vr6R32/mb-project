@@ -523,7 +523,7 @@ function displayResults(data) {
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "200px";
-        resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 0.9)';
+        resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 1)';
         // resultDiv.style.backgroundColor = "#000000";
         // resultDiv.style.backgroundColor = "#181818";
         // adDiv.style.backgroundColor = "black";
@@ -559,7 +559,7 @@ function displayResults(data) {
         const photoElement = document.createElement("img");
         photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
-        photoElement.style.backgroundColor = 'rgba(0, 0, 0, 0.9)'
+        photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
         let maxPhotoWidth = 300;
         photoElement.style.objectFit = "cover";
         photoElement.onload = () => {
@@ -687,6 +687,23 @@ function displayResults(data) {
         productionYear.style.color = 'darkgoldenrod';
         productionYear.textContent = 'ROK';
 
+        const locationDetails = document.createElement("div");
+        locationDetails.textContent = ad.city + ', ' + ad.cityState;
+        locationDetails.style.color = "white"; // Dostosuj kolor tekstu
+        locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+        locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
+        locationDetails.style.bottom = '-40px'; // Dostosuj rozmiar tekstu
+        locationDetails.style.textAlign = 'left';
+        locationDetails.style.marginRight = '15px';
+        locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
+        locationDetails.style.display = 'flex'; // Ustawienie flexbox
+        locationDetails.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
+        locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        locationDetails.style.boxSizing = "border-box";
+        locationDetails.style.flexBasis = "auto";
+
+
 
         function formatPrice(price) {
             // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
@@ -749,6 +766,11 @@ function displayResults(data) {
 
         conversationDetailsDiv.appendChild(conversationDetailsHeader);
         conversationDetailsDiv.appendChild(conversationDetailsMain);
+
+
+
+        conversationDetailsDiv.appendChild(locationDetails);
+
 
         resultDiv.appendChild(conversationDetailsDiv);
 
@@ -925,6 +947,7 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
         // Set the new page number in the formData
         formData.set("pageNumber", pageNumber);
 
+
         if (sortOrder == null) {
             sortOrder = "asc";
             sortBy = "price";
@@ -935,6 +958,13 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
         formData.set("sortOrder", sortOrder);
         // Call the search function with updated data
         executeSearch(formData);
+        setTimeout(function() {
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }, 500);
     });
     return button;
 }

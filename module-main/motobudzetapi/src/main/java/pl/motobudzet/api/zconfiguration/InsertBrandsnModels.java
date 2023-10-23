@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 @AllArgsConstructor
@@ -271,8 +272,8 @@ public class InsertBrandsnModels {
                 .build();
 
 
-        admin.setAdvertisements(List.of(ad1,ad2,ad3));
-        user.setAdvertisements(List.of(ad4,ad5,ad6));
+        admin.setAdvertisements(Set.of(ad1,ad2,ad3));
+        user.setAdvertisements(Set.of(ad4,ad5,ad6));
 
         userRepository.save(admin);
         userRepository.save(user);
