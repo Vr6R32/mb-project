@@ -3,8 +3,8 @@ let isMouseOverMessageIcon = false; // Zmienna flagi
 let advertisement = null;
 let currentPhotoIndex = 0;
 document.addEventListener("DOMContentLoaded", function () {
-        extractAdvertisementId();
-        fetchAdvertisement();
+    extractAdvertisementId();
+    fetchAdvertisement();
 });
 
 function extractAdvertisementId() {
@@ -17,41 +17,40 @@ function extractAdvertisementId() {
 //     return urlParts[urlParts.length - 1];
 // }
 
-function createHeaderTitle(advertisement,container,owner) {
+function createHeaderTitle(advertisement, container, owner) {
 
-        let loggedUser = document.getElementById('username').textContent;
-
-
-
-        const titleContainer = document.createElement('div');
-        titleContainer.setAttribute('id', 'titleDiv');
-        titleContainer.classList.add('title-container');
-        titleContainer.style.color = 'darkgoldenrod';
-        titleContainer.style.textAlign = 'center'
-        titleContainer.style.marginTop = '-30px'; // Przesunięcie o 10 pikseli w górę
+    let loggedUser = document.getElementById('username').textContent;
 
 
-        const titleDiv = document.createElement('div');
-        titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
-        titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
-        titleDiv.style.backgroundColor = 'rgba(0,0,0, 0.9)'
+    const titleContainer = document.createElement('div');
+    titleContainer.setAttribute('id', 'titleDiv');
+    titleContainer.classList.add('title-container');
+    titleContainer.style.color = 'darkgoldenrod';
+    titleContainer.style.textAlign = 'center'
+    titleContainer.style.marginTop = '-30px'; // Przesunięcie o 10 pikseli w górę
 
-        titleContainer.appendChild(titleDiv);
 
-        const titleMidColumn = document.createElement('h2');
-        titleMidColumn.style.gridColumn = '2';
-        titleMidColumn.textContent = advertisement.name;
-        titleMidColumn.style.fontSize = '32px';
-        titleMidColumn.style.fontWeight = 'bold';
+    const titleDiv = document.createElement('div');
+    titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
+    titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
+    titleDiv.style.backgroundColor = 'rgba(0,0,0, 0.9)'
 
-        const titleRightColumn = document.createElement('h2');
-        titleRightColumn.style.gridColumn = '3';
-        titleRightColumn.style.justifyContent = 'space-between';
+    titleContainer.appendChild(titleDiv);
 
-        const heartIcon = document.createElement('img');
-        heartIcon.setAttribute('id', 'hearticon');
-        heartIcon.alt = 'HeartIcon';
-        updateHeartIconSrc(loggedUser,heartIcon);
+    const titleMidColumn = document.createElement('h2');
+    titleMidColumn.style.gridColumn = '2';
+    titleMidColumn.textContent = advertisement.name;
+    titleMidColumn.style.fontSize = '32px';
+    titleMidColumn.style.fontWeight = 'bold';
+
+    const titleRightColumn = document.createElement('h2');
+    titleRightColumn.style.gridColumn = '3';
+    titleRightColumn.style.justifyContent = 'space-between';
+
+    const heartIcon = document.createElement('img');
+    heartIcon.setAttribute('id', 'hearticon');
+    heartIcon.alt = 'HeartIcon';
+    updateHeartIconSrc(loggedUser, heartIcon);
 
 
     heartIcon.addEventListener('click', () => {
@@ -62,7 +61,7 @@ function createHeaderTitle(advertisement,container,owner) {
             headers: {
                 'Content-Type': 'application/json', // Ustaw nagłówek na JSON, jeśli wymagane
             },
-            body: JSON.stringify({ userName: loggedUser, advertisementId: advertisementId }),
+            body: JSON.stringify({userName: loggedUser, advertisementId: advertisementId}),
 
         })
             .then(response => {
@@ -83,44 +82,78 @@ function createHeaderTitle(advertisement,container,owner) {
             });
     });
 
-        const messageIcon = document.createElement('img');
-        messageIcon.setAttribute('id', 'msgicon');
-        messageIcon.src = '/api/resources/messageClosed';
-        messageIcon.alt = 'MessageIcon';
-        messageIcon.style.marginBottom = '3px';
-        messageIcon.style.marginRight = '15px';
+    const messageIcon = document.createElement('img');
+    messageIcon.setAttribute('id', 'msgicon');
+    messageIcon.src = '/api/resources/messageClosed';
+    messageIcon.alt = 'MessageIcon';
+    messageIcon.style.marginBottom = '3px';
+    messageIcon.style.marginRight = '15px';
 
 
-        messageIcon.addEventListener('mouseenter', () => {
-                if (!isMouseOverMessageIcon) {
-                        messageIcon.src = '/api/resources/messageOpen';
-                        messageIcon.style.cursor = 'pointer';
-                }
-        });
-
-        messageIcon.addEventListener('mouseleave', () => {
-                if (!isMouseOverMessageIcon) {
-                        messageIcon.src = '/api/resources/messageClosed';
-                        messageIcon.style.cursor = 'auto';
-                }
-        });
-
-        messageIcon.addEventListener('click', () => {
-                createMessageBox(messageIcon,loggedUser);
-                isMouseOverMessageIcon = true; // Zablokuj działanie mouseleave
-                messageIcon.src = '/api/resources/messageOpen';
-        });
-
-
-
-        if (loggedUser!==owner){
-            titleRightColumn.appendChild(messageIcon);
-            titleRightColumn.appendChild(heartIcon);
+    messageIcon.addEventListener('mouseenter', () => {
+        if (!isMouseOverMessageIcon) {
+            messageIcon.src = '/api/resources/messageOpen';
+            messageIcon.style.cursor = 'pointer';
         }
+    });
 
-        titleDiv.appendChild(titleMidColumn);
-        titleDiv.appendChild(titleRightColumn);
-        container.appendChild(titleContainer);
+    messageIcon.addEventListener('mouseleave', () => {
+        if (!isMouseOverMessageIcon) {
+            messageIcon.src = '/api/resources/messageClosed';
+            messageIcon.style.cursor = 'auto';
+        }
+    });
+
+    messageIcon.addEventListener('click', () => {
+        createMessageBox(messageIcon, loggedUser);
+        isMouseOverMessageIcon = true; // Zablokuj działanie mouseleave
+        messageIcon.src = '/api/resources/messageOpen';
+    });
+
+    const editIcon = document.createElement('img');
+    editIcon.setAttribute('id', 'editIcon');
+    editIcon.src = '/api/resources/editIcon';
+    editIcon.alt = 'editIcon';
+    editIcon.style.marginBottom = '3px';
+    editIcon.style.marginRight = '15px';
+
+    // Tworzenie elementu podpowiedzi
+    const tooltip = document.createElement('span');
+    tooltip.textContent = 'Edytuj Ogłoszenie';
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);  // Dodanie podpowiedzi do dokumentu
+
+    // Wyświetlanie podpowiedzi po najechaniu
+    editIcon.addEventListener('mouseenter', (event) => {
+        tooltip.style.display = 'block';
+        tooltip.style.left = (event.pageX + 20) + 'px';
+        tooltip.style.top = (event.pageY + 20) + 'px';
+        editIcon.style.cursor = 'pointer';
+    });
+
+    editIcon.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+    });
+
+    editIcon.addEventListener('mouseenter', () => {
+        editIcon.style.cursor = 'pointer';
+    });
+
+    editIcon.addEventListener('click', () => {
+        window.location.href = `/advertisement/edit?advertisementId=${advertisementId}`;
+    });
+
+
+    if (loggedUser !== owner) {
+        titleRightColumn.appendChild(messageIcon);
+        titleRightColumn.appendChild(heartIcon);
+    } else {
+        titleRightColumn.appendChild(editIcon);
+    }
+
+    titleDiv.appendChild(titleMidColumn);
+    titleDiv.appendChild(titleRightColumn);
+    container.appendChild(titleContainer);
 }
 
 
@@ -155,119 +188,118 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
 }
 
 
+function createMessageBox(messageIcon, loggedUser) {
 
 
-function createMessageBox(messageIcon,loggedUser) {
+    // Stwórz overlay, czyli zaciemnione tło
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
 
+    // Stwórz okno dialogowe
+    const dialogBox = document.createElement('div');
+    dialogBox.setAttribute('id', 'dialogBox')
+    dialogBox.style.position = 'fixed';
+    dialogBox.style.top = '50%';
+    dialogBox.style.left = '50%';
+    dialogBox.style.height = '250px';
+    dialogBox.style.width = '600px';
+    dialogBox.style.transform = 'translate(-50%, -50%)';
+    dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+    // dialogBox.style.backgroundColor = '#181818';
+    dialogBox.style.borderRadius = '15px';
+    dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
+    dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
+    dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
+    dialogBox.style.display = 'flex';
+    dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
 
-        // Stwórz overlay, czyli zaciemnione tło
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+    const headerTitle = document.createElement('dialogBox');
+    headerTitle.setAttribute('id', 'dialogBoxTitle');
+    headerTitle.textContent = 'Napisz wiadomość do sprzedającego';
+    headerTitle.style.color = 'darkgoldenrod';
+    headerTitle.style.fontSize = '32px';
+    headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
+    headerTitle.style.marginTop = '15px'
+    // headerTitle.style.marginBottom = '15px'
 
-        // Stwórz okno dialogowe
-        const dialogBox = document.createElement('div');
-        dialogBox.setAttribute('id','dialogBox')
-        dialogBox.style.position = 'fixed';
-        dialogBox.style.top = '50%';
-        dialogBox.style.left = '50%';
-        dialogBox.style.height = '250px';
-        dialogBox.style.width = '600px';
-        dialogBox.style.transform = 'translate(-50%, -50%)';
-        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
-        // dialogBox.style.backgroundColor = '#181818';
-        dialogBox.style.borderRadius = '15px';
-        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
-        dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
-        dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-        dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
-        dialogBox.style.display = 'flex';
-        dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
+    // Stwórz obszar tekstowy
+    const textArea = document.createElement('textarea');
+    // textArea.style.backgroundColor = '#181818';
+    textArea.style.backgroundColor = 'transparent'; // Czarny kolor z przeźroczystością
 
-        const headerTitle = document.createElement('dialogBox');
-        headerTitle.setAttribute('id', 'dialogBoxTitle');
-        headerTitle.textContent = 'Napisz wiadomość do sprzedającego';
-        headerTitle.style.color = 'darkgoldenrod';
-        headerTitle.style.fontSize = '32px';
-        headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
-        headerTitle.style.marginTop = '15px'
-        // headerTitle.style.marginBottom = '15px'
+    textArea.style.color = 'white';
+    textArea.style.borderRadius = '10px';
+    textArea.style.width = '100%';
+    textArea.style.height = '100px';
+    textArea.style.width = '500px';
+    textArea.style.resize = 'none';
 
-        // Stwórz obszar tekstowy
-        const textArea = document.createElement('textarea');
-        // textArea.style.backgroundColor = '#181818';
-        textArea.style.backgroundColor = 'transparent'; // Czarny kolor z przeźroczystością
+    const sendButton = document.createElement("button");
+    // settingsButton.setAttribute('id', 'menuPanelButton');
+    sendButton.textContent = 'Wyślij';
+    sendButton.style.backgroundColor = "darkgoldenrod";
+    sendButton.style.border = "none";
+    sendButton.style.marginBottom = "20px";
+    sendButton.style.width = "150px";
+    sendButton.style.color = "black";
+    sendButton.style.marginTop = "20px";
+    sendButton.style.padding = "10px 20px";
+    sendButton.style.borderRadius = "5px";
+    sendButton.style.boxShadow = "0 0 20px darkgoldenrod";
+    sendButton.style.transition = "background-position 0.3s ease-in-out";
 
-        textArea.style.color = 'white';
-        textArea.style.borderRadius = '10px';
-        textArea.style.width = '100%';
-        textArea.style.height = '100px';
-        textArea.style.width = '500px';
-        textArea.style.resize = 'none';
+    sendButton.addEventListener("mouseover", function () {
+        sendButton.style.boxShadow = '0 0 20px moccasin';
+        sendButton.style.color = "white";
+    });
 
-        const sendButton = document.createElement("button");
-        // settingsButton.setAttribute('id', 'menuPanelButton');
-        sendButton.textContent = 'Wyślij';
-        sendButton.style.backgroundColor = "darkgoldenrod";
-        sendButton.style.border = "none";
-        sendButton.style.marginBottom = "20px";
-        sendButton.style.width = "150px";
+    sendButton.addEventListener("mouseout", function () {
+        sendButton.style.boxShadow = '0 0 20px darkgoldenrod';
         sendButton.style.color = "black";
-        sendButton.style.marginTop = "20px";
-        sendButton.style.padding = "10px 20px";
-        sendButton.style.borderRadius = "5px";
-        sendButton.style.boxShadow = "0 0 20px darkgoldenrod";
-        sendButton.style.transition = "background-position 0.3s ease-in-out";
-
-        sendButton.addEventListener("mouseover", function () {
-                sendButton.style.boxShadow = '0 0 20px moccasin';
-                sendButton.style.color = "white";
-        });
-
-        sendButton.addEventListener("mouseout", function () {
-                sendButton.style.boxShadow = '0 0 20px darkgoldenrod';
-                sendButton.style.color = "black";
-        });
-        sendButton.addEventListener("click", function () {
-                checkConversationId(textArea.value);
-        });
-        textArea.addEventListener("keydown", function (event) {
+    });
+    sendButton.addEventListener("click", function () {
+        checkConversationId(textArea.value);
+    });
+    textArea.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
             checkConversationId(textArea.value);
         }
     });
 
-        if(loggedUser === 'KONTO'){
-            headerTitle.textContent = 'Musisz się zalogować !';
-            dialogBox.appendChild(headerTitle);
-         } else {
-            dialogBox.appendChild(headerTitle);
-            dialogBox.appendChild(textArea);
-            dialogBox.appendChild(sendButton);
+    if (loggedUser === 'KONTO') {
+        headerTitle.textContent = 'Musisz się zalogować !';
+        dialogBox.appendChild(headerTitle);
+    } else {
+        dialogBox.appendChild(headerTitle);
+        dialogBox.appendChild(textArea);
+        dialogBox.appendChild(sendButton);
+    }
+    // Dodaj okno dialogowe do overlay
+    overlay.appendChild(dialogBox);
+
+    // Dodaj overlay do dokumentu
+    document.body.appendChild(overlay);
+
+    textArea.focus();
+
+
+    // Dodaj obsługę zdarzenia do zamknięcia okna dialogowego
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
+            isMouseOverMessageIcon = false; // Odblokuj działanie mouseleave
+            messageIcon.src = '/api/resources/messageClosed';
         }
-        // Dodaj okno dialogowe do overlay
-        overlay.appendChild(dialogBox);
-
-        // Dodaj overlay do dokumentu
-        document.body.appendChild(overlay);
-
-        textArea.focus();
-
-
-        // Dodaj obsługę zdarzenia do zamknięcia okna dialogowego
-        overlay.addEventListener('click', (event) => {
-                if (event.target === overlay) {
-                        document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
-                        isMouseOverMessageIcon = false; // Odblokuj działanie mouseleave
-                        messageIcon.src = '/api/resources/messageClosed';
-                }
-        });
+    });
 }
+
 function sendNewMessage(messageValue, advertisementId, conversationId) {
     // Stwórz obiekt FormData z danymi formularza
     const formData = new FormData();
@@ -364,41 +396,40 @@ function checkConversationId(messageValue) {
 }
 
 
-
-
-function fetchAdvertisement(){
-        fetch('/api/advertisements/' + advertisementId)
-            .then(response => response.json())
-            .then(data => {
-                    const container = document.getElementById('container-main');
-                    // container.style.width = '1050px';
-                    advertisement = data; // Używamy pojedynczego obiektu, nie listy
-                    createHeaderTitle(advertisement,container,advertisement.user);
-                    createAdvertisementResultDiv(container,advertisement);
-            })
-            .catch(error => {
-                    console.error('Błąd pobierania danych:', error);
-            });
+function fetchAdvertisement() {
+    fetch('/api/advertisements/' + advertisementId)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('container-main');
+            // container.style.width = '1050px';
+            advertisement = data; // Używamy pojedynczego obiektu, nie listy
+            createHeaderTitle(advertisement, container, advertisement.user);
+            createAdvertisementResultDiv(container, advertisement);
+        })
+        .catch(error => {
+            console.error('Błąd pobierania danych:', error);
+        });
 }
 
-function previousPhoto(mainPhoto)  {
+function previousPhoto(mainPhoto) {
     if (currentPhotoIndex > 0) {
         currentPhotoIndex--;
     } else {
         currentPhotoIndex = advertisement.urlList.length - 1;
     }
-    changePhoto(currentPhotoIndex,mainPhoto);
+    changePhoto(currentPhotoIndex, mainPhoto);
 }
 
-function nextPhoto(mainPhoto)  {
+function nextPhoto(mainPhoto) {
     if (currentPhotoIndex < advertisement.urlList.length - 1) {
         currentPhotoIndex++;
     } else {
         currentPhotoIndex = 0;
     }
-    changePhoto(currentPhotoIndex,mainPhoto);
+    changePhoto(currentPhotoIndex, mainPhoto);
 }
-function changePhoto(index,mainPhoto) {
+
+function changePhoto(index, mainPhoto) {
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
 

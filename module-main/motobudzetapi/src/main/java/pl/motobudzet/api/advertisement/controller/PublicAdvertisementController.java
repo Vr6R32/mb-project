@@ -43,9 +43,11 @@ public class PublicAdvertisementController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public String editExistingAdvertisement(@PathVariable String id,
-                                            @RequestBody @Valid AdvertisementCreateRequest request) {
-        return publicAdvertisementService.editExistingAdvertisement(id, request);
+    public ResponseEntity<String> editExistingAdvertisement(@PathVariable String id,
+                                                            @RequestBody @Valid AdvertisementCreateRequest request,
+                                                            HttpServletRequest httpServletRequest) {
+        String user = httpServletRequest.getUserPrincipal().getName();
+        return publicAdvertisementService.editExistingAdvertisement(id, request, user);
     }
     @GetMapping(value = "user/{username}")
     public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username, Principal principal){

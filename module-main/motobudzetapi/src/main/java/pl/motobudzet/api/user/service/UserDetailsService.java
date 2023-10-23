@@ -3,15 +3,13 @@ package pl.motobudzet.api.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import pl.motobudzet.api.user.dto.AppUserDTO;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.repository.AppUserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserCredentialsService {
+public class UserDetailsService {
 
     private final AppUserRepository userRepository;
     public AppUserDTO getUserDetails(String userName) {

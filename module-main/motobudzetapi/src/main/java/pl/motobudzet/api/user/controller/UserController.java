@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.user.dto.AppUserDTO;
-import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.RegistrationService;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
-import pl.motobudzet.api.user.service.UserCredentialsService;
+import pl.motobudzet.api.user.service.UserDetailsService;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +17,7 @@ import pl.motobudzet.api.user.service.UserCredentialsService;
 public class UserController {
 
     private final RegistrationService registrationService;
-    private final UserCredentialsService userCredentialsService;
+    private final UserDetailsService userDetailsService;
 
     @PostMapping
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request) {
@@ -31,6 +30,6 @@ public class UserController {
     @GetMapping("details")
     public AppUserDTO getUserDetails(HttpServletRequest request){
         String userName = request.getUserPrincipal().getName();
-        return userCredentialsService.getUserDetails(userName);
+        return userDetailsService.getUserDetails(userName);
     }
 }

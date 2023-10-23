@@ -89,6 +89,8 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.engineType e " +
             "LEFT JOIN FETCH a.fuelType f " +
             "LEFT JOIN FETCH a.user u " +
+            "LEFT JOIN FETCH a.city c " +
+            "LEFT JOIN FETCH a.city.cityState cs " +
             "LEFT JOIN FETCH a.transmissionType t WHERE a.id = :uuid")
     Optional<Advertisement> findOneByIdWithFetch(UUID uuid);
 

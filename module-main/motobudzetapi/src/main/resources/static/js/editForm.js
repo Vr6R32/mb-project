@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchBrands();
     fetchSpecifications();
     loadFileDrop();
-    fetchUserDetails();
 
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -29,36 +28,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-function fetchUserDetails() {
-    fetch("/api/user/details")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            setTimeout(() => { // Dodanie opóźnienia tutaj
-                let cityTextarea = document.getElementById('city');
-                let cityStateSelect = document.getElementById('cityState');
-
-                // Tworzymy nowy element option
-                cityTextarea.value = data.cityName;
-
-                let optionState = document.createElement('option');
-                optionState.value = data.cityStateName; // Ustawiamy wartość na cityStateName
-                optionState.textContent = data.cityStateName; // Ustawiamy tekst widoczny dla użytkownika
-
-                // Dodajemy nowy element option do elementu select
-                cityStateSelect.appendChild(optionState);
-
-                console.log(data); // Tutaj masz dostęp do danych z
-            }, 1000); // 2000ms (2 sekundy) opóźnienia
-        })
-        .catch(error => {
-            console.error("There was a problem with the fetch operation:", error.message);
-        });
-}
 
 
 function getUserName(){
@@ -180,7 +149,7 @@ function createForm() {
     titleContainer.style.textAlign = 'center';
 
     const title = document.createElement('h2');
-    title.textContent = 'Dodaj Nowe Ogłoszenie';
+    title.textContent = 'Edytuj swoje ogłoszenie';
     titleContainer.appendChild(title);
 
 
@@ -447,7 +416,7 @@ function createForm() {
 
     const submitButton = document.createElement('input');
     submitButton.type = 'button';
-    submitButton.value = 'Wyślij';
+    submitButton.value = 'Zapisz';
     submitButton.style.marginBottom = '15px';
     submitButton.onclick = submitFormWithFiles;
     submitButton.style.backgroundColor = "black";
@@ -497,18 +466,45 @@ function createForm() {
 
     fetchAdvertisementDetails()
         .then(userData => {
-            populateFormData(userData); // use the returned userData to populate the form
+            setTimeout(() => {
+                populateFormData(userData);
+                showExistingThumbnails(userData.urlList)
+            }, 200);
         });
 
 }
 
+async function showExistingThumbnails(filenames) {
+    if (filenames && filenames.length) {
+        const imagePromises = filenames.map(filename => fetchImageFromFilename(filename));
+        const images = await Promise.all(imagePromises);
+        showThumbnails(images);
+    }
+}
+function fetchImageFromFilename(filename) {
+    return fetch(`/api/resources/advertisementPhoto/${filename}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image for filename: ${filename}`);
+            }
+            return response.blob();
+        })
+        .catch(error => {
+            console.error("Error fetching image:", error);
+            return null; // or handle this error more gracefully
+        });
+}
+
+
 function populateFormData(data) {
     // Here, you can populate each field in your form using the data
     document.getElementById('name').value = data.name || '';
-    document.getElementById('fuelType').value = data.fuelType || '';
-    document.getElementById('driveType').value = data.driveType || '';
-    document.getElementById('engineType').value = data.engineType || '';
-    document.getElementById('transmissionType').value = data.transmissionType || '';
+    setSelectedOption(document.getElementById('fuelType'), data.fuelType);
+    setSelectedOption(document.getElementById('driveType'), data.driveType);
+    setSelectedOption(document.getElementById('engineType'), data.engineType);
+    setSelectedOption(document.getElementById('transmissionType'), data.transmissionType);
+    document.getElementById('city').value = data.city || '';
+    setSelectedOption(document.getElementById('cityState'), data.cityState);
     document.getElementById('mileage').value = data.mileage || '';
     document.getElementById('price').value = data.price || '';
     document.getElementById('engineCapacity').value = data.engineCapacity || '';
@@ -535,6 +531,28 @@ function populateFormData(data) {
         }
     });
 }
+
+function setSelectedOption(selectElement, value) {
+    Array.from(selectElement.options).forEach(option => {
+        if (option.value === value) {
+            option.selected = true;
+        } else {
+            option.selected = false;
+        }
+    });
+}
+
+// function setSelectedOption(selectElement, value) {
+//     setTimeout(() => {
+//         Array.from(selectElement.options).forEach(option => {
+//             if (option.value === value) {
+//                 option.selected = true;
+//             } else {
+//                 option.selected = false;
+//             }
+//         });
+//     }, 500);
+// }
 
 function updateCitySuggestions(suggestions) {
     // Pobierz pole tekstowe i stwórz listę propozycji miast
@@ -691,8 +709,8 @@ function submitForm() {
 
 
 
-    return fetch('/api/advertisements', {
-        method: 'POST',
+    return fetch('/api/advertisements/'+ advertisementId, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -745,7 +763,6 @@ function uploadFiles(advertisementId) {
     // const apiUrl = selectedFiles.length > 1 ? `/api/advertisement/images/${advertisementId}` : `/api/advertisement/image/${advertisementId}`;
     const apiUrl = `/api/advertisements/images/${advertisementId}`;
 
-    console.log(selectedFiles.length);
 
     fetch(apiUrl, {
         method: 'POST',
@@ -919,13 +936,14 @@ async function showThumbnails(files) {
     const maxThumbnails = 15;
     const numThumbnailsToShow = Math.min(files.length, maxThumbnails);
 
-    if(files.length > 1){
+    if (files.length > 1) {
         createDropDeleteZone(files);
     }
 
     for (let i = 0; i < numThumbnailsToShow; i++) {
         const file = files[i];
         const thumbnailElement = document.createElement('img');
+
         thumbnailElement.className = 'thumbnail';
         thumbnailElement.setAttribute('draggable', true);
         thumbnailElement.setAttribute('data-index', i);
@@ -936,10 +954,17 @@ async function showThumbnails(files) {
         thumbnailsContainer.appendChild(thumbnailElement);
 
         try {
-            const thumbnailDataURL = await readFileAsDataURL(file);
-            thumbnailElement.src = thumbnailDataURL;
+            // If the file is a Blob, convert it to a data URL for the thumbnail
+            if (file instanceof Blob) {
+                const thumbnailDataURL = await readFileAsDataURL(file);
+                thumbnailElement.src = thumbnailDataURL;
+                selectedFiles.push(file);
+            } else {
+                // Assuming the file is a URL or path string
+                // thumbnailElement.src = file;
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Error setting thumbnail source:", error);
         }
     }
 }
@@ -952,6 +977,7 @@ function readFileAsDataURL(file) {
         reader.readAsDataURL(file);
     });
 }
+
 
 let dragSrcElement = null;
 

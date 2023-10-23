@@ -15,6 +15,18 @@
     animation: fade-in 1s ease-in-out forwards;
 }
 
+.tooltip {
+    display: none;
+    position: absolute;
+    padding: 8px;
+    background-color: black;
+    color: #fff;
+    border: 2px dashed darkgoldenrod;
+    border-radius: 10px;
+    font-size: 12px;
+    z-index: 1000; /* na wypadek, gdybyś miał inne nakładające się elementy */
+}
+
 #titleDiv {
     animation: fade-in 1s ease-in-out forwards;
 }

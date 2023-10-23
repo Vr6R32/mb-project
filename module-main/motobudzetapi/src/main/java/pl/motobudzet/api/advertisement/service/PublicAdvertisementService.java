@@ -155,20 +155,37 @@ public class PublicAdvertisementService {
         }
     }
 
-    public String editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request) {
+    public ResponseEntity<String> editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request, String loggedUser) {
 
         Advertisement advertisement = getAdvertisement(advertisementId);
 
-        advertisement.setBrand(brandService.getBrand(request.getBrand()));
-        advertisement.setModel(modelService.getModel(request.getModel()));
-        advertisement.setDescription(request.getDescription());
-        advertisement.setName(request.getName());
-        advertisement.setMileage(request.getMileage());
-        advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
-        advertisement.setProductionDate(request.getProductionDate());
-        advertisementRepository.save(advertisement);
+        if (advertisement.getUser().getUsername().equals(loggedUser)) {
 
-        return "advertisement edited!";
+            advertisement.setName(request.getName());
+            advertisement.setDescription(request.getDescription());
+            advertisement.setModel(modelService.getModel(request.getModel()));
+            advertisement.setBrand(brandService.getBrand(request.getBrand()));
+            advertisement.setFuelType(specificationService.getFuelType(request.getFuelType()));
+            advertisement.setDriveType(specificationService.getDriveType(request.getDriveType()));
+            advertisement.setEngineType(specificationService.getEngineType(request.getEngineType()));
+            advertisement.setTransmissionType(specificationService.getTransmissionType(request.getTransmissionType()));
+            advertisement.setMileage(request.getMileage());
+            advertisement.setMileageUnit(MileageUnit.valueOf(request.getMileageUnit()));
+            advertisement.setPrice(request.getPrice());
+            advertisement.setPriceUnit(PriceUnit.valueOf(request.getPriceUnit()));
+            advertisement.setEngineCapacity(request.getEngineCapacity());
+            advertisement.setEngineHorsePower(request.getEngineHorsePower());
+            advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
+            advertisement.setProductionDate(request.getProductionDate());
+            advertisement.setCity(cityService.getCityByName(request.getCity()));
+
+            advertisementRepository.save(advertisement);
+
+
+            String id = advertisement.getId().toString();
+            return ResponseEntity.ok().header("advertisementId", id).body("inserted !");
+        }
+        return ResponseEntity.badRequest().body("not inserted");
     }
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {

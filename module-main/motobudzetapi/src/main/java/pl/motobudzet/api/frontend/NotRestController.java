@@ -1,15 +1,21 @@
 package pl.motobudzet.api.frontend;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.user.service.AppUserCustomService;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class NotRestController {
+
+    private final AppUserCustomService userCustomService;
 
 
     @GetMapping("/")
@@ -34,6 +40,11 @@ public class NotRestController {
     @GetMapping("advertisement/edit")
     public String editForm(Model model, Principal principal,@RequestParam("advertisementId") String advertisementId) {
         ModelUtils.setButtonsAttributes(model, principal);
+//        UUID advertisementUUID = userCustomService.getUserAdvertisement(principal.getName(),UUID.fromString(advertisementId)).orElse(null);
+//        if (advertisementUUID != null) {
+//            return "editForm";
+//        } else
+//            return "login";
         return "editForm";
     }
 
