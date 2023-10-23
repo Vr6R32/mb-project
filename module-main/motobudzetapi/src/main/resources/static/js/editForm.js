@@ -148,7 +148,29 @@ function createDescriptionEditor() {
 
 }
 
+function fetchAdvertisementDetails() {
+    extractAdvertisementId();
+
+    return fetch(`/api/advertisements/${advertisementId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error("There was an error fetching the advertisement details:", error);
+        });
+}
+
+function extractAdvertisementId() {
+    const urlParams = new URLSearchParams(document.location.search);
+    advertisementId = urlParams.get('advertisementId');
+}
+
 function createForm() {
+
+
 
     const titleContainer = document.getElementById('title-container-hidden');
     const formContainer = document.getElementById('half-container-big1');
@@ -162,7 +184,6 @@ function createForm() {
     titleContainer.appendChild(title);
 
 
-
     // photoContainer.style.alignItems = 'center';
     // photoContainer.style.justifyContent = 'center';
     // photoContainer.style.justifySelf = 'center';
@@ -172,14 +193,27 @@ function createForm() {
     form.id = 'advertisementForm';
 
     const formElements = [
-        { label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true },
+        {label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true},
         // { label: 'Opis ogłoszenia:', type: 'div', id: 'description', name: 'description', required: true },
-        { label: 'Marka:', type: 'select', id: 'brand', name: 'brand', onchange: 'fetchModels(this.value)', required: true },
-        { label: 'Model:', type: 'select', id: 'model', name: 'model', required: true },
-        { label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true },
-        { label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true },
-        { label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true },
-        { label: 'Rodzaj skrzyni biegów:', type: 'select', id: 'transmissionType', name: 'transmissionType', required: true },
+        {
+            label: 'Marka:',
+            type: 'select',
+            id: 'brand',
+            name: 'brand',
+            onchange: 'fetchModels(this.value)',
+            required: true
+        },
+        {label: 'Model:', type: 'select', id: 'model', name: 'model', required: true},
+        {label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true},
+        {label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true},
+        {label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true},
+        {
+            label: 'Rodzaj skrzyni biegów:',
+            type: 'select',
+            id: 'transmissionType',
+            name: 'transmissionType',
+            required: true
+        },
         {
             label: 'Przebieg:',
             type: 'number',
@@ -193,17 +227,31 @@ function createForm() {
                 options: ['KM', 'MIL']
             }
         },
-        { label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true ,
+        {
+            label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true,
             additionalSelect: {
                 label: 'Jednostka:',
                 id: 'priceUnit',
                 name: 'priceUnit',
                 options: ['PLN', 'EUR', 'USD']
-            }},
-        { label: 'Pojemność silnika (w cm³):', type: 'number', id: 'engineCapacity', name: 'engineCapacity', required: true },
-        { label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true },
-        { label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true },
-        { label: 'Data pierwszej rejestracji:', type: 'date', id: 'firstRegistrationDate', name: 'firstRegistrationDate', required: true },
+            }
+        },
+        {
+            label: 'Pojemność silnika (w cm³):',
+            type: 'number',
+            id: 'engineCapacity',
+            name: 'engineCapacity',
+            required: true
+        },
+        {label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true},
+        {label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true},
+        {
+            label: 'Data pierwszej rejestracji:',
+            type: 'date',
+            id: 'firstRegistrationDate',
+            name: 'firstRegistrationDate',
+            required: true
+        },
         {
             label: 'Lokalizacja:',
             type: 'text',
@@ -342,7 +390,6 @@ function createForm() {
         }
 
 
-
         if (element.additionalSelect) {
             const wrapper = document.createElement('div');
             wrapper.style.display = 'flex'; // Use flex layout
@@ -352,11 +399,9 @@ function createForm() {
             wrapper.style.width = '500px'; // Same width as other form fields
 
 
-
             const additionalSelectLabel = document.createElement('label');
             additionalSelectLabel.setAttribute('for', element.additionalSelect.id);
             additionalSelectLabel.textContent = element.additionalSelect.label;
-
 
 
             const additionalSelectInput = document.createElement('select');
@@ -364,7 +409,7 @@ function createForm() {
             additionalSelectInput.name = element.additionalSelect.name;
             additionalSelectInput.style.width = '50px'; // Set width
 
-            if(element.additionalSelect.id === 'cityState'){
+            if (element.additionalSelect.id === 'cityState') {
                 additionalSelectInput.style.width = '50%'; // Set width
             }
 
@@ -415,13 +460,13 @@ function createForm() {
     submitButton.style.marginRight = '3px';
 
     submitButton.addEventListener("mouseover", ev => {
-        submitButton.style.boxShadow = '0 0 20px moccasin';
+            submitButton.style.boxShadow = '0 0 20px moccasin';
         }
     )
 
 
     submitButton.addEventListener("mouseout", ev => {
-        submitButton.style.boxShadow = 'none';
+            submitButton.style.boxShadow = 'none';
         }
     )
     horizontalContainer.appendChild(submitButton);
@@ -440,16 +485,55 @@ function createForm() {
     fileDropArea.innerText = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\nMaksymalna ilość zdjęć to 15.";
 
     fileDropArea.addEventListener('drop', handleFileDrop);
-    fileDropArea.addEventListener('dragover', function(e) {
+    fileDropArea.addEventListener('dragover', function (e) {
         e.preventDefault();
     });
     fileDropArea.addEventListener('drop', handleFileDrop);
-    fileDropArea.addEventListener('click', function() {
+    fileDropArea.addEventListener('click', function () {
         fileInput.click();
     });
 
     photoContainer.appendChild(fileDropArea);
 
+    fetchAdvertisementDetails()
+        .then(userData => {
+            populateFormData(userData); // use the returned userData to populate the form
+        });
+
+}
+
+function populateFormData(data) {
+    // Here, you can populate each field in your form using the data
+    document.getElementById('name').value = data.name || '';
+    document.getElementById('fuelType').value = data.fuelType || '';
+    document.getElementById('driveType').value = data.driveType || '';
+    document.getElementById('engineType').value = data.engineType || '';
+    document.getElementById('transmissionType').value = data.transmissionType || '';
+    document.getElementById('mileage').value = data.mileage || '';
+    document.getElementById('price').value = data.price || '';
+    document.getElementById('engineCapacity').value = data.engineCapacity || '';
+    document.getElementById('engineHorsePower').value = data.engineHorsePower || '';
+    document.getElementById('productionDate').value = data.productionDate || '';
+    document.getElementById('firstRegistrationDate').value = data.firstRegistrationDate || '';
+
+
+    // For selects, you may also need to ensure the correct option is selected based on data
+    fetchModels(data.brand).then(() => {
+        const modelSelect = document.getElementById('model');
+        Array.from(modelSelect.options).forEach(option => {
+            if (option.value === data.model) {
+                option.selected = true;
+            }
+        });
+    });
+
+    // ... (rest of your code to populate other fields)
+    const brandSelect = document.getElementById('brand');
+    Array.from(brandSelect.options).forEach(option => {
+        if (option.value === data.brand) {
+            option.selected = true;
+        }
+    });
 }
 
 function updateCitySuggestions(suggestions) {
@@ -501,24 +585,32 @@ function fetchBrands() {
 }
 
 function fetchModels(brand) {
-    const modelSelect = document.getElementById('model');
-    if (brand) {
-        fetch(`/api/models/${brand}`)
-            .then(response => response.json())
-            .then(data => {
-                modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-                data.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.name;
-                    option.text = model.name;
-                    modelSelect.appendChild(option);
+    return new Promise((resolve, reject) => {
+        const modelSelect = document.getElementById('model');
+        if (brand) {
+            fetch(`/api/models/${brand}`)
+                .then(response => response.json())
+                .then(data => {
+                    modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+                    data.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model.name;
+                        option.text = model.name;
+                        modelSelect.appendChild(option);
+                    });
+                    resolve();
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania modeli:', error);
+                    reject(error);
                 });
-            })
-            .catch(error => console.error('Błąd pobierania modeli:', error));
-    } else {
-        modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-    }
+        } else {
+            modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+            resolve();
+        }
+    });
 }
+
 
 function fetchSpecifications() {
     function populateSelect(selectId, data) {

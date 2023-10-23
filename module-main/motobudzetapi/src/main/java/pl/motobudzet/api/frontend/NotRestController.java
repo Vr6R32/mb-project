@@ -26,10 +26,15 @@ public class NotRestController {
     }
 
     @GetMapping("advertisement/new")
-//    @PreAuthorize("isAuthenticated()")
     public String createForm(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "createForm";
+    }
+
+    @GetMapping("advertisement/edit")
+    public String editForm(Model model, Principal principal,@RequestParam("advertisementId") String advertisementId) {
+        ModelUtils.setButtonsAttributes(model, principal);
+        return "editForm";
     }
 
     @GetMapping("login")
