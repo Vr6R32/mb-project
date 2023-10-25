@@ -1,0 +1,76 @@
+
+
+/* Stylowanie nagłówka */
+.form-signin-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: darkgoldenrod;
+}
+
+#suggestionsList::-webkit-scrollbar {
+    width: 5px; /* Szerokość paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-thumb {
+    background-color: darkgoldenrod; /* Kolor paska przewijania */
+    border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
+}
+
+#suggestionsList::-webkit-scrollbar-track {
+    background-color: transparent; /* Kolor tła paska przewijania */
+}
+
+
+/* Stylowanie formularza */
+.form-signin {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #181818;
+    border-radius: 5px;
+}
+
+/* Stylowanie etykiet i pól tekstowych */
+.form-signin label {
+    display: block;
+    margin-bottom: 10px;
+    color: darkgoldenrod;
+    width: 120px;
+    text-align: left;
+    margin-right: 50px;
+
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#userDetailsForm {
+    /*background-color: #181818;*/
+    background-color: #000000;
+    border-radius: 30px;
+    box-shadow: 0 0 40px darkgoldenrod;
+    border: 0px dashed darkgoldenrod;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Dodaj padding, aby uzyskać odstęp od krawędzi */
+    box-sizing: border-box;
+    max-width: 100%;
+    height: 100vh; /* Ustaw wysokość na 100% widoku (viewport height) */
+    margin: 0 auto; /* Wycentruj w poziomie */
+    transition: box-shadow 0s ease-in-out;
+}
+
+#userDetailsForm:hover {
+    box-shadow: 0 0 20px moccasin;
+}
