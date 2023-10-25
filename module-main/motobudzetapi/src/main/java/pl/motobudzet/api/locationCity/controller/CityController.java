@@ -29,7 +29,7 @@ public class CityController {
     }
     @GetMapping("neighbours")
     List<City> getCityNeighbourCitiesByDistance(@RequestParam String mainCity , Integer distanceMax){
-        return cityService.getCityNeighbourCitiesByDistance(mainCity,distanceMax);
+        return cityService.getNeighbourCitiesByDistance(mainCity,distanceMax);
     }
     @GetMapping("test")
     public City findById(@RequestParam Long id){

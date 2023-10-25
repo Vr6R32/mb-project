@@ -451,7 +451,7 @@ function createForm() {
 
     fileDropArea.style.alignItems = 'center';
 
-    fileDropArea.innerText = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\nMaksymalna ilość zdjęć to 15.";
+    fileDropArea.innerText = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\nMaksymalna ilość zdjęć to 12.";
 
     fileDropArea.addEventListener('drop', handleFileDrop);
     fileDropArea.addEventListener('dragover', function (e) {
@@ -487,7 +487,13 @@ function fetchImageFromFilename(filename) {
             if (!response.ok) {
                 throw new Error(`Failed to fetch image for filename: ${filename}`);
             }
-            return response.blob();
+            // return response.blob();
+
+            return response.blob().then(blob => ({
+                blob,
+                name: filename
+            }));
+
         })
         .catch(error => {
             console.error("Error fetching image:", error);
@@ -511,6 +517,7 @@ function populateFormData(data) {
     document.getElementById('engineHorsePower').value = data.engineHorsePower || '';
     document.getElementById('productionDate').value = data.productionDate || '';
     document.getElementById('firstRegistrationDate').value = data.firstRegistrationDate || '';
+    quill.clipboard.dangerouslyPasteHTML(0, data.description || '');
 
 
     // For selects, you may also need to ensure the correct option is selected based on data
@@ -754,10 +761,15 @@ function uploadFiles(advertisementId) {
 
     const formData = new FormData();
     formData.append('advertisementId', advertisementId);
-    formData.append('mainPhotoUrl',selectedFiles[0].name)
+    // formData.append('mainPhotoUrl',selectedFiles[0].name)
+
 
     selectedFiles.forEach((file) => {
-        formData.append('files', file); // Use the same parameter name 'files' for each file
+        if (file.blob instanceof Blob) {
+            formData.append('files', file.blob , file.name); // Use the same parameter name 'files' for each file
+        } else {
+            formData.append('files',file);
+        }
     });
 
     // const apiUrl = selectedFiles.length > 1 ? `/api/advertisement/images/${advertisementId}` : `/api/advertisement/image/${advertisementId}`;
@@ -807,6 +819,10 @@ function createDropDeleteZone(){
         deleteZone.style.position = 'relative';
         deleteZone.style.bottom = '200px';
         deleteZone.innerText = 'Drop to delete';
+        deleteZone.style.position = 'absolute';
+        deleteZone.style.top = '10px';   // Adjust this value to position it where you'd like within the container
+        deleteZone.style.left = '50%';      // This will center the deleteZone within the container
+        deleteZone.style.transform = 'translateX(-50%)'; // This ensures it is perfectly centered regardless of its width
 
         deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
         deleteZone.addEventListener('drop', handleDeleteZoneDrop);
@@ -842,9 +858,6 @@ function handleDeleteZoneDrop(e) {
         const thumbnails = thumbnailsContainer.getElementsByClassName('thumbnail');
         const sourceIndex = Array.from(thumbnails).indexOf(dragSrcElement);
 
-        console.log("Source Index:", sourceIndex); // Dodajemy debugowanie
-        // console.log("Dragged Element:", dragSrcElement); // Wyświetlamy przeciągnięty element
-
         // Usuń miniaturkę z DOM
         dragSrcElement.remove();
 
@@ -858,73 +871,62 @@ function handleDeleteZoneDrop(e) {
             resetFileDropAreamy();
         }
 
+        if (selectedFiles.length < 2) {
+            let thumbnailzone = document.getElementById('deleteZone');
+            thumbnailzone.parentNode.removeChild(thumbnailzone);
+        }
+
         dragSrcElement = null; // Resetuj źródłowy element przeciągania
     }
 
     return false;
 }
 
+
 function handleFileDrop(e) {
     e.preventDefault();
-    const files = e.dataTransfer.files;
-    const allowedExtensions = ["jpg", "png"];
-    const validFiles = [];
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+    const files = Array.from(e.dataTransfer.files);
+    const totalFiles = files.concat(selectedFiles);
+    const allowedExtensions = ["jpg", "png", "heic", "heif"];
+    const validFiles = totalFiles.filter(file => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
-        if (allowedExtensions.includes(fileExtension)) {
-            validFiles.push(file);
-        }
-    }
+        return allowedExtensions.includes(fileExtension);
+    });
 
+    resetFileDropArea();
 
-
-    resetFileDropArea()
-    if (validFiles.length > 0) {
-        selectedFiles = validFiles;
-        showThumbnails(validFiles);
-    }
-    if(validFiles.length < 1){
-        resetFileDropAreamy();
-    }
-}
-function handleFileSelect(e) {
-    const fileInput = e.target;
-    const files = Array.from(fileInput.files);
-    const allowedExtensions = ["jpg", "png"];
-    const validFiles = [];
-
-    // for (let i = 0; i < files.length; i++) {
-    //     const file = files[i];
-    //     const fileExtension = file.name.split(".").pop().toLowerCase();
-    //     if (allowedExtensions.includes(fileExtension)) {
-    //         const uniqueId = Date.now() + i; // Użyj unikalnego znacznika czasowego
-    //         const newFileName = `file_${uniqueId}.${fileExtension}`;
-    //         const renamedFile = new File([file], newFileName, { type: file.type });
-    //         validFiles.push(renamedFile);
-    //     }
-    // }
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExtension = file.name.split(".").pop().toLowerCase();
-        if (allowedExtensions.includes(fileExtension)) {
-            validFiles.push(file);
-        }
-    }
-
-    if (validFiles.length > 15) {
-        alert("Maximum 15 images can be uploaded.");
+    if (validFiles.length > 12) {
+        alert("Maximum 12 images can be uploaded.");
         return;
     }
 
-    selectedFiles = validFiles;
-    showThumbnails(validFiles);
-    resetFileDropArea();
+    if (validFiles.length > 0) {
+        selectedFiles = validFiles;
+        showThumbnails(selectedFiles);
+    } else {
+        resetFileDropAreamy();
+    }
+}
+
+function handleFileSelect(e) {
+    const fileInput = e.target;
+    const files = Array.from(fileInput.files);
+    const totalFiles = files.concat(selectedFiles);
+    const allowedExtensions = ["jpg", "png", "heic", "heif"];
+    const validFiles = totalFiles.filter(file => {
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        return allowedExtensions.includes(fileExtension);
+    });
+
+    if (validFiles.length > 12) {
+        alert("Maximum 12 images can be uploaded.");
+        return;
+    }
 
     if (validFiles.length > 0) {
-        // uploadFiles(advertisementId); // Replace '123' with the appropriate advertisementId value
+        selectedFiles = validFiles;
+        showThumbnails(selectedFiles);
+        resetFileDropArea();
     }
 }
 
@@ -933,7 +935,7 @@ async function showThumbnails(files) {
     const thumbnailsContainer = document.getElementById('thumbnails');
     thumbnailsContainer.innerHTML = '';
 
-    const maxThumbnails = 15;
+    const maxThumbnails = 12;
     const numThumbnailsToShow = Math.min(files.length, maxThumbnails);
 
     if (files.length > 1) {
@@ -941,7 +943,7 @@ async function showThumbnails(files) {
     }
 
     for (let i = 0; i < numThumbnailsToShow; i++) {
-        const file = files[i];
+        const fileObj = files[i];
         const thumbnailElement = document.createElement('img');
 
         thumbnailElement.className = 'thumbnail';
@@ -954,15 +956,27 @@ async function showThumbnails(files) {
         thumbnailsContainer.appendChild(thumbnailElement);
 
         try {
-            // If the file is a Blob, convert it to a data URL for the thumbnail
-            if (file instanceof Blob) {
-                const thumbnailDataURL = await readFileAsDataURL(file);
-                thumbnailElement.src = thumbnailDataURL;
-                selectedFiles.push(file);
+            let thumbnailDataURL;
+
+            // Check if the fileObj has a blob property, indicating that it's the expected object
+            if (fileObj.blob instanceof Blob) {
+                thumbnailDataURL = await readFileAsDataURL(fileObj.blob);
+                const fileData = {
+                    blob: fileObj.blob,
+                    name: fileObj.name
+                };
+
+                // Check if this file is already in the selectedFiles array
+                const isFileAlreadyPresent = selectedFiles.some(existingFile => existingFile.name === fileObj.name);
+
+                if (!isFileAlreadyPresent) {
+                    selectedFiles.push(fileData);
+                }
             } else {
-                // Assuming the file is a URL or path string
-                // thumbnailElement.src = file;
+                thumbnailDataURL = await readFileAsDataURL(fileObj)
             }
+
+            thumbnailElement.src = thumbnailDataURL;
         } catch (error) {
             console.error("Error setting thumbnail source:", error);
         }
@@ -1051,5 +1065,5 @@ function resetFileDropArea() {
     fileDropArea.innerHTML = "Możesz zmienić kolejność zdjęć za pomocą myszki.\n Pierwsze zdjęcie będzie główną miniaturką";
 }
 function resetFileDropAreamy() {
-    fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 15.";
+    fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 12.";
 }

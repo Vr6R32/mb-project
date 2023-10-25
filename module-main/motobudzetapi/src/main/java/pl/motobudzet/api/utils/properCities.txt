@@ -895,7 +895,7 @@ Kunice                  16,15E        51,14N
 Kunów                   21,17E        50,58N
 Kurów                   22,12E        51,24N
 Kuryłówka               21,29E        50,18N
-Kurzętnik               19,34E        53,24N
+Kurzętnik               19.572E       53.402N
 Kuślin                  16,19E        52,22N
 Kutno                   19,22E        52,14N
 Kuźnia Raciborska       18,20E        50,12N

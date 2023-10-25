@@ -22,6 +22,10 @@ public interface CityRepository extends JpaRepository<City,Long> {
     @Cacheable(value = "city_with_states")
     @Query("SELECT c FROM City c LEFT JOIN FETCH c.cityState where c.name = ?1")
     Optional<City> getCityByName(String name);
+
+    @Cacheable(value = "city_with_states")
+    @Query("SELECT c FROM City c LEFT JOIN FETCH c.cityState where c.name = ?1 and c.cityState.name = ?2")
+    Optional<City> getCityByNameAndState(String cityName,String cityStateName);
     @Cacheable(value = "cities_without_states")
     @Query("SELECT c FROM City c where c.name = ?1")
     Optional<City> getCityByNameWithout(String name);

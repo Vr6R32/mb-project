@@ -92,6 +92,11 @@ public class ResourceImageController {
         return new FileSystemResource(PRIVATE_FILE_PATH + "editIcon.png");
     }
 
+    @GetMapping(value = "/successIcon", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getSuccessIcon() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "successIcon.png");
+    }
+
     @GetMapping(value = "/advertisementPhoto/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {
 

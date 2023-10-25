@@ -74,4 +74,10 @@ public class NotRestController {
         model.addAttribute("loadFunction", "Ulubione");
         return "account";
     }
+
+    @GetMapping("user/details")
+    public String setUserDetails(Model model, Principal principal) {
+        ModelUtils.setButtonsAttributes(model, principal);
+        return "details";
+    }
 }

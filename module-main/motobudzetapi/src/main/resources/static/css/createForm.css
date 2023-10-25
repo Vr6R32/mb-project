@@ -120,6 +120,18 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
+.thumbnail-dragging {
+    opacity: 0.5;
+}
+
+.thumbnail-placeholder {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #666;
+    margin: 10px;
+}
+
 #fileDropArea {
     padding: 20px;
     text-align: center;

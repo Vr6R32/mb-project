@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.motobudzet.api.security.filter.AddressLoggingFilter;
+import pl.motobudzet.api.security.filter.UserAwaitingDetailsFilter;
 import pl.motobudzet.api.security.service.UserDetailsServiceImpl;
 
 import java.util.concurrent.TimeUnit;
@@ -49,6 +50,7 @@ public class SecurityConfiguration {
         http.csrf().disable()
                 .cors().and()
                 .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
+                .addFilterBefore(new UserAwaitingDetailsFilter(), SecurityContextPersistenceFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "index", "/css/*", "/js/*").permitAll()
@@ -65,18 +67,26 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
 
+                                .requestMatchers("/user/details/**").hasAuthority("ROLE_AWAITING_DETAILS")
+                                .requestMatchers("/api/user/updateDetails/**").hasAnyAuthority("ROLE_AWAITING_DETAILS","ROLE_USER")
+
                                 .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
                                 .requestMatchers("/account").authenticated()
                                 .requestMatchers("/messages").authenticated()
                                 .requestMatchers("/favourites").authenticated()
                                 .requestMatchers("/api/messages/**").authenticated()
+                                .requestMatchers("/api/user/details").authenticated()
                                 .requestMatchers("/advertisement/new").authenticated()
                                 .requestMatchers("/api/conversations/**").authenticated()
                                 .requestMatchers("/api/users/favourites/**").authenticated()
 
+
+
                                 .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
+
                                 .anyRequest().hasRole("ADMIN")
+
                 )
                 .formLogin((formLogin) ->
                         formLogin

@@ -35,8 +35,10 @@ public class AppUser implements UserDetails {
     String password;
     @Column(nullable = false, unique = true)
     String email;
-
     String registerCode;
+    String name;
+    String surname;
+    String phoneNumber;
     Boolean accountEnabled;
     Boolean accountNotLocked;
     Boolean accountNotExpired;
@@ -59,30 +61,6 @@ public class AppUser implements UserDetails {
             uniqueConstraints = @UniqueConstraint(name = "unique_user_role", columnNames = {"user_id", "role_id"})
     )
     private List<Role> roles;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Role> getRoles() {
-        return this.roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

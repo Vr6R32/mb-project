@@ -5,8 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.user.dto.AppUserDTO;
+import pl.motobudzet.api.user.dto.UserDetailsRequest;
 import pl.motobudzet.api.user.service.RegistrationService;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
 import pl.motobudzet.api.user.service.UserDetailsService;
@@ -24,12 +26,16 @@ public class UserController {
         return registrationService.register(request);
     }
     @GetMapping
-    public ResponseEntity<String> activateAccount(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request){
+    public ResponseEntity<Void> activateAccount(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request){
         return registrationService.activateAccount(activationCode,response,request);
     }
     @GetMapping("details")
     public AppUserDTO getUserDetails(HttpServletRequest request){
         String userName = request.getUserPrincipal().getName();
         return userDetailsService.getUserDetails(userName);
+    }
+    @PutMapping ("updateDetails")
+    public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication){
+        return userDetailsService.updateFirstUserDetails(userDetailsRequest,authentication.getName());
     }
 }

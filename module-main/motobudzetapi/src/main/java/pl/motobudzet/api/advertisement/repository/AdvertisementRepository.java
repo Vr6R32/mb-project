@@ -107,6 +107,21 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 ORDER BY a.creationTime DESC")
     List<Advertisement> findAllAdvertisementsByUserId(Long userNameId);
 
+    @Query("select a from Advertisement a " +
+            "left join fetch a.city " +
+            "left join fetch a.driveType " +
+            "left join fetch a.fuelType " +
+            "left join fetch a.engineType " +
+            "left join fetch a.model " +
+            "left join fetch a.brand " +
+            "left join fetch a.user " +
+            "left join fetch a.city c " +
+            "left join fetch c.cityState cs " +
+            "left join fetch a.transmissionType " +
+            "where a.id = ?1")
+    Optional<Advertisement> findByAjdi(UUID uuid);
+
+
 //    List<String> findAdvertisementGallery(UUID id);
 //    @Query("SELECT a.imageUrls FROM Advertisement a where a.id = :id")
 //    @Query("SELECT a FROM Advertisement a where a.brand = :brand and a.isVerified = true")

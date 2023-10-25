@@ -18,6 +18,27 @@ header.header-hidden {
     transition: opacity 1s ease;
 }
 
+
+#popupNavbar {
+    position: fixed;
+    top: -120px; /* starting position outside of the viewport */
+    width: 100%;
+    background-color: black; /* light color */
+    border: dashed white 2px;
+    border-radius: 20px;
+    text-align: center;
+    padding: 10px;
+    transition: top 0.5s; /* smooth slide animation */
+    z-index: 9999; /* ensure the navbar appears on top of other content */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* shadow for depth effect */
+}
+
+#popupNavbar p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
 header {
     position: fixed;
     top: 0;
@@ -244,10 +265,11 @@ header {
 .container-main .half-container-big {
     box-shadow: 0 0 40px darkgoldenrod;
 
-    /*overflow: hidden; !* Ukrycie zawartości poza zaokrąglonymi krawędziami *!*/
+    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    position: relative;
     border-radius: 30px;
     width: 650px;
-    height: 1200px;
+    height: 1100px;
     margin: 20px;
     display: flex;
     justify-content: center;

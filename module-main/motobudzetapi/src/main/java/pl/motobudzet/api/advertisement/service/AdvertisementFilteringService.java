@@ -2,8 +2,6 @@ package pl.motobudzet.api.advertisement.service;
 
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Tuple;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +12,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
+import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.service.CityService;
-import pl.motobudzet.api.locationState.entity.CityState;
 import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
@@ -42,15 +40,17 @@ public class AdvertisementFilteringService {
     private final CityStateService cityStateService;
     private final EntityManager entityManager;
 
-    public Page<AdvertisementDTO> findAllPublicWithFilters(Integer pageNumber,
-                                                           String brand, String model, String fuelType,
-                                                           String driveType, String engineType, String transmissionType,
-                                                           String city, String cityState,
-                                                           Long priceMin, Long priceMax, Long mileageFrom,
-                                                           Long mileageTo, Long engineCapacityFrom,
-                                                           Long engineCapacityTo, Long engineHorsePowerFrom,
-                                                           Long engineHorsePowerTo, Long productionDateFrom,
-                                                           Long productionDateTo, Integer distanceFrom,
+    public Page<AdvertisementDTO> findAllPublicWithFilters(
+//                                                           String brand, String model, String fuelType,
+//                                                           String driveType, String engineType, String transmissionType,
+//                                                           String city, String cityState,
+//                                                           Long priceMin, Long priceMax, Long mileageFrom,
+//                                                           Long mileageTo, Long engineCapacityFrom,
+//                                                           Long engineCapacityTo, Long engineHorsePowerFrom,
+//                                                           Long engineHorsePowerTo, Long productionDateFrom,
+//                                                           Long productionDateTo,
+                                                            AdvertisementFilterRequest request,
+                                                           Integer distanceFrom,Integer pageNumber,
                                                            String sortBy, String sortOrder) {
 
         Specification<Advertisement> specification = Specification.where(null);
@@ -58,13 +58,57 @@ public class AdvertisementFilteringService {
 //        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
 //                criteriaBuilder.equal(root.get("isVerified"), false));
 
+        specification = setAdvertisementFilterSpecification(request, distanceFrom, specification);
+
+        //        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
+        //                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+
+        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        List<UUID> uuidList = advertisementSpecificationIds.getContent();
+
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
+        List<Advertisement> advertisementDetails = uuidList.stream()
+                .map(uuid -> fetchedAdvertisementDetails.stream()
+                        .filter(adv -> adv.getId().equals(uuid))
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
+                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+    }
+
+    private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request, Integer distanceFrom, Specification<Advertisement> specification) {
+        String brand = request.getBrand();
+        String model = request.getModel();
+        String fuelType = request.getFuelType();
+        String driveType = request.getDriveType();
+        String engineType = request.getEngineType();
+        String transmissionType = request.getTransmissionType();
+        String city = request.getCity();
+        String cityState = request.getCityState();
+        Long priceMin = request.getPriceMin();
+        Long priceMax = request.getPriceMax();
+        Long mileageFrom = request.getMileageFrom();
+        Long mileageTo= request.getMileageTo();
+        Long engineCapacityFrom = request.getEngineCapacityFrom();
+        Long engineCapacityTo = request.getEngineCapacityTo();
+        Long engineHorsePowerFrom = request.getEngineHorsePowerFrom();
+        Long engineHorsePowerTo = request.getEngineHorsePowerTo();
+        Long productionDateFrom = request.getProductionDateFrom();
+        Long productionDateTo = request.getProductionDateTo();
+
         if (brand != null && !brand.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("brand"), brandService.getBrand(brand)));
         }
 
         if (city != null && distanceFrom != null) {
-            List<City> cityList = cityService.getCityNeighbourCitiesByDistance(city,distanceFrom);
+            List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
@@ -187,27 +231,20 @@ public class AdvertisementFilteringService {
                     criteriaBuilder.lessThanOrEqualTo(root.get("productionDate"), productionDateTo));
 
         }
+        return specification;
+    }
 
-        //        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
-        //                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
-
+    public long getCount(AdvertisementFilterRequest request,
+                         Integer distanceFrom,Integer pageNumber,
+                         String sortBy, String sortOrder) {
+        Specification<Advertisement> specification = Specification.where(null);
+        specification = setAdvertisementFilterSpecification(request, distanceFrom, specification);
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
-        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
+        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
-        List<UUID> uuidList = advertisementSpecificationIds.getContent();
-
-        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
-        List<Advertisement> advertisementDetails = uuidList.stream()
-                .map(uuid -> fetchedAdvertisementDetails.stream()
-                        .filter(adv -> adv.getId().equals(uuid))
-                        .findFirst()
-                        .orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
-                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+        return advertisementSpecificationIds.getTotalElements();
     }
+
 }
 

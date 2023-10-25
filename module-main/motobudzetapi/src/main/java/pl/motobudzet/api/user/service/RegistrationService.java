@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import pl.motobudzet.api.user.repository.AppUserRepository;
 import pl.motobudzet.api.user.repository.RoleRepository;
 import pl.motobudzet.api.utils.RegistrationRequestValidation;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -60,7 +62,7 @@ public class RegistrationService {
                     .accountNotLocked(true)
                     .accountNotExpired(true)
                     .credentialsNotExpired(true)
-                    .roles(List.of(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found!"))))
+                    .roles(List.of(roleRepository.findByName("ROLE_AWAITING_DETAILS").orElseThrow(() -> new RuntimeException("Role not found!"))))
                     .build();
             userRepository.saveAndFlush(newUser);
 
@@ -75,26 +77,43 @@ public class RegistrationService {
         }
     }
 
-    public ResponseEntity<String> activateAccount(String activationLink,HttpServletResponse response,HttpServletRequest request) {
+//    public ResponseEntity<String> activateAccount(String activationLink,HttpServletResponse response,HttpServletRequest request) {
+//        AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
+//
+////        if(user!=null){
+//        if(user!=null && !user.getAccountEnabled()){
+//            user.setAccountEnabled(true);
+//            AppUser enabledUser = userRepository.saveAndFlush(user);
+//            setAuthentication(response, request, enabledUser);
+//            return ResponseEntity.ok("Konto aktywowane!");
+//        }
+//        return ResponseEntity.ok("Link nieaktwny!");
+//    }
+
+    public ResponseEntity<Void> activateAccount(String activationLink, HttpServletResponse response, HttpServletRequest request) {
         AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
-//        if(user!=null){
-        if(user!=null && !user.getAccountEnabled()){
+        if(user != null && !user.getAccountEnabled()){
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
-
-//            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(savedUser.getUsername(), "odi123", savedUser.getAuthorities());
-//            Authentication auth = authenticationManager.authenticate(authToken);
-//            SecurityContext sc = SecurityContextHolder.getContext();
-//            sc.setAuthentication(auth);
-//            securityContextRepository.saveContext(sc, request, response);
-
             setAuthentication(response, request, enabledUser);
 
-            return ResponseEntity.ok("Konto aktywowane!");
+            try {
+                response.sendRedirect("/user/details?activation=true");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.FOUND).build();
+        } else {
+            try {
+                response.sendRedirect("/");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.status(HttpStatus.FOUND).build();
         }
-        return ResponseEntity.ok("Link nieaktwny!");
     }
+
 
     private void setAuthentication(HttpServletResponse response, HttpServletRequest request, AppUser enabledUser) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(enabledUser.getUsername(), null, enabledUser.getAuthorities());

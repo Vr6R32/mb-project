@@ -32,7 +32,7 @@ function getParametersFromCurrentUrl() {
         urlSearchParams = new URLSearchParams(queryString);
 
         // Sprawdzamy, czy istnieją jakieś parametry w URL
-        if (urlSearchParams.toString() !== "") {
+        if (urlSearchParams.toString() !== "" && !urlSearchParams.has("activation")) {
             console.log("Parametry istnieją w URL:", urlSearchParams.toString());
             // Tworzymy nowy obiekt FormData
             // Przechodzimy przez każdy parametr w URLSearchParams i dodajemy go do formData
@@ -251,6 +251,7 @@ function createSearchForm(formContainer) {
     // setStyleForElements(formElements, "color", "white");
 
     const searchButton = document.createElement("button");
+    searchButton.setAttribute('id', 'searchButton');
     searchButton.type = "submit";
     searchButton.textContent = "Szukaj";
     searchButton.style.backgroundColor = "darkgoldenrod";
@@ -275,6 +276,17 @@ function createSearchForm(formContainer) {
     searchButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
     form.appendChild(searchButton);
 
+    let inputs = form.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+        input.addEventListener('change', function() {
+            formData.set(input.name, input.value);  // Update the FormData
+            executeAdvertisementFilterResultCount();  // Execute your fetch request
+        });
+    });
+
+
+
 
     formContainer.appendChild(form);
 
@@ -287,6 +299,42 @@ function createSearchForm(formContainer) {
 
     });
 
+}
+
+function executeAdvertisementFilterResultCount() {
+    // Define the endpoint URL
+    let url = 'api/advertisements/filter/count';
+
+    // Append FormData values to the URL if you need query parameters
+    let params = new URLSearchParams();
+    for (let pair of formData.entries()) {
+        params.append(pair[0], pair[1]);
+    }
+    if(params.toString()) {
+        url += '?' + params.toString();
+    }
+
+    // Execute the GET request
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            // Add any other necessary headers here
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            let searchButton = document.getElementById('searchButton');
+            searchButton.textContent = "Szukaj "+"("+data+")";
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 }
 
 function createRowWithInputElement(labelText, inputType, inputId, inputName, selectOptions = null) {
@@ -340,7 +388,6 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     //     inputElement.style.MozAppearance = "textfield"; // Dla przeglądarek Gecko (np. Firefox)
     //     inputElement.style.WebkitAppearance = "none"; // Dla przeglądarek WebKit (np. Chrome, Safari)
     // }
-
     if (selectOptions) {
         // Jeśli to element typu select, dodaj opcje
         selectOptions.forEach(option => {

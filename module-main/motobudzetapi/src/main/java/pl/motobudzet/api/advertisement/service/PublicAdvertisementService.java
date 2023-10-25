@@ -49,8 +49,8 @@ public class PublicAdvertisementService {
     private final CityStateService cityStateService;
     private final EntityManager entityManager;
 
-    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList){
-        if (username.equals(loggedUser)){
+    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {
+        if (username.equals(loggedUser)) {
             List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
             return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()
                     .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
@@ -87,7 +87,7 @@ public class PublicAdvertisementService {
         Specification<Advertisement> isVerifiedSpecification = (root, query, cb) -> cb.equal(root.get("isVerified"), true);
         Specification<Advertisement> specification = Specification.where(isVerifiedSpecification);
 
-        PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize ,LAST_UPLOADED_SORT_PARAMS);
+        PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
         List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
@@ -105,7 +105,7 @@ public class PublicAdvertisementService {
 
     //    @CachePut(cacheNames = "advertisements_filter_cache")
     @CacheEvict(cacheNames = "advertisements_filter_cache")
-    public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request,String user) {
+    public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request, String user) {
 
 
         AppUser currentUser = userCustomService.getByName(user);
@@ -130,7 +130,7 @@ public class PublicAdvertisementService {
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
                 .creationTime(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))
-                .city(currentUser.getCity())
+                .city(cityService.getCityByNameAndState(request.getCity(),request.getCityState()))
                 .user(currentUser)
                 .isVerified(false)
                 .build();
@@ -177,7 +177,7 @@ public class PublicAdvertisementService {
             advertisement.setEngineHorsePower(request.getEngineHorsePower());
             advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
             advertisement.setProductionDate(request.getProductionDate());
-            advertisement.setCity(cityService.getCityByName(request.getCity()));
+            advertisement.setCity(cityService.getCityByNameAndState(request.getCity(),request.getCityState()));
 
             advertisementRepository.save(advertisement);
 
@@ -240,7 +240,7 @@ public class PublicAdvertisementService {
     }
 
     public Advertisement getAdvertisement(String advertisementId) {
-        return advertisementRepository.findById(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
+        return advertisementRepository.findByAjdi(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
     }
 
     public int getPage(Integer pageNumber) {
@@ -251,7 +251,7 @@ public class PublicAdvertisementService {
     }
 
     public List<AdvertisementDTO> getAllUserAdvertisements(String username, String loggedUser) {
-        if(username.equals(loggedUser)){
+        if (username.equals(loggedUser)) {
             Long userNameId = userCustomService.getUserIdByUserName(username);
             return advertisementRepository.findAllAdvertisementsByUserId(userNameId)
                     .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
@@ -266,9 +266,16 @@ public class PublicAdvertisementService {
     public int insertPhotoToAdvertisement(UUID id, String fileName) {
         return advertisementRepository.insertNewPhoto(id, fileName);
     }
+
     @Modifying
     @Transactional
-    public int insertNewPhotos(UUID id, List<String> names) {
+    public int insertNewPhotos(UUID id, LinkedHashSet<String> names) {
+        // First, delete the existing records associated with the advertisement_id
+        Query deleteQuery = entityManager.createNativeQuery("DELETE FROM advertisement_images WHERE advertisement_id = ?");
+        deleteQuery.setParameter(1, id);
+        deleteQuery.executeUpdate();
+
+        // Now proceed with inserting new records
         String baseQuery = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES ";
         List<Object[]> params = new ArrayList<>();
 
@@ -278,7 +285,7 @@ public class PublicAdvertisementService {
             params.add(new Object[]{id, name});
         }
 
-        // Usuń ostatni przecinek
+        // Remove the last comma
         if (values.length() > 0) {
             values.setLength(values.length() - 1);
         }

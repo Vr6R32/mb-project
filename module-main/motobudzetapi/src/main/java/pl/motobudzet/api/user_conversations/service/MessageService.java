@@ -14,6 +14,7 @@ import pl.motobudzet.api.user_conversations.repository.ConversationMessagesRepos
 import pl.motobudzet.api.utils.MessageMapper;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,13 +104,12 @@ public class MessageService {
     }
 
     private void updateMessagesRead(String loggedUser, List<ConversationMessage> conversationMessagesList) {
-        LocalDateTime now = LocalDateTime.now();
 
         for (ConversationMessage conversationMessage : conversationMessagesList) {
             String messageSenderUsername = conversationMessage.getMessageSender().getUsername();
             if (!loggedUser.equals(messageSenderUsername)) {
                 if (conversationMessage.getMessageReadDateTime() == null) {
-                    conversationMessage.setMessageReadDateTime(now);
+                    conversationMessage.setMessageReadDateTime(LocalDateTime.now(ZoneId.of("Europe/Warsaw")));
                 }
             }
         }

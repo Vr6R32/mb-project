@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,7 +31,7 @@ public class PublicAdvertisementImageService {
     public static final int PHOTO_TARGET_WIDTH = 1920;
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
-    List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png");
+    List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png","image/heif","image/heic");
 
     private final PublicAdvertisementService advertisementService;
 
@@ -39,10 +40,17 @@ public class PublicAdvertisementImageService {
     public ResponseEntity<String> uploadAndProcessImagesWithLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
-        List<String> fileNames = new ArrayList<>();
+        List<String> existingImages = advertisement.getImageUrls();
 
+        List<MultipartFile> filteredFilesToUpload = files.stream()
+                .filter(file -> !existingImages.contains(file.getOriginalFilename()))
+                .toList();
 
-        for (MultipartFile file : files) {
+        List<String> filenames = new ArrayList<>(files.stream()
+                .map(MultipartFile::getOriginalFilename)
+                .collect(Collectors.toList()));
+
+        for (MultipartFile file : filteredFilesToUpload) {
             if (file.isEmpty()) {
                 return new ResponseEntity<>("can't upload empty file!", HttpStatus.BAD_REQUEST);
             }
@@ -51,28 +59,35 @@ public class PublicAdvertisementImageService {
                 return new ResponseEntity<>("can't upload that file type!", HttpStatus.BAD_REQUEST);
             }
 
+
             String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
+            int indexToUpdate = filenames.indexOf(file.getOriginalFilename());
+            if(indexToUpdate != -1) {
+                filenames.set(indexToUpdate, fileName);
+            }
 
-            String processedFile = processAndSaveImageWithLogo(file, fileName, advertisement);
-
-            fileNames.add(processedFile);
-//            rowAffected += inserted;
-
+            processAndSaveImageWithLogo(file, fileName, advertisement);
         }
 
-//        advertisementService.insertPhotoToAdvertisement(advertisement.getId(), fileName);
+        int rowAffected = 0;
 
-        int rowAffected = advertisementService.insertNewPhotos(UUID.fromString(advertisementId), fileNames);
+        LinkedHashSet<String> uniqueFilenamesSet = new LinkedHashSet<>(filenames);
+
+        advertisement.setMainPhotoUrl(uniqueFilenamesSet.stream().findFirst().get());
+
+        rowAffected = +advertisementService.insertNewPhotos(UUID.fromString(advertisementId), uniqueFilenamesSet);
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         if (rowAffected > 0) {
             return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
         } else {
-            return new ResponseEntity<>("failed to insert image", HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
         }
     }
 
-    private String processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
+
+
+    private void processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
 
         try {
@@ -140,7 +155,6 @@ public class PublicAdvertisementImageService {
                 advertisement.setMainPhotoUrl(fileName);
                 advertisementService.saveAdvertisement(advertisement);
             }
-            return fileName;
         } catch (IOException e) {
             throw new RuntimeException("Failed to save the file.", e);
         }

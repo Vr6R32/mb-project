@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.locationCity.dto.CityDTO;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.repository.CityRepository;
-import pl.motobudzet.api.utils.CoordinateExtractor;
-import pl.motobudzet.api.utils.DistanceCalculator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +35,7 @@ public class CityService {
         City secondCity = cityRepository.getCityByName(cityTwo).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
         return calculateDistance(firstCity.getNLatitude(),firstCity.getELongitude(),secondCity.getNLatitude(),secondCity.getELongitude());
     }
-    public List<City> getCityNeighbourCitiesByDistance(String mainCity, Integer distanceMax) {
+    public List<City> getNeighbourCitiesByDistance(String mainCity, Integer distanceMax) {
         List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
         City mainLocation = allCitiesWithCityStates.stream()
                 .filter(city -> city.getName().equals(mainCity))
@@ -64,6 +62,10 @@ public class CityService {
 
     public City getCityByName(String name) {
         return cityRepository.getCityByName(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+    }
+
+    public City getCityByNameAndState(String cityName,String stateName) {
+        return cityRepository.getCityByNameAndState(cityName,stateName).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 
     public City getCityByNameWithout(String name) {
