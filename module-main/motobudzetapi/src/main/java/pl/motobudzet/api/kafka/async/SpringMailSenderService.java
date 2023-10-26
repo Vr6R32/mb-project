@@ -80,7 +80,7 @@ public class SpringMailSenderService {
                 "<font color='darkgoldenrod'>Twój link aktywacyjny :</font><br>" +
                 "<b><font color='moccasin' size='+3'>" + "<a href='http://localhost:20134/api/user?activationCode=" + user.getRegisterCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
-                "<font color='darkgoldenrod' size='+2'>" +"Kliknij aby aktywowac swoje konto oraz dokończyć rejerstracje !"+ "</font>" +
+                "<font color='darkgoldenrod' size='+2'>" +"Kliknij aby aktywowac swoje konto oraz dokończyć rejerstracje"+ "</font>" +
                 "</td></tr></table>" +
                 "</center>";
     }

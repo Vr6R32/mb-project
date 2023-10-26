@@ -111,4 +111,3 @@ window.addEventListener('resize', () => {
 
 // }
 // window.addEventListener("load", getAndDisplayConstruction);
-// window.addEventListener("load", getTestPhoto);

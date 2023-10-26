@@ -45,7 +45,7 @@ public class AppUser implements UserDetails {
     Boolean credentialsNotExpired;
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     private City city;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JsonManagedReference
     @JoinTable(
             name = "app_user_advertisements",

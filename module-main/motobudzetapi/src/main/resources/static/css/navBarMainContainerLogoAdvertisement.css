@@ -22,7 +22,7 @@ header.header-hidden {
 #popupNavbar {
     position: fixed;
     top: -120px; /* starting position outside of the viewport */
-    width: 100%;
+    width: 98%;
     background-color: black; /* light color */
     border: dashed white 2px;
     border-radius: 20px;

@@ -667,10 +667,11 @@ function uploadFiles(advertisementId) {
                 // displayResult(data);
                 // Odczytaj nagłówek "Location" z odpowiedzi serwera
                 const redirectURL = response.headers.get('Location');
+                const parameter = response.headers.get('created');
                 console.log(redirectURL);
                 if (redirectURL) {
                     // Wykonaj przekierowanie na określony adres URL
-                    window.location.href = redirectURL;
+                    window.location.href = redirectURL + '&created='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }

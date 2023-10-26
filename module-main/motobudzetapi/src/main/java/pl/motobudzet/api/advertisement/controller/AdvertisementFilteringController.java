@@ -41,11 +41,10 @@ public class AdvertisementFilteringController {
 //            @RequestParam(required = false) Long productionDateTo,
             @RequestParam(required = false) Integer pageNumber,
             @ModelAttribute AdvertisementFilterRequest request,
-            @RequestParam(required = false, defaultValue = "0") Integer distanceFrom,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {
-        return advertisementFilteringService.findAllPublicWithFilters(request, pageNumber, distanceFrom, sortBy, sortOrder);
+        return advertisementFilteringService.findAllPublicWithFilters(request, pageNumber, sortBy, sortOrder);
 
 //        return advertisementFilteringService.findAllPublicWithFilters(pageNumber, brand, model, fuelType, driveType, engineType, transmissionType,city,cityState, priceMin, priceMax,
 //                mileageFrom, mileageTo, engineCapacityFrom,
@@ -59,10 +58,9 @@ public class AdvertisementFilteringController {
     public long getAdvertisementsCount(
             @ModelAttribute AdvertisementFilterRequest request,
             @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false, defaultValue = "0") Integer distanceFrom,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder) {
-        return advertisementFilteringService.getCount(request, pageNumber, distanceFrom, sortBy, sortOrder);
+        return advertisementFilteringService.getCount(request, pageNumber, sortBy, sortOrder);
     }
 }
 

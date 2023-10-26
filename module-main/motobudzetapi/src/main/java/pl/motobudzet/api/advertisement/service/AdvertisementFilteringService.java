@@ -15,6 +15,7 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.advertisement.service.utils.ServiceFunction;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.service.CityService;
 import pl.motobudzet.api.locationState.service.CityStateService;
@@ -22,10 +23,13 @@ import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.PublicAdvertisementService.PAGE_SIZE;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationHelper.handleSelectValue;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationHelper.handleValueInRangeBetween;
 
 @Service
 @RequiredArgsConstructor
@@ -49,19 +53,14 @@ public class AdvertisementFilteringService {
 //                                                           Long engineCapacityTo, Long engineHorsePowerFrom,
 //                                                           Long engineHorsePowerTo, Long productionDateFrom,
 //                                                           Long productionDateTo,
-                                                            AdvertisementFilterRequest request,
-                                                           Integer distanceFrom,Integer pageNumber,
+                                                           AdvertisementFilterRequest request,
+                                                           Integer pageNumber,
                                                            String sortBy, String sortOrder) {
 
-        Specification<Advertisement> specification = Specification.where(null);
+        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
+                criteriaBuilder.isTrue(root.get("isVerified")));
 
-//        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
-//                criteriaBuilder.equal(root.get("isVerified"), false));
-
-        specification = setAdvertisementFilterSpecification(request, distanceFrom, specification);
-
-        //        return advertisementRepository.findAll(specification, PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort))
-        //                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+        specification = setAdvertisementFilterSpecification(request, specification);
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
@@ -82,30 +81,44 @@ public class AdvertisementFilteringService {
                 .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 
-    private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request, Integer distanceFrom, Specification<Advertisement> specification) {
-        String brand = request.getBrand();
-        String model = request.getModel();
-        String fuelType = request.getFuelType();
-        String driveType = request.getDriveType();
-        String engineType = request.getEngineType();
-        String transmissionType = request.getTransmissionType();
+
+    public long getCount(AdvertisementFilterRequest request,
+                         Integer pageNumber,
+                         String sortBy, String sortOrder) {
+        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
+                criteriaBuilder.isTrue(root.get("isVerified")));
+
+        specification = setAdvertisementFilterSpecification(request, specification);
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+
+        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE);
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        return advertisementSpecificationIds.getTotalElements();
+    }
+
+
+    private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
+
+        Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
+        serviceFunctionMap.put("brand", brandService::getBrand);
+        serviceFunctionMap.put("model", modelService::getModel);
+        serviceFunctionMap.put("fuelType", specificationService::getFuelType);
+        serviceFunctionMap.put("driveType", specificationService::getDriveType);
+        serviceFunctionMap.put("engineType", specificationService::getEngineType);
+        serviceFunctionMap.put("transmissionType", specificationService::getTransmissionType);
+
+        specification = handleSelectValue(request, specification, serviceFunctionMap);
+
+        specification = handleValueInRangeBetween(specification, "price", request.getPriceMin(), request.getPriceMax());
+        specification = handleValueInRangeBetween(specification, "mileage", request.getMileageFrom(), request.getMileageTo());
+        specification = handleValueInRangeBetween(specification, "engineCapacity", request.getEngineCapacityFrom(), request.getEngineCapacityTo());
+        specification = handleValueInRangeBetween(specification, "engineHorsePower", request.getEngineHorsePowerFrom(), request.getEngineHorsePowerTo());
+        specification = handleValueInRangeBetween(specification, "productionDate", request.getProductionDateFrom(), request.getProductionDateTo());
+
+
         String city = request.getCity();
         String cityState = request.getCityState();
-        Long priceMin = request.getPriceMin();
-        Long priceMax = request.getPriceMax();
-        Long mileageFrom = request.getMileageFrom();
-        Long mileageTo= request.getMileageTo();
-        Long engineCapacityFrom = request.getEngineCapacityFrom();
-        Long engineCapacityTo = request.getEngineCapacityTo();
-        Long engineHorsePowerFrom = request.getEngineHorsePowerFrom();
-        Long engineHorsePowerTo = request.getEngineHorsePowerTo();
-        Long productionDateFrom = request.getProductionDateFrom();
-        Long productionDateTo = request.getProductionDateTo();
-
-        if (brand != null && !brand.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("brand"), brandService.getBrand(brand)));
-        }
+        Integer distanceFrom = (request.getDistanceFrom() != null) ? request.getDistanceFrom() : 0;
 
         if (city != null && distanceFrom != null) {
             List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
@@ -124,127 +137,7 @@ public class AdvertisementFilteringService {
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
         }
-
-        if (model != null && !model.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("model"), modelService.getModel(model)));
-        }
-
-        if (fuelType != null && !fuelType.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("fuelType"), specificationService.getFuelType(fuelType)));
-        }
-
-        if (driveType != null && !driveType.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("driveType"), specificationService.getDriveType(driveType)));
-        }
-
-        if (engineType != null && !engineType.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("engineType"), specificationService.getEngineType(engineType)));
-        }
-
-        if (transmissionType != null && !transmissionType.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("transmissionType"), specificationService.getTransmissionType(transmissionType)));
-        }
-
-        if (priceMin != null && priceMax != null) {
-            if (priceMin.equals(priceMax)) {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("price"), priceMin));
-            } else {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.between(root.get("price"), priceMin, priceMax));
-            }
-        } else if (priceMin != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("price"), priceMin));
-        } else if (priceMax != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceMax));
-        }
-
-        if (mileageFrom != null && mileageTo != null) {
-            if (mileageFrom.equals(mileageTo)) {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("mileage"), mileageFrom));
-            } else {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.between(root.get("mileage"), mileageFrom, mileageTo));
-            }
-        } else if (mileageFrom != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("mileage"), mileageFrom));
-        } else if (mileageTo != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.lessThanOrEqualTo(root.get("mileage"), mileageTo));
-        }
-
-
-        if (engineCapacityFrom != null && engineCapacityTo != null) {
-            if (engineCapacityFrom.equals(engineCapacityTo)) {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("engineCapacity"), engineCapacityFrom));
-            } else {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.between(root.get("engineCapacity"), engineCapacityFrom, engineCapacityTo));
-            }
-        } else if (engineCapacityFrom != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("engineCapacity"), engineCapacityFrom));
-        } else if (engineCapacityTo != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.lessThanOrEqualTo(root.get("engineCapacity"), engineCapacityTo));
-        }
-
-        if (engineHorsePowerFrom != null && engineHorsePowerTo != null) {
-            if (engineHorsePowerFrom.equals(engineHorsePowerTo)) {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("engineHorsePower"), engineHorsePowerFrom));
-            } else {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.between(root.get("engineHorsePower"), engineHorsePowerFrom, engineHorsePowerTo));
-            }
-        } else if (engineHorsePowerFrom != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("engineHorsePower"), engineHorsePowerFrom));
-        } else if (engineHorsePowerTo != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.lessThanOrEqualTo(root.get("engineHorsePower"), engineHorsePowerTo));
-        }
-
-        if (productionDateFrom != null && productionDateTo != null) {
-            if (productionDateFrom.equals(productionDateTo)) {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("productionDate"), productionDateFrom));
-            } else {
-                specification = specification.and((root, query, criteriaBuilder) ->
-                        criteriaBuilder.between(root.get("productionDate"), productionDateFrom, productionDateTo));
-            }
-        } else if (productionDateFrom != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("productionDate"), productionDateFrom));
-        } else if (productionDateTo != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.lessThanOrEqualTo(root.get("productionDate"), productionDateTo));
-
-        }
         return specification;
     }
-
-    public long getCount(AdvertisementFilterRequest request,
-                         Integer distanceFrom,Integer pageNumber,
-                         String sortBy, String sortOrder) {
-        Specification<Advertisement> specification = Specification.where(null);
-        specification = setAdvertisementFilterSpecification(request, distanceFrom, specification);
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-
-        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE);
-        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
-        return advertisementSpecificationIds.getTotalElements();
-    }
-
 }
 

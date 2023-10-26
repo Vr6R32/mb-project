@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdvertisementFilterRequest {
 
     private Integer pageNumber;
+    private Integer distanceFrom;
     private String brand;
     private String model;
     private String fuelType;

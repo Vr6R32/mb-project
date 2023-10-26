@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
 
 import javax.imageio.ImageIO;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PublicAdvertisementImageService {
+public class AdvertisementImageService {
 
     public static final int PHOTO_TARGET_WIDTH = 1920;
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
@@ -79,9 +78,9 @@ public class PublicAdvertisementImageService {
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         if (rowAffected > 0) {
-            return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
+            return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").body("inserted !" + rowAffected);
         } else {
-            return ResponseEntity.ok().header("Location", redirectUrl).body("inserted !" + rowAffected);
+            return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").body("inserted !" + rowAffected);
         }
     }
 

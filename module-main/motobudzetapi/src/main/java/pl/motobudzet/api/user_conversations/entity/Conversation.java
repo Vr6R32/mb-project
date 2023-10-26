@@ -22,7 +22,7 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Advertisement advertisement;
     @ManyToOne
     private AppUser userOwner;

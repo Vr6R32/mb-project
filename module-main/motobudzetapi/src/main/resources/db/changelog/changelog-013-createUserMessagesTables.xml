@@ -4,6 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <changeSet id="createTableConversations" author="michal-k">
+        <!-- Krok 1: Tworzenie tabeli -->
         <createTable tableName="conversations">
             <column name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" unique="true"/>
@@ -14,20 +15,25 @@
             <column name="user_owner_id" type="BIGINT">
                 <constraints foreignKeyName="fki1pyanwhko4xbpiiql12m4rxg" references="app_user(id)"/>
             </column>
-            <column name="advertisement_id" type="UUID">
-                <constraints foreignKeyName="fktn5mhp1euuy76ay51fbtnfcmj" references="advertisement(id)"/>
-            </column>
+            <column name="advertisement_id" type="UUID"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fktn5mhp1euuy76ay51fbtnfcmj"
+                baseTableName="conversations"
+                baseColumnNames="advertisement_id"
+                referencedTableName="advertisement"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="createTableConversationMessages" author="michal-k">
+        <!-- Krok 1: Tworzenie tabeli -->
         <createTable tableName="conversation_messages">
             <column name="id" type="BIGSERIAL">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="conversation_id" type="BIGINT">
-                <constraints foreignKeyName="fkcr8qqgnqnaqq2hw3gr4wtfe2a" references="conversations(id)"/>
-            </column>
+            <column name="conversation_id" type="BIGINT"/>
             <column name="message_sender_id" type="BIGINT">
                 <constraints foreignKeyName="fkd1a4uths63jnx5ntey3y64wxb" references="app_user(id)"/>
             </column>
@@ -35,6 +41,15 @@
             <column name="message_send_date_time" type="timestamp(6)"/>
             <column name="message_read_date_time" type="timestamp(6)"/>
         </createTable>
+
+        <!-- Krok 2: Dodanie klucza obcego z onDelete="CASCADE" -->
+        <addForeignKeyConstraint
+                constraintName="fkcr8qqgnqnaqq2hw3gr4wtfe2a"
+                baseTableName="conversation_messages"
+                baseColumnNames="conversation_id"
+                referencedTableName="conversations"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="addColumnToConversations" author="michal-k">
