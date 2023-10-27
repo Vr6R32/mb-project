@@ -137,6 +137,8 @@ function loadFavourites() {
 function fetchFavouriteIds(uuidList) {
     let loggedUser = document.getElementById('username').textContent;
 
+    uuidList = uuidList.map(uuid => uuid.replace(/^\"|\"$/g, ''));
+
     fetch('/api/advertisements/favourites/' + loggedUser, {
         method: 'POST',
         headers: {
@@ -154,8 +156,6 @@ function fetchFavouriteIds(uuidList) {
         .then(data => {
 
             let resultContainerRight = document.getElementById('resultContainerRight');
-
-
 
             data.forEach(advertisement => {
                 createUserAdvertisementsResultDiv(advertisement,resultContainerRight);

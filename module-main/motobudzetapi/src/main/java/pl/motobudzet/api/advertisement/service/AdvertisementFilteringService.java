@@ -23,13 +23,12 @@ import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.PublicAdvertisementService.PAGE_SIZE;
-import static pl.motobudzet.api.advertisement.service.utils.SpecificationHelper.handleSelectValue;
-import static pl.motobudzet.api.advertisement.service.utils.SpecificationHelper.handleValueInRangeBetween;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleSelectValue;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleValueInRangeBetween;
 
 @Service
 @RequiredArgsConstructor
@@ -45,14 +44,6 @@ public class AdvertisementFilteringService {
     private final EntityManager entityManager;
 
     public Page<AdvertisementDTO> findAllPublicWithFilters(
-//                                                           String brand, String model, String fuelType,
-//                                                           String driveType, String engineType, String transmissionType,
-//                                                           String city, String cityState,
-//                                                           Long priceMin, Long priceMax, Long mileageFrom,
-//                                                           Long mileageTo, Long engineCapacityFrom,
-//                                                           Long engineCapacityTo, Long engineHorsePowerFrom,
-//                                                           Long engineHorsePowerTo, Long productionDateFrom,
-//                                                           Long productionDateTo,
                                                            AdvertisementFilterRequest request,
                                                            Integer pageNumber,
                                                            String sortBy, String sortOrder) {
@@ -82,9 +73,9 @@ public class AdvertisementFilteringService {
     }
 
 
-    public long getCount(AdvertisementFilterRequest request,
-                         Integer pageNumber,
-                         String sortBy, String sortOrder) {
+    public long getFilterResultCount(AdvertisementFilterRequest request,
+                                     Integer pageNumber,
+                                     String sortBy, String sortOrder) {
         Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
                 criteriaBuilder.isTrue(root.get("isVerified")));
 
@@ -120,22 +111,25 @@ public class AdvertisementFilteringService {
         String cityState = request.getCityState();
         Integer distanceFrom = (request.getDistanceFrom() != null) ? request.getDistanceFrom() : 0;
 
-        if (city != null && distanceFrom != null) {
+// First check for cityState alone since it's the condition you want to prioritize.
+        if (cityState != null && !cityState.isEmpty() && (city == null || city.isEmpty())) {
+            specification = specification.and((root, query, criteriaBuilder) -> {
+                Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
+                return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
+            });
+        }
+// Then check for city and distance
+        else if (city != null && !city.isEmpty() && distanceFrom != null) {
             List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
         }
-        else  if (city != null && !city.isEmpty()) {
+// Then check for city alone
+        else if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))
             );
-        }
-        else if (cityState != null && !cityState.isEmpty() && city == null) {
-            specification = specification.and((root, query, criteriaBuilder) -> {
-                Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
-                return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
-            });
         }
         return specification;
     }

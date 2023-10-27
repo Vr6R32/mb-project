@@ -2,6 +2,7 @@ let formData = new FormData();
 let sortOrder = "asc"; // Set the default sort order to "asc" (ascending) or "desc" (descending) as you prefer
 let sortingBy = "price"; // Set the default sort by parameter to "price" (or any other default value you prefer)
 let urlSearchParams = null;
+let favouritesArray = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     let mainContainer = document.getElementById('container-main');
@@ -33,7 +34,6 @@ function getParametersFromCurrentUrl() {
 
         // Sprawdzamy, czy istnieją jakieś parametry w URL
         if (urlSearchParams.toString() !== "" && !urlSearchParams.has("activation")) {
-            console.log("Parametry istnieją w URL:", urlSearchParams.toString());
             // Tworzymy nowy obiekt FormData
             // Przechodzimy przez każdy parametr w URLSearchParams i dodajemy go do formData
             urlSearchParams.forEach((value, key) => {
@@ -280,11 +280,18 @@ function createSearchForm(formContainer) {
 
     inputs.forEach(input => {
         input.addEventListener('change', function() {
-            formData.set(input.name, input.value);  // Update the FormData
-            executeAdvertisementFilterResultCount();  // Execute your fetch request
+            if (input.name === 'city') {
+                input.value = input.value.trim();
+                setTimeout(() => {
+                    formData.set(input.name, input.value); // Update the FormData
+                    executeAdvertisementFilterResultCount(); // Execute your fetch request
+                }, 500);
+            } else {
+                formData.set(input.name, input.value);  // Update the FormData immediately for other inputs
+                executeAdvertisementFilterResultCount();  // Execute your fetch request immediately for other inputs
+            }
         });
     });
-
 
 
 
@@ -521,9 +528,44 @@ function updateCitySuggestions(suggestions) {
     }
 }
 
+function getUserName(){
+    let userName = document.getElementById('username');
+    return userName.textContent;
+}
 
+
+function getUserFavourites() {
+
+
+    fetch("/api/users/favourites/" + getUserName())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Przekształć ciąg znaków w tablicę UUID
+            let ids = data.replace(/[\[\]]/g, '').split(',').filter(Boolean);
+
+            ids.forEach(id => {
+                id = id.trim();  // Usuń ewentualne białe znaki
+
+                // Usuń cudzysłowy z początku i końca ciągu znaków
+                id = id.replace(/^"|"$/g, '');
+
+                favouritesArray.push(id);
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
+}
 
 function displayResults(data) {
+
+    // Make the GET request to the API endpoint with the sorting parameters
+
+
+
     // This function will be responsible for displaying the results and pagination
     let mainContainer = document.getElementById('container-main');
     const searchFormContainer = document.getElementById('searchFormContainer');
@@ -559,6 +601,8 @@ function displayResults(data) {
         }
         return;
     }
+
+
 
 
 
@@ -630,6 +674,8 @@ function displayResults(data) {
         conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         conversationDetailsHeader.style.boxSizing = "border-box";
         conversationDetailsHeader.style.flexBasis = "auto";
+        // conversationDetailsHeader.style.bottom = '20px';
+
         // conversationDetailsHeader.style.position = 'relative';
         // conversationDetailsHeader.style.bottom = '30px';
 
@@ -637,14 +683,9 @@ function displayResults(data) {
         headerTitleNameDiv.style.display = 'column';
         headerTitleNameDiv.style.width = '100%';
         headerTitleNameDiv.style.position = 'relative';
-        headerTitleNameDiv.style.bottom = '10px';
+        headerTitleNameDiv.style.bottom = '-15px';
 
-        // const headerTitleModelBrand = document.createElement('div');
-        // headerTitleModelBrand.style.display = 'column';
-        // headerTitleModelBrand.style.width = '100%';
-        // headerTitleModelBrand.style.position = 'relative';
-        // headerTitleModelBrand.style.bottom = '50px';
-        // headerTitleOwnerName.style.marginBottom = '50px';
+
 
         const titleElement = document.createElement("div");
         titleElement.textContent = ad.name;
@@ -658,11 +699,11 @@ function displayResults(data) {
         modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
         modelBrandElement.style.textAlign = 'left';
 
-        const ownerName = document.createElement("div");
-        ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
-        ownerName.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        ownerName.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        ownerName.style.textAlign = 'left';
+        // const ownerName = document.createElement("div");
+        // ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
+        // ownerName.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        // ownerName.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        // ownerName.style.textAlign = 'left';
 
 
         headerTitleNameDiv.appendChild(titleElement);
@@ -672,16 +713,32 @@ function displayResults(data) {
         conversationDetailsHeader.appendChild(headerTitleNameDiv);
         // conversationDetailsHeader.appendChild(headerTitleModelBrand);
 
-        const dateElement = document.createElement("div");
-        dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
-        dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        dateElement.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        dateElement.style.bottom = '20px'; // Dostosuj rozmiar tekstu
-        dateElement.style.textAlign = 'right';
-        dateElement.style.marginRight = '15px';
-        dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-        conversationDetailsHeader.appendChild(dateElement);
+        const priceHeader = document.createElement("div");
+        // dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
+        priceHeader.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        priceHeader.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        priceHeader.style.position = 'relative'; // Dostosuj rozmiar tekstu
+        priceHeader.style.bottom = '-5px'; // Dostosuj rozmiar tekstu
+        priceHeader.style.textAlign = 'right';
+        priceHeader.style.marginRight = '25px';
+        priceHeader.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+
+        const priceElement = document.createElement('div');
+        priceElement.style.color = 'white';
+        priceElement.style.fontSize = "26px"; // Dostosuj rozmiar tekstu
+
+        const priceValueSpan = document.createElement('span'); // Używamy span zamiast div
+        priceValueSpan.textContent = ad.priceUnit;
+        priceValueSpan.style.color = 'darkgoldenrod';
+        priceValueSpan.style.verticalAlign = "top"; // Wyrówn
+        priceValueSpan.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+
+        priceElement.textContent = formatInteger(ad.price) + ' '; // Dodajemy spację po wartości ceny
+        priceElement.appendChild(priceValueSpan); // Dodajemy ad.priceUnit bezpośrednio po ad.price
+
+        priceHeader.appendChild(priceElement);
+
+        conversationDetailsHeader.appendChild(priceHeader);
 
 
         ///////////////////////////////////////////////////////////////////////
@@ -702,6 +759,7 @@ function displayResults(data) {
         conversationDetailsMain.style.flexBasis = 'auto';
         conversationDetailsMain.style.display = 'grid';
         conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+        conversationDetailsMain.style.marginTop = '20px';
         // conversationDetailsMain.style.position = 'relative';
         // conversationDetailsMain.style.bottom = '20px';
 
@@ -734,6 +792,33 @@ function displayResults(data) {
         productionYear.style.color = 'darkgoldenrod';
         productionYear.textContent = 'ROK';
 
+        let engineCapacity = document.createElement('span');
+        engineCapacity.style.color = 'darkgoldenrod';
+        engineCapacity.textContent = 'CM';
+        let smallerDigit = document.createElement('span');
+        smallerDigit.textContent = '3';
+        smallerDigit.style.fontSize = '10px'; // Zmniejszenie rozmiaru czcionki o 20%
+        smallerDigit.style.verticalAlign = 'top';
+
+        engineCapacity.appendChild(smallerDigit);
+
+
+        const bottomDetailsHeader = document.createElement("bottomDetailsHeader");
+        bottomDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        bottomDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
+        bottomDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
+        bottomDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        bottomDetailsHeader.style.boxSizing = "border-box";
+        bottomDetailsHeader.style.flexBasis = "auto";
+        // conversationDetailsHeader.style.position = 'relative';
+        // conversationDetailsHeader.style.bottom = '30px';
+
+        const locationDetailsDiv = document.createElement('div');
+        locationDetailsDiv.style.display = 'column';
+        locationDetailsDiv.style.width = '100%';
+        locationDetailsDiv.style.position = 'relative';
+        locationDetailsDiv.style.bottom = '10px';
+
         const locationDetails = document.createElement("div");
         locationDetails.textContent = ad.city + ', ' + ad.cityState;
         locationDetails.style.color = "white"; // Dostosuj kolor tekstu
@@ -749,28 +834,141 @@ function displayResults(data) {
         locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         locationDetails.style.boxSizing = "border-box";
         locationDetails.style.flexBasis = "auto";
+        locationDetails.style.textAlign = 'left';
+
+
+        locationDetailsDiv.appendChild(locationDetails);
+        bottomDetailsHeader.appendChild(locationDetailsDiv);
+
+
+        const favouriteBottomHeaderDiv = document.createElement("div");
+        favouriteBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        favouriteBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        favouriteBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
+        favouriteBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+        favouriteBottomHeaderDiv.style.textAlign = 'right';
+        favouriteBottomHeaderDiv.style.marginRight = '25px';
+        favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
 
 
 
-        function formatPrice(price) {
+        const favouriteWrapper = document.createElement('div');
+        favouriteWrapper.id = 'favouriteWrapper';
+        favouriteWrapper.style.display = 'flex';
+        favouriteWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+
+        const favouriteIconDiv = document.createElement('div');
+        favouriteIconDiv.style.color = 'white';
+        favouriteIconDiv.style.fontSize = "26px";
+        favouriteIconDiv.style.zIndex = '999';
+        favouriteIconDiv.addEventListener('mouseover', function() {
+            favouriteIconDiv.style.cursor = "pointer";
+            favouriteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
+            favouriteText.style.opacity = '1';  // Ustaw opacity na 1
+            console.log('Mouse is over the icon.');
+        });
+        favouriteIconDiv.addEventListener('mouseout', function() {
+            favouriteIconDiv.style.cursor = "auto";
+            favouriteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
+            favouriteText.style.opacity = '0';  // Ustaw opacity na 0
+            console.log('Mouse is out of the icon.');
+        });
+
+
+        const favouriteText = document.createElement('span');
+        favouriteText.id = 'favouriteText';
+        favouriteText.style.border = '5px';
+        favouriteText.style.color = 'white';
+        favouriteText.style.position = 'relative';
+        favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+        favouriteText.style.opacity = '0';
+        favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
+        // favouriteText.style.padding = '8px';
+        // favouriteText.style.backgroundColor = 'black';
+        // favouriteText.style.border = '2px dashed darkgoldenrod';
+        // favouriteText.style.borderRadius = '10px';
+
+        favouriteWrapper.appendChild(favouriteText);
+        favouriteWrapper.appendChild(favouriteIconDiv);
+
+        const heartIcon = document.createElement('img');
+
+        if (ad.user !== getUserName()) {
+            if (favouritesArray.includes(ad.id)) {
+                heartIcon.src = "/api/resources/heartFull";
+                favouriteText.innerHTML = "Usuń z ulubionych";
+            } else {
+                heartIcon.src = "/api/resources/heartEmpty";
+                favouriteText.innerHTML = "Dodaj do ulubionych";
+            }
+        }
+
+
+        favouriteIconDiv.addEventListener('click', function(event) {
+            event.stopPropagation();
+
+            if (heartIcon.src.includes("heartFull")) {
+                heartIcon.src = "/api/resources/heartEmpty";
+                favouriteText.innerHTML = "Dodaj do ulubionych";
+            } else if (heartIcon.src.includes("heartEmpty")) {
+                heartIcon.src = "/api/resources/heartFull";
+                favouriteText.innerHTML = "Usuń z ulubionych";
+            }
+
+            const requestBody = {
+                userName: getUserName(),
+                advertisementId: ad.id
+            };
+
+            fetch('/api/users/favourites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        heartIcon.style.marginBottom = '2px';
+
+        favouriteIconDiv.appendChild(heartIcon);
+
+
+        favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
+        bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
+
+
+
+
+
+        function formatInteger(price) {
             // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
         const containers = [
-            createInfoContainer('price', 'PriceIcon', formatPrice(ad.price)),
-            createInfoContainer('mileage', 'MileageIcon', formatPrice(ad.mileage)),
+            // createInfoContainer('price', 'PriceIcon', formatInteger(ad.price)),
+            createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
             createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
             createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
+            createInfoContainer('engineCapacity', 'CapacityIcon', formatInteger(ad.engineCapacity)),
             createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
             createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
             createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
         ];
 
-        containers[0].appendChild(priceUnitValue);
-        containers[1].appendChild(mileageUnitValue);
-        containers[2].appendChild(horsePower);
-        containers[3].appendChild(productionYear);
+        // containers[0].appendChild(priceUnitValue);
+        containers[0].appendChild(mileageUnitValue);
+        containers[1].appendChild(horsePower);
+        containers[2].appendChild(productionYear);
+        containers[3].appendChild(engineCapacity);
 
         // Dodawanie kontenerów do infoContainerFirst
         // containers.forEach(container => {
@@ -808,15 +1006,17 @@ function displayResults(data) {
         // conversationLastMessage.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
 
 
+
+
+
         conversationDetailsMain.appendChild(advertisementDetails);
-        // conversationDetailsMain.appendChild(conversationLastMessage);
 
         conversationDetailsDiv.appendChild(conversationDetailsHeader);
         conversationDetailsDiv.appendChild(conversationDetailsMain);
 
+        conversationDetailsDiv.appendChild(bottomDetailsHeader);
 
 
-        conversationDetailsDiv.appendChild(locationDetails);
 
 
         resultDiv.appendChild(conversationDetailsDiv);
@@ -1085,6 +1285,11 @@ function createSortButton(sortBy) {
     return button;
 }
 function executeSearch(formData) {
+
+    if(getUserName()!=='KONTO'){
+        getUserFavourites();
+    }
+
 
     let searchParams;
     // Remove the sortBy and sortOrder parameters from formData to avoid confusion

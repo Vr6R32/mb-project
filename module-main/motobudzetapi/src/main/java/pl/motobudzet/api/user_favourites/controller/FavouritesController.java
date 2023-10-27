@@ -8,6 +8,7 @@ import pl.motobudzet.api.user_favourites.service.FavouritesService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,9 +45,8 @@ public class FavouritesController {
 //        return ResponseEntity.ok(String.valueOf(allFavourites));
 //    }
     @GetMapping("{loggedUser}")
-    public ResponseEntity<String> getFavouritesIds(@PathVariable String loggedUser,
-                                                Principal principal) {
-        List<String> allFavouritesId = favouritesService.getAllFavouritesId(loggedUser, principal.getName());
-        return ResponseEntity.ok(String.valueOf(allFavouritesId));
+    public List<UUID> getFavouritesIds(@PathVariable String loggedUser,
+                                       Principal principal) {
+        return favouritesService.getAllFavouritesId(loggedUser, principal.getName());
     }
 }

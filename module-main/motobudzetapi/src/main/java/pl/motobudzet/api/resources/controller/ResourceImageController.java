@@ -37,6 +37,10 @@ public class ResourceImageController {
     public Resource getEngineHorsePower() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "engineHorsePower.png");
     }
+    @GetMapping(value = "/engineCapacity", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getEngineCapacity() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "engineCapacity.png");
+    }
 
     @GetMapping(value = "/fuelType", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getFuel() {

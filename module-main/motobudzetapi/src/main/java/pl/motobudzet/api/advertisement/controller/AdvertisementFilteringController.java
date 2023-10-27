@@ -7,8 +7,6 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.service.AdvertisementFilteringService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "api/advertisements/filter")
 public class AdvertisementFilteringController {
@@ -60,7 +58,7 @@ public class AdvertisementFilteringController {
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder) {
-        return advertisementFilteringService.getCount(request, pageNumber, sortBy, sortOrder);
+        return advertisementFilteringService.getFilterResultCount(request, pageNumber, sortBy, sortOrder);
     }
 }
 

@@ -50,6 +50,7 @@ public class PublicAdvertisementService {
     private final EntityManager entityManager;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {
+        System.out.println(uuidStringList);
         if (username.equals(loggedUser)) {
             List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
             return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()

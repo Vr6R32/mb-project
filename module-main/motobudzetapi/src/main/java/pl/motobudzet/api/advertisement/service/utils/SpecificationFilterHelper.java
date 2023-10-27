@@ -1,20 +1,15 @@
 package pl.motobudzet.api.advertisement.service.utils;
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.locationCity.entity.City;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class SpecificationHelper {
+public class SpecificationFilterHelper {
 
-    private SpecificationHelper() {
+    private SpecificationFilterHelper() {
     }
 
     public static <T extends Comparable<T>> Specification<Advertisement> handleValueInRangeBetween(Specification<Advertisement> specification, String fieldName, T min, T max) {

@@ -2,6 +2,7 @@ package pl.motobudzet.api.user_favourites.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_favourites.dto.FavouriteRequest;
@@ -10,6 +11,7 @@ import pl.motobudzet.api.user_favourites.repository.FavouritesRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +64,7 @@ public class FavouritesService {
         return 0;
     }
 
-    public List<String> getAllFavouritesId(String loggedUser, String principalName) {
+    public List<UUID> getAllFavouritesId(String loggedUser, String principalName) {
         if(loggedUser.equals(principalName)){
             return favouritesRepository.findAllFavouritesIdByUserName(loggedUser);
         }
