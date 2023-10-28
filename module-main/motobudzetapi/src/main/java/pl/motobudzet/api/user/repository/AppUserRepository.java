@@ -1,6 +1,7 @@
 package pl.motobudzet.api.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
@@ -18,12 +19,14 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select a from AppUser a " +
             "left join fetch a.roles " +
-            "left join fetch a.advertisements " +
             "left join fetch a.city c " +
-            "left join fetch c.cityState cs" +
-            "left join fetch a.roles " +
-            " where a.userName = ?1")
+            "left join fetch c.cityState cs " +
+            "where a.userName = ?1")
     Optional<AppUser> findByUserNameForDto(String userName);
+
+    @Modifying
+    @Query("UPDATE AppUser a SET a.resetPasswordCode = ?1 WHERE a.email = ?2")
+    int insertResetPasswordCode(String code, String email);
 
 
     @Query(value = "SELECT adv.id " +
@@ -60,5 +63,14 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("select a from AppUser a where a.registerCode = ?1")
     Optional<AppUser> getAppUserByRegisterCode(String activationCode);
+
+    @Query("select a from AppUser a " +
+            "left join fetch a.roles " +
+            "left join fetch a.advertisements " +
+            "left join fetch a.city c " +
+            "left join fetch c.cityState cs" +
+            "left join fetch a.roles " +
+            " where a.email = ?1")
+    Optional<AppUser> findByEmail(String email);
 
 }

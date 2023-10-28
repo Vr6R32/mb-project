@@ -1,3 +1,10 @@
+
+function getUserName(){
+    let userName = document.getElementById('username');
+    return userName.textContent;
+}
+
+
 function createResultDiv(conversation,resultContainerRight) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
@@ -185,11 +192,18 @@ function createResultDiv(conversation,resultContainerRight) {
     conversationDeliveryDateTime.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
     conversationDeliveryDateTime.style.textAlign = "right"; // Dostosuj rozmiar tekstu
 
+
+
     if (conversation.lastMessage === null) {
         conversationDeliveryDateTime.textContent += 'Brak Wiadomości';
     } else {
+        const isSenderCurrentUser = conversation.lastMessage.userSender === getUserName();
         if (conversation.lastMessage.messageReadTime === null) {
-            conversationDeliveryDateTime.textContent += 'Dostarczono : ' + conversation.lastMessage.messageSendTime;
+            if (isSenderCurrentUser) {
+                conversationDeliveryDateTime.textContent += 'Dostarczono : ' + conversation.lastMessage.messageSendTime;
+            } else {
+                conversationDeliveryDateTime.textContent += 'Odebrano : ' + conversation.lastMessage.messageSendTime;
+            }
         } else {
             conversationDeliveryDateTime.textContent += 'Wyswietlono : ' + conversation.lastMessage.messageReadTime;
         }
@@ -213,6 +227,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
     return resultDiv;
 }
+
 
 
 

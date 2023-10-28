@@ -674,18 +674,12 @@ function displayResults(data) {
         conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         conversationDetailsHeader.style.boxSizing = "border-box";
         conversationDetailsHeader.style.flexBasis = "auto";
-        // conversationDetailsHeader.style.bottom = '20px';
-
-        // conversationDetailsHeader.style.position = 'relative';
-        // conversationDetailsHeader.style.bottom = '30px';
 
         const headerTitleNameDiv = document.createElement('div');
         headerTitleNameDiv.style.display = 'column';
         headerTitleNameDiv.style.width = '100%';
         headerTitleNameDiv.style.position = 'relative';
         headerTitleNameDiv.style.bottom = '-15px';
-
-
 
         const titleElement = document.createElement("div");
         titleElement.textContent = ad.name;
@@ -699,22 +693,12 @@ function displayResults(data) {
         modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
         modelBrandElement.style.textAlign = 'left';
 
-        // const ownerName = document.createElement("div");
-        // ownerName.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + ad.user + "</strong>";
-        // ownerName.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        // ownerName.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        // ownerName.style.textAlign = 'left';
-
-
         headerTitleNameDiv.appendChild(titleElement);
         headerTitleNameDiv.appendChild(modelBrandElement);
-        // headerTitleOwnerName.appendChild(ownerName);
 
         conversationDetailsHeader.appendChild(headerTitleNameDiv);
-        // conversationDetailsHeader.appendChild(headerTitleModelBrand);
 
         const priceHeader = document.createElement("div");
-        // dateElement.textContent = 'Utworzone dnia ' + ad.creationDate;
         priceHeader.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
         priceHeader.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
         priceHeader.style.position = 'relative'; // Dostosuj rozmiar tekstu
@@ -741,11 +725,6 @@ function displayResults(data) {
         conversationDetailsHeader.appendChild(priceHeader);
 
 
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////HEADER//////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-
-
         const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
         conversationDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
         conversationDetailsDiv.style.flexBasis = 'auto';
@@ -760,15 +739,6 @@ function displayResults(data) {
         conversationDetailsMain.style.display = 'grid';
         conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
         conversationDetailsMain.style.marginTop = '20px';
-        // conversationDetailsMain.style.position = 'relative';
-        // conversationDetailsMain.style.bottom = '20px';
-
-
-        // const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
-        // conversationDetailsSecondUser.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-        // conversationDetailsSecondUser.style.flexBasis = 'auto';
-        // conversationDetailsSecondUser.innerHTML = "Konwersacja z → <strong style='font-size: 1.4em;'>" + conversation.secondUser + "</strong>";
-
 
         const advertisementDetails = document.createElement("conversationDetailsBottom");
         advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
@@ -810,8 +780,6 @@ function displayResults(data) {
         bottomDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         bottomDetailsHeader.style.boxSizing = "border-box";
         bottomDetailsHeader.style.flexBasis = "auto";
-        // conversationDetailsHeader.style.position = 'relative';
-        // conversationDetailsHeader.style.bottom = '30px';
 
         const locationDetailsDiv = document.createElement('div');
         locationDetailsDiv.style.display = 'column';
@@ -850,8 +818,6 @@ function displayResults(data) {
         favouriteBottomHeaderDiv.style.marginRight = '25px';
         favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
 
-
-
         const favouriteWrapper = document.createElement('div');
         favouriteWrapper.id = 'favouriteWrapper';
         favouriteWrapper.style.display = 'flex';
@@ -861,17 +827,16 @@ function displayResults(data) {
         favouriteIconDiv.style.color = 'white';
         favouriteIconDiv.style.fontSize = "26px";
         favouriteIconDiv.style.zIndex = '999';
+
         favouriteIconDiv.addEventListener('mouseover', function() {
             favouriteIconDiv.style.cursor = "pointer";
             favouriteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
             favouriteText.style.opacity = '1';  // Ustaw opacity na 1
-            console.log('Mouse is over the icon.');
         });
         favouriteIconDiv.addEventListener('mouseout', function() {
             favouriteIconDiv.style.cursor = "auto";
             favouriteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
             favouriteText.style.opacity = '0';  // Ustaw opacity na 0
-            console.log('Mouse is out of the icon.');
         });
 
 
@@ -883,17 +848,77 @@ function displayResults(data) {
         favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
         favouriteText.style.opacity = '0';
         favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
-        // favouriteText.style.padding = '8px';
-        // favouriteText.style.backgroundColor = 'black';
-        // favouriteText.style.border = '2px dashed darkgoldenrod';
-        // favouriteText.style.borderRadius = '10px';
+
 
         favouriteWrapper.appendChild(favouriteText);
         favouriteWrapper.appendChild(favouriteIconDiv);
 
         const heartIcon = document.createElement('img');
 
+
+
+        const editBottomHeaderDiv = document.createElement("div");
+        editBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+        editBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        editBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
+        editBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+        editBottomHeaderDiv.style.textAlign = 'right';
+        editBottomHeaderDiv.style.marginRight = '25px';
+        editBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+
+        const editWrapper = document.createElement('div');
+        editWrapper.id = 'editWrapper';
+        editWrapper.style.display = 'flex';
+        editWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+
+        const editText = document.createElement('span');
+        editText.id = 'editText';
+        editText.style.border = '5px';
+        editText.style.color = 'white';
+        editText.style.position = 'relative';
+        editText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+        editText.style.opacity = '0';
+        editText.style.transition = 'left 0.5s, opacity 0.5s';
+
+        const editIconDiv = document.createElement('div');
+        editIconDiv.style.color = 'white';
+        editIconDiv.style.fontSize = "26px";
+        editIconDiv.style.zIndex = '999';
+
+        editIconDiv.addEventListener('mouseover', function() {
+            editIconDiv.style.cursor = "pointer";
+            editText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
+            editText.style.opacity = '1';  // Ustaw opacity na 1
+        });
+        editIconDiv.addEventListener('mouseout', function() {
+            editIconDiv.style.cursor = "auto";
+            editText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
+            editText.style.opacity = '0';  // Ustaw opacity na 0
+        });
+
+
+
+
+
+
+
+
+
+        const editIcon = document.createElement('img');
+
+        editIconDiv.addEventListener('click', function(event) {
+            event.stopPropagation();
+            window.location = '/advertisement/edit?advertisementId=' + ad.id;
+        });
+
+        editWrapper.appendChild(editText);
+        editWrapper.appendChild(editIconDiv);
+
         if (ad.user !== getUserName()) {
+            heartIcon.style.marginBottom = '2px';
+            favouriteIconDiv.appendChild(heartIcon);
+            favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
+            bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
             if (favouritesArray.includes(ad.id)) {
                 heartIcon.src = "/api/resources/heartFull";
                 favouriteText.innerHTML = "Usuń z ulubionych";
@@ -901,6 +926,13 @@ function displayResults(data) {
                 heartIcon.src = "/api/resources/heartEmpty";
                 favouriteText.innerHTML = "Dodaj do ulubionych";
             }
+        } else if (getUserName() === ad.user) {
+            editIcon.src = "/api/resources/editIcon";
+            editText.innerHTML = "Edytuj ogłoszenie";
+            editBottomHeaderDiv.appendChild(editWrapper);
+            editIcon.style.marginBottom = '2px';
+            editIconDiv.appendChild(editIcon);
+            bottomDetailsHeader.appendChild(editBottomHeaderDiv);
         }
 
 
@@ -916,40 +948,31 @@ function displayResults(data) {
             }
 
             const requestBody = {
-                userName: getUserName(),
                 advertisementId: ad.id
             };
 
-            fetch('/api/users/favourites', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+            if(getUserName()!=='KONTO'){
+                fetch('/api/users/favourites', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
         });
-
-        heartIcon.style.marginBottom = '2px';
-
-        favouriteIconDiv.appendChild(heartIcon);
-
-
-        favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
-        bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
-
 
 
 
 
         function formatInteger(price) {
-            // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
@@ -970,22 +993,6 @@ function displayResults(data) {
         containers[2].appendChild(productionYear);
         containers[3].appendChild(engineCapacity);
 
-        // Dodawanie kontenerów do infoContainerFirst
-        // containers.forEach(container => {
-        //     advertisementDetails.appendChild(container);
-        // });
-
-
-        //
-        // if (ad.fuelType !== 'ELEKTRYK') {
-        //     containers.push(
-        //         createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
-        //         createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType)
-        //     );
-        // }
-
-
-
         containers.forEach(container => {
             advertisementDetails.appendChild(container);
         });
@@ -998,15 +1005,6 @@ function displayResults(data) {
         containers.forEach(container => {
             container.style.width = maxTextWidth + '65px';
         });
-
-        // const conversationLastMessage = document.createElement("conversationLastMessage");
-        // conversationLastMessage.style.width = '100%'; // Dostosowanie do szerokości
-        // conversationLastMessage.style.overflow = 'hidden'; // Ukrywa nadmiarowy tekst
-        // conversationLastMessage.style.textOverflow = 'ellipsis'; // Dodaje trzy kropki na końcu, gdy tekst jest zbyt długi
-        // conversationLastMessage.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-
-
-
 
 
         conversationDetailsMain.appendChild(advertisementDetails);

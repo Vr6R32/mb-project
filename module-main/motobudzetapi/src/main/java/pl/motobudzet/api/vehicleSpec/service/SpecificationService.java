@@ -29,6 +29,7 @@ public class SpecificationService {
         this.transmissionTypeRepository = transmissionTypeRepository;
     }
 
+    @Cacheable(value = "drive_type_cache_all")
     public List<DriveType> getDriveTypes() {
         return driveTypeRepository.findAllCached();
     }
@@ -38,10 +39,12 @@ public class SpecificationService {
         return engineTypeRepository.findAllCached();
     }
 
+    @Cacheable(value = "fuel_type_cache_all")
     public List<FuelType> getFuelTypes() {
         return fuelTypeRepository.findAllCached();
     }
 
+    @Cacheable(value = "transmission_type_cache_all")
     public List<TransmissionType> getTransmissionTypes() {
         return transmissionTypeRepository.findAllCached();
     }

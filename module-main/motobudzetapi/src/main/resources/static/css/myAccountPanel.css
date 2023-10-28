@@ -13,6 +13,7 @@
     border-radius: 30px;
     cursor: pointer;
     animation: fade-in 1s ease-in-out forwards;
+
 }
 #menuPanelButton {
     background-color: darkgoldenrod;

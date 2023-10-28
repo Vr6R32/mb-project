@@ -41,6 +41,10 @@ public class Advertisement {
     @Column(length = 60000)
     private String description;
     private String mainPhotoUrl;
+    private Long mileage;
+    private Long price;
+    private Long engineCapacity;
+    private Long engineHorsePower;
     private Long productionDate;
     private LocalDate firstRegistrationDate;
     private LocalDateTime creationTime;
@@ -48,10 +52,6 @@ public class Advertisement {
     private MileageUnit mileageUnit;
     @Enumerated(EnumType.STRING)
     private PriceUnit priceUnit;
-    private Long mileage;
-    private Long price;
-    private Long engineCapacity;
-    private Long engineHorsePower;
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     private City city;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -74,8 +74,6 @@ public class Advertisement {
             name = "advertisement_images",
             joinColumns = @JoinColumn(name = "advertisement_id")
     )
-    //@Column(name = "image_url", nullable = false)
-    //@OrderColumn(name = "image_order", nullable = false)
     private List<String> imageUrls;
     private boolean isVerified;
 

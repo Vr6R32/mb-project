@@ -2,23 +2,22 @@ package pl.motobudzet.api.user.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.kafka.async.SpringMailSenderService;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
+import pl.motobudzet.api.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.repository.AppUserRepository;
 import pl.motobudzet.api.user.repository.RoleRepository;
@@ -34,7 +33,6 @@ public class RegistrationService {
     private final AppUserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final SpringMailSenderService springMailSenderService;
     private final SecurityContextRepository securityContextRepository;
 
@@ -58,7 +56,6 @@ public class RegistrationService {
                     .email(request.getEmail())
                     .registerCode(code)
                     .accountEnabled(false)
-//                    .accountEnabled(true)
                     .accountNotLocked(true)
                     .accountNotExpired(true)
                     .credentialsNotExpired(true)
@@ -90,7 +87,7 @@ public class RegistrationService {
 //        return ResponseEntity.ok("Link nieaktwny!");
 //    }
 
-    public ResponseEntity<Void> activateAccount(String activationLink, HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<Void> confirmEmail(String activationLink, HttpServletResponse response, HttpServletRequest request) {
         AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
         if(user != null && !user.getAccountEnabled()){
@@ -103,15 +100,14 @@ public class RegistrationService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return ResponseEntity.status(HttpStatus.FOUND).build();
         } else {
             try {
                 response.sendRedirect("/");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return ResponseEntity.status(HttpStatus.FOUND).build();
         }
+        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
 
@@ -120,5 +116,11 @@ public class RegistrationService {
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authToken);
         securityContextRepository.saveContext(sc, request, response);
+    }
+
+    @Transactional
+    public int generatePasswordResetCode(ResetPasswordRequest request) {
+        String resetCode = RandomStringUtils.randomAlphanumeric(30, 30);
+        return userRepository.insertResetPasswordCode(resetCode, request.getEmail());
     }
 }

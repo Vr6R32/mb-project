@@ -18,10 +18,10 @@ public class FavouritesController {
     private final FavouritesService favouritesService;
 
     @PostMapping
-    public ResponseEntity<String> manageUserFavourite(@RequestBody FavouriteRequest userRequest,
+    public String manageUserFavourite(@RequestBody FavouriteRequest userRequest,
                                                       Principal principal){
-        String response = favouritesService.manageUserFavourite(userRequest, principal.getName());
-        return ResponseEntity.ok(response);
+        return favouritesService.manageUserFavourite(userRequest, principal.getName());
+
     }
 //    @GetMapping
 //    public ResponseEntity<String> checkIsFavourite(@RequestBody FavouriteRequest userRequest,

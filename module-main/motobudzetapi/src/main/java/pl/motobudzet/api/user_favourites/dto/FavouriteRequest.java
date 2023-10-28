@@ -1,12 +1,12 @@
 package pl.motobudzet.api.user_favourites.dto;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class FavouriteRequest {
-    String userName;
-    String advertisementId;
+    private String advertisementId;
 }

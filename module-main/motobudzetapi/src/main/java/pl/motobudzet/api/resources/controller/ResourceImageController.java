@@ -91,15 +91,26 @@ public class ResourceImageController {
     public Resource getMessageOpen() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "messageOpen.png");
     }
+
     @GetMapping(value = "/editIcon", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getEditIcon() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "editIcon.png");
+    }
+
+    @GetMapping(value = "/trashOpen", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getTrashIconOpen() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "trashOpen.png");
+    }
+    @GetMapping(value = "/trashClosed", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getTrashIconClosed() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "trashClosed.png");
     }
 
     @GetMapping(value = "/successIcon", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getSuccessIcon() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "successIcon.png");
     }
+
 
     @GetMapping(value = "/advertisementPhoto/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {

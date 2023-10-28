@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 public class AdvertisementCreateRequest {
 
-    @Size(min = 5, max = 32, message = "Title must be between 2 and 32 characters long")
+    @Size(min = 2, max = 32, message = "Title must be between 2 and 32 characters long")
     private String name;
     @NotEmpty(message = "Description cannot be empty!")
     private String description;
@@ -53,6 +53,5 @@ public class AdvertisementCreateRequest {
     private String city;
     @NotNull(message = "City state cannot be empty!")
     private String cityState;
-    private String userName;
 
 }

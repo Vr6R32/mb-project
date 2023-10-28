@@ -32,7 +32,7 @@ document.addEventListener('click', function(event) {
 
 function getUserName(){
     let userName = document.getElementById('username');
-    console.log('Principal Name2:', userName.textContent);
+    console.log(userName.textContent);
     return userName.textContent;
 }
 
@@ -806,31 +806,37 @@ function uploadFiles(advertisementId) {
 
 function createDropDeleteZone(){
     if(document.getElementById('deleteZone')===null){
+
+        const trashIcon = document.createElement('img');
+        trashIcon.src = `/api/resources/trashClosed`;
+        trashIcon.alt = 'trashIcon';
+
+
         const deleteZone = document.createElement('div');
+
         deleteZone.id = 'deleteZone';
-        deleteZone.style.width = '200px';
-        deleteZone.style.height = '100px';
-        deleteZone.style.color = 'white';
-        deleteZone.style.border = '2px dashed red';
-        deleteZone.style.borderRadius = '10px';
-        deleteZone.style.textAlign = 'center';
-        deleteZone.style.lineHeight = '100px';  // Center the text vertically
-        deleteZone.style.cursor = 'pointer';
-        deleteZone.style.position = 'relative';
-        deleteZone.style.bottom = '200px';
-        deleteZone.innerText = 'Drop to delete';
+
         deleteZone.style.position = 'absolute';
-        deleteZone.style.top = '10px';   // Adjust this value to position it where you'd like within the container
-        deleteZone.style.left = '50%';      // This will center the deleteZone within the container
-        deleteZone.style.transform = 'translateX(-50%)'; // This ensures it is perfectly centered regardless of its width
+        deleteZone.style.top = '60px';
+
+
+        deleteZone.appendChild(trashIcon);
+
+        deleteZone.addEventListener('mouseover', function() {
+            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
+        });
+        deleteZone.addEventListener('mouseout', function() {
+            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
+        });
 
         deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
         deleteZone.addEventListener('drop', handleDeleteZoneDrop);
-        deleteZone.addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+
+        deleteZone.addEventListener('dragenter', function() {
+            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
         });
-        deleteZone.addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
+        deleteZone.addEventListener('dragleave', function() {
+            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
         });
 
         let thumbnailzone = document.getElementById('half-container-big2');
@@ -997,7 +1003,6 @@ let dragSrcElement = null;
 
 
 function handleDragStart(e) {
-
     dragSrcElement = this;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', this.innerHTML);

@@ -50,7 +50,6 @@ public class PublicAdvertisementService {
     private final EntityManager entityManager;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {
-        System.out.println(uuidStringList);
         if (username.equals(loggedUser)) {
             List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
             return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()
@@ -67,31 +66,13 @@ public class PublicAdvertisementService {
 
     public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
 
-
-//        String jpql =
-//                "SELECT a FROM Advertisement a " +
-//                "LEFT JOIN FETCH a.imageUrls " +
-//                "LEFT JOIN FETCH a.brand b " +
-//                "LEFT JOIN FETCH a.model m " +
-//                "LEFT JOIN FETCH a.driveType d " +
-//                "LEFT JOIN FETCH a.engineType e " +
-//                "LEFT JOIN FETCH a.fuelType f " +
-//                "LEFT JOIN FETCH a.user u " +
-//                "LEFT JOIN FETCH a.transmissionType t " +
-//                "left join fetch a.city ac " +
-//                "left join fetch ac.cityState acs " +
-//                "where a.isVerified = true";
-//        TypedQuery<Advertisement> query = entityManager.createQuery(jpql, Advertisement.class);
-//        query.setMaxResults(12);
-//        return query.getResultList().stream().map(advertisement -> mapToAdvertisementDTO(advertisement,false)).toList();
-
         Specification<Advertisement> isVerifiedSpecification = (root, query, cb) -> cb.equal(root.get("isVerified"), true);
         Specification<Advertisement> specification = Specification.where(isVerifiedSpecification);
 
         PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
-        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
         List<Advertisement> advertisementDetails = uuidList.stream()
                 .map(uuid -> fetchedAdvertisementDetails.stream()
                         .filter(adv -> adv.getId().equals(uuid))
@@ -104,14 +85,9 @@ public class PublicAdvertisementService {
                 .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).collect(Collectors.toList());
     }
 
-    //    @CachePut(cacheNames = "advertisements_filter_cache")
     @CacheEvict(cacheNames = "advertisements_filter_cache")
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request, String user) {
-
-
         AppUser currentUser = userCustomService.getByName(user);
-
-
         Advertisement advertisement = Advertisement.builder()
 
                 .name(request.getName())

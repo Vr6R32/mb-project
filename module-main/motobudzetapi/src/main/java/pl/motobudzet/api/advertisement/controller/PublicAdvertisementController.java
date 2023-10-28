@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
@@ -27,8 +28,9 @@ public class PublicAdvertisementController {
     }
 
     @GetMapping("/last-uploaded")
-    public List<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
-        return publicAdvertisementService.findLastUploaded(pageNumber,pageSize);
+    public List<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber,
+                                                   @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
+        return publicAdvertisementService.findLastUploaded(pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")
@@ -37,25 +39,28 @@ public class PublicAdvertisementController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<String> createNewAdvertisement(@RequestBody @Valid AdvertisementCreateRequest request, HttpServletRequest httpServletRequest) {
-        String user = httpServletRequest.getUserPrincipal().getName();
-        return publicAdvertisementService.createNewAdvertisement(request,user);
+    public ResponseEntity<String> createNewAdvertisement(@RequestBody @Valid AdvertisementCreateRequest request,
+                                                         Authentication authentication) {
+        return publicAdvertisementService.createNewAdvertisement(request, authentication.getName());
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<String> editExistingAdvertisement(@PathVariable String id,
                                                             @RequestBody @Valid AdvertisementCreateRequest request,
-                                                            HttpServletRequest httpServletRequest) {
-        String user = httpServletRequest.getUserPrincipal().getName();
-        return publicAdvertisementService.editExistingAdvertisement(id, request, user);
+                                                            Authentication authentication) {
+        return publicAdvertisementService.editExistingAdvertisement(id, request, authentication.getName());
     }
+
     @GetMapping(value = "user/{username}")
-    public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username, Principal principal){
-        return publicAdvertisementService.getAllUserAdvertisements(username,principal.getName());
+    public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username,
+                                                           Principal principal) {
+        return publicAdvertisementService.getAllUserAdvertisements(username, principal.getName());
     }
-//    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+
     @PostMapping(value = "favourites/{username}")
-    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(@PathVariable String username, Principal principal, @RequestBody List<String> uuidStringList){
-        return publicAdvertisementService.getAllUserFavouritesAdvertisements(username,principal.getName(),uuidStringList);
+    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(@PathVariable String username,
+                                                                     Principal principal,
+                                                                     @RequestBody List<String> uuidStringList) {
+        return publicAdvertisementService.getAllUserFavouritesAdvertisements(username, principal.getName(), uuidStringList);
     }
 }

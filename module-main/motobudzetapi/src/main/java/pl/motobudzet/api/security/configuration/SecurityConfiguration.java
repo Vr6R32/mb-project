@@ -62,9 +62,10 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/models/**").permitAll()
                                 .requestMatchers("/api/cities/**").permitAll()
                                 .requestMatchers("/api/brands/**").permitAll()
+                                .requestMatchers("/api/user/forgot").permitAll()
                                 .requestMatchers("/api/resources/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/user").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/user/confirm").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
 
                                 .requestMatchers("/user/details/**").hasAuthority("ROLE_AWAITING_DETAILS")

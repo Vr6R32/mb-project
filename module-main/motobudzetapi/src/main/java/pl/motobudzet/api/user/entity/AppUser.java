@@ -36,6 +36,7 @@ public class AppUser implements UserDetails {
     @Column(nullable = false, unique = true)
     String email;
     String registerCode;
+    String resetPasswordCode;
     String name;
     String surname;
     String phoneNumber;

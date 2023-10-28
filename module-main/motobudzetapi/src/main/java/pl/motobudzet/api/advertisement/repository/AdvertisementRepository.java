@@ -2,14 +2,12 @@ package pl.motobudzet.api.advertisement.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 
 import java.util.List;
@@ -32,7 +30,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
             "WHERE a.id IN :uuids")
-    List<Advertisement> findAllCustomByUUIDs(@Param("uuids") List<UUID> uuids);
+    List<Advertisement> findByListOfUUIDs(@Param("uuids") List<UUID> uuids);
 
 //    @Query("SELECT a FROM Advertisement a " +
 //            "LEFT JOIN FETCH a.imageUrls " +
@@ -67,7 +65,18 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
 //            nativeQuery = true)
 //    List<Advertisement> findAllVerified();
 
-    @Query("SELECT a FROM Advertisement a where a.isVerified = false")
+    @Query("SELECT a FROM Advertisement a " +
+            "LEFT JOIN FETCH a.imageUrls " +
+            "LEFT JOIN FETCH a.brand b " +
+            "LEFT JOIN FETCH a.model m " +
+            "LEFT JOIN FETCH a.driveType d " +
+            "LEFT JOIN FETCH a.engineType e " +
+            "LEFT JOIN FETCH a.fuelType f " +
+            "LEFT JOIN FETCH a.user u " +
+            "LEFT JOIN FETCH a.transmissionType t " +
+            "LEFT JOIN FETCH a.city c " +
+            "LEFT JOIN FETCH a.city.cityState cs " +
+            " where a.isVerified = false")
 //    @Query("SELECT a FROM Advertisement a LEFT JOIN FETCH a.user LEFT JOIN FETCH a.imageUrls where a.isVerified = false")
     Page<Advertisement> findAllToVerify(Pageable pageable);
 
@@ -76,7 +85,18 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
     int insertNewPhoto(UUID id, String name);
 
 
-    @Query("SELECT a FROM Advertisement a WHERE a.id IN ?1")
+    @Query("SELECT a FROM Advertisement a " +
+            "LEFT JOIN FETCH a.imageUrls " +
+            "LEFT JOIN FETCH a.brand b " +
+            "LEFT JOIN FETCH a.model m " +
+            "LEFT JOIN FETCH a.driveType d " +
+            "LEFT JOIN FETCH a.engineType e " +
+            "LEFT JOIN FETCH a.fuelType f " +
+            "LEFT JOIN FETCH a.transmissionType t " +
+            "LEFT JOIN FETCH a.user u " +
+            "LEFT JOIN FETCH a.city c " +
+            "LEFT JOIN FETCH a.city.cityState cs " +
+           " WHERE a.id IN ?1")
     List<Advertisement> getAllAdvertisementsByListOfIds(List<UUID> uuidList);
 
 //    Page<Advertisement> findAll(Specification spec, Pageable pageable);

@@ -2,7 +2,6 @@ package pl.motobudzet.api.user_favourites.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_favourites.dto.FavouriteRequest;
@@ -22,7 +21,8 @@ public class FavouritesService {
 
     public String manageUserFavourite(FavouriteRequest request, String loggedUser) {
 
-        AppUser appUser = authorizeUser(request, loggedUser);
+
+        AppUser appUser = getUser(loggedUser);
         Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(appUser, request.getAdvertisementId());
 
             if(existingFavourite.isEmpty()){
@@ -49,12 +49,10 @@ public class FavouritesService {
                 .build();
     }
 
-    private AppUser authorizeUser(FavouriteRequest request,String loggedUser) {
-        AppUser user = appUserCustomService.getByName(loggedUser);
-        if(request.getUserName().equals(user.getUsername())){
-            return  user;
-        }
-        throw new RuntimeException("not authorized");
+    private AppUser getUser(String loggedUser) {
+
+        return appUserCustomService.getByName(loggedUser);
+
     }
 
     public int getAllFavourites(String loggedUser, String principalName) {

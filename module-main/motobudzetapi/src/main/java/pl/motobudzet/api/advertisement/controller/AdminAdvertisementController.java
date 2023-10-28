@@ -31,10 +31,4 @@ public class AdminAdvertisementController {
         return adminAdvertisementService.deleteAdvertisement(id);
     }
 
-//    @PutMapping (value = "/{id}",consumes = "application/json")
-//    public String editExistingAdvertisement(@PathVariable String id,
-//                                            @RequestBody AdvertisementDTO request){
-//        return adminAdvertisementService.editExistingAdvertisement(id,request);
-//    }
-
 }
