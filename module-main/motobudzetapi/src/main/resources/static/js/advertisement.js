@@ -403,6 +403,9 @@ function fetchAdvertisement() {
             const container = document.getElementById('container-main');
             // container.style.width = '1050px';
             advertisement = data; // Używamy pojedynczego obiektu, nie listy
+            if (advertisement.deleted===true){
+                window.location = '/';
+            }
             createHeaderTitle(advertisement, container, advertisement.user);
             createAdvertisementResultDiv(container, advertisement);
         })

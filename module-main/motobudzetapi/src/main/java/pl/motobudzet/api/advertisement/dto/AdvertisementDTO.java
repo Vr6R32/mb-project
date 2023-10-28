@@ -37,6 +37,8 @@ public class AdvertisementDTO {
     private Long productionDate;
     private LocalDate firstRegistrationDate;
     private boolean isVerified;
+    private boolean isDeleted;
+    private boolean isActive;
     private List<String> urlList;
 
 }

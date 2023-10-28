@@ -1,6 +1,5 @@
 package pl.motobudzet.api.advertisement.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,12 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
-import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.repository.AppUserRepository;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 
 @Service
@@ -28,13 +22,14 @@ public class AdminAdvertisementService {
 
 
     public Page<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
-        return advertisementRepository.findAllToVerify(PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE))
+        return advertisementRepository.findAllToEnableAndVerify(PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE))
                 .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 
     public String verifyAndEnableAdvertisement(String id) {
         Advertisement advertisement = publicAdvertisementService.getAdvertisement(id);
         advertisement.setVerified(true);
+        advertisement.setActive(true);
         advertisementRepository.save(advertisement);
         return "verified !";
     }

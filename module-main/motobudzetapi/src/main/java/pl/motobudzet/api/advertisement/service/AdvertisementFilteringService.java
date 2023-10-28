@@ -48,8 +48,12 @@ public class AdvertisementFilteringService {
                                                            Integer pageNumber,
                                                            String sortBy, String sortOrder) {
 
-        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
-                criteriaBuilder.isTrue(root.get("isVerified")));
+        Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.and(
+                        criteriaBuilder.isTrue(root.get("isVerified")),
+                        criteriaBuilder.isTrue(root.get("isActive")),
+                        criteriaBuilder.isFalse(root.get("isDeleted"))
+                );
 
         specification = setAdvertisementFilterSpecification(request, specification);
 
@@ -76,9 +80,12 @@ public class AdvertisementFilteringService {
     public long getFilterResultCount(AdvertisementFilterRequest request,
                                      Integer pageNumber,
                                      String sortBy, String sortOrder) {
-        Specification<Advertisement> specification = Specification.where((root, query, criteriaBuilder) ->
-                criteriaBuilder.isTrue(root.get("isVerified")));
-
+        Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.and(
+                        criteriaBuilder.isTrue(root.get("isVerified")),
+                        criteriaBuilder.isTrue(root.get("isActive")),
+                        criteriaBuilder.isFalse(root.get("isDeleted"))
+                );
         specification = setAdvertisementFilterSpecification(request, specification);
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 

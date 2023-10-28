@@ -76,5 +76,6 @@ public class Advertisement {
     )
     private List<String> imageUrls;
     private boolean isVerified;
-
+    private boolean isActive;
+    private boolean isDeleted;
 }

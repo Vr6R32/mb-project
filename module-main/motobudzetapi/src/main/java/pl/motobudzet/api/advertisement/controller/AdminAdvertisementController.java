@@ -7,7 +7,7 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.service.AdminAdvertisementService;
 
 @RestController
-@RequestMapping(value = "api/advertisements/")
+@RequestMapping(value = "api/advertisements")
 public class AdminAdvertisementController {
 
     private final AdminAdvertisementService adminAdvertisementService;
@@ -26,9 +26,9 @@ public class AdminAdvertisementController {
         return adminAdvertisementService.verifyAndEnableAdvertisement(id);
     }
 
-    @DeleteMapping("{id}")
-    public String deleteAdvertisement(@PathVariable String id) {
-        return adminAdvertisementService.deleteAdvertisement(id);
-    }
+//    @DeleteMapping("{id}")
+//    public String deleteAdvertisement(@PathVariable String id) {
+//        return adminAdvertisementService.deleteAdvertisement(id);
+//    }
 
 }

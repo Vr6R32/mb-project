@@ -76,9 +76,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.transmissionType t " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-            " where a.isVerified = false")
+            " where a.isVerified = false or a.isActive = false")
 //    @Query("SELECT a FROM Advertisement a LEFT JOIN FETCH a.user LEFT JOIN FETCH a.imageUrls where a.isVerified = false")
-    Page<Advertisement> findAllToVerify(Pageable pageable);
+    Page<Advertisement> findAllToEnableAndVerify(Pageable pageable);
 
     @Modifying
     @Query(value = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES (?1, ?2)", nativeQuery = true)
@@ -124,7 +124,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 ORDER BY a.creationTime DESC")
+            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 and a.isDeleted = false ORDER BY a.creationTime DESC")
     List<Advertisement> findAllAdvertisementsByUserId(Long userNameId);
 
     @Query("select a from Advertisement a " +
@@ -140,6 +140,11 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "left join fetch a.transmissionType " +
             "where a.id = ?1")
     Optional<Advertisement> findByAjdi(UUID uuid);
+
+    @Modifying
+    @Query("UPDATE Advertisement a SET a.isDeleted = true WHERE a.id = ?1")
+    int updateAdvertisementIsDeleted(UUID id);
+
 
 
 //    List<String> findAdvertisementGallery(UUID id);
