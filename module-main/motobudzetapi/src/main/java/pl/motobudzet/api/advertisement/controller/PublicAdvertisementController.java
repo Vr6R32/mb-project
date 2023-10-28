@@ -37,6 +37,10 @@ public class PublicAdvertisementController {
     public AdvertisementDTO findOneByIdWithFetch(@PathVariable UUID id) {
         return publicAdvertisementService.findOneByIdWithFetch(id);
     }
+    @DeleteMapping("/{id}")
+    public int deleteUserAdvertisement(@PathVariable UUID id,Authentication authentication) {
+        return publicAdvertisementService.deleteUserAdvertisement(id,authentication.getName());
+    }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<String> createNewAdvertisement(@RequestBody @Valid AdvertisementCreateRequest request,

@@ -76,6 +76,7 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").authenticated()
                                 .requestMatchers("/account").authenticated()
                                 .requestMatchers("/messages").authenticated()
                                 .requestMatchers("/favourites").authenticated()

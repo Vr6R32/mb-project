@@ -111,6 +111,12 @@ public class ResourceImageController {
         return new FileSystemResource(PRIVATE_FILE_PATH + "successIcon.png");
     }
 
+    @GetMapping(value = "/deleteIcon", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getDeleteIcon() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "deleteIcon.png");
+    }
+
+
 
     @GetMapping(value = "/advertisementPhoto/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {

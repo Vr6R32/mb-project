@@ -47,63 +47,34 @@ function getParametersFromCurrentUrl() {
     }
 }
 function setFormValuesFromUrlParams(urlSearchParams) {
+    const paramsMapping = {
+        sortBy: null,
+        sortOrder: null,
+        priceMin: "priceMin",
+        priceMax: "priceMax",
+        mileageFrom: "mileageFrom",
+        mileageTo: "mileageTo",
+        engineCapacityFrom: "engineCapacityFrom",
+        engineCapacityTo: "engineCapacityTo",
+        engineHorsePowerFrom: "engineHorsePowerFrom",
+        engineHorsePowerTo: "engineHorsePowerTo",
+        productionDateFrom: "productionDateFrom",
+        productionDateTo: "productionDateTo",
+        city: "city",
+        distanceFrom: "distanceFrom"
+    };
 
-    if (urlSearchParams.has("sortBy")) {
-        sortingBy = urlSearchParams.get("sortBy");
-    }
-    if (urlSearchParams.has("sortOrder")) {
-        sortOrder = urlSearchParams.get("sortOrder");
-    }
-    if (urlSearchParams.has("priceMin")) {
-        let priceMin = document.getElementById("priceMin");
-        priceMin.value = urlSearchParams.get("priceMin");
-    }
-    if (urlSearchParams.has("priceMax")) {
-        let priceMax = document.getElementById("priceMax");
-        priceMax.value = urlSearchParams.get("priceMax");
-    }
-    if (urlSearchParams.has("mileageFrom")) {
-        let mileageFrom = document.getElementById("mileageFrom");
-        mileageFrom.value = urlSearchParams.get("mileageFrom");
-    }
-    if (urlSearchParams.has("mileageTo")) {
-        let mileageTo = document.getElementById("mileageTo");
-        mileageTo.value = urlSearchParams.get("mileageTo");
-    }
-    if (urlSearchParams.has("engineCapacityFrom")) {
-        let engineCapacityFrom = document.getElementById("engineCapacityFrom");
-        engineCapacityFrom.value = urlSearchParams.get("engineCapacityFrom");
-    }
-    if (urlSearchParams.has("engineCapacityTo")) {
-        let engineCapacityTo = document.getElementById("engineCapacityTo");
-        engineCapacityTo.value = urlSearchParams.get("engineCapacityTo");
-    }
-    if (urlSearchParams.has("engineHorsePowerFrom")) {
-        let engineHorsePowerFrom = document.getElementById("engineHorsePowerFrom");
-        engineHorsePowerFrom.value = urlSearchParams.get("engineHorsePowerFrom");
-    }
-    if (urlSearchParams.has("engineHorsePowerTo")) {
-        let engineHorsePowerTo = document.getElementById("engineHorsePowerTo");
-        engineHorsePowerTo.value = urlSearchParams.get("engineHorsePowerTo");
-    }
-    if (urlSearchParams.has("productionDateFrom")) {
-        let productionDateFrom = document.getElementById("productionDateFrom");
-        productionDateFrom.value = urlSearchParams.get("productionDateFrom");
-    }
-    if (urlSearchParams.has("productionDateTo")) {
-        let productionDateTo = document.getElementById("productionDateTo");
-        productionDateTo.value = urlSearchParams.get("productionDateTo");
-    }
-    if (urlSearchParams.has("city")) {
-        let city = document.getElementById("city");
-        city.value = urlSearchParams.get("city");
-    }
-    if (urlSearchParams.has("distanceFrom")) {
-        let distanceFrom = document.getElementById("distanceFrom");
-        distanceFrom.value = urlSearchParams.get("distanceFrom");
+    for (let param in paramsMapping) {
+        if (urlSearchParams.has(param)) {
+            if (paramsMapping[param]) {
+                let element = document.getElementById(paramsMapping[param]);
+                element.value = urlSearchParams.get(param);
+            } else {
+                window[param] = urlSearchParams.get(param);
+            }
+        }
     }
 }
-
 setTimeout(function setInputSelect() {
     if(urlSearchParams){
         let formObj = document.getElementById('advertisementFilterForm');

@@ -1,8 +1,10 @@
 
-
 function createUserAdvertisementsResultDiv(ad,container) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
+
+    let isEventListenerActive = true;  // Zmienna stanu
+
 
     container.style.display = 'grid';
     container.style.gridTemplateColumns = '100%';
@@ -25,7 +27,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     container.appendChild(grid1);
 
     resultDiv.addEventListener("click", () => {
-        // Pobierz ID reklamy
+        if(!isEventListenerActive) return;
         const advertisementId = ad.id;
 
         // Przenieś na stronę /id/advertisement.id
@@ -129,7 +131,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     conversationDetailsDiv.style.flexBasis = 'auto';
     conversationDetailsDiv.style.display = 'flex-start';
     conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
-    conversationDetailsDiv.style.marginBottom = '30px';
+    // conversationDetailsDiv.style.marginBottom = '30px';
 
 
     const conversationDetailsMain = document.createElement("conversationDetailsMain");
@@ -184,7 +186,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     locationDetailsDiv.style.display = 'column';
     locationDetailsDiv.style.width = '100%';
     locationDetailsDiv.style.position = 'relative';
-    locationDetailsDiv.style.bottom = '10px';
+    locationDetailsDiv.style.bottom = '20px';
 
     const locationDetails = document.createElement("div");
     locationDetails.textContent = ad.city + ', ' + ad.cityState;
@@ -228,6 +230,20 @@ function createUserAdvertisementsResultDiv(ad,container) {
     favouriteIconDiv.style.zIndex = '999';
 
 
+    const favouriteText = document.createElement('span');
+    favouriteText.id = 'favouriteText';
+    favouriteText.style.border = '5px';
+    favouriteText.style.color = 'white';
+    favouriteText.style.position = 'relative';
+    favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+    favouriteText.style.opacity = '0';
+    favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
+
+
+    favouriteWrapper.appendChild(favouriteText);
+    favouriteWrapper.appendChild(favouriteIconDiv);
+    const heartIcon = document.createElement('img');
+
 
 
     favouriteIconDiv.addEventListener('mouseover', function() {
@@ -249,28 +265,12 @@ function createUserAdvertisementsResultDiv(ad,container) {
     });
 
 
-    const favouriteText = document.createElement('span');
-    favouriteText.id = 'favouriteText';
-    favouriteText.style.border = '5px';
-    favouriteText.style.color = 'white';
-    favouriteText.style.position = 'relative';
-    favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
-    favouriteText.style.opacity = '0';
-    favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
-
-
-    favouriteWrapper.appendChild(favouriteText);
-    favouriteWrapper.appendChild(favouriteIconDiv);
-    const heartIcon = document.createElement('img');
-
-
-
 
     const editBottomHeaderDiv = document.createElement("div");
     editBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
     editBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
     editBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    editBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+    editBottomHeaderDiv.style.bottom = '0px'; // Dostosuj rozmiar tekstu
     editBottomHeaderDiv.style.textAlign = 'right';
     editBottomHeaderDiv.style.marginRight = '25px';
     editBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
@@ -294,36 +294,125 @@ function createUserAdvertisementsResultDiv(ad,container) {
     editIconDiv.style.fontSize = "26px";
     editIconDiv.style.zIndex = '999';
 
+    editWrapper.appendChild(editText);
+    editWrapper.appendChild(editIconDiv);
+    const editIcon = document.createElement('img');
+
     editIconDiv.addEventListener('mouseover', function() {
         editIconDiv.style.cursor = "pointer";
         editText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
         editText.style.opacity = '1';  // Ustaw opacity na 1
-        console.log('Mouse is over the icon.');
     });
     editIconDiv.addEventListener('mouseout', function() {
         editIconDiv.style.cursor = "auto";
         editText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
         editText.style.opacity = '0';  // Ustaw opacity na 0
-        console.log('Mouse is out of the icon.');
     });
-
-
-
-
-
-    editWrapper.appendChild(editText);
-    editWrapper.appendChild(editIconDiv);
-
-
-
-    const editIcon = document.createElement('img');
-
-    editIconDiv.addEventListener('click', function(event) {
+    editIconDiv.addEventListener('click', function() {
         event.stopPropagation();
+        if (!isEventListenerActive) return;
         window.location = '/advertisement/edit?advertisementId=' + ad.id;
     });
 
 
+    // editIconDiv.addEventListener('click', handleEditIconClick);
+
+
+
+    const deleteBottomHeaderDiv = document.createElement("div");
+    deleteBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
+    deleteBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+    deleteBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
+    deleteBottomHeaderDiv.style.bottom = '0px'; // Dostosuj rozmiar tekstu
+    deleteBottomHeaderDiv.style.textAlign = 'right';
+    deleteBottomHeaderDiv.style.marginRight = '25px';
+    deleteBottomHeaderDiv.style.left = '10px';
+    deleteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+
+    const deleteWrapper = document.createElement('div');
+    deleteWrapper.id = 'deleteWrapper';
+    deleteWrapper.style.display = 'flex';
+    deleteWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+
+    const deleteText = document.createElement('span');
+    deleteText.id = 'deleteText';
+    deleteText.style.border = '5px';
+    deleteText.style.color = 'white';
+    deleteText.style.position = 'relative';
+    deleteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+    deleteText.style.opacity = '0';
+    deleteText.style.transition = 'left 0.5s, opacity 0.5s';
+
+    const deleteIconDiv = document.createElement('div');
+    deleteIconDiv.style.color = 'white';
+    deleteIconDiv.style.fontSize = "26px";
+    deleteIconDiv.style.zIndex = '999';
+
+    deleteWrapper.appendChild(deleteText);
+    deleteWrapper.appendChild(deleteIconDiv);
+    const deleteIcon = document.createElement('img');
+
+
+
+
+    deleteIconDiv.addEventListener('mouseover', function() {
+        deleteIconDiv.style.cursor = "pointer";
+        deleteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
+        deleteText.style.opacity = '1';  // Ustaw opacity na 1
+        console.log('Mouse is over the icon.');
+    });
+    deleteIconDiv.addEventListener('mouseout', function() {
+        deleteIconDiv.style.cursor = "auto";
+        deleteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
+        deleteText.style.opacity = '0';  // Ustaw opacity na 0
+        console.log('Mouse is out of the icon.');
+    });
+
+
+    deleteIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+
+
+
+                isEventListenerActive = false;
+
+                // editIconDiv.removeEventListener('click', handleEditIconClick);
+
+                let opacity = 1;
+                const step = 0.01;
+                const intervalDuration = 10;
+
+                resultDiv.style.opacity = String(opacity);
+
+                const fadeOutInterval = setInterval(() => {
+                    opacity -= step;
+                    resultDiv.style.setProperty('opacity', String(opacity), 'important');
+
+                    if (opacity <= 0) {
+                        clearInterval(fadeOutInterval);
+                        if (resultDiv.parentNode === container) {
+                            container.removeChild(resultDiv);
+                        }
+                    }
+                }, intervalDuration);
+
+
+
+        fetch('/api/advertisements/' + ad.id, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('deleted');
+                } else {
+                    console.error('Nie udało się usunąć ogłoszenia.');
+                }
+            })
+            .catch(error => {
+                // Obsłuż błędy sieci lub inne błędy, które mogą wystąpić
+                console.error('Wystąpił błąd:', error);
+            });
+    });
 
 
 
@@ -336,17 +425,34 @@ function createUserAdvertisementsResultDiv(ad,container) {
         bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
     }
     else if (getUserName()===ad.user) {
+
         editIcon.src = "/api/resources/editIcon";
         editText.innerHTML = "Edytuj ogłoszenie";
         editBottomHeaderDiv.appendChild(editWrapper);
         editIcon.style.marginBottom = '2px';
         editIconDiv.appendChild(editIcon);
-        bottomDetailsHeader.appendChild(editBottomHeaderDiv);
+
+        deleteIcon.src = "/api/resources/deleteIcon";
+        deleteText.innerHTML = "Usuń ogłoszenie";
+        deleteBottomHeaderDiv.appendChild(deleteWrapper);
+        deleteIcon.style.marginBottom = '2px';
+        deleteIconDiv.appendChild(deleteIcon);
+
+        let iconWrapper = document.createElement('div');
+        iconWrapper.style.display = 'flex';
+        iconWrapper.style.flexDirection = 'column';
+        // iconWrapper.style.gap = '10px';
+
+        iconWrapper.appendChild(deleteBottomHeaderDiv);
+        iconWrapper.appendChild(editBottomHeaderDiv);
+        bottomDetailsHeader.appendChild(iconWrapper);
+
+        // bottomDetailsHeader.appendChild(editBottomHeaderDiv);
+
     }
 
 
 
-    let isEventListenerActive = true;  // Zmienna stanu
 
     favouriteIconDiv.addEventListener('click', function(event) {
         event.stopPropagation();

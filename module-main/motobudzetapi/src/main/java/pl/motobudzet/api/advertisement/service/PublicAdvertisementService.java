@@ -66,8 +66,13 @@ public class PublicAdvertisementService {
 
     public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
 
-        Specification<Advertisement> isVerifiedSpecification = (root, query, cb) -> cb.equal(root.get("isVerified"), true);
-        Specification<Advertisement> specification = Specification.where(isVerifiedSpecification);
+        Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.and(
+                        criteriaBuilder.isTrue(root.get("isVerified")),
+                        criteriaBuilder.isTrue(root.get("isActive")),
+                        criteriaBuilder.isFalse(root.get("isDeleted"))
+                );
+
 
         PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
@@ -110,6 +115,8 @@ public class PublicAdvertisementService {
                 .city(cityService.getCityByNameAndState(request.getCity(),request.getCityState()))
                 .user(currentUser)
                 .isVerified(false)
+                .isActive(false)
+                .isDeleted(false)
                 .build();
 
 
@@ -155,6 +162,7 @@ public class PublicAdvertisementService {
             advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
             advertisement.setProductionDate(request.getProductionDate());
             advertisement.setCity(cityService.getCityByNameAndState(request.getCity(),request.getCityState()));
+            advertisement.setVerified(false);
 
             advertisementRepository.save(advertisement);
 
@@ -207,6 +215,7 @@ public class PublicAdvertisementService {
 //                .city(cityService.getCityByAjdi(adv.getCity().getId()).getName())
 //                .cityState(cityStateService.findCityStateByAjdi(cityService.getCityByAjdi(adv.getCity().getId()).getCityState().getId()).getName())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
+                .isDeleted(adv.isDeleted())
                 .build();
 
         if (includeImageUrls) {
@@ -275,5 +284,14 @@ public class PublicAdvertisementService {
         }
 
         return query.executeUpdate();
+    }
+
+    @Transactional
+    public int deleteUserAdvertisement(UUID id, String username) {
+        AppUser user = userCustomService.getByName(username);
+        if(username.equals(user.getUsername())){
+            return advertisementRepository.updateAdvertisementIsDeleted(id);
+        }
+        return 0;
     }
 }
