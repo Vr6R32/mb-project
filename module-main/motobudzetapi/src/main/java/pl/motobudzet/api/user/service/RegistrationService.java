@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.kafka.async.SpringMailSenderService;
+import pl.motobudzet.api.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.user.dto.RegistrationRequest;
 import pl.motobudzet.api.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.user.entity.AppUser;
@@ -24,6 +25,9 @@ import pl.motobudzet.api.user.repository.RoleRepository;
 import pl.motobudzet.api.utils.RegistrationRequestValidation;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -120,7 +124,32 @@ public class RegistrationService {
 
     @Transactional
     public int generatePasswordResetCode(ResetPasswordRequest request) {
-        String resetCode = RandomStringUtils.randomAlphanumeric(30, 30);
-        return userRepository.insertResetPasswordCode(resetCode, request.getEmail());
+        String resetCode = RandomStringUtils.randomAlphanumeric(30);
+        LocalDateTime resetCodeExpirationTime = LocalDateTime.now(ZoneId.of("Europe/Warsaw")).plusDays(1);
+
+        int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.getEmail());
+
+        AppUser user = userRepository.findByResetCode(resetCode)
+                .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+
+        springMailSenderService.sendResetPasswordNotificationCodeLink(user);
+
+        return result;
+    }
+    @Transactional
+    public int changeUserPassword(NewPasswordRequest request) {
+
+        if (!request.getPassword().equals(request.getPasswordRepeat())) {
+            return 0;
+        }
+
+        AppUser user = userRepository.findByResetCode(request.getResetCode())
+                .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+
+        if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))) {
+            return userRepository.insertNewUserPassword(passwordEncoder.encode(request.getPassword()), request.getResetCode());
+        }
+
+        return 0;
     }
 }

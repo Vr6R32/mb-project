@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                         authorizeRequests
                                 .requestMatchers("/", "index", "/css/*", "/js/*").permitAll()
                                 .requestMatchers("/id/**").permitAll()
+                                .requestMatchers("/reset").permitAll()
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/favicon.ico").permitAll()
@@ -66,7 +67,9 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/resources/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/user/confirm").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user/resetCode").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user/resetPassword").permitAll()
 
                                 .requestMatchers("/user/details/**").hasAuthority("ROLE_AWAITING_DETAILS")
                                 .requestMatchers("/api/user/updateDetails/**").hasAnyAuthority("ROLE_AWAITING_DETAILS","ROLE_USER")

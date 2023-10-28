@@ -71,7 +71,7 @@ public class AdvertisementFilteringServiceOld {
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
 
-        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findAllCustomByUUIDs(uuidList);
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
         List<Advertisement> advertisementDetails = uuidList.stream()
                 .map(uuid -> fetchedAdvertisementDetails.stream()
                         .filter(adv -> adv.getId().equals(uuid))

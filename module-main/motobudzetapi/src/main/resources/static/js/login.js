@@ -1,6 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    createLoginForm();
+
+
     let containerMain = document.getElementById('container-main');
     containerMain.style.minHeight = '1000px';
     containerMain.style.justifyContent = 'center';
@@ -8,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.backgroundColor = 'transparent';
     containerMain.style.border = '0px';
     containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
+
+    createLoginForm();
+
 });
 
 function createDialogBox(message){
@@ -411,7 +415,7 @@ function createForgotPasswordForm()  {
             email: document.getElementById("email").value
         };
 
-        fetch("/api/user/reset", {
+        fetch("/api/user/resetCode", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -75,6 +75,12 @@ public class NotRestController {
         return "account";
     }
 
+    @GetMapping("reset")
+    public String resetPassword(Model model, Principal principal) {
+        ModelUtils.setButtonsAttributes(model, principal);
+        return "reset";
+    }
+
     @GetMapping("user/details")
     public String setUserDetails(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);

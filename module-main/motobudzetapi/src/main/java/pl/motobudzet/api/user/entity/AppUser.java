@@ -11,6 +11,7 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationState.entity.CityState;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -28,22 +29,23 @@ public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false, unique = true)
-    String userName;
+    private String userName;
     @Column(nullable = false)
-    String password;
+    private String password;
     @Column(nullable = false, unique = true)
-    String email;
-    String registerCode;
-    String resetPasswordCode;
-    String name;
-    String surname;
-    String phoneNumber;
-    Boolean accountEnabled;
-    Boolean accountNotLocked;
-    Boolean accountNotExpired;
-    Boolean credentialsNotExpired;
+    private String email;
+    private String registerCode;
+    private String resetPasswordCode;
+    private String name;
+    private String surname;
+    private String phoneNumber;
+    private Boolean accountEnabled;
+    private Boolean accountNotLocked;
+    private Boolean accountNotExpired;
+    private Boolean credentialsNotExpired;
+    private LocalDateTime resetPasswordCodeExpiration;
     @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
     private City city;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})

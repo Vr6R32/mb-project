@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.user.entity.AppUser;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,8 +26,13 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByUserNameForDto(String userName);
 
     @Modifying
-    @Query("UPDATE AppUser a SET a.resetPasswordCode = ?1 WHERE a.email = ?2")
-    int insertResetPasswordCode(String code, String email);
+    @Query("UPDATE AppUser a SET a.resetPasswordCode = ?1, a.resetPasswordCodeExpiration = ?2 WHERE a.email = ?3")
+    int insertResetPasswordCode(String code, LocalDateTime resetCodeExpirationTime, String email);
+
+
+    @Modifying
+    @Query("UPDATE AppUser a SET a.password = ?1 WHERE a.resetPasswordCode = ?2")
+    int insertNewUserPassword(String newPassword, String resetCode);
 
 
     @Query(value = "SELECT adv.id " +
@@ -73,4 +79,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             " where a.email = ?1")
     Optional<AppUser> findByEmail(String email);
 
+    @Query("select a from AppUser a " +
+            "left join fetch a.city c " +
+            "left join fetch c.cityState cs " +
+            "left join fetch a.roles " +
+            " where a.resetPasswordCode = ?1")
+    Optional<AppUser> findByResetCode(String resetCode);
 }

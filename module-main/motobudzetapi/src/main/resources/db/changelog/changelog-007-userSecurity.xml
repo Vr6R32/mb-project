@@ -29,6 +29,7 @@
             <column name="surname" type="varchar(255)"/>
             <column name="phone_number" type="varchar(255)"/>
             <column name="reset_password_code" type="varchar(255)"/>
+            <column name="reset_password_code_expiration" type="TIMESTAMP"/>
 
         </createTable>
     </changeSet>

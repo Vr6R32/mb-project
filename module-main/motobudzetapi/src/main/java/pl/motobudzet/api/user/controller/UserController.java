@@ -7,11 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.motobudzet.api.user.dto.AppUserDTO;
-import pl.motobudzet.api.user.dto.ResetPasswordRequest;
-import pl.motobudzet.api.user.dto.UserDetailsRequest;
+import pl.motobudzet.api.user.dto.*;
 import pl.motobudzet.api.user.service.RegistrationService;
-import pl.motobudzet.api.user.dto.RegistrationRequest;
 import pl.motobudzet.api.user.service.UserDetailsService;
 
 @RequiredArgsConstructor
@@ -39,8 +36,12 @@ public class UserController {
     public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication){
         return userDetailsService.updateFirstUserDetails(userDetailsRequest,authentication.getName());
     }
-    @PostMapping("reset")
+    @PostMapping("resetCode")
     public int generatePasswordResetCode(@RequestBody @Valid ResetPasswordRequest request) {
         return registrationService.generatePasswordResetCode(request);
+    }
+    @PostMapping("resetPassword")
+    public int changeUserPassword(@RequestBody @Valid NewPasswordRequest request) {
+        return registrationService.changeUserPassword(request);
     }
 }
