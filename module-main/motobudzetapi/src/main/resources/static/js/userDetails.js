@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     createLoginForm();
+});
+
+
+function createLoginForm()   {
+
     let containerMain = document.getElementById('container-main');
     containerMain.style.minHeight = '1000px';
     containerMain.style.justifyContent = 'center';
@@ -7,10 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.backgroundColor = 'transparent';
     containerMain.style.border = '0px';
     containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
-});
 
-
-function createLoginForm()   {
     let formContainer = document.getElementById("userDetailsForm");
 
     formContainer.innerHTML = '';

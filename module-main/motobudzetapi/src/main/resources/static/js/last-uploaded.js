@@ -6,18 +6,12 @@ const resultsPerPage = 4; // Liczba wyników na stronie
 
 function createLastUploadedHeader() {
     const container = document.getElementById('container-main');
-    // document.body.style.cursor = 'crosshair';
-
 
     const title = document.createElement('h2');
     title.textContent = 'Ostatnio Dodane';
-    // title.style.textShadow = '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
-    // title.style.textShadow = 'black 0px 0px';
     title.style.fontSize = '32px';
     title.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
 
-
-    // Create the independent title container
     const titleContainer = document.createElement('div');
     titleContainer.style.fontWeight = "bold";
     titleContainer.style.color = "darkgoldenrod";
@@ -40,13 +34,11 @@ function createLastUploadedHeader() {
     prevPageButton.style.fontSize = '72px';
     prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
 
-
     const nextPageButton = document.createElement('buttonNext');
     nextPageButton.textContent = '→';
     nextPageButton.id = 'nextPageButton';
     nextPageButton.style.fontSize = '72px';
     prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
-
 
     arrowButtonContainer.appendChild(prevPageButton);
     arrowButtonContainer.appendChild(nextPageButton);
@@ -149,7 +141,6 @@ function getLastUploaded(pageNumber){
 }
 
 function displayLastUploaded(min,max){
-
     const container = document.getElementById('results2');
 
     advertisements.slice(min,max).forEach(advertisement => {
@@ -181,8 +172,6 @@ function displayLastUploaded(min,max){
         title.textContent = advertisement.brand + '  ' + advertisement.model;
         titleContainerMiniature.appendChild(title);
 
-
-
         const mainPhoto = document.createElement('img');
         mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
         mainPhoto.style.height = '300px';
@@ -204,9 +193,6 @@ function displayLastUploaded(min,max){
             window.location.href = '/id?advertisementId=' + advertisement.id;
         });
 
-
-
-
         const infoContainerFirst = document.createElement('div');
         infoContainerFirst.style.display = 'flex';
         infoContainerFirst.style.alignItems = 'center';
@@ -220,7 +206,6 @@ function displayLastUploaded(min,max){
         infoContainerSecond.style.justifyContent = 'space-evenly';
         infoContainerSecond.style.justifyContent = 'center';
         infoContainerSecond.style.marginTop = '30px';
-
 
         const mileageInfo = document.createElement('div');
         mileageInfo.style.display = 'flex';
@@ -248,7 +233,6 @@ function displayLastUploaded(min,max){
         productionDateIcon.alt = 'ProductionDateIcon';
         productionDateIcon.style.marginBottom = '2px';
 
-
         const productionDateValue = document.createElement('span');
         productionDateValue.textContent = advertisement.productionDate
         productionDateInfo.appendChild(productionDateIcon);
@@ -269,8 +253,6 @@ function displayLastUploaded(min,max){
         fuelTypeValue.textContent = advertisement.fuelType;
         fuelTypeInfo.appendChild(fuelTypeIcon);
         fuelTypeInfo.appendChild(fuelTypeValue);
-
-////////////////////////////////////////////////////////
 
         const transmissionInfo = document.createElement('div');
         transmissionInfo.style.display = 'flex';
@@ -303,7 +285,6 @@ function displayLastUploaded(min,max){
         engineInfo.appendChild(engineIcon);
         engineInfo.appendChild(engineValue);
 
-
         const engineHorsePowerInfo = document.createElement('div');
         engineHorsePowerInfo.style.display = 'flex';
         engineHorsePowerInfo.style.flexDirection = 'column';
@@ -319,24 +300,6 @@ function displayLastUploaded(min,max){
         engineHorsePowerValue.textContent = advertisement.engineHorsePower + ' KM';
         engineHorsePowerInfo.appendChild(engineHorsePowerIcon);
         engineHorsePowerInfo.appendChild(engineHorsePowerValue);
-
-        const itemMarginSide = '10px';
-        const itemMarginBottom = '10px';
-
-
-        // [mileageInfo, productionDateInfo, fuelTypeInfo].forEach(item => {
-        //     item.style.marginLeft = itemMarginSide;
-        //     item.style.marginRight = itemMarginSide;
-        //     item.style.marginBottom = itemMarginSide;
-        // });
-        //
-        // [engineInfo, transmissionInfo, engineHorsePowerInfo].forEach(item => {
-        //     item.style.marginLeft = itemMarginSide;
-        //     item.style.marginRight = itemMarginSide;
-        //     item.style.marginBottom = itemMarginSide;
-        // });
-
-
 
         infoContainerFirst.appendChild(mileageInfo);
         infoContainerFirst.appendChild(productionDateInfo);
@@ -357,9 +320,3 @@ function displayLastUploaded(min,max){
 
     });
 }
-
-
-
-
-
-// window.addEventListener("load", getAndDisplayLogo);

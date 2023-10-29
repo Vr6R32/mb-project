@@ -3,11 +3,20 @@ let descriptionContent;
 let quill;
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
 
     window.onload = function() {
         window.scrollTo(0, 0);
     }
+    window.addEventListener('beforeunload', function (e) {
+        // Wiadomość, która zostanie wyświetlona w komunikacie
+        var message = 'Czy na pewno chcesz opuścić tę stronę?';
+
+        e.returnValue = message; // Stare przeglądarki mogą wymagać ustawienia returnValue
+        return message;  // Nowe przeglądarki mogą używać wartości zwracanej
+    });
+
 
     createForm();
     fetchBrands();
@@ -32,7 +41,6 @@ document.addEventListener('click', function(event) {
 
 function getUserName(){
     let userName = document.getElementById('username');
-    console.log(userName.textContent);
     return userName.textContent;
 }
 
@@ -123,6 +131,7 @@ function fetchAdvertisementDetails() {
     return fetch(`/api/advertisements/${advertisementId}`)
         .then(response => {
             if (!response.ok) {
+                window.location = '/';
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.json();
@@ -466,6 +475,10 @@ function createForm() {
 
     fetchAdvertisementDetails()
         .then(userData => {
+            if(userData.user !== getUserName()){
+                window.location = '/';
+                return;
+            }
             setTimeout(() => {
                 populateFormData(userData);
                 showExistingThumbnails(userData.urlList)
@@ -788,10 +801,11 @@ function uploadFiles(advertisementId) {
                 // displayResult(data);
                 // Odczytaj nagłówek "Location" z odpowiedzi serwera
                 const redirectURL = response.headers.get('Location');
+                const parameter = response.headers.get('edited');
                 console.log(redirectURL);
                 if (redirectURL) {
                     // Wykonaj przekierowanie na określony adres URL
-                    window.location.href = redirectURL;
+                    window.location.href = redirectURL + '&edited='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }

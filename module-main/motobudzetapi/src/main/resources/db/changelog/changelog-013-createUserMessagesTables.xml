@@ -37,7 +37,7 @@
             <column name="message_sender_id" type="BIGINT">
                 <constraints foreignKeyName="fkd1a4uths63jnx5ntey3y64wxb" references="app_user(id)"/>
             </column>
-            <column name="message" type="VARCHAR(255)"/>
+            <column name="message" type="VARCHAR(1000)"/>
             <column name="message_send_date_time" type="timestamp(6)"/>
             <column name="message_read_date_time" type="timestamp(6)"/>
         </createTable>

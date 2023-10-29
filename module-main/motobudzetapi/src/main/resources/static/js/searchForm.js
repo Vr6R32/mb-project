@@ -5,44 +5,34 @@ let urlSearchParams = null;
 let favouritesArray = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-    let mainContainer = document.getElementById('container-main');
-    createSearchFormContainer(mainContainer);
+    createSearchFormContainer();
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
-    // const brandSelect = document.getElementById("brand");
-    // brandSelect.value = '1';
-
+    initializeParameters();
 });
 
 
-
+function initializeParameters() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let activationParam = "activation";
+    if (urlParams.has(activationParam) && urlParams.get(activationParam) === "true") {
+        showSuccessNotification('Twoje konto zostało pomyślnie aktywowane, a profil w pełni skonfigurowany. Możesz teraz publikowanić nowe ogłoszenia.');
+    }
+}
 
 
 function getParametersFromCurrentUrl() {
-    // Pobieramy aktualny URL z okna przeglądarki
     const currentUrl = window.location.href;
-
-    // Sprawdzamy, czy istnieją znaki '?' w URL
     const indexOfQuestionMark = currentUrl.indexOf('?');
-
     if (indexOfQuestionMark !== -1) {
-        // Jeśli znaleziono znak '?', pobieramy tylko fragment URL po '?'
         const queryString = currentUrl.substring(indexOfQuestionMark + 1);
-
-        // Tworzymy obiekt URLSearchParams z parametrami URL
         urlSearchParams = new URLSearchParams(queryString);
-
-        // Sprawdzamy, czy istnieją jakieś parametry w URL
         if (urlSearchParams.toString() !== "" && !urlSearchParams.has("activation")) {
-            // Tworzymy nowy obiekt FormData
-            // Przechodzimy przez każdy parametr w URLSearchParams i dodajemy go do formData
             urlSearchParams.forEach((value, key) => {
                 formData.set(key, value);
             });
-
             executeSearch(formData);
             setFormValuesFromUrlParams(urlSearchParams);
-
         }
     }
 }
@@ -163,8 +153,11 @@ function fetchAllSpecifications() {
 }
 
 
-async function createSearchFormContainer(mainContainer) {
+async function createSearchFormContainer() {
+
+    let mainContainer = document.getElementById('container-main');
     const formContainer = document.createElement("div");
+
     formContainer.setAttribute('id', 'searchFormContainer');
     mainContainer.insertBefore(formContainer, mainContainer.firstChild);
     createSearchForm(formContainer);

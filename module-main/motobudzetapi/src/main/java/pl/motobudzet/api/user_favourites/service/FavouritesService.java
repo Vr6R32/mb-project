@@ -26,7 +26,7 @@ public class FavouritesService {
         Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(appUser, request.getAdvertisementId());
 
             if(existingFavourite.isEmpty()){
-                favouritesRepository.save(buildFavourite(request, appUser));
+                favouritesRepository.save(mapToFavouriteDTO(request, appUser));
                 return "Dodano do ulubionych";
             } else {
                 favouritesRepository.delete(existingFavourite.get());
@@ -41,7 +41,7 @@ public class FavouritesService {
         return false;
     }
 
-    private Favourite buildFavourite(FavouriteRequest request, AppUser appUser) {
+    private Favourite mapToFavouriteDTO(FavouriteRequest request, AppUser appUser) {
         return Favourite.builder()
                 .appUser(appUser)
                 .advertisementId(request.getAdvertisementId())

@@ -2,9 +2,13 @@ let advertisementId = null;
 let isMouseOverMessageIcon = false; // Zmienna flagi
 let advertisement = null;
 let currentPhotoIndex = 0;
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     extractAdvertisementId();
     fetchAdvertisement();
+    initializeParameters();
 });
 
 function extractAdvertisementId() {
@@ -12,6 +16,19 @@ function extractAdvertisementId() {
     advertisementId = urlParams.get('advertisementId');
 }
 
+
+function initializeParameters() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let editedParam = "edited";
+    let createdParam = "created";
+
+
+    if (urlParams.has(createdParam) && urlParams.get(createdParam) === "true") {
+        showSuccessNotification("Twoje ogłoszenie zostało utworzone pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
+    } else if (urlParams.has(editedParam) && urlParams.get(editedParam) === "true")  {
+        showSuccessNotification("Twoje ogłoszenie zostało zmodyfikowane pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
+    }
+}
 // function extractAdvertisementId(currentURL) {
 //     const urlParts = currentURL.split('/');
 //     return urlParts[urlParts.length - 1];
@@ -117,27 +134,34 @@ function createHeaderTitle(advertisement, container, owner) {
     editIcon.style.marginBottom = '3px';
     editIcon.style.marginRight = '15px';
 
-    // Tworzenie elementu podpowiedzi
+// Tworzenie elementu podpowiedzi
     const tooltip = document.createElement('span');
     tooltip.textContent = 'Edytuj Ogłoszenie';
     tooltip.className = 'tooltip';
     document.body.appendChild(tooltip);  // Dodanie podpowiedzi do dokumentu
 
-    // Wyświetlanie podpowiedzi po najechaniu
-    editIcon.addEventListener('mouseenter', (event) => {
-        tooltip.style.display = 'block';
+// Funkcja do aktualizacji pozycji podpowiedzi
+    function updateTooltipPosition(event) {
         tooltip.style.left = (event.pageX + 20) + 'px';
         tooltip.style.top = (event.pageY + 20) + 'px';
+    }
+
+// Wyświetlanie podpowiedzi po najechaniu
+    editIcon.addEventListener('mouseenter', (event) => {
+        tooltip.style.display = 'block';
         editIcon.style.cursor = 'pointer';
+
+        // Dodanie nasłuchiwania zdarzenia mousemove
+        document.addEventListener('mousemove', updateTooltipPosition);
     });
 
     editIcon.addEventListener('mouseleave', () => {
         tooltip.style.display = 'none';
+
+        // Usunięcie nasłuchiwania zdarzenia mousemove po opuszczeniu ikony
+        document.removeEventListener('mousemove', updateTooltipPosition);
     });
 
-    editIcon.addEventListener('mouseenter', () => {
-        editIcon.style.cursor = 'pointer';
-    });
 
     editIcon.addEventListener('click', () => {
         window.location.href = `/advertisement/edit?advertisementId=${advertisementId}`;
@@ -407,7 +431,7 @@ function fetchAdvertisement() {
                 window.location = '/';
             }
             createHeaderTitle(advertisement, container, advertisement.user);
-            createAdvertisementResultDiv(container, advertisement);
+            createAdvertisementIndexDiv(container, advertisement);
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);

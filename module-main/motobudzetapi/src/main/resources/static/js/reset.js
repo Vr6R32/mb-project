@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (urlParams.has("code")){
         resetCode = urlParams.get("code");
-        console.log(resetCode);
         createForgotPasswordForm();
     } else {
         window.location = '/';

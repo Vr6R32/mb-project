@@ -1,8 +1,5 @@
 
-function getUserName(){
-    let userName = document.getElementById('username');
-    return userName.textContent;
-}
+
 
 
 function createResultDiv(conversation,resultContainerRight) {
@@ -12,6 +9,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
     // Tworzenie dwóch elementów grid
     resultContainerRight.style.display = 'grid';
+    // resultContainerRight.style.height = '900px';
     resultContainerRight.style.gridTemplateColumns = '100%';
     resultContainerRight.style.overflowY = 'scroll';
     resultContainerRight.style.overflowX = 'hidden';
@@ -243,6 +241,11 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         userSender: document.getElementById('username').textContent,  // Przyjmuję, że masz dostęp do loggedUser w zakresie
     };
 
+    if(messageText.length > 1000){
+        console.log('za długa wiadomosc');
+        return;
+    }
+
     // Sprawdź, czy treść wiadomości nie jest pusta
     if (messageText.trim() !== "") {
         // Stwórz obiekt FormData z danymi formularza
@@ -258,7 +261,7 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
                 // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
             }
         })
-            .then(response => response.json())
+            .then(response => response.text())
             .then(response => {
                 console.log(response);
             })
@@ -306,6 +309,18 @@ function createMessageInputContainer(resultContainerRight, conversation) {
     // Tworzenie przycisku "Wyślij"
     const sendButton = document.createElement("button");
     sendButton.textContent = "Wyślij";
+    sendButton.style.position = 'absolute';
+    sendButton.style.bottom = '1px';
+    sendButton.style.right = '-75px';
+    sendButton.style.backgroundColor = "black";
+    sendButton.style.color = "white";
+    sendButton.style.border = "1px solid darkgoldenrod";
+    sendButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
+    sendButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
+    sendButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    sendButton.style.borderRadius = '15px';
+    sendButton.style.marginRight = '3px';
+
 
     // Obsługa zdarzenia kliknięcia przycisku "Wyślij"
     sendButton.addEventListener("click", function () {

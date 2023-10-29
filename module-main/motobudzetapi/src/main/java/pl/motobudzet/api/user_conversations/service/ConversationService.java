@@ -30,12 +30,12 @@ public class ConversationService {
 //
 //    }
 
-    public Long createConversation(String advertisementId, String client) {
+    public Long createConversation(String advertisementId, String loggedUser) {
 
-        AppUser userClient = userCustomService.getByName(client);
+        AppUser userClient = userCustomService.getByName(loggedUser);
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
-        if(advertisement.getUser().getUsername().equals(client)){
+        if(advertisement.getUser().getUsername().equals(loggedUser)){
             return null;
         }
 

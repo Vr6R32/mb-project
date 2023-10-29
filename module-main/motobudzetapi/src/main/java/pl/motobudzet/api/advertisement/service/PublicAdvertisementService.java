@@ -90,7 +90,6 @@ public class PublicAdvertisementService {
                 .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).collect(Collectors.toList());
     }
 
-    @CacheEvict(cacheNames = "advertisements_filter_cache")
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request, String user) {
         AppUser currentUser = userCustomService.getByName(user);
         Advertisement advertisement = Advertisement.builder()
@@ -140,6 +139,8 @@ public class PublicAdvertisementService {
     }
 
     public ResponseEntity<String> editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request, String loggedUser) {
+
+        System.out.println(request);
 
         Advertisement advertisement = getAdvertisement(advertisementId);
 
@@ -216,6 +217,8 @@ public class PublicAdvertisementService {
 //                .cityState(cityStateService.findCityStateByAjdi(cityService.getCityByAjdi(adv.getCity().getId()).getCityState().getId()).getName())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
                 .isDeleted(adv.isDeleted())
+                .isVerified(adv.isVerified())
+                .isActive(adv.isActive())
                 .build();
 
         if (includeImageUrls) {

@@ -45,6 +45,7 @@ let resultCount = 0;
 
 function fetchAdvertisements(){
     let loggedUser = document.getElementById('username').textContent;
+    let resultContainerRight = document.getElementById('resultContainerRight');
     fetch('/api/advertisements/user/' + loggedUser)
         .then(response => response.json())
         .then(data => {
@@ -52,21 +53,21 @@ function fetchAdvertisements(){
             if (data.length === 0) {
                 container.textContent = "Nie masz jeszcze żadnych ogłoszeń";
             } else {
-                    data.forEach(advertisementData => {
+
+                // resultContainerRight.style.maxHeight = "900px";
+                // resultContainerRight.style.overflowY = "auto";
+                // resultContainerRight.style.overflowX = "hidden";
+                // resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
+                // resultContainerRight.style.paddingLeft = "20px"; // Dodaj dolny padding
+                // resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding
+                // resultContainerRight.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
+                // resultContainerRight.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
+
+                data.forEach(advertisementData => {
                         createUserAdvertisementsResultDiv(advertisementData,container);
                         row++;
                         resultCount++
                     });
-                if(resultCount>0){
-                    container.style.maxHeight = "950x";
-                    container.style.overflowY = "auto";
-                    container.style.overflowX = "hidden";
-                    container.style.paddingBottom = "30px"; // Dodaj dolny padding
-                    container.style.paddingLeft = "20px"; // Dodaj dolny padding
-                    container.style.paddingRight = "20px"; // Dodaj dolny padding
-                    container.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
-                    container.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
-                }
             }
         })
         .catch(error => {
@@ -157,6 +158,17 @@ function fetchFavouriteIds(uuidList) {
 
             let resultContainerRight = document.getElementById('resultContainerRight');
 
+
+
+            // resultContainerRight.style.overflowY = "auto";
+            // resultContainerRight.style.overflowX = "hidden";
+            // resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
+            // resultContainerRight.style.paddingLeft = "20px"; // Dodaj dolny padding
+            // resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding
+            // resultContainerRight.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
+            // resultContainerRight.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
+
+
             data.forEach(advertisement => {
                 createUserAdvertisementsResultDiv(advertisement,resultContainerRight);
                 row++;
@@ -175,6 +187,7 @@ function loadConversations() {
 
     let url = `/api/conversations`;
     let resultContainerRight = document.getElementById("resultContainerRight");
+
 
     fetch(url)
         .then((response) => {
@@ -196,13 +209,13 @@ function loadConversations() {
                 });
             }
                 resultContainerRight.style.maxHeight = "900px";
-                resultContainerRight.style.overflowY = "auto";
-                resultContainerRight.style.overflowX = "hidden";
-                resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
-                resultContainerRight.style.paddingLeft = "20px"; // Dodaj dolny padding
-                resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding
-                resultContainerRight.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
-                resultContainerRight.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
+                // resultContainerRight.style.overflowY = "auto";
+                // resultContainerRight.style.overflowX = "hidden";
+                // resultContainerRight.style.paddingBottom = "30px"; // Dodaj dolny padding
+                // resultContainerRight.style.paddingLeft = "20px"; // Dodaj dolny padding
+                // resultContainerRight.style.paddingRight = "20px"; // Dodaj dolny padding
+                // resultContainerRight.style.scrollbarWidth = "thin"; // Ustaw szerokość paska przewijania
+                // resultContainerRight.style.scrollbarColor = "darkgoldenrod transparent"; // Ustaw kolory paska przewijania
         })
         .catch((error) => {
             console.error("Fetch error:", error);
@@ -221,11 +234,16 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
     resultDiv.style.paddingleft = '20px';
     resultDiv.style.paddingRight = '20px';
     resultContainerRight.style.paddingTop = '0px';
-    resultContainerRight.style.maxHeight = "600px";
+    resultContainerRight.style.maxHeight = "535px";
+
 
     const conversationId = conversation.conversationId;
     const url = `/api/messages?conversationId=${conversationId}`;
     let resultCount = 0;
+
+    // let currentUrl = window.location.origin + window.location.pathname;  // Pobierz bazowy URL (bez parametrów i fragmentu)
+    // let newUrl = `${currentUrl}?conversationId=` + conversationId;
+    // window.history.pushState({path:newUrl}, '', newUrl);
 
 
     fetch(url)

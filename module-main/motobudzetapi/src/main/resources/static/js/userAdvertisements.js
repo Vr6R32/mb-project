@@ -6,6 +6,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     let isEventListenerActive = true;  // Zmienna stanu
 
 
+    container.style.maxHeight = "900px";
     container.style.display = 'grid';
     container.style.gridTemplateColumns = '100%';
     container.style.overflowY = 'scroll';
