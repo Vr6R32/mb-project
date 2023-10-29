@@ -3,8 +3,6 @@ let isMouseOverMessageIcon = false; // Zmienna flagi
 let advertisement = null;
 let currentPhotoIndex = 0;
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     extractAdvertisementId();
     fetchAdvertisement();
@@ -15,8 +13,6 @@ function extractAdvertisementId() {
     const urlParams = new URLSearchParams(document.location.search);
     advertisementId = urlParams.get('advertisementId');
 }
-
-
 function initializeParameters() {
     let urlParams = new URLSearchParams(window.location.search);
     let editedParam = "edited";
@@ -29,11 +25,6 @@ function initializeParameters() {
         showSuccessNotification("Twoje ogłoszenie zostało zmodyfikowane pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
     }
 }
-// function extractAdvertisementId(currentURL) {
-//     const urlParts = currentURL.split('/');
-//     return urlParts[urlParts.length - 1];
-// }
-
 function createHeaderTitle(advertisement, container, owner) {
 
     let loggedUser = document.getElementById('username').textContent;
@@ -179,8 +170,6 @@ function createHeaderTitle(advertisement, container, owner) {
     titleDiv.appendChild(titleRightColumn);
     container.appendChild(titleContainer);
 }
-
-
 function updateHeartIconSrc(loggedUser, heartIcon) {
     const queryParams = new URLSearchParams({
         userName: loggedUser,
@@ -210,8 +199,6 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
             heartIcon.src = '/api/resources/heartEmpty';
         });
 }
-
-
 function createMessageBox(messageIcon, loggedUser) {
 
 
@@ -323,7 +310,6 @@ function createMessageBox(messageIcon, loggedUser) {
         }
     });
 }
-
 function sendNewMessage(messageValue, advertisementId, conversationId) {
     // Stwórz obiekt FormData z danymi formularza
     const formData = new FormData();
@@ -360,7 +346,6 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
             console.error("Błąd podczas wysyłania wiadomości:", error);
         });
 }
-
 function createNewConversation() {
     const formData = new FormData();
     formData.append("advertisementId", advertisementId);
@@ -382,7 +367,6 @@ function createNewConversation() {
             console.error("Błąd podczas wysyłania wiadomości:", error);
         });
 }
-
 function checkConversationId(messageValue) {
     let conversationId = null;
     let loggedUser = document.getElementById('username').textContent;
@@ -418,8 +402,6 @@ function checkConversationId(messageValue) {
             console.error('Błąd:', error);
         });
 }
-
-
 function fetchAdvertisement() {
     fetch('/api/advertisements/' + advertisementId)
         .then(response => response.json())
@@ -437,7 +419,6 @@ function fetchAdvertisement() {
             console.error('Błąd pobierania danych:', error);
         });
 }
-
 function previousPhoto(mainPhoto) {
     if (currentPhotoIndex > 0) {
         currentPhotoIndex--;
@@ -446,7 +427,6 @@ function previousPhoto(mainPhoto) {
     }
     changePhoto(currentPhotoIndex, mainPhoto);
 }
-
 function nextPhoto(mainPhoto) {
     if (currentPhotoIndex < advertisement.urlList.length - 1) {
         currentPhotoIndex++;
@@ -455,8 +435,12 @@ function nextPhoto(mainPhoto) {
     }
     changePhoto(currentPhotoIndex, mainPhoto);
 }
-
 function changePhoto(index, mainPhoto) {
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
+// function extractAdvertisementId(currentURL) {
+//     const urlParts = currentURL.split('/');
+//     return urlParts[urlParts.length - 1];
+// }
+
 

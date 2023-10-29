@@ -1,3 +1,7 @@
+let row = 1;
+let resultCount = 0;
+let conversationRow = 1;
+let currentRow = 1;
 
 document.addEventListener("DOMContentLoaded", function () {
     createButtons();
@@ -12,7 +16,6 @@ function loadFunctionHref(){
         UkryjMenu();
     }
 }
-
 function Profil(buttonName) {
     createHeader(buttonName);
 }
@@ -35,14 +38,9 @@ function UkryjMenu(buttonName) {
     let leftContainer = document.getElementById('left-container');
     leftContainer.remove();
 }
-
 function loadUserAdvertisements(){
     fetchAdvertisements();
 }
-
-let row = 1;
-let resultCount = 0;
-
 function fetchAdvertisements(){
     let loggedUser = document.getElementById('username').textContent;
     let resultContainerRight = document.getElementById('resultContainerRight');
@@ -74,27 +72,6 @@ function fetchAdvertisements(){
             console.error('Błąd pobierania danych:', error);
         });
 }
-
-
-// function createAdvertisementDetailsContainer(iconPath, altText, value) {
-//     const container = document.createElement('advertisementInfoContainer');
-//     container.setAttribute('id', 'advertisementInfoContainer');
-//     container.style.color = 'darkgoldenrod';
-//
-//     const icon = document.createElement('img');
-//     icon.src = `/api/resources/${iconPath}`;
-//     icon.alt = altText;
-//     icon.style.marginBottom = '2px';
-//
-//     const valueElement = document.createElement('span');
-//     valueElement.textContent = value;
-//
-//     container.appendChild(icon);
-//     container.appendChild(valueElement);
-//
-//     return container;
-// }
-
 function loadFavourites() {
     let loggedUser = document.getElementById('username').textContent;
     fetch('/api/users/favourites/' + loggedUser, {
@@ -134,7 +111,6 @@ function loadFavourites() {
             console.error('Błąd: ' + error.message);
         });
 }
-
 function fetchFavouriteIds(uuidList) {
     let loggedUser = document.getElementById('username').textContent;
 
@@ -180,9 +156,6 @@ function fetchFavouriteIds(uuidList) {
             console.error('Błąd: ' + error.message);
         });
 }
-
-let conversationRow = 1;
-
 function loadConversations() {
 
     let url = `/api/conversations`;
@@ -221,10 +194,6 @@ function loadConversations() {
             console.error("Fetch error:", error);
         });
 }
-
-
-let currentRow = 1;
-
 function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv) {
 
     let rightContainer = document.getElementById("rightContainer");
@@ -297,8 +266,6 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
             console.error("Wystąpił błąd podczas pobierania wiadomości:", error);
         });
 }
-
-
 function createHeader(buttonName){
 
 
@@ -338,7 +305,6 @@ function createHeader(buttonName){
         // hrLine.style.backgroundImage = "linear-gradient(to left, transparent 0%, darkgoldenrod 50%, transparent 100%)"; // Efekt fade z środka w lewo
     }, 100);
 }
-
 function cleanMessages() {
     let childConversationMessageInputElement = document.getElementById('messageInputDiv');
 
@@ -357,7 +323,6 @@ function cleanMessages() {
 
     resultContainerRight.style.display = 'flex';
 }
-
 function createButtons() {
     const leftContainer = document.getElementById('left-container');
     const buttonNames = ["Profil", "Ogloszenia", "Wiadomosci", "Ulubione", "Ustawienia" , "Ukryj_Menu"];
@@ -404,6 +369,24 @@ function createButtons() {
         leftContainer.appendChild(settingsButton);
     });
 }
+// function createAdvertisementDetailsContainer(iconPath, altText, value) {
+//     const container = document.createElement('advertisementInfoContainer');
+//     container.setAttribute('id', 'advertisementInfoContainer');
+//     container.style.color = 'darkgoldenrod';
+//
+//     const icon = document.createElement('img');
+//     icon.src = `/api/resources/${iconPath}`;
+//     icon.alt = altText;
+//     icon.style.marginBottom = '2px';
+//
+//     const valueElement = document.createElement('span');
+//     valueElement.textContent = value;
+//
+//     container.appendChild(icon);
+//     container.appendChild(valueElement);
+//
+//     return container;
+// }
 
 // function loadPreviousButton() {
 //     const cookies = document.cookie.split("; "); // Pobierz wszystkie cookies i podziel na tablicę

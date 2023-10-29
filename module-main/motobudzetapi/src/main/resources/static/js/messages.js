@@ -1,7 +1,3 @@
-
-
-
-
 function createResultDiv(conversation,resultContainerRight) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
@@ -226,118 +222,32 @@ function createResultDiv(conversation,resultContainerRight) {
     return resultDiv;
 }
 
+function createInfoContainer(iconPath, altText, value) {
+    const container = document.createElement('messageInfoContainer');
+    container.setAttribute('id', 'messageInfoContainer');
+    container.style.color = 'white';
+
+    // container.style.id = 'messageInfoContainer';
+    // container.style.display = 'flex';
+    // container.style.flexDirection = 'column';
+    // container.style.alignItems = 'center';
+    // container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+    // container.style.textAlign = 'center';
+    // container.style.marginRight = '30px';
 
 
+    const icon = document.createElement('img');
+    icon.src = `/api/resources/${iconPath}`;
+    icon.alt = altText;
+    icon.style.marginBottom = '2px';
 
-function sendMessage(messageInput, conversation, resultContainerRight) {
-    // Pobierz treść z pola tekstowego
+    const valueElement = document.createElement('span');
+    valueElement.textContent = value;
 
-    const messageText = messageInput.value;
-    const conversationId = conversation.conversationId;
-    const advertisementIde = conversation.advertisement.id;
+    container.appendChild(icon);
+    container.appendChild(valueElement);
 
-    const messageObject = {
-        message: messageText,
-        userSender: document.getElementById('username').textContent,  // Przyjmuję, że masz dostęp do loggedUser w zakresie
-    };
-
-    if(messageText.length > 1000){
-        console.log('za długa wiadomosc');
-        return;
-    }
-
-    // Sprawdź, czy treść wiadomości nie jest pusta
-    if (messageText.trim() !== "") {
-        // Stwórz obiekt FormData z danymi formularza
-        const formData = new FormData();
-        formData.append("message", messageText);
-        formData.append("conversationId", conversationId);
-
-        // Wysłanie danych jako żądanie POST z danymi formularza
-        fetch("/api/messages", {
-            method: "POST",
-            body: formData,
-            headers: {
-                // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
-            }
-        })
-            .then(response => response.text())
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.error("Błąd podczas wysyłania wiadomości:", error);
-            });
-        currentRow++;
-        createMessageContainer(messageObject,resultContainerRight,conversation,currentRow);
-        resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
-
-        // Wyczyść pole tekstowe po wysłaniu
-        messageInput.value = "";
-    }
-}
-
-function createMessageInputContainer(resultContainerRight, conversation) {
-
-    const messageInputDiv = document.createElement("div");
-
-    messageInputDiv.id = 'messageInputDiv';
-    // messageInputDiv.style.width = '600px';
-    // messageInputDiv.style.height = '50px';
-    // messageInputDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-    // messageInputDiv.style.maxWidth = '100%';
-    // messageInputDiv.style.boxSizing = 'border-box';
-    // messageInputDiv.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
-
-    // Tworzenie pola tekstowego
-    const messageInput = document.createElement("textarea");
-
-    messageInput.id = 'messageInputTextAreaDiv';
-    messageInput.placeholder = "Wpisz wiadomość...";
-    // messageInput.style.width = '550px'; // Ustaw szerokość na 500px
-    // messageInput.style.height = '40px'; // Ustaw wysokość na 100px
-    // messageInput.style.color = 'white'; // Ustaw kolor tekstu na biały
-    // messageInput.style.resize = 'none';
-    // messageInput.style.borderRadius = '10px'; // Dodaj zaokrąglone rogi o promieniu 10px
-    // messageInput.style.backgroundColor = '#181818'; // Ustaw tło na kolor #181818
-    // messageInput.style.maxWidth = '100%';
-    // messageInput.style.boxSizing = 'border-box';
-    // messageInput.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
-
-
-
-    // Tworzenie przycisku "Wyślij"
-    const sendButton = document.createElement("button");
-    sendButton.textContent = "Wyślij";
-    sendButton.style.position = 'absolute';
-    sendButton.style.bottom = '1px';
-    sendButton.style.right = '-75px';
-    sendButton.style.backgroundColor = "black";
-    sendButton.style.color = "white";
-    sendButton.style.border = "1px solid darkgoldenrod";
-    sendButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    sendButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    sendButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
-    sendButton.style.borderRadius = '15px';
-    sendButton.style.marginRight = '3px';
-
-
-    // Obsługa zdarzenia kliknięcia przycisku "Wyślij"
-    sendButton.addEventListener("click", function () {
-        sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);
-    });
-
-    messageInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);
-        }
-    });
-
-    messageInputDiv.appendChild(messageInput);
-    messageInputDiv.appendChild(sendButton);
-    let rightContainer = document.getElementById("rightContainer");
-    rightContainer.appendChild(messageInputDiv);
+    return container;
 }
 
 function createMessageContainer(message,resultContainerRight,conversation,currentRow){
@@ -405,6 +315,117 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
 
 }
 
+function createMessageInputContainer(resultContainerRight, conversation) {
+
+    const messageInputDiv = document.createElement("div");
+
+    messageInputDiv.id = 'messageInputDiv';
+    // messageInputDiv.style.width = '600px';
+    // messageInputDiv.style.height = '50px';
+    // messageInputDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    // messageInputDiv.style.maxWidth = '100%';
+    // messageInputDiv.style.boxSizing = 'border-box';
+    // messageInputDiv.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+
+    // Tworzenie pola tekstowego
+    const messageInput = document.createElement("textarea");
+
+    messageInput.id = 'messageInputTextAreaDiv';
+    messageInput.placeholder = "Wpisz wiadomość...";
+    // messageInput.style.width = '550px'; // Ustaw szerokość na 500px
+    // messageInput.style.height = '40px'; // Ustaw wysokość na 100px
+    // messageInput.style.color = 'white'; // Ustaw kolor tekstu na biały
+    // messageInput.style.resize = 'none';
+    // messageInput.style.borderRadius = '10px'; // Dodaj zaokrąglone rogi o promieniu 10px
+    // messageInput.style.backgroundColor = '#181818'; // Ustaw tło na kolor #181818
+    // messageInput.style.maxWidth = '100%';
+    // messageInput.style.boxSizing = 'border-box';
+    // messageInput.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+
+
+
+    // Tworzenie przycisku "Wyślij"
+    const sendButton = document.createElement("button");
+    sendButton.textContent = "Wyślij";
+    sendButton.style.position = 'absolute';
+    sendButton.style.bottom = '1px';
+    sendButton.style.right = '-75px';
+    sendButton.style.backgroundColor = "black";
+    sendButton.style.color = "white";
+    sendButton.style.border = "1px solid darkgoldenrod";
+    sendButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
+    sendButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
+    sendButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    sendButton.style.borderRadius = '15px';
+    sendButton.style.marginRight = '3px';
+
+
+    // Obsługa zdarzenia kliknięcia przycisku "Wyślij"
+    sendButton.addEventListener("click", function () {
+        sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);
+    });
+
+    messageInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);
+        }
+    });
+
+    messageInputDiv.appendChild(messageInput);
+    messageInputDiv.appendChild(sendButton);
+    let rightContainer = document.getElementById("rightContainer");
+    rightContainer.appendChild(messageInputDiv);
+}
+
+function sendMessage(messageInput, conversation, resultContainerRight) {
+    // Pobierz treść z pola tekstowego
+
+    const messageText = messageInput.value;
+    const conversationId = conversation.conversationId;
+    const advertisementIde = conversation.advertisement.id;
+
+    const messageObject = {
+        message: messageText,
+        userSender: document.getElementById('username').textContent,  // Przyjmuję, że masz dostęp do loggedUser w zakresie
+    };
+
+    if(messageText.length > 1000){
+        console.log('za długa wiadomosc');
+        return;
+    }
+
+    // Sprawdź, czy treść wiadomości nie jest pusta
+    if (messageText.trim() !== "") {
+        // Stwórz obiekt FormData z danymi formularza
+        const formData = new FormData();
+        formData.append("message", messageText);
+        formData.append("conversationId", conversationId);
+
+        // Wysłanie danych jako żądanie POST z danymi formularza
+        fetch("/api/messages", {
+            method: "POST",
+            body: formData,
+            headers: {
+                // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
+            }
+        })
+            .then(response => response.text())
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error("Błąd podczas wysyłania wiadomości:", error);
+            });
+        currentRow++;
+        createMessageContainer(messageObject,resultContainerRight,conversation,currentRow);
+        resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
+
+        // Wyczyść pole tekstowe po wysłaniu
+        messageInput.value = "";
+    }
+}
+
 function calculateSenderNamePosition(singleMessageDiv, userNameElement) {
     // Pobierz wysokość elementu singleMessageDiv
     const clientHeight = singleMessageDiv.offsetHeight;
@@ -422,32 +443,4 @@ function calculateSenderNamePosition(singleMessageDiv, userNameElement) {
 
     userNameElement.style.top = topValue;
     console.log(clientHeight);
-}
-
-function createInfoContainer(iconPath, altText, value) {
-    const container = document.createElement('messageInfoContainer');
-    container.setAttribute('id', 'messageInfoContainer');
-    container.style.color = 'white';
-
-    // container.style.id = 'messageInfoContainer';
-    // container.style.display = 'flex';
-    // container.style.flexDirection = 'column';
-    // container.style.alignItems = 'center';
-    // container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
-    // container.style.textAlign = 'center';
-    // container.style.marginRight = '30px';
-
-
-    const icon = document.createElement('img');
-    icon.src = `/api/resources/${iconPath}`;
-    icon.alt = altText;
-    icon.style.marginBottom = '2px';
-
-    const valueElement = document.createElement('span');
-    valueElement.textContent = value;
-
-    container.appendChild(icon);
-    container.appendChild(valueElement);
-
-    return container;
 }

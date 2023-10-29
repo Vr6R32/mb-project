@@ -1,6 +1,7 @@
 let selectedFiles = []; // Store the selected files references in an array
 let descriptionContent;
 let quill;
+let dragSrcElement = null;
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -52,102 +53,12 @@ function fetchUserDetails() {
                 // Dodajemy nowy element option do elementu select
                 cityStateSelect.appendChild(optionState);
 
-                console.log(data); // Tutaj masz dostęp do danych z
             }, 1000); // 2000ms (2 sekundy) opóźnienia
         })
         .catch(error => {
             console.error("There was a problem with the fetch operation:", error.message);
         });
 }
-
-
-function getUserName(){
-    let userName = document.getElementById('username');
-    console.log('Principal Name2:', userName.textContent);
-    return userName.textContent;
-}
-
-function loadFileDrop(){
-    const fileDropArea = document.getElementById('fileDropArea');
-
-    fileDropArea.addEventListener('drop', handleFileDrop);
-    fileDropArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
-    });
-}
-
-function createDescriptionEditor() {
-    let horizontalContainer = document.getElementById('half-container-horizontal');
-    let editor = document.createElement('div'); // zamiast 'textarea'
-    editor.id = "editor";
-
-    let label = document.createElement('div');
-    label.textContent = 'Opis Ogłoszenia:'
-    label.style.marginTop = '15px';
-    label.style.marginBottom = '15px';
-    label.style.color = 'darkgoldenrod';
-    label.style.width = '1300px';
-    label.style.textAlign = 'center';
-    label.style.fontSize = '18px';
-
-    editor.style.scrollbarWidth = 'thin';
-    editor.style.scrollbarColor = 'darkgoldenrod transparent';
-    editor.style.WebkitScrollbar = 'thin';
-    editor.style.WebkitScrollbarTrack = 'transparent';
-    editor.style.WebkitScrollbarThumb = 'darkgoldenrod';
-    editor.style.WebkitScrollbarThumbHover = 'goldenrod';
-
-
-    // Stylizacja dla textarea
-    editor.style.width = '1200px';
-    editor.style.maxWidth = '100%';
-    editor.style.padding = '40px';
-    // editor.style.marginBottom = '10px';
-    // editor.style.marginLeft = '30px';
-    // editor.style.marginRight = '30px';
-    editor.style.height = '700px';
-    editor.style.backgroundColor = 'black';
-    editor.style.borderRadius = '10px';
-    // input.style.border = '0px';
-    // input.style.color = 'white';
-    // input.style.textAlign = 'center';
-    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
-    editor.style.overflowY = 'auto'; // Dodane
-
-    // Dodanie elementów do kontenera
-    horizontalContainer.appendChild(label);
-    horizontalContainer.appendChild(editor);
-    horizontalContainer.appendChild(document.createElement('br'));
-
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        // ['blockquote', 'code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        // ['clean']
-    ];
-
-    quill = new Quill('#editor', {
-        modules: {
-            toolbar: toolbarOptions
-        },
-        theme: 'snow'
-    });
-
-    quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
-    quill.format(0, quill.getLength(), 'color', '#fff');
-
-
-}
-
 function createForm() {
 
     const titleContainer = document.getElementById('title-container-hidden');
@@ -451,112 +362,6 @@ function createForm() {
     photoContainer.appendChild(fileDropArea);
 
 }
-
-function updateCitySuggestions(suggestions) {
-    // Pobierz pole tekstowe i stwórz listę propozycji miast
-    const cityInput = document.getElementById('city');
-    const cityStateInput = document.getElementById('cityState');
-    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
-
-    // Usuń wszystkie istniejące propozycje z listy
-    while (suggestionsList.firstChild) {
-        suggestionsList.removeChild(suggestionsList.firstChild);
-    }
-
-    // Wyświetl nowe propozycje
-    suggestions.forEach(suggestion => {
-        const suggestionItem = document.createElement('li');
-        suggestionItem.textContent = suggestion.cityName;
-        suggestionItem.addEventListener('click', function () {
-            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
-            cityInput.value = suggestion.name;
-            cityStateInput.value = suggestion.cityStateName;
-            suggestionsList.innerHTML = '';
-        });
-        suggestionsList.appendChild(suggestionItem);
-    });
-
-    // Jeśli nie ma propozycji, ukryj listę
-    if (suggestions.length === 0) {
-        suggestionsList.style.display = 'none';
-    } else {
-        suggestionsList.style.display = 'block';
-    }
-}
-
-function fetchBrands() {
-    fetch('/api/brands')
-        .then(response => response.json())
-        .then(data => {
-            const brandSelect = document.getElementById('brand');
-            brandSelect.innerHTML = '<option value="">Wybierz markę</option>';
-            data.forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand.name;
-                option.text = brand.name;
-                brandSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Błąd pobierania marek:', error));
-}
-
-function fetchModels(brand) {
-    const modelSelect = document.getElementById('model');
-    if (brand) {
-        fetch(`/api/models/${brand}`)
-            .then(response => response.json())
-            .then(data => {
-                modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-                data.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.name;
-                    option.text = model.name;
-                    modelSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Błąd pobierania modeli:', error));
-    } else {
-        modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-    }
-}
-
-function fetchSpecifications() {
-    function populateSelect(selectId, data) {
-        const select = document.getElementById(selectId);
-        // select.innerHTML = `<option value="">Wybierz ${selectId}</option>`;
-        select.innerHTML = `<option value="">------</option>`;
-        data.forEach(option => {
-            const value = option.name;
-            const text = option.name;
-
-            const optionElement = document.createElement('option');
-            optionElement.value = value;
-            optionElement.text = text;
-            select.appendChild(optionElement);
-        });
-    }
-
-    fetch('/api/spec/fuelTypes')
-        .then(response => response.json())
-        .then(data => populateSelect('fuelType', data))
-        .catch(error => console.error('Błąd pobierania rodzaju paliwa:', error));
-
-    fetch('/api/spec/driveTypes')
-        .then(response => response.json())
-        .then(data => populateSelect('driveType', data))
-        .catch(error => console.error('Błąd pobierania rodzaju napędu:', error));
-
-    fetch('/api/spec/engineTypes')
-        .then(response => response.json())
-        .then(data => populateSelect('engineType', data))
-        .catch(error => console.error('Błąd pobierania rodzaju silnika:', error));
-
-    fetch('/api/spec/transmissionTypes')
-        .then(response => response.json())
-        .then(data => populateSelect('transmissionType', data))
-        .catch(error => console.error('Błąd pobierania rodzaju skrzyni biegów:', error));
-}
-
 function submitFormWithFiles() {
     if(selectedFiles.length>0){
         submitForm()
@@ -569,7 +374,6 @@ function submitFormWithFiles() {
     } else { alert('Umieść zdjęcia!');
     }
 }
-
 function submitForm() {
 
     quill.format(0, quill.getLength(), 'color', '#fff');
@@ -609,33 +413,6 @@ function submitForm() {
         .then(handleResponse)
         .catch(handleError);
 }
-
-function handleResponse(response) {
-    const errorMessagesElement = document.getElementById('errorMessages');
-    errorMessagesElement.innerHTML = ''; // Wyczyść komunikaty błędów
-
-    if (!response.ok) {
-        if (response.status === 400) {
-            return response.text().then(errorMessage => {
-                throw new Error(errorMessage);
-            });
-        } else {
-            throw new Error('Wystąpił błąd podczas przetwarzania formularza.');
-        }
-    }
-    return response.headers.get('advertisementId');
-}
-
-function handleError(error) {
-    console.error(error);
-    alert(error.message);
-}
-
-function getValue(id) {
-    return document.getElementById(id).value;
-}
-
-
 function uploadFiles(advertisementId) {
     if (selectedFiles.length === 0) {
         console.error('Nie wybrano pliku.');
@@ -683,7 +460,6 @@ function uploadFiles(advertisementId) {
             // displayResult('Błąd podczas przesyłania pliku.');
         });
 }
-
 function createDropDeleteZone(){
     if(document.getElementById('deleteZone')===null){
         const deleteZone = document.createElement('div');
@@ -714,7 +490,6 @@ function createDropDeleteZone(){
         thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
     }
 }
-
 function handleDeleteZoneDragOver(e) {
     if (e.preventDefault) {
         e.preventDefault();
@@ -722,7 +497,6 @@ function handleDeleteZoneDragOver(e) {
     e.dataTransfer.dropEffect = 'move';
     return false;
 }
-
 function handleDeleteZoneDrop(e) {
     if (e.stopPropagation) {
         e.stopPropagation();
@@ -755,7 +529,6 @@ function handleDeleteZoneDrop(e) {
 
     return false;
 }
-
 function handleFileDrop(e) {
     e.preventDefault();
     const files = e.dataTransfer.files;
@@ -819,8 +592,6 @@ function handleFileSelect(e) {
         // uploadFiles(advertisementId); // Replace '123' with the appropriate advertisementId value
     }
 }
-
-
 async function showThumbnails(files) {
     const thumbnailsContainer = document.getElementById('thumbnails');
     thumbnailsContainer.innerHTML = '';
@@ -852,87 +623,6 @@ async function showThumbnails(files) {
         }
     }
 }
-
-function readFileAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = event => resolve(event.target.result);
-        reader.onerror = event => reject(event.error);
-        reader.readAsDataURL(file);
-    });
-}
-
-let dragSrcElement = null;
-
-
-function handleDragStart(e) {
-
-    dragSrcElement = this;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
-}
-
-
-
-function handleDragOver(e) {
-    if (e.preventDefault) {
-        e.preventDefault();
-    }
-    e.dataTransfer.dropEffect = 'move';
-    return false;
-}
-
-function handleDrop(e) {
-    if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
-    }
-
-    if (dragSrcElement !== this) {
-        const thumbnailsContainer = document.getElementById('thumbnails');
-        const thumbnails = thumbnailsContainer.getElementsByClassName('thumbnail');
-
-        const targetIndex = Array.from(thumbnails).indexOf(this);
-        const sourceIndex = Array.from(thumbnails).indexOf(dragSrcElement);
-
-        if(targetIndex<sourceIndex){
-            // Swap the positions of the two dragged thumbnails only
-            thumbnailsContainer.insertBefore(this, thumbnails[sourceIndex]);
-            thumbnailsContainer.insertBefore(dragSrcElement, thumbnails[targetIndex]);
-
-            // Update the selectedFiles array to reflect the new order of files
-            const filesCopy = selectedFiles.slice();
-            const movedFileSource = filesCopy[sourceIndex];
-            filesCopy[sourceIndex] = filesCopy[targetIndex];
-            filesCopy[targetIndex] = movedFileSource;
-
-            selectedFiles = filesCopy;
-
-        }
-
-        if(targetIndex > sourceIndex){
-            // Swap the positions of the two dragged thumbnails only
-            thumbnailsContainer.insertBefore(dragSrcElement, thumbnails[targetIndex].nextSibling);
-            thumbnailsContainer.insertBefore(this, dragSrcElement);
-
-            // Update the selectedFiles array to reflect the new order of files
-            const filesCopy = selectedFiles.slice();
-            const movedFileSource = filesCopy[sourceIndex];
-            filesCopy[sourceIndex] = filesCopy[targetIndex];
-            filesCopy[targetIndex] = movedFileSource;
-
-            selectedFiles = filesCopy;
-        }
-
-    }
-
-    return false;
-}
-
-
-
-function resetFileDropArea() {
-    fileDropArea.innerHTML = "Możesz zmienić kolejność zdjęć za pomocą myszki.\n Pierwsze zdjęcie będzie główną miniaturką";
-}
 function resetFileDropAreamy() {
-    fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 15.";
+    fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 12.";
 }

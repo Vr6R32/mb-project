@@ -1,9 +1,9 @@
-
 function createUserAdvertisementsResultDiv(ad,container) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
 
     let isEventListenerActive = true;  // Zmienna stanu
+    let iconWrapper;
 
 
     container.style.maxHeight = "900px";
@@ -35,16 +35,21 @@ function createUserAdvertisementsResultDiv(ad,container) {
         window.location.href = `/id?advertisementId=${advertisementId}`;
     });
 
-    // Add hover effect on mouseover
+    // let iconWrapper = resultDiv.querySelector('.iconWrapper'); // Zwróci iconWrapper tylko dla tego konkretnego resultDiv
+
     resultDiv.onmouseover = () => {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
+        if (iconWrapper) {
+            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+        }
     };
 
-    // Remove hover effect on mouseout
     resultDiv.onmouseout = () => {
         resultDiv.style.boxShadow = "0 0 0px darkgoldenrod";
+        if (iconWrapper) {
+            iconWrapper.style.opacity = '0'; // Ukryj iconWrapper
+        }
     };
-
 
 
 
@@ -253,7 +258,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
         favouriteIconDiv.style.cursor = "pointer";
         favouriteText.style.left = '-15px';
         favouriteText.style.opacity = '1';
-        console.log('Mouse is over the icon.');
     });
 
     favouriteIconDiv.addEventListener('mouseout', function() {
@@ -262,7 +266,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
         favouriteIconDiv.style.cursor = "auto";
         favouriteText.style.left = '-150px';
         favouriteText.style.opacity = '0';
-        console.log('Mouse is out of the icon.');
     });
 
 
@@ -360,13 +363,11 @@ function createUserAdvertisementsResultDiv(ad,container) {
         deleteIconDiv.style.cursor = "pointer";
         deleteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
         deleteText.style.opacity = '1';  // Ustaw opacity na 1
-        console.log('Mouse is over the icon.');
     });
     deleteIconDiv.addEventListener('mouseout', function() {
         deleteIconDiv.style.cursor = "auto";
         deleteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
         deleteText.style.opacity = '0';  // Ustaw opacity na 0
-        console.log('Mouse is out of the icon.');
     });
 
 
@@ -439,10 +440,10 @@ function createUserAdvertisementsResultDiv(ad,container) {
         deleteIcon.style.marginBottom = '2px';
         deleteIconDiv.appendChild(deleteIcon);
 
-        let iconWrapper = document.createElement('div');
+        iconWrapper = document.createElement('div');
         iconWrapper.style.display = 'flex';
         iconWrapper.style.flexDirection = 'column';
-        // iconWrapper.style.gap = '10px';
+        iconWrapper.style.opacity = '0';
 
         iconWrapper.appendChild(deleteBottomHeaderDiv);
         iconWrapper.appendChild(editBottomHeaderDiv);
@@ -575,9 +576,4 @@ function createUserAdvertisementsResultDiv(ad,container) {
 
     container.appendChild(resultDiv);
     return resultDiv;
-}
-
-function getUserName(){
-    let userName = document.getElementById('username');
-    return userName.textContent;
 }

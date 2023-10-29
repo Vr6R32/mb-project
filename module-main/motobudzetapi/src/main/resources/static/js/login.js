@@ -14,55 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function createDialogBox(message){
-    if(!document.getElementById('overlayId')){
-        const overlay = document.createElement('div');
-        overlay.setAttribute('id', 'overlayId');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
-
-
-        overlay.addEventListener('click', (event) => {
-            if (event.target === overlay) {
-                document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
-            }
-        });
-
-        // Stwórz okno dialogowe
-        const dialogBox = document.createElement('div');
-        dialogBox.setAttribute('id','dialogBox')
-        dialogBox.style.position = 'fixed';
-        dialogBox.style.top = '50%';
-        dialogBox.style.left = '50%';
-        dialogBox.style.height = '250px';
-        dialogBox.style.width = '600px';
-        dialogBox.style.transform = 'translate(-50%, -50%)';
-        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
-        dialogBox.style.borderRadius = '15px';
-        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
-        dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
-        dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-        dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
-        dialogBox.style.display = 'flex';
-        dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
-
-        const headerTitle = document.createElement('dialogBox');
-        headerTitle.setAttribute('id', 'dialogBoxTitle');
-        headerTitle.textContent = message;
-        headerTitle.style.color = 'darkgoldenrod';
-        headerTitle.style.fontSize = '32px';
-        headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
-        headerTitle.style.marginTop = '15px'
-
-        dialogBox.appendChild(headerTitle);
-        overlay.appendChild(dialogBox);
-        document.body.appendChild(overlay);
-    }
-}
 
 const createRegisterForm = () => {
     let formContainer = document.getElementById("registerFormContainer");
@@ -245,7 +196,6 @@ const createRegisterForm = () => {
 
 };
 
-
 function createLoginForm(){
     let formContainer = document.getElementById("registerFormContainer");
 
@@ -393,7 +343,6 @@ function createLoginForm(){
     formContainer.appendChild(form);
 
 }
-
 
 function createForgotPasswordForm()  {
     let formContainer = document.getElementById("registerFormContainer");

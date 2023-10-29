@@ -3,12 +3,21 @@ let sortOrder = "asc"; // Set the default sort order to "asc" (ascending) or "de
 let sortingBy = "price"; // Set the default sort by parameter to "price" (or any other default value you prefer)
 let urlSearchParams = null;
 let favouritesArray = [];
+let clickedButton = "";
 
 document.addEventListener("DOMContentLoaded", function () {
     createSearchFormContainer();
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
     initializeParameters();
+});
+document.addEventListener('click', function(event) {
+    const suggestionsList = document.getElementById('suggestionsList');
+
+    // Sprawdza, czy istnieje lista propozycji i czy kliknięcie miało miejsce poza nią
+    if (suggestionsList && !suggestionsList.contains(event.target)) {
+        suggestionsList.style.display = 'none';
+    }
 });
 
 
@@ -19,8 +28,6 @@ function initializeParameters() {
         showSuccessNotification('Twoje konto zostało pomyślnie aktywowane, a profil w pełni skonfigurowany. Możesz teraz publikowanić nowe ogłoszenia.');
     }
 }
-
-
 function getParametersFromCurrentUrl() {
     const currentUrl = window.location.href;
     const indexOfQuestionMark = currentUrl.indexOf('?');
@@ -82,7 +89,6 @@ setTimeout(function setInputSelect() {
         cityState.value = urlSearchParams.get("cityState");
     }
 }, 200);
-
 setTimeout(function setModelSelect() {
     if (urlSearchParams) {
         fetch(`/api/models/${urlSearchParams.get("brand")}`)
@@ -95,8 +101,6 @@ setTimeout(function setModelSelect() {
             });
     }
 }, 300); // Drugi setTimeout z opóźnieniem 1000 ms (1 sekunda)
-
-
 function fetchAllSpecifications() {
     fetch("/api/spec/driveTypes")
         .then(response => response.json())
@@ -151,8 +155,6 @@ function fetchAllSpecifications() {
             brandSelect.dispatchEvent(changeEvent);
         });
 }
-
-
 async function createSearchFormContainer() {
 
     let mainContainer = document.getElementById('container-main');
@@ -162,7 +164,6 @@ async function createSearchFormContainer() {
     mainContainer.insertBefore(formContainer, mainContainer.firstChild);
     createSearchForm(formContainer);
 }
-
 function createSearchForm(formContainer) {
     const form = document.createElement("form");
     form.setAttribute('id', 'advertisementFilterForm');
@@ -271,7 +272,6 @@ function createSearchForm(formContainer) {
     });
 
 }
-
 function executeAdvertisementFilterResultCount() {
     // Define the endpoint URL
     let url = 'api/advertisements/filter/count';
@@ -307,7 +307,6 @@ function executeAdvertisementFilterResultCount() {
             console.error('Error fetching data:', error);
         });
 }
-
 function createRowWithInputElement(labelText, inputType, inputId, inputName, selectOptions = null) {
     const rowDiv = document.createElement("div");
     rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
@@ -450,54 +449,6 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
 
     return rowDiv;
 }
-
-document.addEventListener('click', function(event) {
-    const suggestionsList = document.getElementById('suggestionsList');
-
-    // Sprawdza, czy istnieje lista propozycji i czy kliknięcie miało miejsce poza nią
-    if (suggestionsList && !suggestionsList.contains(event.target)) {
-        suggestionsList.style.display = 'none';
-    }
-});
-
-function updateCitySuggestions(suggestions) {
-    // Pobierz pole tekstowe i stwórz listę propozycji miast
-    const cityInput = document.getElementById('city');
-    const cityStateInput = document.getElementById('cityState');
-    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
-
-    // Usuń wszystkie istniejące propozycje z listy
-    while (suggestionsList.firstChild) {
-        suggestionsList.removeChild(suggestionsList.firstChild);
-    }
-
-    // Wyświetl nowe propozycje
-    suggestions.forEach(suggestion => {
-        const suggestionItem = document.createElement('li');
-        suggestionItem.textContent = suggestion.cityName;
-        suggestionItem.addEventListener('click', function () {
-            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
-            cityInput.value = suggestion.name;
-            cityStateInput.value = suggestion.cityStateName;
-            suggestionsList.innerHTML = '';
-        });
-        suggestionsList.appendChild(suggestionItem);
-    });
-
-    // Jeśli nie ma propozycji, ukryj listę
-    if (suggestions.length === 0) {
-        suggestionsList.style.display = 'none';
-    } else {
-        suggestionsList.style.display = 'block';
-    }
-}
-
-function getUserName(){
-    let userName = document.getElementById('username');
-    return userName.textContent;
-}
-
-
 function getUserFavourites() {
 
 
@@ -523,7 +474,6 @@ function getUserFavourites() {
         })
         .catch(error => console.error("Error fetching data:", error));
 }
-
 function displayResults(data) {
 
     // Make the GET request to the API endpoint with the sorting parameters
@@ -924,9 +874,6 @@ function displayResults(data) {
                     body: JSON.stringify(requestBody)
                 })
                     .then(response => response.text())
-                    .then(data => {
-                        console.log(data);
-                    })
                     .catch(error => {
                         console.error('Error:', error);
                     });
@@ -1079,7 +1026,6 @@ function displayResults(data) {
         resultsDiv.appendChild(paginationDiv);
     }
 }
-
 function updatePaginationButtons(data, sortBy, sortOrder) {
     const paginationDiv = document.querySelector(".pagination");
     if (!paginationDiv) return;
@@ -1109,17 +1055,14 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
         paginationDiv.appendChild(nextPageButton);
     }
 }
-
 function extractSortParam() {
     const urlParams = new URLSearchParams(document.location.search);
     return urlParams.get('sortBy');
 }
-
 function extractPageNumber() {
     const urlParams = new URLSearchParams(document.location.search);
     return Number(urlParams.get('pageNumber'));
 }
-
 function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     const button = document.createElement("button");
     button.textContent = label;
@@ -1177,7 +1120,6 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     });
     return button;
 }
-let clickedButton = "";
 function createSortButton(sortBy) {
     const button = document.createElement("button");
     // button.textContent = sortBy;
@@ -1284,8 +1226,6 @@ function executeSearch(formData) {
         })
         .catch(error => console.error("Error fetching data:", error));
 }
-
-
 function createInfoContainer(iconPath, altText, value) {
     const container = document.createElement('div');
     container.style.display = 'flex';
@@ -1308,7 +1248,6 @@ function createInfoContainer(iconPath, altText, value) {
 
     return container;
 }
-
 function populateSelectOptions(options, selectId) {
     const selectElement = document.getElementById(selectId);
     // Clear existing options

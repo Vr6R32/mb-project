@@ -189,7 +189,6 @@ function createLabel(forId, textContent) {
     label.textContent = textContent;
     return label;
 }
-
 function createInput(type, id, placeholder,form) {
     const input = document.createElement("input");
     input.type = type;
@@ -288,35 +287,5 @@ function createInput(type, id, placeholder,form) {
 return input;
 }
 
-function updateCitySuggestions(suggestions) {
-    // Pobierz pole tekstowe i stwórz listę propozycji miast
-    const cityInput = document.getElementById('city');
-    const cityStateInput = document.getElementById('cityState');
-    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
 
-    // Usuń wszystkie istniejące propozycje z listy
-    while (suggestionsList.firstChild) {
-        suggestionsList.removeChild(suggestionsList.firstChild);
-    }
-
-    // Wyświetl nowe propozycje
-    suggestions.forEach(suggestion => {
-        const suggestionItem = document.createElement('li');
-        suggestionItem.textContent = suggestion.cityName;
-        suggestionItem.addEventListener('click', function () {
-            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
-            cityInput.value = suggestion.name;
-            cityStateInput.value = suggestion.cityStateName;
-            suggestionsList.innerHTML = '';
-        });
-        suggestionsList.appendChild(suggestionItem);
-    });
-
-    // Jeśli nie ma propozycji, ukryj listę
-    if (suggestions.length === 0) {
-        suggestionsList.style.display = 'none';
-    } else {
-        suggestionsList.style.display = 'block';
-    }
-}
 

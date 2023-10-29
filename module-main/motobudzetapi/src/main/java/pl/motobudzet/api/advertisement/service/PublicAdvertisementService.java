@@ -140,7 +140,6 @@ public class PublicAdvertisementService {
 
     public ResponseEntity<String> editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request, String loggedUser) {
 
-        System.out.println(request);
 
         Advertisement advertisement = getAdvertisement(advertisementId);
 

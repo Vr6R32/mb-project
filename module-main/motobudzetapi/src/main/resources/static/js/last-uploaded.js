@@ -4,6 +4,55 @@ let currentMinIndex = 0;
 let currentMaxIndex = 4;
 const resultsPerPage = 4; // Liczba wyników na stronie
 
+document.addEventListener("DOMContentLoaded", function () {
+    const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
+    getLastUploaded(0);
+
+
+    prevPageButton.addEventListener('click', () => {
+        if (currentMinIndex > 0) {
+            clearAdvertisements(container);
+            currentMinIndex -= resultsPerPage; // Przesuń się o 3 wyniki wstecz
+            currentMaxIndex -= resultsPerPage;
+            displayLastUploaded(currentMinIndex, currentMaxIndex);
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        // Sprawdź, czy currentMaxIndex nie przekracza rozmiaru listy reklam
+        if (currentMaxIndex < advertisements.length) {
+            clearAdvertisements(container);
+            currentMinIndex += resultsPerPage; // Przesuń się o 3 wyniki do przodu
+            currentMaxIndex += resultsPerPage;
+
+            // Jeśli currentMaxIndex przekracza advertisements.size, ogranicz go do advertisements.size
+            if (currentMaxIndex > advertisements.length) {
+                currentMaxIndex = advertisements.length;
+            }
+
+            displayLastUploaded(currentMinIndex, currentMaxIndex);
+        }
+    });
+
+    function addHoverEffect(buttonElement) {
+        buttonElement.addEventListener('mouseover', () => {
+            buttonElement.style.textShadow = '0 0 10px moccasin';
+            buttonElement.style.cursor = 'crosshair';
+            buttonElement.style.color = 'moccasin';
+        });
+
+        buttonElement.addEventListener('mouseout', () => {
+            buttonElement.style.textShadow = '0 0 10px darkgoldenrod';
+            buttonElement.style.cursor = 'default';
+            buttonElement.style.color = 'darkgoldenrod';
+        });
+    }
+
+// Dodaj efekt podświetlenia do przycisków
+    addHoverEffect(prevPageButton);
+    addHoverEffect(nextPageButton);
+});
+
 function createLastUploadedHeader() {
     const container = document.getElementById('container-main');
 
@@ -54,69 +103,6 @@ function createLastUploadedHeader() {
     return {container, prevPageButton, nextPageButton};
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
-    getLastUploaded(0);
-
-
-    prevPageButton.addEventListener('click', () => {
-        if (currentMinIndex > 0) {
-            clearAdvertisements(container);
-            currentMinIndex -= resultsPerPage; // Przesuń się o 3 wyniki wstecz
-            currentMaxIndex -= resultsPerPage;
-            displayLastUploaded(currentMinIndex, currentMaxIndex);
-        }
-    });
-
-    nextPageButton.addEventListener('click', () => {
-        // Sprawdź, czy currentMaxIndex nie przekracza rozmiaru listy reklam
-        if (currentMaxIndex < advertisements.length) {
-            clearAdvertisements(container);
-            currentMinIndex += resultsPerPage; // Przesuń się o 3 wyniki do przodu
-            currentMaxIndex += resultsPerPage;
-
-            // Jeśli currentMaxIndex przekracza advertisements.size, ogranicz go do advertisements.size
-            if (currentMaxIndex > advertisements.length) {
-                currentMaxIndex = advertisements.length;
-            }
-
-            displayLastUploaded(currentMinIndex, currentMaxIndex);
-        }
-    });
-
-    function addHoverEffect(buttonElement) {
-        buttonElement.addEventListener('mouseover', () => {
-            buttonElement.style.textShadow = '0 0 10px moccasin';
-            buttonElement.style.cursor = 'crosshair';
-            buttonElement.style.color = 'moccasin';
-        });
-
-        buttonElement.addEventListener('mouseout', () => {
-            buttonElement.style.textShadow = '0 0 10px darkgoldenrod';
-            buttonElement.style.cursor = 'default';
-            buttonElement.style.color = 'darkgoldenrod';
-        });
-    }
-
-// Dodaj efekt podświetlenia do przycisków
-    addHoverEffect(prevPageButton);
-    addHoverEffect(nextPageButton);
-});
-
-function clearAdvertisements(container) {
-    const advertisementElements = container.getElementsByClassName('sub-container-miniature');
-    while (advertisementElements.length > 0) {
-        advertisementElements[0].remove();
-        adjustContainerSize(container);
-    }
-}
-
-function adjustContainerSize(container) {
-    // container.style.overflow = 'auto'; // Set overflow to auto
-    const minHeight = '650px'; // Set your desired minimum height here
-    container.style.minHeight = minHeight;
-}
-
 function getLastUploaded(pageNumber){
 
     const results2 = document.getElementById('results2');
@@ -125,7 +111,7 @@ function getLastUploaded(pageNumber){
     results2.style.marginBottom = "0px";
     results2.style.maxWidth = "100%";
     results2.innerHTML = "";
-    adjustContainerSize(results2);
+    results2.style.minHeight = '650px';
 
 
     fetch('/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
@@ -142,7 +128,6 @@ function getLastUploaded(pageNumber){
 
 function displayLastUploaded(min,max){
     const container = document.getElementById('results2');
-
     advertisements.slice(min,max).forEach(advertisement => {
         const subContainer = document.createElement('div');
         subContainer.classList.add('sub-container-miniature');
@@ -319,4 +304,12 @@ function displayLastUploaded(min,max){
 
 
     });
+}
+
+function clearAdvertisements(container) {
+    const advertisementElements = container.getElementsByClassName('sub-container-miniature');
+    while (advertisementElements.length > 0) {
+        advertisementElements[0].remove();
+        results2.style.minHeight = '650px';
+    }
 }
