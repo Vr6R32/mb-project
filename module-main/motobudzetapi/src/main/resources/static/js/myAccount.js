@@ -359,12 +359,12 @@ function createButtons() {
             // window[buttonName](buttonName.toString()); // Call the corresponding function using bracket notation
             window[buttonName.replace("_", "")].call(this, buttonName.replace("_", "")); // Zamień podkreślenie na spację i wywołaj funkcję
 
-            settingsButton.disabled = true;
+            // settingsButton.disabled = true;
 
             // Po 3 sekundach włącz przycisk ponownie
-            setTimeout(function () {
-                settingsButton.disabled = false;
-            }, 2000);
+            // setTimeout(function () {
+            //     settingsButton.disabled = false;
+            // }, 2000);
         });
         leftContainer.appendChild(settingsButton);
     });

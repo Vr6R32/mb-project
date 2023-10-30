@@ -466,15 +466,6 @@ function populateFormData(data) {
         }
     });
 }
-function setSelectedOption(selectElement, value) {
-    Array.from(selectElement.options).forEach(option => {
-        if (option.value === value) {
-            option.selected = true;
-        } else {
-            option.selected = false;
-        }
-    });
-}
 function fetchModels(brand) {
     return new Promise((resolve, reject) => {
         const modelSelect = document.getElementById('model');
@@ -783,15 +774,15 @@ async function showThumbnails(files) {
 function resetFileDropAreamy() {
     fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 12.";
 }
-// function setSelectedOption(selectElement, value) {
-//     setTimeout(() => {
-//         Array.from(selectElement.options).forEach(option => {
-//             if (option.value === value) {
-//                 option.selected = true;
-//             } else {
-//                 option.selected = false;
-//             }
-//         });
-//     }, 500);
-// }
+function setSelectedOption(selectElement, value) {
+    setTimeout(() => {
+        Array.from(selectElement.options).forEach(option => {
+            if (option.value === value) {
+                option.selected = true;
+            } else {
+                option.selected = false;
+            }
+        });
+    }, 500);
+}
 
