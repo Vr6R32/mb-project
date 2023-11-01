@@ -21,7 +21,4 @@ public class AppUserCustomService {
     public Long getUserIdByUserName(String userName) {
         return userRepository.getAppUserIdByUserName(userName).orElseThrow(() -> new RuntimeException("User doesnt' exists!"));
     }
-    public Optional<UUID> getUserAdvertisement(String userName, UUID uuid) {
-        return userRepository.findAdvertisementByUserNameAndId(userName,uuid);
-    }
 }

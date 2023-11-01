@@ -83,6 +83,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/api/messages/**").authenticated()
                                 .requestMatchers("/api/user/details").authenticated()
                                 .requestMatchers("/advertisement/new").authenticated()
+                                .requestMatchers("/advertisement/edit").authenticated()
                                 .requestMatchers("/api/conversations/**").authenticated()
                                 .requestMatchers("/api/users/favourites/**").authenticated()
 

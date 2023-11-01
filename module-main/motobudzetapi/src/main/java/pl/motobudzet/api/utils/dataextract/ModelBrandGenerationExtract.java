@@ -25,7 +25,7 @@ public class ModelBrandGenerationExtract {
     public void extractBrands() {
 
         try {
-            String content = new String(Files.readAllBytes(Paths.get("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\marki.txt")));
+            String content = new String(Files.readAllBytes(Paths.get("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\brands.txt")));
             String patternStr = "<span class=\"ooa-micpln er34gjf0\">([^<]+)</span>";
             Pattern pattern = Pattern.compile(patternStr);
             Matcher matcher = pattern.matcher(content);
@@ -47,7 +47,7 @@ public class ModelBrandGenerationExtract {
         Map<String, Integer> brandMap = new HashMap<>();
 
         try {
-            String content = new String(Files.readAllBytes(Paths.get("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\marki.txt")));
+            String content = new String(Files.readAllBytes(Paths.get("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\brands.txt")));
             String patternStr = "<span class=\"ooa-micpln er34gjf0\">([^<]+)</span>";
             Pattern pattern = Pattern.compile(patternStr);
             Matcher matcher = pattern.matcher(content);

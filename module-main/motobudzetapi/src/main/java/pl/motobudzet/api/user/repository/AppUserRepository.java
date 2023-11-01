@@ -37,7 +37,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query(value = "SELECT adv.id " +
             "FROM app_user a " +
-            "JOIN advertisement adv ON a.id = adv.user_id " + // Assuming there's a foreign key relationship like this
+            "JOIN advertisement adv ON a.id = adv.user_id " +
             "WHERE a.user_name = ?1 AND adv.id = ?2", nativeQuery = true)
     Optional<UUID> findAdvertisementByUserNameAndId(String userName, UUID advertisementId);
 
@@ -74,15 +74,14 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "left join fetch a.roles " +
             "left join fetch a.advertisements " +
             "left join fetch a.city c " +
-            "left join fetch c.cityState cs" +
-            "left join fetch a.roles " +
-            " where a.email = ?1")
+            "left join fetch c.cityState cs " +
+            "where a.email = ?1")
     Optional<AppUser> findByEmail(String email);
 
     @Query("select a from AppUser a " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
             "left join fetch a.roles " +
-            " where a.resetPasswordCode = ?1")
+            "where a.resetPasswordCode = ?1")
     Optional<AppUser> findByResetCode(String resetCode);
 }

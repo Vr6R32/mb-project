@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.utils.UserAuthorization.authorizeMessageGetAccess;
@@ -38,6 +39,8 @@ public class MessageService {
         AppUser conversationUserClient = conversation.getUserClient();
         AppUser conversationUserOwner = conversation.getUserOwner();
 
+        String lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
+
         AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
         AppUser messageSender = userCustomService.getByName(messageSenderName);
 
@@ -53,7 +56,10 @@ public class MessageService {
             messagesRepository.save(newMessage);
         }
 
-        sendEmailMessageNotificationAsync(message,emailNotificationReceiver,messageSender,conversation);
+        if(!Objects.equals(lastMessageUserName, messageSenderName)){
+            sendEmailMessageNotificationAsync(message,emailNotificationReceiver,messageSender,conversation);
+        }
+
         return "Message Sent!";
     }
 
@@ -88,6 +94,7 @@ public class MessageService {
                 .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
                 .build();
         springMailSenderService.sendMessageNotificationHtml(emailMessageRequest);
+        System.out.println("sent");
     }
 
 

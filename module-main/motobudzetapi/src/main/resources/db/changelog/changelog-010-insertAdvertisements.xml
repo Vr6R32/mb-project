@@ -11,8 +11,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="3"/>
-            <column name="model_id" value="9"/>
+            <column name="brand_id" value="9"/>
+            <column name="model_id" value="127"/>
             <column name="name" value="Audi RS3 OKAZJA !"/>
             <column name="main_photo_url" value="rs3.png"/>
             <column name="creation_time" value="2023-08-17 10:08:45.613802"/>
@@ -41,8 +41,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="3"/>
-            <column name="model_id" value="7"/>
+            <column name="brand_id" value="9"/>
+            <column name="model_id" value="130"/>
             <column name="name" value="Audi RS6 500HP SUPERCHARGED"/>
             <column name="main_photo_url" value="rs6.jpg"/>
             <column name="creation_time" value="2023-08-18 09:08:45.613802"/>
@@ -71,8 +71,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="3"/>
-            <column name="model_id" value="8"/>
+            <column name="brand_id" value="9"/>
+            <column name="model_id" value="134"/>
             <column name="name" value="RSQ8 MANHART"/>
             <column name="main_photo_url" value="rsq8.jpg"/>
             <column name="creation_time" value="2023-08-14 03:08:45.613802"/>
@@ -101,8 +101,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="2"/>
-            <column name="model_id" value="6"/>
+            <column name="brand_id" value="65"/>
+            <column name="model_id" value="1132"/>
             <column name="name" value="MERCEDES C63 AMG OKAZJA KOZAK IGLA"/>
             <column name="main_photo_url" value="c63.jpg"/>
             <column name="creation_time" value="2023-08-06 07:08:45.613802"/>
@@ -131,8 +131,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="2"/>
-            <column name="model_id" value="5"/>
+            <column name="brand_id" value="65"/>
+            <column name="model_id" value="1134"/>
             <column name="name" value="MERCEDES GKLASA"/>
             <column name="main_photo_url" value="gklasa.jpg"/>
             <column name="creation_time" value="2023-07-30 00:08:45.613802"/>
@@ -161,8 +161,8 @@
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
             <column name="is_deleted" value="false"/>
-            <column name="brand_id" value="4"/>
-            <column name="model_id" value="10"/>
+            <column name="brand_id" value="63"/>
+            <column name="model_id" value="1088"/>
             <column name="name" value="MAZDA RX-8"/>
             <column name="main_photo_url" value="rx8.jpg"/>
             <column name="creation_time" value="2023-07-30 00:08:45.613802"/>

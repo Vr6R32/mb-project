@@ -30,7 +30,6 @@ public class UserController {
     @GetMapping("details")
     public AppUserDTO getUserDetails(Authentication authentication){
         return userDetailsService.getUserDetails(authentication.getName());
-//        return AppUserDTO.builder().build();
     }
     @PutMapping ("updateDetails")
     public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication){
