@@ -12,8 +12,9 @@ admin
 ```
 ## compilation: 
 ```bash
-mvn clean install
+cd module-main; mvn clean install
 ```
+
 ## deploy on docker: 
 ```bash
 docker compose up --build

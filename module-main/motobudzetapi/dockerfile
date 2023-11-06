@@ -1,3 +1,4 @@
+
 # Use the official OpenJDK 17 image as the base
 FROM openjdk:17-jdk-slim
 
@@ -13,7 +14,7 @@ RUN mkdir -p /app/module-main/files/private && \
 
 
 # Variable ARG for the JAR file name; you can adjust this value during the build of the image
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=/motobudzetapi/target/*.jar
 
 # Copy the application JAR file into the image at location /app/app.jar
 COPY ${JAR_FILE} app.jar
