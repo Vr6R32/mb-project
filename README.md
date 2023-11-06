@@ -5,3 +5,6 @@ Authorize credentials needed to access :
 Login : admin,
 Password : admin
 
+## deploy on docker: 
+```bash
+docker compose up --build
