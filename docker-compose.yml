@@ -1,0 +1,47 @@
+version: '3'
+services:
+  main-monolith:
+    image: main-monolith:latest
+    build:
+      context: .
+      dockerfile: ./module-main/motobudzetapi/dockerfile
+    container_name: main-monolith
+    ports:
+      - "20134:20134"
+    volumes:
+          - ./module-main/files/public:/app/module-main/files/public
+          - ./module-main/files/private:/app/module-main/files/private
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: dontgotosql
+      SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.PostgreSQL10Dialect
+    depends_on:
+      - postgres
+    networks:
+      - motobudzet
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    ports:
+      - "3309:5432"
+    volumes:
+      - mainmonolith-postgres-data:/var/lib/postgresql/data
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
+    environment:
+      POSTGRES_PASSWORD: dontgotosql  # This line should be here
+    networks:
+      - motobudzet
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1m
+      timeout: 10s
+      retries: 2
+
+volumes:
+  mainmonolith-postgres-data:
+
+networks:
+  motobudzet:
