@@ -3,15 +3,18 @@ Technical REST API documentation available at : http://srv21.mikr.us:20134/swagg
 Authorize credentials needed to access : 
 
 ## Login : 
-
-```bash
+```
 admin
 ```
-
 ## Password : 
-```bash
+```
 admin
+```
+## compilation: 
+```bash
+mvn clean install
 ```
 ## deploy on docker: 
 ```bash
 docker compose up --build
+```
