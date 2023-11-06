@@ -63,7 +63,7 @@ public class RegistrationService {
                     .accountNotLocked(true)
                     .accountNotExpired(true)
                     .credentialsNotExpired(true)
-                    .roles(List.of(roleRepository.findByName("ROLE_AWAITING_DETAILS").orElseThrow(() -> new RuntimeException("Role not found!"))))
+                    .roles(List.of(roleRepository.findByName("ROLE_AWAITING_DETAILS").orElseThrow(() -> new RuntimeException("ROLE_NOT_FOUND"))))
                     .build();
             userRepository.saveAndFlush(newUser);
 

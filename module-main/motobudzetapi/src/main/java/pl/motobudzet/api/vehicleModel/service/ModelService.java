@@ -35,7 +35,7 @@ public class ModelService {
 
         Brand brand = brandRepository.findByName(brandName.toUpperCase()).orElseThrow(() -> new RuntimeException("brand doesnt exists!"));
 
-        if (modelRepository.findByName(modelUpperCase).isPresent()) {
+        if (modelRepository.findByNameAndBrandName(modelUpperCase,brandName).isPresent()) {
             throw new RuntimeException("model already exists!");
         }
 
@@ -56,10 +56,10 @@ public class ModelService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<String> deleteModel(String modelName) {
+    public ResponseEntity<String> deleteModel(String modelName, String brandName) {
 
-        Model model = modelRepository.findByName(modelName.toUpperCase()).orElseThrow(() -> new RuntimeException("no model"));
-        Brand brand = brandRepository.findByName(model.getBrand().getName().toUpperCase()).orElseThrow(() -> new RuntimeException("no brand"));
+        Model model = modelRepository.findByNameAndBrandName(modelName,brandName).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
+        Brand brand = brandRepository.findByName(model.getBrand().getName().toUpperCase()).orElseThrow(() -> new RuntimeException("BRAND_DOESNT_EXIST"));
 
         model.setBrand(null);
         brand.deleteElement(model);
@@ -71,12 +71,16 @@ public class ModelService {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+    public Model getModelByBrand(String model,String brandName) {
+        return modelRepository.findByNameAndBrandName(model.toUpperCase(),brandName.toUpperCase()).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
+    }
+
     public Model getModel(String model) {
-        return modelRepository.findByName(model.toUpperCase()).orElseThrow(() -> new InvalidParameterException("model doesnt exists !"));
+        return modelRepository.findByName(model.toUpperCase()).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
     }
 
     public String getModel(Long modelId) {
-        Model model = modelRepository.findByAjdi(modelId).orElseThrow(() -> new RuntimeException("model doesnt exists !"));
+        Model model = modelRepository.findByAjdi(modelId).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
         return model.getName();
     }
 }

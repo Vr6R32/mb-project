@@ -14,6 +14,10 @@ public interface ModelRepository extends JpaRepository<Model, Long> {
     @Cacheable(value = "vehicle_model_cache_by_name")
     Optional<Model> findByName(String name);
 
+    @Cacheable(value = "vehicle_model_cache_by_name")
+    @Query("select a from Model a where a.name = ?1 and a.brand.name = ?2")
+    Optional<Model> findByNameAndBrandName(String name,String brandName);
+
     @Cacheable(value = "vehicle_model_cache")
     @Query("select m from Model m where m.id = ?1 ORDER BY m.name asc")
     Optional<Model> findByAjdi(Long modelId);

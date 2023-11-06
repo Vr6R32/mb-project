@@ -39,9 +39,8 @@ public class ModelController {
     // TODO PREAUTHORIZE HAS ROLE ADMIN
 
     @DeleteMapping("/")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<String> deleteModel(@RequestParam String model) {
-        return modelService.deleteModel(model);
+    public ResponseEntity<String> deleteModel(@RequestParam String modelName, @RequestParam String brandName) {
+        return modelService.deleteModel(modelName.toUpperCase(),brandName.toUpperCase());
     }
 
 }

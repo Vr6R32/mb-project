@@ -15,7 +15,7 @@
     </properties>
 
     <modules>
-        <module>mail-module</module>
+<!--        <module>mail-module</module>-->
         <module>motobudzetapi</module>
     </modules>
 </project>

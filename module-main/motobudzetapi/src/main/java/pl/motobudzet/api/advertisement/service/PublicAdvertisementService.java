@@ -96,7 +96,7 @@ public class PublicAdvertisementService {
 
                 .name(request.getName())
                 .description(request.getDescription())
-                .model(modelService.getModel(request.getModel()))
+                .model(modelService.getModelByBrand(request.getModel(),request.getBrand()))
                 .brand(brandService.getBrand(request.getBrand()))
                 .fuelType(specificationService.getFuelType(request.getFuelType()))
                 .driveType(specificationService.getDriveType(request.getDriveType()))

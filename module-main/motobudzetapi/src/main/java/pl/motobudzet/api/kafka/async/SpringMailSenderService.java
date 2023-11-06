@@ -21,7 +21,7 @@ import java.util.List;
 public class SpringMailSenderService {
 
     public static final String INFO_MOTOBUDZET_PL_EMAIL = "info@motobudzet.pl";
-    public static final String SITE_URL = "http://localhost:20134";
+    public static final String SITE_URL = "http://srv21.mikr.us:20134";
     public static final String TITLE_NEW_CONVERSATION_MESSAGE = "Dostałeś nową wiadomość ";
     public static final String REGISTRATION_ACTIVATION_LINK = "Link aktywacyjny";
     public static final String RESET_PASSWORD_LINK = "Resetowanie hasła";

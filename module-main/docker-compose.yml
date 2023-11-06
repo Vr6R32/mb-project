@@ -4,10 +4,13 @@ services:
     image: main-monolith:latest
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./motobudzetapi/dockerfile
     container_name: main-monolith
     ports:
       - "20134:20134"
+    volumes:
+          - ./files/public:/app/module-main/files/public
+          - ./files/private:/app/module-main/files/private
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: postgres
@@ -26,10 +29,7 @@ services:
       - "3309:5432"
     volumes:
       - mainmonolith-postgres-data:/var/lib/postgresql/data
-#      - ./module-main/motobudzetapi/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
       - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
-
-
     environment:
       POSTGRES_PASSWORD: dontgotosql  # This line should be here
     networks:
