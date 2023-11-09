@@ -18,13 +18,12 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://motobudzet.pl",
-                                "http://localhost",
-                                "http://192.168.100.27"
+                                "http://motobudzet.pl"
                         )
                         .allowedHeaders("*")
                         .allowedMethods("*")
-                        .allowCredentials(true)               .exposedHeaders("Access-Control-Allow-Origin");
+                        .allowCredentials(true)
+                        .exposedHeaders("Access-Control-Allow-Origin");
             }
         };
     }

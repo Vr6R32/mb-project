@@ -32,22 +32,8 @@ public class YahooFinanceController {
     public String getAmcPrice(){
         RestTemplate restTemplate = new RestTemplate();
 
-            ResponseEntity<String> exchange = restTemplate.exchange(AMC_URL, HttpMethod.GET, HttpEntity.EMPTY, String.class);
-            String extractedText = null;
-            String body = exchange.getBody();
-            boolean containsFinStreamer = body.contains("<fin-streamer class=");
-
-            if (containsFinStreamer) {
-                int index = body.indexOf("<fin-streamer class=");
-                int endIndex = body.indexOf("</fin-streamer>");
-                if (index != -1) { // Sprawdzamy, czy znaleziono indeks
-                    int startIndex = index + "<fin-streamer class=".length() + 174;
-                    extractedText = body.substring(startIndex, endIndex);
-                    System.out.println(extractedText);
-                }
-            }
-        return extractedText;
-        }
+        return getString(restTemplate, AMC_URL);
+    }
 
     @GetMapping("nkla")
     public String getNklaPrice(HttpServletRequest request){
@@ -66,7 +52,11 @@ public class YahooFinanceController {
             System.out.println(attributeNames.nextElement());
         }
 
-        ResponseEntity<String> exchange = restTemplate.exchange(NKLA_URL, HttpMethod.GET, HttpEntity.EMPTY, String.class);
+        return getString(restTemplate, NKLA_URL);
+    }
+
+    private String getString(RestTemplate restTemplate, String amcUrl) {
+        ResponseEntity<String> exchange = restTemplate.exchange(amcUrl, HttpMethod.GET, HttpEntity.EMPTY, String.class);
         String extractedText = null;
         String body = exchange.getBody();
         boolean containsFinStreamer = body.contains("<fin-streamer class=");

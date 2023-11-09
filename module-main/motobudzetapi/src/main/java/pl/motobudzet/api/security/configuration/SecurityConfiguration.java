@@ -47,8 +47,9 @@ public class SecurityConfiguration {
     @Bean
     @SuppressWarnings("deprecation")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .cors().and()
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
                 .addFilterBefore(new UserAwaitingDetailsFilter(), SecurityContextPersistenceFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->

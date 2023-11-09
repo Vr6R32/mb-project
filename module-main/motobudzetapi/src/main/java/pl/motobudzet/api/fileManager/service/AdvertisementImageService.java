@@ -77,11 +77,7 @@ public class AdvertisementImageService {
         rowAffected = +advertisementService.insertNewPhotos(UUID.fromString(advertisementId), uniqueFilenamesSet);
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
-        if (rowAffected > 0) {
-            return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").header("edited","true").body("inserted !" + rowAffected);
-        } else {
-            return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").header("edited","true").body("inserted !" + rowAffected);
-        }
+        return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").header("edited","true").body("inserted !" + rowAffected);
     }
 
 
