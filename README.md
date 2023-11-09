@@ -12,7 +12,7 @@ admin
 ```
 ## compilation: 
 ```bash
-cd module-main; mvn clean install
+cd module-main; mvn clean install -DskipTests
 ```
 
 ## deploy on docker: 
