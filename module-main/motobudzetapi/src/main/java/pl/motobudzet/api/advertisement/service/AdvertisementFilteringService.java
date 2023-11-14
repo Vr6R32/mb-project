@@ -1,7 +1,6 @@
 package pl.motobudzet.api.advertisement.service;
 
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.advertisement.service.utils.ServiceFunction;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.service.CityService;
-import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
@@ -26,7 +24,7 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.advertisement.service.PublicAdvertisementService.PAGE_SIZE;
+import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
 import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleSelectValue;
 import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleValueInRangeBetween;
 
@@ -35,18 +33,17 @@ import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterH
 public class AdvertisementFilteringService {
 
     private final AdvertisementRepository advertisementRepository;
-    private final PublicAdvertisementService publicAdvertisementService;
+    private final UserAdvertisementService userAdvertisementService;
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
     private final CityService cityService;
-    private final CityStateService cityStateService;
-    private final EntityManager entityManager;
+
 
     public Page<AdvertisementDTO> findAllPublicWithFilters(
-                                                           AdvertisementFilterRequest request,
-                                                           Integer pageNumber,
-                                                           String sortBy, String sortOrder) {
+            AdvertisementFilterRequest request,
+            Integer pageNumber,
+            String sortBy, String sortOrder) {
 
         Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(
@@ -59,7 +56,7 @@ public class AdvertisementFilteringService {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
-        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
+        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
 
@@ -73,7 +70,7 @@ public class AdvertisementFilteringService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
-                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+                .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 
 
@@ -89,7 +86,7 @@ public class AdvertisementFilteringService {
         specification = setAdvertisementFilterSpecification(request, specification);
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
-        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE);
+        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         return advertisementSpecificationIds.getTotalElements();
     }
@@ -141,4 +138,3 @@ public class AdvertisementFilteringService {
         return specification;
     }
 }
-

@@ -31,8 +31,8 @@ public class CityService {
     }
 
     public double calculateCityDistance(String cityOne, String cityTwo) {
-        City firstCity = cityRepository.getCityByName(cityOne).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
-        City secondCity = cityRepository.getCityByName(cityTwo).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+        City firstCity = cityRepository.getCityByNameWithState(cityOne).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+        City secondCity = cityRepository.getCityByNameWithState(cityTwo).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
         return calculateDistance(firstCity.getNLatitude(),firstCity.getELongitude(),secondCity.getNLatitude(),secondCity.getELongitude());
     }
     public List<City> getNeighbourCitiesByDistance(String mainCity, Integer distanceMax) {
@@ -62,18 +62,14 @@ public class CityService {
         return neighborCities;
     }
 
-    public City getCityByName(String name) {
-        return cityRepository.getCityByName(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
-    }
+
 
     public City getCityByNameAndState(String cityName,String stateName) {
-//        System.out.println(cityName);
-//        System.out.println(stateName);
         return cityRepository.getCityByNameAndState(cityName,stateName.toUpperCase()).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 
     public City getCityByNameWithout(String name) {
-        return cityRepository.getCityByNameWithout(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+        return cityRepository.getCityByNameWithoutState(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
     public City getCityById(Long city) {
         return cityRepository.getCityById(city).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));

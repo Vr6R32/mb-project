@@ -3,7 +3,7 @@ package pl.motobudzet.mailingmodule;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
+import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
 import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
 //import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
 

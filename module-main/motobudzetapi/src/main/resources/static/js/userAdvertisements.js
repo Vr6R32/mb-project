@@ -35,8 +35,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
         window.location.href = `/id?advertisementId=${advertisementId}`;
     });
 
-    // let iconWrapper = resultDiv.querySelector('.iconWrapper'); // Zwróci iconWrapper tylko dla tego konkretnego resultDiv
-
     resultDiv.onmouseover = () => {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
         if (iconWrapper) {

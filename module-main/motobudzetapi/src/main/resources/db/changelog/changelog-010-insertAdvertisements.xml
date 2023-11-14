@@ -6,7 +6,7 @@
 
 
     <changeSet id="1" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
@@ -36,7 +36,7 @@
 
 
     <changeSet id="2" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="9079429f-854c-4908-b833-915140612b79"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
@@ -66,7 +66,7 @@
 
 
     <changeSet id="3" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
@@ -96,7 +96,7 @@
 
 
     <changeSet id="4" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
@@ -126,7 +126,7 @@
 
 
     <changeSet id="5" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>
@@ -156,7 +156,7 @@
 
 
     <changeSet id="6" author="michal-k">
-        <insert tableName="advertisement">
+        <insert tableName="advertisements">
             <column name="id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>
             <column name="is_verified" value="true"/>
             <column name="is_active" value="true"/>

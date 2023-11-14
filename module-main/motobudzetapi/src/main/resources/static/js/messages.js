@@ -5,7 +5,6 @@ function createResultDiv(conversation,resultContainerRight) {
 
     // Tworzenie dwóch elementów grid
     resultContainerRight.style.display = 'grid';
-    // resultContainerRight.style.height = '900px';
     resultContainerRight.style.gridTemplateColumns = '100%';
     resultContainerRight.style.overflowY = 'scroll';
     resultContainerRight.style.overflowX = 'hidden';
@@ -19,26 +18,19 @@ function createResultDiv(conversation,resultContainerRight) {
     // Tworzenie dwóch elementów grid
     const grid1 = document.createElement('div');
     grid1.style.maxWidth = '100%';
-    // grid4.style.textAlign = 'right';
-    // grid4.style.justifyContent = 'flex-end'; // Wyrównujemy do prawej
 
 
-    // Dodawanie tych gridów jako dzieci do resultContainerRight
     resultContainerRight.appendChild(grid1);
 
 
-
-    // Add hover effect on mouseover
     resultDiv.onmouseover = () => {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
     };
 
-    // Remove hover effect on mouseout
     resultDiv.onmouseout = () => {
         resultDiv.style.boxShadow = "0 0 0px darkgoldenrod";
     };
 
-    // Set the onclick event to fetch and display messages for this conversation
     resultDiv.onclick = () => {
         resultDiv.onmouseover = null;
         resultDiv.onclick = null;
@@ -52,8 +44,6 @@ function createResultDiv(conversation,resultContainerRight) {
         fetchAdvertisementMessages(conversation, resultContainerRight, resultDiv);
 
     };
-
-
 
 
     const photoElement = document.createElement("img");
@@ -88,11 +78,11 @@ function createResultDiv(conversation,resultContainerRight) {
     if (conversation.lastMessage !== null) {
         const dateElement = document.createElement("div");
         dateElement.textContent = conversation.lastMessage.messageSendDate;
-        dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+        dateElement.style.color = "darkgoldenrod";
+        dateElement.style.fontSize = "18px";
         dateElement.style.textAlign = 'right';
         dateElement.style.marginRight = '15px';
-        dateElement.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        dateElement.style.whiteSpace = 'nowrap';
         conversationDetailsHeader.appendChild(dateElement);
     }
 
@@ -133,7 +123,6 @@ function createResultDiv(conversation,resultContainerRight) {
     pln.textContent = 'PLN';
 
     function formatPrice(price) {
-        // Zamienia liczbę na łańcuch znaków i dodaje separatery tysięcy
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
@@ -156,35 +145,32 @@ function createResultDiv(conversation,resultContainerRight) {
 
     containers.forEach(container => {
         container.style.width = maxTextWidth + 'px';
-        // container.style.maxWidth = "100%";
-        // container.style.boxSizing = "border-box";
-        // container.style.flexBasis = "auto";
         advertisementDetails.appendChild(container);
     });
 
     const conversationLastMessage = document.createElement("conversationLastMessage");
-    conversationLastMessage.style.width = '100%'; // Dostosowanie do szerokości
-    conversationLastMessage.style.overflow = 'hidden'; // Ukrywa nadmiarowy tekst
-    conversationLastMessage.style.textOverflow = 'ellipsis'; // Dodaje trzy kropki na końcu, gdy tekst jest zbyt długi
-    conversationLastMessage.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    conversationLastMessage.style.width = '100%';
+    conversationLastMessage.style.overflow = 'hidden';
+    conversationLastMessage.style.textOverflow = 'ellipsis';
+    conversationLastMessage.style.whiteSpace = 'nowrap';
 
     if (conversation.lastMessage === null) {
         conversationLastMessage.textContent += 'Brak Wiadomości';
     } else {
         const lastMessageValue = document.createElement("lastMessageValue");
-        lastMessageValue.style.color = "white"; // Dostosuj kolor tekstu
-        lastMessageValue.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+        lastMessageValue.style.color = "white";
+        lastMessageValue.style.fontSize = "24px";
         lastMessageValue.style.textAlign = 'right';
-        lastMessageValue.style.marginLeft = 'auto'; // Przesunięcie na prawą stronę
+        lastMessageValue.style.marginLeft = 'auto';
         lastMessageValue.textContent = conversation.lastMessage.userSender + ' : ' + conversation.lastMessage.message;
         conversationLastMessage.appendChild(lastMessageValue);
     }
 
 
     const conversationDeliveryDateTime = document.createElement("deliveryDateTime");
-    conversationDeliveryDateTime.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    conversationDeliveryDateTime.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
-    conversationDeliveryDateTime.style.textAlign = "right"; // Dostosuj rozmiar tekstu
+    conversationDeliveryDateTime.style.color = "darkgoldenrod";
+    conversationDeliveryDateTime.style.fontSize = "24px";
+    conversationDeliveryDateTime.style.textAlign = "right";
 
 
 
@@ -214,8 +200,8 @@ function createResultDiv(conversation,resultContainerRight) {
 
     resultDiv.style.gridColumn = 1;
 
-    resultDiv.style.gridRowStart = conversationRow; // Ustaw numer rzędu
-    resultDiv.style.gridRowEnd = conversationRow + 1; // Ustaw numer rzędu
+    resultDiv.style.gridRowStart = conversationRow;
+    resultDiv.style.gridRowEnd = conversationRow + 1;
 
     resultDiv.appendChild(conversationDetailsDiv);
 
@@ -226,15 +212,6 @@ function createInfoContainer(iconPath, altText, value) {
     const container = document.createElement('messageInfoContainer');
     container.setAttribute('id', 'messageInfoContainer');
     container.style.color = 'white';
-
-    // container.style.id = 'messageInfoContainer';
-    // container.style.display = 'flex';
-    // container.style.flexDirection = 'column';
-    // container.style.alignItems = 'center';
-    // container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
-    // container.style.textAlign = 'center';
-    // container.style.marginRight = '30px';
-
 
     const icon = document.createElement('img');
     icon.src = `/api/resources/${iconPath}`;
@@ -254,14 +231,7 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
 
     const singleMessageDiv = document.createElement("div");
     singleMessageDiv.setAttribute('id', 'singleMessageDiv');
-    // singleMessageDiv.style.marginBottom = '30px';
     singleMessageDiv.style.maxWidth = '100%';
-    // singleMessageDiv.style.display = 'flex'; // Dodaj display:flex, aby elementy wewnątrz div były równo rozłożone
-    // singleMessageDiv.style.flexDirection = 'column'; // Dodaj display:flex, aby elementy wewnątrz div były równo rozłożone
-    // singleMessageDiv.style.alignItems = 'center'; // Wyrównaj wertykalnie elementy
-    //
-    // singleMessageDiv.style.gridRowStart = 'auto'; // Ustaw na 'auto', aby elementy były w osobnych rzędach
-    // singleMessageDiv.style.gridRowEnd = 'auto'; // Ustaw na 'auto', aby elementy były w osobnych rzędach
 
     singleMessageDiv.style.gridRowStart = currentRow; // Ustaw numer rzędu
     singleMessageDiv.style.gridRowEnd = currentRow + 1; // Ustaw numer rzędu
@@ -285,21 +255,11 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
 
     messageElement.setAttribute('id', 'singleMessageValueDiv');
     messageElement.textContent = message.message;
-    // messageElement.style.border = '2px dashed darkgoldenrod';
-    // messageElement.style.padding = '10px';
-    // messageElement.style.borderRadius = '10px'; // Dodaj zaokrągloną ramkę 10px
-    // messageElement.style.color = 'white'; // Dodaj zaokrągloną ramkę 10px
-    // messageElement.style.overflowWrap = 'break-word'; // Użyj overflow-wrap zamiast word-wrap
-    // messageElement.style.textAlign = 'left';
-    // messageElement.style.marginRight = 'auto'; // Przesunięcie na prawą stronę
+
 
 
     const userNameElement = document.createElement("userNameValueDiv");
     userNameElement.setAttribute('id', 'userNameValueDiv');
-    // userNameElement.style.marginRight = '10px';
-    // userNameElement.style.position = 'relative';
-    // userNameElement.style.top = "10px";
-    // userNameElement.style.flexShrink = '0'; // Nie zmniejszaj rozmiaru userNameElement
 
     /*
     CHARS
@@ -311,40 +271,18 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
     singleMessageDiv.appendChild(messageElement);
     resultContainerRight.appendChild(singleMessageDiv);
 
-    // calculateSenderNamePosition(singleMessageDiv,userNameElement);
 
 }
 
 function createMessageInputContainer(resultContainerRight, conversation) {
 
     const messageInputDiv = document.createElement("div");
-
     messageInputDiv.id = 'messageInputDiv';
-    // messageInputDiv.style.width = '600px';
-    // messageInputDiv.style.height = '50px';
-    // messageInputDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-    // messageInputDiv.style.maxWidth = '100%';
-    // messageInputDiv.style.boxSizing = 'border-box';
-    // messageInputDiv.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
 
-    // Tworzenie pola tekstowego
     const messageInput = document.createElement("textarea");
-
     messageInput.id = 'messageInputTextAreaDiv';
     messageInput.placeholder = "Wpisz wiadomość...";
-    // messageInput.style.width = '550px'; // Ustaw szerokość na 500px
-    // messageInput.style.height = '40px'; // Ustaw wysokość na 100px
-    // messageInput.style.color = 'white'; // Ustaw kolor tekstu na biały
-    // messageInput.style.resize = 'none';
-    // messageInput.style.borderRadius = '10px'; // Dodaj zaokrąglone rogi o promieniu 10px
-    // messageInput.style.backgroundColor = '#181818'; // Ustaw tło na kolor #181818
-    // messageInput.style.maxWidth = '100%';
-    // messageInput.style.boxSizing = 'border-box';
-    // messageInput.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
 
-
-
-    // Tworzenie przycisku "Wyślij"
     const sendButton = document.createElement("button");
     sendButton.textContent = "Wyślij";
     sendButton.style.position = 'absolute';
@@ -353,14 +291,12 @@ function createMessageInputContainer(resultContainerRight, conversation) {
     sendButton.style.backgroundColor = "black";
     sendButton.style.color = "white";
     sendButton.style.border = "1px solid darkgoldenrod";
-    sendButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    sendButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    sendButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    sendButton.style.padding = "10px 20px";
+    sendButton.style.cursor = "pointer";
+    sendButton.style.transition = "0.3s";
     sendButton.style.borderRadius = '15px';
     sendButton.style.marginRight = '3px';
 
-
-    // Obsługa zdarzenia kliknięcia przycisku "Wyślij"
     sendButton.addEventListener("click", function () {
         sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);
     });
@@ -379,7 +315,6 @@ function createMessageInputContainer(resultContainerRight, conversation) {
 }
 
 function sendMessage(messageInput, conversation, resultContainerRight) {
-    // Pobierz treść z pola tekstowego
 
     const messageText = messageInput.value;
     const conversationId = conversation.conversationId;
@@ -387,7 +322,7 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
 
     const messageObject = {
         message: messageText,
-        userSender: document.getElementById('username').textContent,  // Przyjmuję, że masz dostęp do loggedUser w zakresie
+        userSender: document.getElementById('username').textContent,
     };
 
     if(messageText.length > 1000){
@@ -395,9 +330,7 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         return;
     }
 
-    // Sprawdź, czy treść wiadomości nie jest pusta
     if (messageText.trim() !== "") {
-        // Stwórz obiekt FormData z danymi formularza
         const formData = new FormData();
         formData.append("message", messageText);
         formData.append("conversationId", conversationId);
@@ -406,9 +339,6 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         fetch("/api/messages", {
             method: "POST",
             body: formData,
-            headers: {
-                // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
-            }
         })
             .then(response => response.text())
             .then(response => {
@@ -421,26 +351,6 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         createMessageContainer(messageObject,resultContainerRight,conversation,currentRow);
         resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
 
-        // Wyczyść pole tekstowe po wysłaniu
         messageInput.value = "";
     }
-}
-
-function calculateSenderNamePosition(singleMessageDiv, userNameElement) {
-    // Pobierz wysokość elementu singleMessageDiv
-    const clientHeight = singleMessageDiv.offsetHeight;
-
-    // Oblicz top na podstawie reguł opisanych w pytaniu
-    let topValue = "10px"; // Domyślnie 10px
-
-    if (clientHeight > 42) {
-        // Oblicz, ile 18px liniowych przekracza 42px
-        const additionalTop = Math.floor((clientHeight - 42) / 18) * 9;
-
-        // Dodaj dodatkowe top do wartości początkowej
-        topValue = (10 + additionalTop) + "px";
-    }
-
-    userNameElement.style.top = topValue;
-    console.log(clientHeight);
 }

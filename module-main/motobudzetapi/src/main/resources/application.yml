@@ -1,10 +1,14 @@
 spring:
+  zipkin:
+    baseUrl: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
   mail:
     host: serwer2379308.home.pl
     port: 587
     username: info@motobudzet.pl
     password: dontgotosql
-
     properties:
       mail:
         smtp:
@@ -13,9 +17,9 @@ spring:
             auth: true
             starttls:
               enable: true
-            connectiontimeout: 5000
+            connection-timeout: 5000
             timeout: 3000
-            writetimeout: 5000
+            write timeout: 5000
   kafka:
     bootstrap-servers: localhost:9092
   datasource:
@@ -60,6 +64,7 @@ management:
     metrics:
       export:
         enabled: true
+
 server:
   port: 20134
 

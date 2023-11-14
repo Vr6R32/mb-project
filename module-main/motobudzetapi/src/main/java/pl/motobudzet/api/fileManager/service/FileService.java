@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
+import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,18 +25,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdvertisementImageService {
+public class FileService {
 
-    public static final int PHOTO_TARGET_WIDTH = 1920;
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png","image/heif","image/heic");
 
-    private final PublicAdvertisementService advertisementService;
+    private final UserAdvertisementService advertisementService;
 
 
     @Transactional
-    public ResponseEntity<String> uploadAndProcessImagesWithLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
+    public ResponseEntity<String> verifyAndSortImages(String advertisementId, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
         List<String> existingImages = advertisement.getImageUrls();
@@ -45,9 +44,8 @@ public class AdvertisementImageService {
                 .filter(file -> !existingImages.contains(file.getOriginalFilename()))
                 .toList();
 
-        List<String> filenames = new ArrayList<>(files.stream()
-                .map(MultipartFile::getOriginalFilename)
-                .collect(Collectors.toList()));
+        List<String> filenames = files.stream()
+                .map(MultipartFile::getOriginalFilename).collect(Collectors.toList());
 
         for (MultipartFile file : filteredFilesToUpload) {
             if (file.isEmpty()) {
@@ -72,31 +70,24 @@ public class AdvertisementImageService {
 
         LinkedHashSet<String> uniqueFilenamesSet = new LinkedHashSet<>(filenames);
 
-//        advertisement.setMainPhotoUrl(uniqueFilenamesSet.stream().findFirst().get());
-
         rowAffected = +advertisementService.insertNewPhotos(UUID.fromString(advertisementId), uniqueFilenamesSet);
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").header("edited","true").body("inserted !" + rowAffected);
     }
 
-
-
     private void processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
 
         try {
-            // Zapisywanie pliku
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Przetwarzanie i zapisywanie obrazu
             BufferedImage image = ImageIO.read(file.getInputStream());
             int originalWidth = image.getWidth();
             int originalHeight = image.getHeight();
             int maxWidth = 2560;
             int maxHeight = 2560;
 
-            // Skalowanie obrazu, jeśli wymiary przekraczają maksymalne
             if (originalWidth > maxWidth || originalHeight > maxHeight) {
                 double widthRatio = (double) originalWidth / maxWidth;
                 double heightRatio = (double) originalHeight / maxHeight;
@@ -111,7 +102,6 @@ public class AdvertisementImageService {
                 g.drawImage(image, 0, 0, newWidth, newHeight, null);
                 g.dispose();
 
-                // Nadpisanie pliku przeskalowanym obrazem
                 ImageIO.write(resizedImage, "jpg", targetPath.toFile());
             }
 
@@ -132,7 +122,6 @@ public class AdvertisementImageService {
             logoGraphics.drawImage(logo, 0, 0, newLogoWidth, newLogoHeight, null);
             logoGraphics.dispose();
 
-            // Oblicz pozycję logo na obrazie (prawy dolny róg)
             int logoX = originalWidth - newLogoWidth - 10;
             int logoY = originalHeight - newLogoHeight - 10;
 
@@ -142,10 +131,8 @@ public class AdvertisementImageService {
             g.drawImage(scaledLogo, logoX, logoY, null);
             g.dispose();
 
-            // Zapisz obraz z logo
             ImageIO.write(imageWithScaledLogo, "jpg", targetPath.toFile());
 
-            // Aktualizacja głównego URL zdjęcia
             if (advertisement.getMainPhotoUrl() == null) {
                 advertisement.setMainPhotoUrl(fileName);
                 advertisementService.saveAdvertisement(advertisement);

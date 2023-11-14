@@ -28,7 +28,6 @@ public class RegistrationExceptionHandler {
         String errorMessagesList = errorMessages.toString();
         if (errorMessagesList.length() > 2) {
             errorMessagesList = errorMessagesList.substring(1, errorMessagesList.length() - 1);
-//            errorMessagesList = errorMessagesList.replaceAll(", ", "\n");
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessagesList);

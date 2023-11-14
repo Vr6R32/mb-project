@@ -3,11 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let urlParams = new URLSearchParams(window.location.search);
 
-    // if (urlParams.has("resetPassword") && urlParams.get("resetPassword") === "true" && urlParams.has("resetCode")){
-    //     console.log(urlParams.get("resetPassword"));
-    //     console.log(urlParams.get("resetCode"));
-    // }
-
     if (urlParams.has("code")){
         resetCode = urlParams.get("code");
         createForgotPasswordForm();
@@ -21,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.alignItems = 'center';
     containerMain.style.backgroundColor = 'transparent';
     containerMain.style.border = '0px';
-    containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
+    containerMain.style.boxShadow = 'none';
 
 
 
@@ -35,8 +30,8 @@ function createForgotPasswordForm()  {
     const addEnterKeyListener = (element)=> {
         element.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !document.getElementById('overlayId')) {
-                event.preventDefault(); // Zapobiegaj domyślnemu zachowaniu Enter (np. przeładowanie strony)
-                submitForm(); // Wywołaj funkcję submitForm
+                event.preventDefault();
+                submitForm();
             }
         });
     }
@@ -64,12 +59,12 @@ function createForgotPasswordForm()  {
             body: JSON.stringify(formData)
         })
             .then(response => {
-                return response.text(); // Pobieramy treść ciała odpowiedzi jako tekst
+                return response.text();
             })
             .then(responseText => {
                 if(responseText==='1'){
                     message = "Twoje hasło zostało zaktualizowane :)"
-                    resetForm(); // Resetuj pola formularza po pomyślnym wysłaniu
+                    resetForm();
                 } else {
                     message = "Coś poszło nie tak :(";
                 }
@@ -163,13 +158,12 @@ function createForgotPasswordForm()  {
         submitButton.style.color = "black";
     });
 
-    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    submitButton.style.flexBasis = "15%";
 
-    submitButton.addEventListener("click", submitForm); // Wywołaj funkcję submitForm po kliknięciu
+    submitButton.addEventListener("click", submitForm);
 
     submitButtonDiv.appendChild(submitButton);
 
-    // Dodaj elementy do formularza
     form.appendChild(heading);
     form.appendChild(passwordLabel);
     form.appendChild(passwordInput);
@@ -177,7 +171,6 @@ function createForgotPasswordForm()  {
     form.appendChild(passwordRepeatInput);
     form.appendChild(submitButtonDiv);
 
-    // Dodaj formularz do kontenera
     formContainer.appendChild(form);
 
     const resetForm = () => {

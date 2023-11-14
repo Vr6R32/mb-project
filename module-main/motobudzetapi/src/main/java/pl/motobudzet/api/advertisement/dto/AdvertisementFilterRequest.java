@@ -1,7 +1,7 @@
 package pl.motobudzet.api.advertisement.dto;
 
 import lombok.*;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Data
 @RequiredArgsConstructor

@@ -1,5 +1,5 @@
 let advertisementId = null;
-let isMouseOverMessageIcon = false; // Zmienna flagi
+let isMouseOverMessageIcon = false;
 let advertisement = null;
 let currentPhotoIndex = 0;
 
@@ -35,13 +35,15 @@ function createHeaderTitle(advertisement, container, owner) {
     titleContainer.classList.add('title-container');
     titleContainer.style.color = 'darkgoldenrod';
     titleContainer.style.textAlign = 'center'
-    titleContainer.style.marginTop = '-30px'; // Przesunięcie o 10 pikseli w górę
+    titleContainer.style.marginTop = '-30px';
+    titleContainer.style.width = '1460px';
+    titleContainer.style.maxWidth = '100%';
 
 
     const titleDiv = document.createElement('div');
-    titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
-    titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
-    titleDiv.style.backgroundColor = 'rgba(0,0,0, 0.9)'
+    titleDiv.style.display = 'grid';
+    titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr';
+    titleDiv.style.backgroundColor = 'rgba(0,0,0, 1)'
 
     titleContainer.appendChild(titleDiv);
 
@@ -62,12 +64,11 @@ function createHeaderTitle(advertisement, container, owner) {
 
 
     heartIcon.addEventListener('click', () => {
-        // Wyślij żądanie POST na adres "api/users/favourites"
 
         fetch('/api/users/favourites', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json', // Ustaw nagłówek na JSON, jeśli wymagane
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({userName: loggedUser, advertisementId: advertisementId}),
 
@@ -82,12 +83,10 @@ function createHeaderTitle(advertisement, container, owner) {
                         toolTipFavourite.textContent = 'Dodaj do ulubionych';
                     }
                 } else {
-                    // Obsłuż błąd, np. wyświetl komunikat dla użytkownika
                     console.error('Błąd podczas wysyłania żądania POST');
                 }
             })
             .catch(error => {
-                // Obsłuż błąd sieciowy
                 console.error('Błąd sieciowy: ' + error);
             });
     });
@@ -116,7 +115,7 @@ function createHeaderTitle(advertisement, container, owner) {
 
     messageIcon.addEventListener('click', () => {
         createMessageBox(messageIcon, loggedUser);
-        isMouseOverMessageIcon = true; // Zablokuj działanie mouseleave
+        isMouseOverMessageIcon = true;
         messageIcon.src = '/api/resources/messageOpen';
     });
 
@@ -127,7 +126,6 @@ function createHeaderTitle(advertisement, container, owner) {
     editIcon.style.marginBottom = '3px';
     editIcon.style.marginRight = '15px';
 
-// Tworzenie elementu podpowiedzi
     const toolTipEdit = document.createElement('span');
     toolTipEdit.textContent = 'Edytuj Ogłoszenie';
     toolTipEdit.className = 'tooltip';
@@ -145,7 +143,7 @@ function createHeaderTitle(advertisement, container, owner) {
     toolTipFavourite.className = 'tooltip';
     document.body.appendChild(toolTipFavourite);  // Dodanie podpowiedzi do dokumentu
 
-// Wyświetlanie podpowiedzi po najechaniu
+
     editIcon.addEventListener('mouseenter', (event) => {
         toolTipEdit.style.display = 'block';
         editIcon.style.cursor = 'pointer';
@@ -160,7 +158,7 @@ function createHeaderTitle(advertisement, container, owner) {
     heartIcon.addEventListener('mouseenter', (event) => {
         toolTipFavourite.style.display = 'block';
         heartIcon.style.cursor = 'pointer';
-        setTooltipText(heartIcon, toolTipFavourite); // Update tooltip text based on the current icon
+        setTooltipText(heartIcon, toolTipFavourite);
         document.addEventListener('mousemove', updateTooltipPosition);
     });
 
@@ -221,11 +219,10 @@ function createHeaderTitle(advertisement, container, owner) {
 
     titleDiv.appendChild(titleMidColumn);
     titleDiv.appendChild(titleRightColumn);
-    container.appendChild(titleContainer);
+    let advertisementDiv = document.getElementById('advertisementResultDiv');
+    advertisementDiv.insertBefore(titleContainer,advertisementDiv.firstChild);
 }
-
 function setTooltipText(heartIcon, toolTipFavourite) {
-    // Check the heart icon's source to determine what text to display
     if(heartIcon.src.includes('heartFull')){
         toolTipFavourite.textContent = 'Usuń z ulubionych';
     } else {
@@ -264,7 +261,6 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
 function createMessageBox(messageIcon, loggedUser) {
 
 
-    // Stwórz overlay, czyli zaciemnione tło
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
@@ -273,7 +269,6 @@ function createMessageBox(messageIcon, loggedUser) {
     overlay.style.height = '100%';
     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
 
-    // Stwórz okno dialogowe
     const dialogBox = document.createElement('div');
     dialogBox.setAttribute('id', 'dialogBox')
     dialogBox.style.position = 'fixed';
@@ -283,7 +278,7 @@ function createMessageBox(messageIcon, loggedUser) {
     dialogBox.style.width = '600px';
     dialogBox.style.transform = 'translate(-50%, -50%)';
     dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
-    // dialogBox.style.backgroundColor = '#181818';
+
     dialogBox.style.borderRadius = '15px';
     dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
     dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
@@ -297,14 +292,12 @@ function createMessageBox(messageIcon, loggedUser) {
     headerTitle.textContent = 'Napisz wiadomość do sprzedającego';
     headerTitle.style.color = 'darkgoldenrod';
     headerTitle.style.fontSize = '32px';
-    headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
+    headerTitle.style.fontWeight = 'bold';
     headerTitle.style.marginTop = '15px'
-    // headerTitle.style.marginBottom = '15px'
 
-    // Stwórz obszar tekstowy
+
     const textArea = document.createElement('textarea');
-    // textArea.style.backgroundColor = '#181818';
-    textArea.style.backgroundColor = 'transparent'; // Czarny kolor z przeźroczystością
+    textArea.style.backgroundColor = 'transparent';
 
     textArea.style.color = 'white';
     textArea.style.borderRadius = '10px';
@@ -354,71 +347,58 @@ function createMessageBox(messageIcon, loggedUser) {
         dialogBox.appendChild(textArea);
         dialogBox.appendChild(sendButton);
     }
-    // Dodaj okno dialogowe do overlay
+
     overlay.appendChild(dialogBox);
 
-    // Dodaj overlay do dokumentu
     document.body.appendChild(overlay);
 
     textArea.focus();
 
 
-    // Dodaj obsługę zdarzenia do zamknięcia okna dialogowego
     overlay.addEventListener('click', (event) => {
         if (event.target === overlay) {
-            document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
-            isMouseOverMessageIcon = false; // Odblokuj działanie mouseleave
+            document.body.removeChild(overlay);
+            isMouseOverMessageIcon = false;
             messageIcon.src = '/api/resources/messageClosed';
         }
     });
 }
 function sendNewMessage(messageValue, advertisementId, conversationId) {
-    // Stwórz obiekt FormData z danymi formularza
+
     const formData = new FormData();
     formData.append("message", messageValue);
     formData.append("conversationId", conversationId);
     formData.append("advertisementId", advertisementId);
 
-    // Wysłanie danych jako żądanie POST z danymi formularza
     fetch("/api/messages", {
         method: "POST",
         body: formData,
-        headers: {
-            // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
-        }
     })
         .then(response => {
             if (response.ok) {
-                // Jeśli odpowiedź jest OK (status 200), nie parsujemy jej jako JSON
                 let dialogBox = document.getElementById('dialogBox');
                 let dialogBoxTitle = document.getElementById('dialogBoxTitle');
                 dialogBox.innerHTML = '';
                 dialogBoxTitle.textContent = "Wiadomość wysłana pomyślnie.";
                 dialogBox.appendChild(dialogBoxTitle);
-            } else {
-                let dialogBox = document.getElementById('dialogBox');
-                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
-                dialogBox.innerHTML = '';
-                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + response.status;
-                dialogBox.appendChild(dialogBoxTitle);
-                console.error();
             }
         })
         .catch(error => {
-            console.error("Błąd podczas wysyłania wiadomości:", error);
+                let dialogBox = document.getElementById('dialogBox');
+                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
+                dialogBox.innerHTML = '';
+                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + error.message;
+                dialogBox.appendChild(dialogBoxTitle);
+                console.error();
         });
 }
 function createNewConversation() {
     const formData = new FormData();
     formData.append("advertisementId", advertisementId);
 
-    // Zwróć obietnicę
     return fetch("/api/conversations/create", {
         method: "POST",
         body: formData,
-        headers: {
-            // Tutaj możesz ustawić odpowiednie nagłówki, np. "Content-Type"
-        }
     })
         .then(response => response.json())
         .then(response => {
@@ -431,18 +411,17 @@ function createNewConversation() {
 }
 function checkConversationId(messageValue) {
     let conversationId = null;
-    let loggedUser = document.getElementById('username').textContent;
 
     fetch("/api/conversations/id?advertisementId=" + advertisementId)
         .then(response => {
             if (response.status === 200) {
-                return response.text(); // Jeśli odpowiedź jest OK, odczytaj ją jako tekst
+                return response.text();
             } else {
                 throw new Error('Błąd na serwerze: ' + response.statusText);
             }
         })
         .then(data => {
-            conversationId = parseInt(data); // Przekształć odpowiedź w numer konwersacji
+            conversationId = parseInt(data);
             if (conversationId < 0) {
                 createNewConversation()
                     .then(result => {
@@ -476,14 +455,13 @@ function fetchAdvertisement() {
             const container = document.getElementById('container-main');
 
 
-            advertisement = data; // Używamy pojedynczego obiektu, nie listy
+            advertisement = data;
             if (data.deleted===true){
                 window.location = '/';
             }
             setTitleInUrl(data);
-
-            createHeaderTitle(advertisement, container, advertisement.user);
             createAdvertisementIndexDiv(container, advertisement);
+            createHeaderTitle(advertisement, container, advertisement.user);
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
@@ -508,9 +486,5 @@ function nextPhoto(mainPhoto) {
 function changePhoto(index, mainPhoto) {
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
-// function extractAdvertisementId(currentURL) {
-//     const urlParts = currentURL.split('/');
-//     return urlParts[urlParts.length - 1];
-// }
 
 

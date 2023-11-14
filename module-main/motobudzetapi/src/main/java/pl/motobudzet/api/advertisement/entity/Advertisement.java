@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.locationCity.entity.City;
-import pl.motobudzet.api.locationState.entity.CityState;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.entity.Brand;
 import pl.motobudzet.api.vehicleModel.entity.Model;
@@ -26,7 +24,6 @@ import pl.motobudzet.api.vehicleSpec.entity.TransmissionType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +32,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "advertisement")
+@Table(name = "advertisements")
 @EntityListeners(AuditingEntityListener.class)
 public class Advertisement {
 

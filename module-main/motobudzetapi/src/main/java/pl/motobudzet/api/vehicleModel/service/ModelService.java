@@ -72,7 +72,7 @@ public class ModelService {
     }
 
     public Model getModelByBrand(String model,String brandName) {
-        return modelRepository.findByNameAndBrandName(model.toUpperCase(),brandName.toUpperCase()).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
+        return modelRepository.findByNameAndBrandName(model,brandName).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
     }
 
     public Model getModel(String model) {

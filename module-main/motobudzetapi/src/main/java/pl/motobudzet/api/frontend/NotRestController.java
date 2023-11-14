@@ -40,11 +40,6 @@ public class NotRestController {
     @GetMapping("advertisement/edit")
     public String editForm(Model model, Principal principal,@RequestParam("advertisementId") String advertisementId) {
         ModelUtils.setButtonsAttributes(model, principal);
-//        UUID advertisementUUID = userCustomService.getUserAdvertisement(principal.getName(),UUID.fromString(advertisementId)).orElse(null);
-//        if (advertisementUUID != null) {
-//            return "editForm";
-//        } else
-//            return "login";
         return "editForm";
     }
 

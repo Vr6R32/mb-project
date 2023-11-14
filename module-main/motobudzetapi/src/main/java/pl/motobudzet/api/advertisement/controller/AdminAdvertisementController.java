@@ -26,9 +26,4 @@ public class AdminAdvertisementController {
         return adminAdvertisementService.verifyAndEnableAdvertisement(id);
     }
 
-//    @DeleteMapping("{id}")
-//    public String deleteAdvertisement(@PathVariable String id) {
-//        return adminAdvertisementService.deleteAdvertisement(id);
-//    }
-
 }

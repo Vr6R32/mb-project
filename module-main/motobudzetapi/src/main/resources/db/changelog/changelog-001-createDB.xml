@@ -47,7 +47,7 @@
     </changeSet>
 
     <changeSet id="1" author="michal-k">
-        <createTable tableName="brand">
+        <createTable tableName="brands">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -58,7 +58,7 @@
     </changeSet>
 
     <changeSet id="2" author="michal-k">
-        <createTable tableName="drive_type">
+        <createTable tableName="drive_types">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -69,7 +69,7 @@
     </changeSet>
 
     <changeSet id="3" author="michal-k">
-        <createTable tableName="engine_type">
+        <createTable tableName="engine_types">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -80,7 +80,7 @@
     </changeSet>
 
     <changeSet id="4" author="michal-k">
-        <createTable tableName="fuel_type">
+        <createTable tableName="fuel_types">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -91,7 +91,7 @@
     </changeSet>
 
     <changeSet id="5" author="michal-k">
-        <createTable tableName="model">
+        <createTable tableName="models">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -105,7 +105,7 @@
     </changeSet>
 
     <changeSet id="6" author="michal-k">
-        <createTable tableName="brand_model_list">
+        <createTable tableName="brands_model_list">
             <column name="brand_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -116,7 +116,7 @@
     </changeSet>
 
     <changeSet id="7" author="michal-k">
-        <createTable tableName="transmission_type">
+        <createTable tableName="transmission_types">
             <column name="id" type="bigserial" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -127,7 +127,7 @@
     </changeSet>
 
     <changeSet id="8" author="michal-k">
-        <createTable tableName="advertisement">
+        <createTable tableName="advertisements">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -184,45 +184,45 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="brand_id"
-                                 referencedTableName="brand"
+                                 referencedTableName="brands"
                                  referencedColumnNames="id"
                                  constraintName="fksmrjb6imcn6lfd82wh045ntu5"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="city_id"
                                  referencedTableName="cities"
                                  referencedColumnNames="id"
                                  constraintName="fkl1p9vos2flnbm4bepw7y7u8on"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="drive_type_id"
-                                 referencedTableName="drive_type"
+                                 referencedTableName="drive_types"
                                  referencedColumnNames="id"
                                  constraintName="fknj8gdmre6khpjsoy6kdkbj7ai"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="engine_type_id"
-                                 referencedTableName="engine_type"
+                                 referencedTableName="engine_types"
                                  referencedColumnNames="id"
                                  constraintName="fklxhcfot1h4t04dec4e4175haj"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="fuel_type_id"
-                                 referencedTableName="fuel_type"
+                                 referencedTableName="fuel_types"
                                  referencedColumnNames="id"
                                  constraintName="fk1c97ccvnaal9aw8v5viwdlw5v"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="model_id"
-                                 referencedTableName="model"
+                                 referencedTableName="models"
                                  referencedColumnNames="id"
                                  constraintName="fk4cbs20m6gc5aueipii0cu0nfc"/>
 
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="transmission_type_id"
-                                 referencedTableName="transmission_type"
+                                 referencedTableName="transmission_types"
                                  referencedColumnNames="id"
                                  constraintName="fkc2bcd874c4023wdmehxjqgvps"/>
     </changeSet>
@@ -237,40 +237,40 @@
     </changeSet>
 
     <changeSet id="10" author="michal-k">
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="brand_id"
                                  constraintName="fk_brand_advertisement"
-                                 referencedTableName="brand"
+                                 referencedTableName="brands"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="drive_type_id"
                                  constraintName="fk_drive_type_advertisement"
-                                 referencedTableName="drive_type"
+                                 referencedTableName="drive_types"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="engine_type_id"
                                  constraintName="fk_engine_type_advertisement"
-                                 referencedTableName="engine_type"
+                                 referencedTableName="engine_types"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="fuel_type_id"
                                  constraintName="fk_fuel_type_advertisement"
-                                 referencedTableName="fuel_type"
+                                 referencedTableName="fuel_types"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="model_id"
                                  constraintName="fk_model_advertisement"
-                                 referencedTableName="model"
+                                 referencedTableName="models"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
-        <addForeignKeyConstraint baseTableName="advertisement"
+        <addForeignKeyConstraint baseTableName="advertisements"
                                  baseColumnNames="transmission_type_id"
                                  constraintName="fk_transmission_type_advertisement"
-                                 referencedTableName="transmission_type"
+                                 referencedTableName="transmission_types"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
     </changeSet>

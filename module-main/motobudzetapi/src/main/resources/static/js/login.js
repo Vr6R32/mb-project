@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.alignItems = 'center';
     containerMain.style.backgroundColor = 'transparent';
     containerMain.style.border = '0px';
-    containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
+    containerMain.style.boxShadow = 'none';
 
     createLoginForm();
 
@@ -23,8 +23,8 @@ const createRegisterForm = () => {
     const addEnterKeyListener = (element)=> {
         element.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !document.getElementById('overlayId')) {
-                event.preventDefault(); // Zapobiegaj domyślnemu zachowaniu Enter (np. przeładowanie strony)
-                submitForm(); // Wywołaj funkcję submitForm
+                event.preventDefault();
+                submitForm();
             }
         });
     }
@@ -44,13 +44,13 @@ const createRegisterForm = () => {
             body: JSON.stringify(formData)
         })
             .then(response => {
-                return response.text(); // Pobieramy treść ciała odpowiedzi jako tekst
+                return response.text();
             })
             .then(responseText => {
                 console.log(responseText);
                 createDialogBox(responseText);
                 if(responseText==='Zarejerstrowano pomyślnie !'){
-                    resetForm(); // Resetuj pola formularza po pomyślnym wysłaniu
+                    resetForm();
                 }
             })
     };
@@ -173,7 +173,6 @@ const createRegisterForm = () => {
 
     submitButtonDiv.appendChild(submitButton);
 
-    // Dodaj elementy do formularza
     form.appendChild(heading);
     form.appendChild(usernameLabel);
     form.appendChild(usernameInput);
@@ -184,7 +183,6 @@ const createRegisterForm = () => {
     form.appendChild(submitButtonDiv);
     form.appendChild(loginLink);
 
-    // Dodaj formularz do kontenera
     formContainer.appendChild(form);
 
     const resetForm = () => {
@@ -281,13 +279,12 @@ function createLoginForm(){
         submitButton.style.color = "white";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     submitButton.addEventListener("mouseout", function () {
         submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
         submitButton.style.color = "black";
     });
 
-    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    submitButton.style.flexBasis = "15%";
 
     const registerLink = document.createElement("p");
     registerLink.textContent = "Nie masz jeszcze konta? Zarejestruj się!";
@@ -301,7 +298,6 @@ function createLoginForm(){
         registerLink.style.color = "moccasin";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     registerLink.addEventListener("mouseout", function () {
         registerLink.style.color = "darkgoldenrod";
     });
@@ -320,7 +316,6 @@ function createLoginForm(){
         forgotPasswordLink.style.color = "moccasin";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     forgotPasswordLink.addEventListener("mouseout", function () {
         forgotPasswordLink.style.color = "darkgoldenrod";
     });
@@ -372,12 +367,12 @@ function createForgotPasswordForm()  {
             body: JSON.stringify(formData)
         })
             .then(response => {
-                return response.text(); // Pobieramy treść ciała odpowiedzi jako tekst
+                return response.text();
             })
             .then(responseText => {
                 if(responseText==='1'){
                     message = "Na podany adres e-mail przyjdzie link resetujacy hasło."
-                    resetForm(); // Resetuj pola formularza po pomyślnym wysłaniu
+                    resetForm();
                 } else {
                     message = "Nieprawidłowy adres e-mail";
                 }
@@ -447,9 +442,9 @@ function createForgotPasswordForm()  {
         submitButton.style.color = "black";
     });
 
-    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    submitButton.style.flexBasis = "15%";
 
-    submitButton.addEventListener("click", submitForm); // Wywołaj funkcję submitForm po kliknięciu
+    submitButton.addEventListener("click", submitForm);
 
     const registerLink = document.createElement("p");
     registerLink.textContent = "Nie masz jeszcze konta? Zarejestruj się!";
@@ -463,7 +458,6 @@ function createForgotPasswordForm()  {
         registerLink.style.color = "moccasin";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     registerLink.addEventListener("mouseout", function () {
         registerLink.style.color = "darkgoldenrod";
     });
@@ -482,7 +476,7 @@ function createForgotPasswordForm()  {
         loginLink.style.color = "moccasin";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
+
     loginLink.addEventListener("mouseout", function () {
         loginLink.style.color = "darkgoldenrod";
     });
@@ -491,7 +485,6 @@ function createForgotPasswordForm()  {
 
     submitButtonDiv.appendChild(submitButton);
 
-    // Dodaj elementy do formularza
     form.appendChild(heading);
     form.appendChild(emailLabel);
     form.appendChild(emailInput);
@@ -499,7 +492,7 @@ function createForgotPasswordForm()  {
     form.appendChild(loginLink);
     form.appendChild(registerLink);
 
-    // Dodaj formularz do kontenera
+
     formContainer.appendChild(form);
 
     const resetForm = () => {

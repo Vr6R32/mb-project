@@ -2,7 +2,7 @@ let prevPageButton = null;
 let advertisements;
 let currentMinIndex = 0;
 let currentMaxIndex = 4;
-const resultsPerPage = 4; // Liczba wyników na stronie
+const resultsPerPage = 4;
 
 document.addEventListener("DOMContentLoaded", function () {
     const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
@@ -12,20 +12,18 @@ document.addEventListener("DOMContentLoaded", function () {
     prevPageButton.addEventListener('click', () => {
         if (currentMinIndex > 0) {
             clearAdvertisements(container);
-            currentMinIndex -= resultsPerPage; // Przesuń się o 3 wyniki wstecz
+            currentMinIndex -= resultsPerPage;
             currentMaxIndex -= resultsPerPage;
             displayLastUploaded(currentMinIndex, currentMaxIndex);
         }
     });
 
     nextPageButton.addEventListener('click', () => {
-        // Sprawdź, czy currentMaxIndex nie przekracza rozmiaru listy reklam
         if (currentMaxIndex < advertisements.length) {
             clearAdvertisements(container);
-            currentMinIndex += resultsPerPage; // Przesuń się o 3 wyniki do przodu
+            currentMinIndex += resultsPerPage;
             currentMaxIndex += resultsPerPage;
 
-            // Jeśli currentMaxIndex przekracza advertisements.size, ogranicz go do advertisements.size
             if (currentMaxIndex > advertisements.length) {
                 currentMaxIndex = advertisements.length;
             }
@@ -48,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-// Dodaj efekt podświetlenia do przycisków
     addHoverEffect(prevPageButton);
     addHoverEffect(nextPageButton);
 });

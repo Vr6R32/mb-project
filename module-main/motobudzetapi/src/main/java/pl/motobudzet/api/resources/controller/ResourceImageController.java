@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.motobudzet.api.resources.service.ResourceImageService;
 
-import static pl.motobudzet.api.fileManager.service.AdvertisementImageService.PRIVATE_FILE_PATH;
+import static pl.motobudzet.api.fileManager.service.FileService.PRIVATE_FILE_PATH;
 
 @RequestMapping("api/resources")
 @RestController
