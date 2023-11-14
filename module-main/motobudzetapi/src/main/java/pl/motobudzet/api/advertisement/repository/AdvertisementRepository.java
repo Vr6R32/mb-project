@@ -124,7 +124,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 and a.isDeleted = false ORDER BY a.creationTime DESC")
+            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 and a.isDeleted = false ORDER BY a.createDate DESC")
     List<Advertisement> findAllAdvertisementsByUserId(Long userNameId);
 
     @Query("select a from Advertisement a " +

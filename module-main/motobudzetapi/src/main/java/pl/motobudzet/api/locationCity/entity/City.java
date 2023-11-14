@@ -30,4 +30,14 @@ public class City {
     @JoinColumn(name = "state_id", referencedColumnName = "id", insertable = false, updatable = false)
     private CityState cityState;
 
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nLatitude=" + nLatitude +
+                ", eLongitude=" + eLongitude +
+                ", cityState=" + cityState.getId() +
+                '}';
+    }
 }

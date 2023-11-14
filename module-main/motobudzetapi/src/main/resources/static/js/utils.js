@@ -81,6 +81,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     mainPhoto.style.width = '100%'; // Ustawienie tła na czarny
 
     const previousArrow = document.createElement('span');
+    previousArrow.setAttribute('id', 'previousArrow');
     previousArrow.textContent = '←';
     previousArrow.style.cursor = 'pointer';
     previousArrow.style.fontSize = '72px';
@@ -88,6 +89,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     previousArrow.addEventListener('click', () => previousPhoto(mainPhoto));
 
     const nextArrow = document.createElement('span');
+    nextArrow.setAttribute('id', 'nextArrow');
     nextArrow.textContent = '→';
     nextArrow.style.cursor = 'pointer';
     nextArrow.style.fontSize = '72px';
@@ -177,14 +179,15 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
         createAdvertisementIndexDetailsContainer('productionDate', 'ProductionDateIcon', advertisement.productionDate),
         createAdvertisementIndexDetailsContainer('fuelType', 'FuelTypeIcon', advertisement.fuelType),
         createAdvertisementIndexDetailsContainer('engineHorsePower', 'EngineIcon', advertisement.engineHorsePower + ' HP'),
+        createAdvertisementIndexDetailsContainer('engineType/' + advertisement.engineType, 'transmissionIcon', advertisement.engineType),
+        createAdvertisementIndexDetailsContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
     ];
 
-    if (advertisement.fuelType !== 'ELEKTRYK') {
-        containers.push(
-            createAdvertisementIndexDetailsContainer('engineType/' + advertisement.engineType, 'transmissionIcon', advertisement.engineType),
-            createAdvertisementIndexDetailsContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
-        );
-    }
+    // if (advertisement.fuelType !== 'EV') {
+    //     containers.push(
+    //
+    //     );
+    // }
 
     containers.push(createAdvertisementIndexDetailsContainer('price', 'PriceIcon', advertisement.price + ',-'));
 
@@ -218,8 +221,9 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     let descContainer = document.createElement('div');
     descContainer.className = "ql-editor";
-    descContainer.style.width = '1400px';
+    descContainer.style.width = '1460px';
     descContainer.style.maxWidth = '100%';
+    descContainer.style.borderRadius = '20px';
     descContainer.style.margin = '0 auto'; // Wyśrodkowanie w poziomie
 
 
@@ -228,6 +232,13 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     document.body.appendChild(descContainer);
     return resultDiv;
+}
+function updateTooltipPosition(event) {
+    const tooltips = document.querySelectorAll('.tooltip');
+    tooltips.forEach(tooltip => {
+        tooltip.style.left = (event.pageX + 20) + 'px';
+        tooltip.style.top = (event.pageY + 20) + 'px';
+    });
 }
 function createAdvertisementIndexDetailsContainer(iconPath, altText, value) {
     const container = document.createElement('advertisementInfoContainer');
@@ -571,6 +582,76 @@ function fetchModels(brand) {
         modelSelect.innerHTML = '<option value="">Wybierz model</option>';
     }
 }
+
+function advertisementFormDataExtract() {
+    quill.format(0, quill.getLength(), 'color', '#fff');
+    descriptionContent = quill.container.firstChild.innerHTML;
+
+    const formData = {
+        name: getValue('name'),
+        description: descriptionContent,
+        brand: getValue('brand'),
+        model: getValue('model'),
+        fuelType: getValue('fuelType'),
+        driveType: getValue('driveType'),
+        engineType: getValue('engineType'),
+        transmissionType: getValue('transmissionType'),
+        mileage: getValue('mileage'),
+        mileageUnit: getValue('mileageUnit'),
+        price: getValue('price'),
+        priceUnit: getValue('priceUnit'),
+        engineCapacity: getValue('engineCapacity'),
+        engineHorsePower: getValue('engineHorsePower'),
+        productionDate: getValue('productionDate'),
+        firstRegistrationDate: getValue('firstRegistrationDate'),
+        city: getValue('city'),
+        cityState: getValue('cityState'),
+        mainPhotoUrl: getValue('name') + '-' + selectedFiles[0].name
+    };
+    return formData;
+}
+
+function createDropDeleteZone(){
+    if(document.getElementById('deleteZone')===null){
+
+        const trashIcon = document.createElement('img');
+        trashIcon.src = `/api/resources/trashClosed`;
+        trashIcon.alt = 'trashIcon';
+
+
+        const deleteZone = document.createElement('div');
+
+        deleteZone.id = 'deleteZone';
+
+        deleteZone.style.position = 'absolute';
+        deleteZone.style.top = '60px';
+
+
+        deleteZone.appendChild(trashIcon);
+
+        deleteZone.addEventListener('mouseover', function() {
+            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
+        });
+        deleteZone.addEventListener('mouseout', function() {
+            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
+        });
+
+        deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
+        deleteZone.addEventListener('drop', handleDeleteZoneDrop);
+
+        deleteZone.addEventListener('dragenter', function() {
+            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
+        });
+        deleteZone.addEventListener('dragleave', function() {
+            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
+        });
+
+        let thumbnailzone = document.getElementById('half-container-big2');
+
+        thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
+    }
+}
+
 function getDeviceScreenInfo(){
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
@@ -605,4 +686,37 @@ function getDeviceScreenInfo(){
         console.log(`Nowa wysokość okna przeglądarki: ${windowHeight}px`);
     });
 
+}
+
+function handleEvType() {
+    document.getElementById('fuelType').addEventListener('change', function () {
+        const fuelType = this.value;
+        const transmissionType = document.getElementById('transmissionType');
+        const engineType = document.getElementById('engineType');
+        const engineCapacity = document.getElementById('engineCapacity');
+
+        if (fuelType === 'EV') {
+            // Sprawdzanie, czy opcja 'AUTOMAT' istnieje w 'transmissionType'
+            if (Array.from(transmissionType.options).some(option => option.value === 'Automat')) {
+                transmissionType.value = 'Automat';
+            }
+            transmissionType.disabled = true;
+
+            // Analogicznie dla 'engineType'
+            if (Array.from(engineType.options).some(option => option.value === 'Cewka')) {
+                engineType.value = 'Cewka';
+            }
+            engineType.disabled = true;
+
+            engineCapacity.value = '0';
+            engineCapacity.disabled = true;
+        } else {
+            transmissionType.disabled = false;
+            engineType.disabled = false;
+            engineCapacity.disabled = false;
+            transmissionType.value = '------';
+            engineType.value = '------';
+            engineCapacity.value = '';
+        }
+    });
 }

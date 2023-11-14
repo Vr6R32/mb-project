@@ -1,9 +1,12 @@
 package pl.motobudzet.api.advertisement.dto;
 
 import lombok.*;
+import pl.motobudzet.api.advertisement.model.MileageUnit;
+import pl.motobudzet.api.advertisement.model.PriceUnit;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -23,11 +26,7 @@ public class AdvertisementDTO {
     private String engineType;
     private String transmissionType;
     private String mainPhotoUrl;
-    private String mileageUnit;
-    private String priceUnit;
     private String user;
-    private String creationDate;
-    private String creationTime;
     private String city;
     private String cityState;
     private Long mileage;
@@ -35,6 +34,10 @@ public class AdvertisementDTO {
     private Long engineCapacity;
     private Long engineHorsePower;
     private Long productionDate;
+    private MileageUnit mileageUnit;
+    private PriceUnit priceUnit;
+    private LocalTime createTime;
+    private LocalDate createDate;
     private LocalDate firstRegistrationDate;
     private boolean isVerified;
     private boolean isDeleted;

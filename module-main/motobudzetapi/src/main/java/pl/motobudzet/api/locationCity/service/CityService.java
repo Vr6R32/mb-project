@@ -67,7 +67,9 @@ public class CityService {
     }
 
     public City getCityByNameAndState(String cityName,String stateName) {
-        return cityRepository.getCityByNameAndState(cityName,stateName).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
+//        System.out.println(cityName);
+//        System.out.println(stateName);
+        return cityRepository.getCityByNameAndState(cityName,stateName.toUpperCase()).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 
     public City getCityByNameWithout(String name) {

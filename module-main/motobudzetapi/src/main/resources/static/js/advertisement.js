@@ -58,7 +58,7 @@ function createHeaderTitle(advertisement, container, owner) {
     const heartIcon = document.createElement('img');
     heartIcon.setAttribute('id', 'hearticon');
     heartIcon.alt = 'HeartIcon';
-    updateHeartIconSrc(loggedUser, heartIcon);
+
 
 
     heartIcon.addEventListener('click', () => {
@@ -76,8 +76,10 @@ function createHeaderTitle(advertisement, container, owner) {
                 if (response.ok) {
                     if (heartIcon.src.endsWith('heartEmpty')) {
                         heartIcon.src = '/api/resources/heartFull';
+                        toolTipFavourite.textContent = 'Usuń z ulubionych';
                     } else {
                         heartIcon.src = '/api/resources/heartEmpty';
+                        toolTipFavourite.textContent = 'Dodaj do ulubionych';
                     }
                 } else {
                     // Obsłuż błąd, np. wyświetl komunikat dla użytkownika
@@ -126,37 +128,88 @@ function createHeaderTitle(advertisement, container, owner) {
     editIcon.style.marginRight = '15px';
 
 // Tworzenie elementu podpowiedzi
-    const tooltip = document.createElement('span');
-    tooltip.textContent = 'Edytuj Ogłoszenie';
-    tooltip.className = 'tooltip';
-    document.body.appendChild(tooltip);  // Dodanie podpowiedzi do dokumentu
+    const toolTipEdit = document.createElement('span');
+    toolTipEdit.textContent = 'Edytuj Ogłoszenie';
+    toolTipEdit.className = 'tooltip';
+    document.body.appendChild(toolTipEdit);  // Dodanie podpowiedzi do dokumentu
 
-// Funkcja do aktualizacji pozycji podpowiedzi
-    function updateTooltipPosition(event) {
-        tooltip.style.left = (event.pageX + 20) + 'px';
-        tooltip.style.top = (event.pageY + 20) + 'px';
-    }
+    const toolTipMessageSend = document.createElement('span');
+    toolTipMessageSend.textContent = 'Wyślij wiadomość';
+    toolTipMessageSend.className = 'tooltip';
+    document.body.appendChild(toolTipMessageSend);  // Dodanie podpowiedzi do dokumentu
+
+    updateHeartIconSrc(loggedUser, heartIcon);
+
+
+    const toolTipFavourite = document.createElement('span');
+    toolTipFavourite.className = 'tooltip';
+    document.body.appendChild(toolTipFavourite);  // Dodanie podpowiedzi do dokumentu
 
 // Wyświetlanie podpowiedzi po najechaniu
     editIcon.addEventListener('mouseenter', (event) => {
-        tooltip.style.display = 'block';
+        toolTipEdit.style.display = 'block';
         editIcon.style.cursor = 'pointer';
-
-        // Dodanie nasłuchiwania zdarzenia mousemove
         document.addEventListener('mousemove', updateTooltipPosition);
     });
 
     editIcon.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-
-        // Usunięcie nasłuchiwania zdarzenia mousemove po opuszczeniu ikony
+        toolTipEdit.style.display = 'none';
         document.removeEventListener('mousemove', updateTooltipPosition);
     });
 
+    heartIcon.addEventListener('mouseenter', (event) => {
+        toolTipFavourite.style.display = 'block';
+        heartIcon.style.cursor = 'pointer';
+        setTooltipText(heartIcon, toolTipFavourite); // Update tooltip text based on the current icon
+        document.addEventListener('mousemove', updateTooltipPosition);
+    });
+
+    heartIcon.addEventListener('mouseleave', () => {
+        toolTipFavourite.style.display = 'none';
+        document.removeEventListener('mousemove', updateTooltipPosition);
+    });
+
+    messageIcon.addEventListener('mouseenter', (event) => {
+        toolTipMessageSend.style.display = 'block';
+        editIcon.style.cursor = 'pointer';
+        document.addEventListener('mousemove', updateTooltipPosition);
+    });
+
+    messageIcon.addEventListener('mouseleave', () => {
+        toolTipMessageSend.style.display = 'none';
+        document.removeEventListener('mousemove', updateTooltipPosition);
+    });
 
     editIcon.addEventListener('click', () => {
         window.location.href = `/advertisement/edit?advertisementId=${advertisementId}`;
     });
+
+    //
+    // let nextArrow = document.getElementById('nextArrow');
+    //
+    // nextArrow.addEventListener('mouseenter', (event) => {
+    //     toolTipNextArrow.style.display = 'block';
+    //     nextArrow.style.cursor = 'pointer';
+    //     setTooltipText(nextArrow, toolTipNextArrow); // Update tooltip text based on the current icon
+    //     document.addEventListener('mousemove', updateTooltipPosition);
+    // });
+    //
+    // nextArrow.addEventListener('mouseleave', () => {
+    //     toolTipNextArrow.style.display = 'none';
+    //     document.removeEventListener('mousemove', updateTooltipPosition);
+    // });
+    //
+    //
+    // const toolTipNextArrow = document.createElement('span');
+    // toolTipNextArrow.textContent = 'Następne zdjęcie';
+    // toolTipNextArrow.className = 'tooltip';
+    // document.body.appendChild(toolTipNextArrow);  // Dodanie podpowiedzi do dokumentu
+    //
+    // const toolTipPreviousArrow = document.createElement('span');
+    // toolTipNextArrow.textContent = 'Poprzednie zdjęcie';
+    // toolTipNextArrow.className = 'tooltip';
+    // document.body.appendChild(toolTipPreviousArrow);  // Dodanie podpowiedzi do dokumentu
+
 
 
     if (loggedUser !== owner) {
@@ -169,6 +222,15 @@ function createHeaderTitle(advertisement, container, owner) {
     titleDiv.appendChild(titleMidColumn);
     titleDiv.appendChild(titleRightColumn);
     container.appendChild(titleContainer);
+}
+
+function setTooltipText(heartIcon, toolTipFavourite) {
+    // Check the heart icon's source to determine what text to display
+    if(heartIcon.src.includes('heartFull')){
+        toolTipFavourite.textContent = 'Usuń z ulubionych';
+    } else {
+        toolTipFavourite.textContent = 'Dodaj do ulubionych';
+    }
 }
 function updateHeartIconSrc(loggedUser, heartIcon) {
     const queryParams = new URLSearchParams({
@@ -402,16 +464,24 @@ function checkConversationId(messageValue) {
             console.error('Błąd:', error);
         });
 }
+function setTitleInUrl(data) {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('name', data.name);
+    window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
+}
 function fetchAdvertisement() {
     fetch('/api/advertisements/' + advertisementId)
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('container-main');
-            // container.style.width = '1050px';
+
+
             advertisement = data; // Używamy pojedynczego obiektu, nie listy
-            if (advertisement.deleted===true){
+            if (data.deleted===true){
                 window.location = '/';
             }
+            setTitleInUrl(data);
+
             createHeaderTitle(advertisement, container, advertisement.user);
             createAdvertisementIndexDiv(container, advertisement);
         })

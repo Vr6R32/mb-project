@@ -24,4 +24,12 @@ public class Model {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Brand brand;
 
+    @Override
+    public String toString() {
+        return "Model{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", brand=" + brand.getId() +
+                '}';
+    }
 }
