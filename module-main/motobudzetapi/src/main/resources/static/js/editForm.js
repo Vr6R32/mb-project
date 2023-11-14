@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchBrands();
     fetchSpecifications();
     loadFileDrop();
+    createDropDeleteZone();
 
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -389,6 +390,8 @@ function createForm() {
         fileInput.click();
     });
 
+    handleEvType();
+
     photoContainer.appendChild(fileDropArea);
 
     fetchAdvertisementDetails()
@@ -505,34 +508,8 @@ function submitFormWithFiles() {
     }
 }
 function submitForm() {
-
-    quill.format(0, quill.getLength(), 'color', '#fff');
-    descriptionContent = quill.container.firstChild.innerHTML;
-
-    const formData = {
-        name: getValue('name'),
-        description: descriptionContent,
-        brand: getValue('brand'),
-        model: getValue('model'),
-        fuelType: getValue('fuelType'),
-        driveType: getValue('driveType'),
-        engineType: getValue('engineType'),
-        transmissionType: getValue('transmissionType'),
-        mileage: getValue('mileage'),
-        mileageUnit: getValue('mileageUnit'),
-        price: getValue('price'),
-        priceUnit: getValue('priceUnit'),
-        engineCapacity: getValue('engineCapacity'),
-        engineHorsePower: getValue('engineHorsePower'),
-        productionDate: getValue('productionDate'),
-        firstRegistrationDate: getValue('firstRegistrationDate'),
-        city: getValue('city'),
-        cityState: getValue('cityState'),
-        userName: getUserName()
-    };
-
-
-
+    const formData
+        = advertisementFormDataExtract();
     return fetch('/api/advertisements/'+ advertisementId, {
         method: 'PUT',
         headers: {
@@ -593,46 +570,6 @@ function uploadFiles(advertisementId) {
             resetFileDropArea();
             // displayResult('Błąd podczas przesyłania pliku.');
         });
-}
-function createDropDeleteZone(){
-    if(document.getElementById('deleteZone')===null){
-
-        const trashIcon = document.createElement('img');
-        trashIcon.src = `/api/resources/trashClosed`;
-        trashIcon.alt = 'trashIcon';
-
-
-        const deleteZone = document.createElement('div');
-
-        deleteZone.id = 'deleteZone';
-
-        deleteZone.style.position = 'absolute';
-        deleteZone.style.top = '60px';
-
-
-        deleteZone.appendChild(trashIcon);
-
-        deleteZone.addEventListener('mouseover', function() {
-            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
-        });
-        deleteZone.addEventListener('mouseout', function() {
-            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
-        });
-
-        deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
-        deleteZone.addEventListener('drop', handleDeleteZoneDrop);
-
-        deleteZone.addEventListener('dragenter', function() {
-            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
-        });
-        deleteZone.addEventListener('dragleave', function() {
-            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
-        });
-
-        let thumbnailzone = document.getElementById('half-container-big2');
-
-        thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
-    }
 }
 function handleDeleteZoneDragOver(e) {
     if (e.preventDefault) {

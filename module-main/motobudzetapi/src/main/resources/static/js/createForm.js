@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchSpecifications();
     loadFileDrop();
     fetchUserDetails();
+    createDropDeleteZone();
 
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -348,7 +349,7 @@ function createForm() {
 
     fileDropArea.style.alignItems = 'center';
 
-    fileDropArea.innerText = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\nMaksymalna ilość zdjęć to 15.";
+    fileDropArea.innerText = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\nMaksymalna ilość zdjęć to 12.";
 
     fileDropArea.addEventListener('drop', handleFileDrop);
     fileDropArea.addEventListener('dragover', function(e) {
@@ -358,6 +359,7 @@ function createForm() {
     fileDropArea.addEventListener('click', function() {
         fileInput.click();
     });
+    handleEvType();
 
     photoContainer.appendChild(fileDropArea);
 
@@ -375,34 +377,8 @@ function submitFormWithFiles() {
     }
 }
 function submitForm() {
-
-    quill.format(0, quill.getLength(), 'color', '#fff');
-    descriptionContent = quill.container.firstChild.innerHTML;
-
-    const formData = {
-        name: getValue('name'),
-        description: descriptionContent,
-        brand: getValue('brand'),
-        model: getValue('model'),
-        fuelType: getValue('fuelType'),
-        driveType: getValue('driveType'),
-        engineType: getValue('engineType'),
-        transmissionType: getValue('transmissionType'),
-        mileage: getValue('mileage'),
-        mileageUnit: getValue('mileageUnit'),
-        price: getValue('price'),
-        priceUnit: getValue('priceUnit'),
-        engineCapacity: getValue('engineCapacity'),
-        engineHorsePower: getValue('engineHorsePower'),
-        productionDate: getValue('productionDate'),
-        firstRegistrationDate: getValue('firstRegistrationDate'),
-        city: getValue('city'),
-        cityState: getValue('cityState'),
-        userName: getUserName()
-    };
-
-
-
+    const formData
+        = advertisementFormDataExtract();
     return fetch('/api/advertisements', {
         method: 'POST',
         headers: {
@@ -460,36 +436,7 @@ function uploadFiles(advertisementId) {
             // displayResult('Błąd podczas przesyłania pliku.');
         });
 }
-function createDropDeleteZone(){
-    if(document.getElementById('deleteZone')===null){
-        const deleteZone = document.createElement('div');
-        deleteZone.id = 'deleteZone';
-        deleteZone.style.width = '200px';
-        deleteZone.style.height = '100px';
-        deleteZone.style.color = 'white';
-        deleteZone.style.border = '2px dashed red';
-        deleteZone.style.borderRadius = '10px';
-        deleteZone.style.textAlign = 'center';
-        deleteZone.style.lineHeight = '100px';  // Center the text vertically
-        deleteZone.style.cursor = 'pointer';
-        deleteZone.style.position = 'relative';
-        deleteZone.style.bottom = '200px';
-        deleteZone.innerText = 'Drop to delete';
 
-        deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
-        deleteZone.addEventListener('drop', handleDeleteZoneDrop);
-        deleteZone.addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
-        });
-        deleteZone.addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
-        });
-
-        let thumbnailzone = document.getElementById('half-container-big2');
-
-        thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
-    }
-}
 function handleDeleteZoneDragOver(e) {
     if (e.preventDefault) {
         e.preventDefault();

@@ -151,7 +151,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="main_photo_url" type="varchar(255)"/>
-            <column name="creation_time" type="timestamp(6)"/>
+
+            <column name="create_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified" type="timestamp"/>
+            <column name="last_modified_by" type="bigint"/>
             <column name="engine_capacity" type="bigint"/>
             <column name="engine_horse_power" type="bigint"/>
             <column name="first_registration_date" type="date"/>

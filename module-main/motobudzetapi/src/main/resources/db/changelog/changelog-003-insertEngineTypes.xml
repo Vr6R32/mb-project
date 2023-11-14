@@ -25,5 +25,12 @@
         </insert>
     </changeSet>
 
+    <changeSet id="4" author="michal-k">
+        <insert tableName="engine_type">
+            <column name="id" value="4"/>
+            <column name="name" value="Cewka"/>
+        </insert>
+    </changeSet>
+
 
 </databaseChangeLog>

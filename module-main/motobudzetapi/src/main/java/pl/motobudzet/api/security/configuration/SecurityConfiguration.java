@@ -3,6 +3,7 @@ package pl.motobudzet.api.security.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SecurityConfiguration {
 
     private final UserDetailsServiceImpl userDetailsService;

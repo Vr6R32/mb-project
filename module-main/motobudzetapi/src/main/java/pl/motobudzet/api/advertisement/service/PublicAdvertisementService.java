@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class PublicAdvertisementService {
 
     public static final int PAGE_SIZE = 10;
-    public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "creationTime");
+    public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
     private final AdvertisementRepository advertisementRepository;
     private final SpecificationService specificationService;
     private final BrandService brandService;
@@ -110,12 +110,12 @@ public class PublicAdvertisementService {
                 .engineHorsePower(request.getEngineHorsePower())
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
-                .creationTime(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))
                 .city(cityService.getCityByNameAndState(request.getCity(),request.getCityState()))
                 .user(currentUser)
                 .isVerified(false)
                 .isActive(false)
                 .isDeleted(false)
+                .mainPhotoUrl(request.getMainPhotoUrl())
                 .build();
 
 
@@ -147,7 +147,7 @@ public class PublicAdvertisementService {
 
             advertisement.setName(request.getName());
             advertisement.setDescription(request.getDescription());
-            advertisement.setModel(modelService.getModel(request.getModel()));
+            advertisement.setModel(modelService.getModelByBrand(request.getBrand(),request.getModel()));
             advertisement.setBrand(brandService.getBrand(request.getBrand()));
             advertisement.setFuelType(specificationService.getFuelType(request.getFuelType()));
             advertisement.setDriveType(specificationService.getDriveType(request.getDriveType()));
@@ -175,11 +175,6 @@ public class PublicAdvertisementService {
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
 
-        LocalDateTime advCreationTime = adv.getCreationTime();
-
-        String creationDate = MessageDateTimeExtractor.extractDate(advCreationTime);
-        String creationTime = MessageDateTimeExtractor.extractTime(advCreationTime);
-
         AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
                 .name(adv.getName())
@@ -194,14 +189,15 @@ public class PublicAdvertisementService {
                 .city(adv.getCity().getName())
                 .cityState(adv.getCity().getCityState().getName())
                 .mileage(adv.getMileage())
-                .mileageUnit(String.valueOf(adv.getMileageUnit()))
+                .mileageUnit(adv.getMileageUnit())
                 .price(adv.getPrice())
-                .priceUnit(String.valueOf(adv.getPriceUnit()))
+                .priceUnit(adv.getPriceUnit())
                 .engineCapacity(adv.getEngineCapacity())
                 .engineHorsePower(adv.getEngineHorsePower())
                 .firstRegistrationDate(adv.getFirstRegistrationDate())
                 .productionDate(adv.getProductionDate())
-                .creationDate(creationDate)
+                .createDate(adv.getCreateDate().toLocalDate())
+                .createTime(adv.getCreateDate().toLocalTime())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
                 .isDeleted(adv.isDeleted())
                 .isVerified(adv.isVerified())

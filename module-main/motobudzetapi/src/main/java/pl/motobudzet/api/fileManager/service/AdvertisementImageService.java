@@ -59,7 +59,7 @@ public class AdvertisementImageService {
             }
 
 
-            String fileName = advertisement.getName() + '-' + UUID.randomUUID() + '-' + file.getOriginalFilename();
+            String fileName = advertisement.getName() + '-' + file.getOriginalFilename();
             int indexToUpdate = filenames.indexOf(file.getOriginalFilename());
             if(indexToUpdate != -1) {
                 filenames.set(indexToUpdate, fileName);
@@ -72,7 +72,7 @@ public class AdvertisementImageService {
 
         LinkedHashSet<String> uniqueFilenamesSet = new LinkedHashSet<>(filenames);
 
-        advertisement.setMainPhotoUrl(uniqueFilenamesSet.stream().findFirst().get());
+//        advertisement.setMainPhotoUrl(uniqueFilenamesSet.stream().findFirst().get());
 
         rowAffected = +advertisementService.insertNewPhotos(UUID.fromString(advertisementId), uniqueFilenamesSet);
 

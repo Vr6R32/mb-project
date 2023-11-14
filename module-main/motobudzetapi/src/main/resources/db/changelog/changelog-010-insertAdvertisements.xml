@@ -15,7 +15,7 @@
             <column name="model_id" value="127"/>
             <column name="name" value="Audi RS3 OKAZJA !"/>
             <column name="main_photo_url" value="rs3.png"/>
-            <column name="creation_time" value="2023-08-17 10:08:45.613802"/>
+            <column name="create_date" value="2023-08-17 10:08:45.613802"/>
             <column name="engine_capacity" value="2497"/>
             <column name="engine_horse_power" value="350"/>
             <column name="first_registration_date" value="2014-04-30"/>
@@ -45,7 +45,7 @@
             <column name="model_id" value="130"/>
             <column name="name" value="Audi RS6 500HP SUPERCHARGED"/>
             <column name="main_photo_url" value="rs6.jpg"/>
-            <column name="creation_time" value="2023-08-18 09:08:45.613802"/>
+            <column name="create_date" value="2023-08-18 09:08:45.613802"/>
             <column name="engine_capacity" value="4497"/>
             <column name="engine_horse_power" value="500"/>
             <column name="first_registration_date" value="2013-04-24"/>
@@ -75,7 +75,7 @@
             <column name="model_id" value="134"/>
             <column name="name" value="RSQ8 MANHART"/>
             <column name="main_photo_url" value="rsq8.jpg"/>
-            <column name="creation_time" value="2023-08-14 03:08:45.613802"/>
+            <column name="create_date" value="2023-08-14 03:08:45.613802"/>
             <column name="engine_capacity" value="4197"/>
             <column name="engine_horse_power" value="800"/>
             <column name="first_registration_date" value="2006-12-24"/>
@@ -105,7 +105,7 @@
             <column name="model_id" value="1132"/>
             <column name="name" value="MERCEDES C63 AMG OKAZJA KOZAK IGLA"/>
             <column name="main_photo_url" value="c63.jpg"/>
-            <column name="creation_time" value="2023-08-06 07:08:45.613802"/>
+            <column name="create_date" value="2023-08-06 07:08:45.613802"/>
             <column name="engine_capacity" value="3897"/>
             <column name="engine_horse_power" value="649"/>
             <column name="first_registration_date" value="1996-11-04"/>
@@ -135,7 +135,7 @@
             <column name="model_id" value="1134"/>
             <column name="name" value="MERCEDES GKLASA"/>
             <column name="main_photo_url" value="gklasa.jpg"/>
-            <column name="creation_time" value="2023-07-30 00:08:45.613802"/>
+            <column name="create_date" value="2023-07-30 00:08:45.613802"/>
             <column name="engine_capacity" value="4997"/>
             <column name="engine_horse_power" value="532"/>
             <column name="first_registration_date" value="2019-07-09"/>
@@ -165,7 +165,7 @@
             <column name="model_id" value="1088"/>
             <column name="name" value="MAZDA RX-8"/>
             <column name="main_photo_url" value="rx8.jpg"/>
-            <column name="creation_time" value="2023-07-30 00:08:45.613802"/>
+            <column name="create_date" value="2023-07-30 00:08:45.613802"/>
             <column name="engine_capacity" value="4997"/>
             <column name="engine_horse_power" value="532"/>
             <column name="first_registration_date" value="2019-07-09"/>

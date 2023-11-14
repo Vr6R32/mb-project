@@ -7,6 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.locationCity.entity.City;
@@ -21,6 +26,7 @@ import pl.motobudzet.api.vehicleSpec.entity.TransmissionType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +36,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "advertisement")
+@EntityListeners(AuditingEntityListener.class)
 public class Advertisement {
 
     @Id
@@ -47,7 +54,15 @@ public class Advertisement {
     private Long engineHorsePower;
     private Long productionDate;
     private LocalDate firstRegistrationDate;
-    private LocalDateTime creationTime;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createDate;
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModified;
+    @LastModifiedBy
+    @Column(insertable = false)
+    private Long lastModifiedBy;
     @Enumerated(EnumType.STRING)
     private MileageUnit mileageUnit;
     @Enumerated(EnumType.STRING)

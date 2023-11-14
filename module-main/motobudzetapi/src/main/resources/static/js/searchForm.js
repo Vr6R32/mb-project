@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('click', function(event) {
     const suggestionsList = document.getElementById('suggestionsList');
 
-    // Sprawdza, czy istnieje lista propozycji i czy kliknięcie miało miejsce poza nią
     if (suggestionsList && !suggestionsList.contains(event.target)) {
         suggestionsList.style.display = 'none';
     }
@@ -66,41 +65,79 @@ function setFormValuesFromUrlParams(urlSearchParams) {
             if (paramsMapping[param]) {
                 let element = document.getElementById(paramsMapping[param]);
                 element.value = urlSearchParams.get(param);
+
+                // Pobierz etykietę powiązaną z elementem
+                let label = document.querySelector(`label[for='${paramsMapping[param]}']`);
+                if (label) {
+                    applyLabelColor(element, label); // Zastosuj kolor etykiety
+                }
             } else {
                 window[param] = urlSearchParams.get(param);
             }
         }
     }
+
 }
 setTimeout(function setInputSelect() {
-    if(urlSearchParams){
+    if (urlSearchParams) {
         let formObj = document.getElementById('advertisementFilterForm');
-        let brand = formObj.querySelector('#brand');
-        let driveType = formObj.querySelector('#driveType');
-        let engineType = formObj.querySelector('#engineType');
-        let fuelType = formObj.querySelector('#fuelType');
-        let transmissionType = formObj.querySelector('#transmissionType');
-        let cityState = formObj.querySelector('#cityState');
-        brand.value = urlSearchParams.get("brand");
-        driveType.value = urlSearchParams.get("driveType");
-        engineType.value = urlSearchParams.get("engineType");
-        fuelType.value = urlSearchParams.get("fuelType");
-        transmissionType.value = urlSearchParams.get("transmissionType");
-        cityState.value = urlSearchParams.get("cityState");
+        let fields = {
+            brand: formObj.querySelector('#brand'),
+            driveType: formObj.querySelector('#driveType'),
+            engineType: formObj.querySelector('#engineType'),
+            fuelType: formObj.querySelector('#fuelType'),
+            transmissionType: formObj.querySelector('#transmissionType'),
+            cityState: formObj.querySelector('#cityState')
+        };
+
+        for (let key in fields) {
+            if (fields.hasOwnProperty(key)) {
+                let paramValue = urlSearchParams.get(key);
+                if (paramValue !== null && paramValue.trim() !== "") {
+                    fields[key].value = paramValue;
+                    fields[key].style.color = 'white';
+                    let label = document.querySelector(`label[for='${fields[key].id}']`);
+                    if (label) {
+                        applyLabelColor(fields[key], label); // Zastosuj kolor etykiety
+                    }
+                }
+            }
+        }
     }
 }, 200);
 setTimeout(function setModelSelect() {
     if (urlSearchParams) {
-        fetch(`/api/models/${urlSearchParams.get("brand")}`)
-            .then(response => response.json())
-            .then(data => {
-                populateSelectOptions(data, "model");
-                let formObj = document.getElementById('advertisementFilterForm');
-                let model = formObj.querySelector('#model');
-                model.value = urlSearchParams.get("model");
-            });
+        let brandValue = urlSearchParams.get("brand");
+        if (brandValue !== null && brandValue.trim() !== "") {
+            fetch(`/api/models/${encodeURIComponent(brandValue)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    populateSelectOptions(data, "model");
+
+                    let formObj = document.getElementById('advertisementFilterForm');
+                    let modelSelect = formObj.querySelector('#model');
+                    let modelValue = urlSearchParams.get("model");
+                    if (modelValue !== null && modelValue.trim() !== "") {
+                        modelSelect.value = modelValue;
+                        modelSelect.style.color = 'white';
+                        // Pobierz etykietę powiązaną z elementem modelSelect
+                        let label = document.querySelector(`label[for='model']`);
+                        if (label) {
+                            applyLabelColor(modelSelect, label); // Zastosuj kolor etykiety
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
     }
-}, 300); // Drugi setTimeout z opóźnieniem 1000 ms (1 sekunda)
+}, 300); // Timeout to ensure this runs after the first set of dropdowns are populated
 function fetchAllSpecifications() {
     fetch("/api/spec/driveTypes")
         .then(response => response.json())
@@ -128,29 +165,21 @@ function fetchAllSpecifications() {
             // Populate brand options
             populateSelectOptions(data, "brand");
             // Add event listener to the brand select element after populating the options
-            const brandSelect = document.getElementById("brand");
             const modelSelect = document.getElementById("model");
+            const brandSelect = document.getElementById("brand");
 
             brandSelect.addEventListener("change", function (event) {
                 const selectedBrand = event.target.value;
-
-                // Check if a brand is selected before making the model fetch
                 if (selectedBrand !== "") {
+                    modelSelect.innerHTML = "";
                     fetch(`/api/models/${selectedBrand}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Clear existing model options
-                            modelSelect.innerHTML = "";
-                            // Populate new model options
                             populateSelectOptions(data, "model");
                         });
-                } else {
-                    // If no brand is selected, clear model options
-                    modelSelect.innerHTML = `<option value=""> </option>`;
                 }
             });
 
-            // Trigger the change event to populate models initially with the default brand (empty value)
             const changeEvent = new Event("change");
             brandSelect.dispatchEvent(changeEvent);
         });
@@ -183,26 +212,26 @@ function createSearchForm(formContainer) {
     const transmissionTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
     const brandsOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
 
-    form.appendChild(createRowWithInputElement("Marka:", "select", "brand", "brand", brandsOptions));
-    form.appendChild(createRowWithInputElement("Model:", "select", "model", "model"));
-    form.appendChild(createRowWithInputElement("Rodzaj Silnika:", "select", "engineType", "engineType", engineTypesOptions));
-    form.appendChild(createRowWithInputElement("Rodzaj Paliwa:", "select", "fuelType", "fuelType", fuelTypesOptions));
-    form.appendChild(createRowWithInputElement("Rodzaj Napędu:", "select", "driveType", "driveType", driveTypesOptions));
-    form.appendChild(createRowWithInputElement("Skrzynia Biegów:", "select", "transmissionType", "transmissionType", transmissionTypesOptions));
-    form.appendChild(createRowWithInputElement("Cena od:", "number", "priceMin", "priceMin"));
-    form.appendChild(createRowWithInputElement("Cena do:", "number", "priceMax", "priceMax"));
-    form.appendChild(createRowWithInputElement("Przebieg od:", "number", "mileageFrom", "mileageFrom"));
-    form.appendChild(createRowWithInputElement("Przebieg do:", "number", "mileageTo", "mileageTo"));
-    form.appendChild(createRowWithInputElement("Pojemność od:", "number", "engineCapacityFrom", "engineCapacityFrom"));
-    form.appendChild(createRowWithInputElement("Pojemność do:", "number", "engineCapacityTo", "engineCapacityTo"));
-    form.appendChild(createRowWithInputElement("Moc od:", "number", "engineHorsePowerFrom", "engineHorsePowerFrom"));
-    form.appendChild(createRowWithInputElement("Moc do:", "number", "engineHorsePowerTo", "engineHorsePowerTo"));
-    form.appendChild(createRowWithInputElement("Rok Produkcji od:", "number", "productionDateFrom", "productionDateFrom"));
-    form.appendChild(createRowWithInputElement("Rok Produkcji do:", "number", "productionDateTo", "productionDateTo"));
-    form.appendChild(createRowWithInputElement("Miasto:", "text", "city", "city"));
-    form.appendChild(createRowWithInputElement("Województwo:", "select", "cityState", "cityState"));
-    form.appendChild(createRowWithInputElement("Odległość:", "number", "distanceFrom", "distanceFrom"));
-    form.appendChild(createRowWithInputElement("Anglik:", "select", "jaj", "jaj"));
+    form.appendChild(createRowWithInputElement("np. -> Nissan","Marka:", "select", "brand", "brand", brandsOptions));
+    form.appendChild(createRowWithInputElement("np. -> 350Z","Model:", "select", "model", "model"));
+    form.appendChild(createRowWithInputElement("np. -> Widlasty","Rodzaj Silnika:", "select", "engineType", "engineType", engineTypesOptions));
+    form.appendChild(createRowWithInputElement("np. -> LPG","Rodzaj Paliwa:", "select", "fuelType", "fuelType", fuelTypesOptions));
+    form.appendChild(createRowWithInputElement("np. -> RWD","Rodzaj Napędu:", "select", "driveType", "driveType", driveTypesOptions));
+    form.appendChild(createRowWithInputElement("np. -> Automat","Skrzynia Biegów:", "select", "transmissionType", "transmissionType", transmissionTypesOptions));
+    form.appendChild(createRowWithInputElement("np. -> 10000","Cena od:", "number", "priceMin", "priceMin"));
+    form.appendChild(createRowWithInputElement("np. -> 100000","Cena do:", "number", "priceMax", "priceMax"));
+    form.appendChild(createRowWithInputElement("np. -> 50000","Przebieg od:", "number", "mileageFrom", "mileageFrom"));
+    form.appendChild(createRowWithInputElement("np. -> 200000","Przebieg do:", "number", "mileageTo", "mileageTo"));
+    form.appendChild(createRowWithInputElement("np. -> 2997","Pojemność od:", "number", "engineCapacityFrom", "engineCapacityFrom"));
+    form.appendChild(createRowWithInputElement("np. -> 4007","Pojemność do:", "number", "engineCapacityTo", "engineCapacityTo"));
+    form.appendChild(createRowWithInputElement("(KM) np. -> 299","Moc od:", "number", "engineHorsePowerFrom", "engineHorsePowerFrom"));
+    form.appendChild(createRowWithInputElement("(KM) np. -> 820", "Moc do:", "number", "engineHorsePowerTo", "engineHorsePowerTo"));
+    form.appendChild(createRowWithInputElement("np. -> 2015", "Rok Produkcji od:", "number", "productionDateFrom", "productionDateFrom"));
+    form.appendChild(createRowWithInputElement("np. -> 2019", "Rok Produkcji do:", "number", "productionDateTo", "productionDateTo"));
+    form.appendChild(createRowWithInputElement("np. -> Gdańsk", "Miasto:", "text", "city", "city"));
+    form.appendChild(createRowWithInputElement("np. -> Pomorskie", "Województwo:", "select", "cityState", "cityState"));
+    form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
+    form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
 
 
     // function setStyleForElements(elements, styleName, styleValue) {
@@ -243,18 +272,26 @@ function createSearchForm(formContainer) {
 
     let inputs = form.querySelectorAll('input, select, textarea');
 
+
+
     inputs.forEach(input => {
         input.addEventListener('change', function() {
-            if (input.name === 'city') {
+            let delay = 200; // Default delay is 0 for most inputs
+
+            if (input.name === 'city' || input.name === 'brand') {
                 input.value = input.value.trim();
-                setTimeout(() => {
-                    formData.set(input.name, input.value); // Update the FormData
-                    executeAdvertisementFilterResultCount(); // Execute your fetch request
-                }, 500);
-            } else {
-                formData.set(input.name, input.value);  // Update the FormData immediately for other inputs
-                executeAdvertisementFilterResultCount();  // Execute your fetch request immediately for other inputs
+                delay = 500;
             }
+
+            if(input.name === 'brand'){
+                let model = document.getElementById('model');
+                formData.set("model","");
+            }
+
+            setTimeout(() => {
+                formData.set(input.name, input.value); // Update the FormData
+                executeAdvertisementFilterResultCount(); // Execute your fetch request
+            }, delay);
         });
     });
 
@@ -307,7 +344,7 @@ function executeAdvertisementFilterResultCount() {
             console.error('Error fetching data:', error);
         });
 }
-function createRowWithInputElement(labelText, inputType, inputId, inputName, selectOptions = null) {
+function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions = null) {
     const rowDiv = document.createElement("div");
     rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
     rowDiv.style.display = "flex";
@@ -315,11 +352,13 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     rowDiv.style.marginBottom = "10px";
     rowDiv.style.maxWidth = "100%";
 
+
     const labelColumn = document.createElement("div");
     labelColumn.style.flexBasis = "40%"; // Trzy kolumny - 30% szerokości wiersza
     labelColumn.style.display = "flex";
     labelColumn.style.alignItems = "center";
-    labelColumn.style.marginRight = "10px";
+    labelColumn.style.marginRight = "5px";
+    labelColumn.style.marginLeft = "5px";
     labelColumn.style.maxWidth = "100%";
 
     const label = document.createElement("label");
@@ -328,6 +367,7 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     label.style.width = "100%"; // Szerokość etykiety - 100% kolumny etykiet
     label.style.textAlign = "center";
     label.style.maxWidth = "100%";
+    label.style.color = 'darkgoldenrod';
     labelColumn.appendChild(label);
     rowDiv.appendChild(labelColumn);
 
@@ -342,24 +382,18 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
     inputElement.type = inputType;
     inputElement.setAttribute('id',inputId);
     inputElement.name = inputName;
-    inputElement.style.width = "100%"; // Szerokość pola - 100% kolumny pól
+    inputElement.style.width = "100%";
     inputElement.style.padding = "5px";
     inputElement.style.boxSizing = "border-box";
     inputElement.style.backgroundColor = "black";
     inputElement.style.color = "white";
     inputElement.style.maxWidth = "100%";
-    // inputElement.style.border = "1px dashed goldenrod"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
-    inputElement.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
-    inputElement.style.borderRadius = "5px"; // Zaokrąglone rogi
+    inputElement.style.border = "1px solid rgba(255, 255, 255, 0.5)";
+    inputElement.style.borderRadius = "5px";
 
-    // if (inputType === "number") {
-    //     inputElement.style.appearance = "textfield"; // Ukryj strzałki zwiększania i zmniejszania
-    //     inputElement.style.appearance = "none"; // Usunięcie domyślnego wyglądu
-    //     inputElement.style.MozAppearance = "textfield"; // Dla przeglądarek Gecko (np. Firefox)
-    //     inputElement.style.WebkitAppearance = "none"; // Dla przeglądarek WebKit (np. Chrome, Safari)
-    // }
+    inputElement.placeholder = exampleValue;
+
     if (selectOptions) {
-        // Jeśli to element typu select, dodaj opcje
         selectOptions.forEach(option => {
             const optionElement = document.createElement("option");
             optionElement.value = option.name;
@@ -368,11 +402,22 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
         });
     }
 
+    if(inputId === 'model'){
+        inputElement.style.color = 'gray';
+        const defaultOption = document.createElement("option");
+        defaultOption.setAttribute('id', 'emptyModel');
+        defaultOption.value = "";
+        defaultOption.style.color = 'gray';
+        defaultOption.textContent = "Wybierz...";
+        inputElement.appendChild(defaultOption);
+    }
+
+
+
     if (inputId === 'city') {
 
         const inputContainer = document.createElement("div");
-        inputContainer.style.position = "relative"; // Ustawiamy pozycję na "relative", aby umożliwić pozycjonowanie względem tego kontenera
-
+        inputContainer.style.position = "relative";
         inputColumn.style.position = 'relative';
 
         const suggestionsList = document.createElement('ul');
@@ -442,12 +487,24 @@ function createRowWithInputElement(labelText, inputType, inputId, inputName, sel
         });
     }
 
+    inputElement.addEventListener('change', function() {
+        applyLabelColor(inputElement, label);
+    });
+
     inputColumn.appendChild(inputElement);
     rowDiv.appendChild(inputColumn);
 
 
 
     return rowDiv;
+}
+
+function applyLabelColor(element, label) {
+    if (element.value !== '') {
+        label.style.color = 'white';
+    } else {
+        label.style.color = 'darkgoldenrod';
+    }
 }
 function getUserFavourites() {
 
@@ -1248,16 +1305,40 @@ function createInfoContainer(iconPath, altText, value) {
 
     return container;
 }
+
 function populateSelectOptions(options, selectId) {
     const selectElement = document.getElementById(selectId);
-    // Clear existing options
-    selectElement.innerHTML = `<option value=""> </option>`;
-    options.forEach(option => {
-        const optionElement = document.createElement("option");
-        optionElement.value = option.name;
-        optionElement.textContent = option.name;
-        selectElement.appendChild(optionElement);
 
+
+    selectElement.style.color = 'gray';
+        const defaultOption = document.createElement("option");
+        defaultOption.setAttribute('id', 'emptyOption');
+        defaultOption.value = "";
+        defaultOption.style.color = 'gray';
+        defaultOption.textContent = "Wybierz...";
+        selectElement.appendChild(defaultOption);
+    // defaultOption.selected = true; // Optional: make it selected by default
+
+    if(options !== null) {
+        options.forEach(option => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option.name;
+            optionElement.textContent = option.name;
+            optionElement.style.color = 'white';
+            selectElement.appendChild(optionElement);
+        });
+    }
+
+    selectElement.value = "";
+    selectElement.addEventListener('change', function() {
+        this.style.color = this.value === "" ? 'gray' : 'white';
     });
+
+    if (selectId === "model") {
+        const emptyModelOption = document.getElementById('emptyModel');
+        if (emptyModelOption) {
+            selectElement.removeChild(emptyModelOption);
+        }
+    }
 }
 

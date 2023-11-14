@@ -54,6 +54,7 @@ public class InsertBrandsnModels {
 
         Role roleUser = Role.builder().name("ROLE_USER").build();
         Role roleAdmin = Role.builder().name("ROLE_ADMIN").build();
+        Role roleAwaitingDetails = Role.builder().name("ROLE_AWAITING_DETAILS").build();
         AppUser admin = AppUser.builder()
                 .userName("admin")
                 .password(passwordEncoder.encode("admin"))
@@ -78,6 +79,7 @@ public class InsertBrandsnModels {
 
             userRepository.save(admin);
             userRepository.save(user);
+        roleRepository.save(roleAwaitingDetails);
 
         fillBrandDB(admin,user);
     }
@@ -136,9 +138,9 @@ public class InsertBrandsnModels {
         bmw.addElement(e36);
         bmw.addElement(e34);
         bmw.addElement(e90);
+        brandRepository.saveAll(List.of(audi,bmw,mazda,nissan,mercedes));
         modelRepository.saveAll(List.of(e34,e36,e46,e90,C63,gelenda,rs3,rx8,rs6,rs8q8,z350,z370));
 
-        brandRepository.saveAll(List.of(audi,bmw,mazda,nissan,mercedes));
 
 
         Advertisement ad1 = Advertisement.builder()
@@ -157,7 +159,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(350L)
                 .firstRegistrationDate(LocalDate.of(2014,4,30))
                 .productionDate(2016L)
-                .creationTime(LocalDateTime.now().minusDays(2).minusHours(3))
                 .imageUrls(List.of("rs3.png","rs3-2.jpg"))
                 .user(admin)
                 .isVerified(true)
@@ -178,7 +179,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(500L)
                 .firstRegistrationDate(LocalDate.of(2013,4,24))
                 .productionDate(2015L)
-                .creationTime(LocalDateTime.now().minusDays(1).minusHours(4))
                 .imageUrls(List.of("rs6.jpg","rs6-2.jpg"))
                 .user(admin)
                 .isVerified(true)
@@ -201,7 +201,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(800L)
                 .firstRegistrationDate(LocalDate.of(2006,12,24))
                 .productionDate(2022L)
-                .creationTime(LocalDateTime.now().minusDays(5).minusHours(10))
                 .imageUrls(List.of("rsq8.jpg","rsq8-2.jpg"))
                 .user(admin)
                 .isVerified(true)
@@ -222,7 +221,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(649L)
                 .firstRegistrationDate(LocalDate.of(1996,11,4))
                 .productionDate(2012L)
-                .creationTime(LocalDateTime.now().minusDays(12).minusHours(30))
                 .imageUrls(List.of("c63.jpg","c63-2.jpg"))
                 .user(user)
                 .isVerified(true)
@@ -243,7 +241,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(532L)
                 .firstRegistrationDate(LocalDate.of(2019,7,9))
                 .productionDate(2007L)
-                .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("gklasa.jpg","gklasa-2.jpg"))
                 .user(user)
                 .isVerified(true)
@@ -265,7 +262,6 @@ public class InsertBrandsnModels {
                 .engineHorsePower(532L)
                 .firstRegistrationDate(LocalDate.of(2019,7,9))
                 .productionDate(2005L)
-                .creationTime(LocalDateTime.now().minusDays(20).minusHours(13))
                 .imageUrls(List.of("rx8.jpg","rx8-2.jpg"))
                 .user(user)
                 .isVerified(true)

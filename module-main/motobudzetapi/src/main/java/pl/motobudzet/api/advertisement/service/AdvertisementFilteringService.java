@@ -99,7 +99,7 @@ public class AdvertisementFilteringService {
 
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
         serviceFunctionMap.put("brand", brandService::getBrand);
-        serviceFunctionMap.put("model", modelService::getModel);
+        serviceFunctionMap.put("model", modelName -> modelService.getModelByBrand(request.getModel(), request.getBrand()));
         serviceFunctionMap.put("fuelType", specificationService::getFuelType);
         serviceFunctionMap.put("driveType", specificationService::getDriveType);
         serviceFunctionMap.put("engineType", specificationService::getEngineType);
