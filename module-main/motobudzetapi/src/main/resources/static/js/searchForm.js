@@ -603,7 +603,8 @@ function displayResults(data) {
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
 
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
-        resultDiv.onclick = () => {
+        resultDiv.onclick = (event) => {
+            event.preventDefault(); // To zatrzyma domyślne przewijanie strony
             window.location.href = `/id?advertisementId=${ad.id}`;
         };
 
