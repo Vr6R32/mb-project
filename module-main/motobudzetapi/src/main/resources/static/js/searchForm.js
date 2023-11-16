@@ -184,14 +184,98 @@ function fetchAllSpecifications() {
             brandSelect.dispatchEvent(changeEvent);
         });
 }
+function createMotorcycleForm(){
+
+}
+function createCarForm(){
+
+}
+function createPartForm(){
+
+}
+function createTabbedMenu() {
+    const tabbedMenu = document.createElement("div");
+    tabbedMenu.setAttribute('id', 'tabbedMenu');
+    tabbedMenu.style.display = "flex";
+    tabbedMenu.style.justifyContent = "flex-start";
+    tabbedMenu.style.position = "absolute";
+    tabbedMenu.style.top = "-40px";
+    tabbedMenu.style.left = "20px";
+    tabbedMenu.style.zIndex = '0';
+
+
+    const tabs = [
+        { name: "Samochody", callback: createCarForm },
+        { name: "Motocykle", callback: createMotorcycleForm },
+        { name: "Części", callback: createPartForm }
+    ];
+
+    tabs.forEach((tab, index) => {
+        const tabButton = document.createElement("button");
+        tabButton.textContent = tab.name;
+        tabButton.style.padding = "10px 20px";
+        tabButton.style.border = "none";
+        tabButton.style.cursor = "pointer";
+        tabButton.style.background = "black";
+        tabButton.style.color = "white";
+        tabButton.style.width = '100px';
+        tabButton.style.height = '69px';
+        tabButton.style.lineHeight = '54px';
+        tabButton.style.maxHeight = '100%';
+        tabButton.style.maxWidth = '100%';
+        tabButton.style.display = 'flex';
+        tabButton.style.alignItems = 'center';
+        tabButton.style.justifyContent = 'center';
+        tabButton.style.transform = 'translateY(-20px)';
+
+        if (index === 0) {
+            tabButton.style.borderRadius = "15px 0 0 0";
+            // tabButton.style.boxShadow = "10px 0 15px -5px darkgoldenrod, 0 -10px 15px -5px darkgoldenrod";
+        } else if (index === tabs.length - 1) {
+            tabButton.style.borderRadius = "0 15px 0 0";
+            // tabButton.style.boxShadow = "-10px 0 15px -5px darkgoldenrod, 0 -10px 15px -5px darkgoldenrod";
+        } else {
+            tabButton.style.borderRadius = "0";
+            // tabButton.style.boxShadow = "0 -10px 15px -5px darkgoldenrod";
+        }
+
+        tabButton.addEventListener('click', function() {
+            for (let btn of tabbedMenu.children) {
+                btn.style.zIndex = "-100";
+                btn.style.boxShadow = "none";
+            }
+
+            this.style.borderRadius = '15px 15px 0 0 '
+            this.style.zIndex = "100";
+            this.style.boxShadow = "-9px -9px 12px -6px darkgoldenrod,  9px -9px 12px -6px darkgoldenrod, -2px 0px 7px -17px darkgoldenrod";
+
+            tab.callback();
+        });
+
+
+        tabbedMenu.appendChild(tabButton);
+    });
+    if (tabs.length > 1) {
+        const lastButton = tabbedMenu.children[tabbedMenu.children.length - 1];
+        lastButton.style.marginRight = "0";
+    }
+    let mainContainer = document.getElementById('container-main');
+    mainContainer.style.position = "relative";
+    mainContainer.insertBefore(tabbedMenu, mainContainer.firstChild);
+}
 async function createSearchFormContainer() {
 
     let mainContainer = document.getElementById('container-main');
     const formContainer = document.createElement("div");
 
+
+
+
     formContainer.setAttribute('id', 'searchFormContainer');
     mainContainer.insertBefore(formContainer, mainContainer.firstChild);
     createSearchForm(formContainer);
+    createTabbedMenu();
+
 }
 function createSearchForm(formContainer) {
     const form = document.createElement("form");
@@ -204,13 +288,11 @@ function createSearchForm(formContainer) {
     form.style.maxWidth = "100%";
 
 
-
-// Tworzymy pola formularza - najpierw pola typu select, a następnie pola typu input
-    const driveTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
-    const engineTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
-    const fuelTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
-    const transmissionTypesOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
-    const brandsOptions = []; // Pobierz dane opcji dla elementu typu select (np. za pomocą fetch)
+    const driveTypesOptions = [];
+    const engineTypesOptions = [];
+    const fuelTypesOptions = [];
+    const transmissionTypesOptions = [];
+    const brandsOptions = [];
 
     form.appendChild(createRowWithInputElement("np. -> Nissan","Marka:", "select", "brand", "brand", brandsOptions));
     form.appendChild(createRowWithInputElement("np. -> 350Z","Model:", "select", "model", "model"));
@@ -232,17 +314,6 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("np. -> Pomorskie", "Województwo:", "select", "cityState", "cityState"));
     form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
     form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
-
-
-    // function setStyleForElements(elements, styleName, styleValue) {
-    //     for (let i = 0; i < elements.length; i++) {
-    //         elements[i].style[styleName] = styleValue;
-    //     }
-    // }
-    //
-    // const formElements = form.querySelectorAll("select, input");
-    // setStyleForElements(formElements, "background", "black")
-    // setStyleForElements(formElements, "color", "white");
 
     const searchButton = document.createElement("button");
     searchButton.setAttribute('id', 'searchButton');
@@ -276,22 +347,23 @@ function createSearchForm(formContainer) {
 
     inputs.forEach(input => {
         input.addEventListener('change', function() {
-            let delay = 200; // Default delay is 0 for most inputs
+            let delay = 100;
 
             if (input.name === 'city' || input.name === 'brand') {
                 input.value = input.value.trim();
                 delay = 500;
             }
 
-            if(input.name === 'brand'){
-                let model = document.getElementById('model');
-                formData.set("model","");
-            }
-
             setTimeout(() => {
-                formData.set(input.name, input.value); // Update the FormData
-                executeAdvertisementFilterResultCount(); // Execute your fetch request
+                formData.set(input.name, input.value);
+                if(input.name === 'brand'){
+                    let modelLabel = document.getElementById('modellabel');
+                    modelLabel.style.color = 'darkgoldenrod';
+                    formData.set("model","");
+                }
+                executeAdvertisementFilterResultCount();
             }, delay);
+
         });
     });
 
@@ -301,9 +373,7 @@ function createSearchForm(formContainer) {
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
-        // Get the form data
         formData = new FormData(event.target);
-
         executeSearch(formData);
 
     });
@@ -344,6 +414,69 @@ function executeAdvertisementFilterResultCount() {
             console.error('Error fetching data:', error);
         });
 }
+function handleProposalOptions(inputId,proposeElements) {
+    switch (inputId) {
+        case 'productionDateFrom':
+            for (let year = 1970; year <= 2024; year++) {
+                proposeElements.push(year.toString());
+            }
+            break;
+        case 'productionDateTo':
+            for (let year = 2024; year >= 1970; year--) {
+                proposeElements.push(year.toString());
+            }
+            break;
+        case 'mileageFrom':
+            for (let mileage = 50000; mileage <= 250000; mileage += 50000) {
+                proposeElements.push(mileage.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'mileageTo':
+            for (let mileage = 250000; mileage >= 50000; mileage -= 50000) {
+                proposeElements.push(mileage.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'priceMin':
+            for (let price = 10000; price <= 250000; price += 10000) {
+                proposeElements.push(price.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'priceMax':
+            for (let price = 250000; price >= 10000; price -= 10000) {
+                proposeElements.push(price.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'engineCapacityFrom':
+            for (let capacity = 990; capacity <= 6990; capacity += 500) {
+                proposeElements.push(capacity.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'engineCapacityTo':
+            for (let capacity = 6990; capacity >= 990; capacity -= 500) {
+                proposeElements.push(capacity.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'engineHorsePowerFrom':
+            for (let horsePower = 90; horsePower <= 640; horsePower += 50) {
+                proposeElements.push(horsePower.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'engineHorsePowerTo':
+            for (let horsePower = 640; horsePower >= 90; horsePower -= 50) {
+                proposeElements.push(horsePower.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        case 'distanceFrom':
+            for (let distance = 20; distance <= 400; distance += 20) {
+                proposeElements.push(distance.toLocaleString('en-US', { maximumFractionDigits: 0 }).replace(/,/g, ' '));
+            }
+            break;
+        default:
+            proposeElements = ["999"];
+            break;
+    }
+    return proposeElements;
+}
 function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions = null) {
     const rowDiv = document.createElement("div");
     rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
@@ -363,6 +496,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
 
     const label = document.createElement("label");
     label.setAttribute("for", inputId);
+    label.setAttribute("id", inputId+'label');
     label.textContent = labelText;
     label.style.width = "100%"; // Szerokość etykiety - 100% kolumny etykiet
     label.style.textAlign = "center";
@@ -390,8 +524,44 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     inputElement.style.maxWidth = "100%";
     inputElement.style.border = "1px solid rgba(255, 255, 255, 0.5)";
     inputElement.style.borderRadius = "5px";
-
     inputElement.placeholder = exampleValue;
+
+
+
+
+    if (inputType === "number") {
+        let dataListId;
+        dataListId = `list-${inputId}`;
+        inputElement.setAttribute("list", dataListId);
+        inputElement.setAttribute("type", "text"); // Zmień na text, aby umożliwić wybór z datalist
+        // inputElement.setAttribute("pattern", "\\d*");
+        const dataList = document.createElement("datalist");
+        dataList.className = "custom-datalist";
+        dataList.id = dataListId;
+        dataList.style.maxHeight = '300px';
+        dataList.style.height = "5.1em";
+        dataList.style.overflow = "hidden";
+        // inputElement.addEventListener('mouseenter', function() {
+        //     this.click();
+        // });
+        inputElement.addEventListener('input', function(event) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        let proposeElements = [];
+
+        proposeElements = handleProposalOptions(inputId, proposeElements);
+
+        proposeElements.forEach(value => {
+            const optionElement = document.createElement("option");
+            optionElement.value = value;
+            dataList.appendChild(optionElement);
+        });
+        inputColumn.appendChild(dataList);
+    }
+
+
+
 
     if (selectOptions) {
         selectOptions.forEach(option => {
@@ -408,11 +578,9 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         defaultOption.setAttribute('id', 'emptyModel');
         defaultOption.value = "";
         defaultOption.style.color = 'gray';
-        defaultOption.textContent = "Wybierz...";
+        defaultOption.textContent = "Wybierz markę...";
         inputElement.appendChild(defaultOption);
     }
-
-
 
     if (inputId === 'city') {
 
@@ -498,7 +666,6 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
 
     return rowDiv;
 }
-
 function applyLabelColor(element, label) {
     if (element.value !== '') {
         label.style.color = 'white';
@@ -533,21 +700,14 @@ function getUserFavourites() {
 }
 function displayResults(data) {
 
-    // Make the GET request to the API endpoint with the sorting parameters
-
-
-
-    // This function will be responsible for displaying the results and pagination
     let mainContainer = document.getElementById('container-main');
     const searchFormContainer = document.getElementById('searchFormContainer');
 
-    // Usuwamy istniejący element o id "results", jeśli istnieje
     let existingResultsDiv = document.getElementById('results');
     if (existingResultsDiv) {
         mainContainer.removeChild(existingResultsDiv);
     }
 
-    // Tworzymy nowy element "results"
     const resultsDiv = document.createElement("div");
     resultsDiv.setAttribute('id', 'results');
 
@@ -556,7 +716,6 @@ function displayResults(data) {
     resultsDiv.style.marginBottom = "20px";
     resultsDiv.style.maxWidth = "100%";
 
-    // Clear previous results and pagination
     resultsDiv.innerHTML = "";
 
     if(data.content.length === 0){
@@ -567,7 +726,7 @@ function displayResults(data) {
         if (searchFormContainer) {
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
         } else {
-            // Jeśli "searchFormContianer" nie istnieje, dodajemy "resultsDiv" jako pierwsze dziecko
+
             mainContainer.appendChild(resultsDiv);
         }
         return;
@@ -828,7 +987,6 @@ function displayResults(data) {
         const heartIcon = document.createElement('img');
 
 
-
         const editBottomHeaderDiv = document.createElement("div");
         editBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
         editBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
@@ -867,14 +1025,6 @@ function displayResults(data) {
             editText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
             editText.style.opacity = '0';  // Ustaw opacity na 0
         });
-
-
-
-
-
-
-
-
 
         const editIcon = document.createElement('img');
 
@@ -992,7 +1142,7 @@ function displayResults(data) {
         resultsDiv.appendChild(resultDiv);
 
 
-        // Sprawdzamy, czy istnieje "searchFormContianer"
+
         if (searchFormContainer) {
             // Jeśli "searchFormContianer" istnieje, dodajemy "resultsDiv" po nim
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
@@ -1001,7 +1151,6 @@ function displayResults(data) {
             mainContainer.appendChild(resultsDiv);
         }
 
-        // updatePaginationButtons(data, formData.get("sortBy"), formData.get("sortOrder"));
 
     });
 

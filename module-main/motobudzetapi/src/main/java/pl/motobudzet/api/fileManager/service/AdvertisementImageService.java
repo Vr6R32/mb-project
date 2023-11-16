@@ -36,7 +36,7 @@ public class AdvertisementImageService {
 
 
     @Transactional
-    public ResponseEntity<String> uploadAndProcessImagesWithLogo(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
+    public ResponseEntity<String> uploadAndProcessImages(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
         List<String> existingImages = advertisement.getImageUrls();
@@ -72,8 +72,6 @@ public class AdvertisementImageService {
 
         LinkedHashSet<String> uniqueFilenamesSet = new LinkedHashSet<>(filenames);
 
-//        advertisement.setMainPhotoUrl(uniqueFilenamesSet.stream().findFirst().get());
-
         rowAffected = +advertisementService.insertNewPhotos(UUID.fromString(advertisementId), uniqueFilenamesSet);
 
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
@@ -86,17 +84,14 @@ public class AdvertisementImageService {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
 
         try {
-            // Zapisywanie pliku
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Przetwarzanie i zapisywanie obrazu
             BufferedImage image = ImageIO.read(file.getInputStream());
             int originalWidth = image.getWidth();
             int originalHeight = image.getHeight();
             int maxWidth = 2560;
             int maxHeight = 2560;
 
-            // Skalowanie obrazu, jeśli wymiary przekraczają maksymalne
             if (originalWidth > maxWidth || originalHeight > maxHeight) {
                 double widthRatio = (double) originalWidth / maxWidth;
                 double heightRatio = (double) originalHeight / maxHeight;
@@ -111,7 +106,6 @@ public class AdvertisementImageService {
                 g.drawImage(image, 0, 0, newWidth, newHeight, null);
                 g.dispose();
 
-                // Nadpisanie pliku przeskalowanym obrazem
                 ImageIO.write(resizedImage, "jpg", targetPath.toFile());
             }
 
@@ -132,7 +126,6 @@ public class AdvertisementImageService {
             logoGraphics.drawImage(logo, 0, 0, newLogoWidth, newLogoHeight, null);
             logoGraphics.dispose();
 
-            // Oblicz pozycję logo na obrazie (prawy dolny róg)
             int logoX = originalWidth - newLogoWidth - 10;
             int logoY = originalHeight - newLogoHeight - 10;
 
@@ -142,10 +135,8 @@ public class AdvertisementImageService {
             g.drawImage(scaledLogo, logoX, logoY, null);
             g.dispose();
 
-            // Zapisz obraz z logo
             ImageIO.write(imageWithScaledLogo, "jpg", targetPath.toFile());
 
-            // Aktualizacja głównego URL zdjęcia
             if (advertisement.getMainPhotoUrl() == null) {
                 advertisement.setMainPhotoUrl(fileName);
                 advertisementService.saveAdvertisement(advertisement);

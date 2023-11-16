@@ -36,12 +36,14 @@ function createHeaderTitle(advertisement, container, owner) {
     titleContainer.style.color = 'darkgoldenrod';
     titleContainer.style.textAlign = 'center'
     titleContainer.style.marginTop = '-30px'; // Przesunięcie o 10 pikseli w górę
+    titleContainer.style.width = '1460px';
+    titleContainer.style.maxWidth = '100%';
 
 
     const titleDiv = document.createElement('div');
     titleDiv.style.display = 'grid'; // Ustawiamy wyświetlanie jako siatka (grid)
     titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr'; // Tworzymy trzy kolumny o równych szerokościach
-    titleDiv.style.backgroundColor = 'rgba(0,0,0, 0.9)'
+    titleDiv.style.backgroundColor = 'rgba(0,0,0, 1)'
 
     titleContainer.appendChild(titleDiv);
 
@@ -221,11 +223,10 @@ function createHeaderTitle(advertisement, container, owner) {
 
     titleDiv.appendChild(titleMidColumn);
     titleDiv.appendChild(titleRightColumn);
-    container.appendChild(titleContainer);
+    let advertisementDiv = document.getElementById('advertisementResultDiv');
+    advertisementDiv.insertBefore(titleContainer,advertisementDiv.firstChild);
 }
-
 function setTooltipText(heartIcon, toolTipFavourite) {
-    // Check the heart icon's source to determine what text to display
     if(heartIcon.src.includes('heartFull')){
         toolTipFavourite.textContent = 'Usuń z ulubionych';
     } else {
@@ -431,7 +432,6 @@ function createNewConversation() {
 }
 function checkConversationId(messageValue) {
     let conversationId = null;
-    let loggedUser = document.getElementById('username').textContent;
 
     fetch("/api/conversations/id?advertisementId=" + advertisementId)
         .then(response => {
@@ -481,9 +481,8 @@ function fetchAdvertisement() {
                 window.location = '/';
             }
             setTitleInUrl(data);
-
-            createHeaderTitle(advertisement, container, advertisement.user);
             createAdvertisementIndexDiv(container, advertisement);
+            createHeaderTitle(advertisement, container, advertisement.user);
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
@@ -508,9 +507,5 @@ function nextPhoto(mainPhoto) {
 function changePhoto(index, mainPhoto) {
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
-// function extractAdvertisementId(currentURL) {
-//     const urlParts = currentURL.split('/');
-//     return urlParts[urlParts.length - 1];
-// }
 
 

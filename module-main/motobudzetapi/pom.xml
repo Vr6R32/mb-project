@@ -142,14 +142,14 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version> <!-- Use the latest version available -->
+                <version>1.4.13</version>
                 <executions>
                     <execution>
                         <id>default</id>
-                        <phase>install</phase> <!-- Bind this execution with a lifecycle phase -->
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
-                            <!-- <goal>push</goal> --> <!-- Zakomentuj lub usuń tę linię, jeśli nie chcesz pushować obrazu -->
+                            <!-- <goal>push</goal> -->
                         </goals>
                     </execution>
                 </executions>
@@ -159,7 +159,7 @@
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
-                    <!-- Jeśli chcesz wskazać inny katalog z dockerfile niż domyślny -->
+                    <!-- Jeśli chcesz wskazać inny katalog z Dockerfile niż domyślny -->
                     <!-- <contextDirectory>${project.basedir}/Docker</contextDirectory> -->
                 </configuration>
             </plugin>

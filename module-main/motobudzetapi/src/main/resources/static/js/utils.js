@@ -183,11 +183,6 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
         createAdvertisementIndexDetailsContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
     ];
 
-    // if (advertisement.fuelType !== 'EV') {
-    //     containers.push(
-    //
-    //     );
-    // }
 
     containers.push(createAdvertisementIndexDetailsContainer('price', 'PriceIcon', advertisement.price + ',-'));
 
@@ -224,13 +219,14 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     descContainer.style.width = '1460px';
     descContainer.style.maxWidth = '100%';
     descContainer.style.borderRadius = '20px';
-    descContainer.style.margin = '0 auto'; // Wyśrodkowanie w poziomie
+    descContainer.style.margin = '0 auto';
+    descContainer.style.marginTop = '30px';
 
 
     descContainer.style.backgroundColor = 'black';
     descContainer.appendChild(descriptionContainer);
 
-    document.body.appendChild(descContainer);
+    resultDiv.appendChild(descContainer);
     return resultDiv;
 }
 function updateTooltipPosition(event) {
@@ -312,10 +308,9 @@ function createDialogBox(message){
     }
 }
 function updateCitySuggestions(suggestions) {
-    // Pobierz pole tekstowe i stwórz listę propozycji miast
     const cityInput = document.getElementById('city');
     const cityStateInput = document.getElementById('cityState');
-    const suggestionsList = document.getElementById('suggestionsList'); // Zakładam, że masz element listy o id 'suggestionsList'
+    const suggestionsList = document.getElementById('suggestionsList');
 
     // Usuń wszystkie istniejące propozycje z listy
     while (suggestionsList.firstChild) {
@@ -563,25 +558,6 @@ function handleDrop(e) {
 function resetFileDropArea() {
     fileDropArea.innerHTML = "Możesz zmienić kolejność zdjęć za pomocą myszki.\n Pierwsze zdjęcie będzie główną miniaturką";
 }
-function fetchModels(brand) {
-    const modelSelect = document.getElementById('model');
-    if (brand) {
-        fetch(`/api/models/${brand}`)
-            .then(response => response.json())
-            .then(data => {
-                modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-                data.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.name;
-                    option.text = model.name;
-                    modelSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Błąd pobierania modeli:', error));
-    } else {
-        modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-    }
-}
 
 function advertisementFormDataExtract() {
     quill.format(0, quill.getLength(), 'color', '#fff');
@@ -719,4 +695,24 @@ function handleEvType() {
             engineCapacity.value = '';
         }
     });
+}
+
+function fetchModels(brand) {
+    const modelSelect = document.getElementById('model');
+    if (brand) {
+        fetch(`/api/models/${brand}`)
+            .then(response => response.json())
+            .then(data => {
+                modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+                data.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.name;
+                    option.text = model.name;
+                    modelSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Błąd pobierania modeli:', error));
+    } else {
+        modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+    }
 }

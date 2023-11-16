@@ -3,8 +3,9 @@
     /*background-color: #000000;*/
     background-color: rgba(0, 0, 0, 0.9);
     /*background-color: #181818;*/
-    border-radius: 30px;
-    box-shadow: 0 0 40px darkgoldenrod;
+    /*border-radius: 30px;*/
+    border-radius: 0 30px 30px 30px;
+    /*box-shadow: 0 0 40px green;*/
     border: 0px dashed darkgoldenrod;
     width: 1500px;
     display: flex;
@@ -19,7 +20,7 @@
     /* flex-grow: 1;*/
 
     /* Dodaj zmianę box shadow po najechaniu myszką */
-    transition: box-shadow 0s ease-in-out;
+    /*transition: box-shadow 0s ease-in-out;*/
 }
 
 input::-webkit-outer-spin-button,
@@ -28,15 +29,28 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+
+/*input[list]::-webkit-calendar-picker-indicator {*/
+/*    height: 300px;*/
+/*    overflow-y: auto;*/
+/*}*/
+
+
+.custom-datalist {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
 }
 
-/* Efekt po najechaniu myszką */
-#searchFormContainer:hover {
-    box-shadow: 0 0 20px moccasin;
-}
+/*#searchFormContainer:hover {*/
+/*    box-shadow: -10px 0 20px moccasin,*/
+/*    10px 0 20px moccasin,*/
+/*    0 10px 20px moccasin;*/
+/*}*/
 
 #results {
     width: 100%;

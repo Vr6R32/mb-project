@@ -28,7 +28,7 @@ public class AdvertisementImageController {
     public ResponseEntity<String> uploadPublicAdvertisementImages(@PathVariable String advertisementId,
                                                                   @RequestParam(required = false) String mainPhotoUrl,
                                                                   @RequestParam List<MultipartFile> files) {
-        return advertisementImageService.uploadAndProcessImagesWithLogo(advertisementId, mainPhotoUrl, files);
+        return advertisementImageService.uploadAndProcessImages(advertisementId, mainPhotoUrl, files);
     }
 
 

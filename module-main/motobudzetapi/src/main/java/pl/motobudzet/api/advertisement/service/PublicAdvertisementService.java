@@ -147,7 +147,7 @@ public class PublicAdvertisementService {
 
             advertisement.setName(request.getName());
             advertisement.setDescription(request.getDescription());
-            advertisement.setModel(modelService.getModelByBrand(request.getBrand(),request.getModel()));
+            advertisement.setModel(modelService.getModelByBrand(request.getModel(),request.getBrand()));
             advertisement.setBrand(brandService.getBrand(request.getBrand()));
             advertisement.setFuelType(specificationService.getFuelType(request.getFuelType()));
             advertisement.setDriveType(specificationService.getDriveType(request.getDriveType()));
