@@ -9,9 +9,6 @@ import java.util.Map;
 
 public class SpecificationFilterHelper {
 
-    private SpecificationFilterHelper() {
-    }
-
     public static <T extends Comparable<T>> Specification<Advertisement> handleValueInRangeBetween(Specification<Advertisement> specification, String fieldName, T min, T max) {
         if (min != null && max != null) {
             if (min.equals(max)) {
@@ -33,7 +30,7 @@ public class SpecificationFilterHelper {
 
     public static Specification<Advertisement> handleSelectValue(AdvertisementFilterRequest request, Specification<Advertisement> specification, Map<String, ServiceFunction> serviceFunctionMap) {
         for (Field field : AdvertisementFilterRequest.class.getDeclaredFields()) {
-            field.setAccessible(true); // by móc czytać prywatne pola
+            field.setAccessible(true);
             try {
                 Object value = field.get(request);
                 if (value != null && !value.toString().isEmpty()) {
@@ -45,7 +42,7 @@ public class SpecificationFilterHelper {
                     }
                 }
             } catch (IllegalAccessException e) {
-                // Obsłuż wyjątek
+                // TODO HANDLE EXCEPTION
             }
         }
         return specification;

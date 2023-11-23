@@ -1144,10 +1144,8 @@ function displayResults(data) {
 
 
         if (searchFormContainer) {
-            // Jeśli "searchFormContianer" istnieje, dodajemy "resultsDiv" po nim
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
         } else {
-            // Jeśli "searchFormContianer" nie istnieje, dodajemy "resultsDiv" jako pierwsze dziecko
             mainContainer.appendChild(resultsDiv);
         }
 

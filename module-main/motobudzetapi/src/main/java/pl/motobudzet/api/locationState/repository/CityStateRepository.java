@@ -23,4 +23,5 @@ public interface CityStateRepository extends JpaRepository<CityState,Long> {
     @Query("select c from City c")
     @Cacheable(value = "cities_states")
     Optional<CityState> findByAjdi(Long id);
+
 }

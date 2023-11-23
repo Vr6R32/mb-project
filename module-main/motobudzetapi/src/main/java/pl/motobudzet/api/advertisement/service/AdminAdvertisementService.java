@@ -16,9 +16,7 @@ public class AdminAdvertisementService {
 
     public static final int PAGE_SIZE = 12;
     private final AdvertisementRepository advertisementRepository;
-    private final AppUserRepository userRepository;
     private final PublicAdvertisementService publicAdvertisementService;
-
 
 
     public Page<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
@@ -32,14 +30,5 @@ public class AdminAdvertisementService {
         advertisement.setActive(true);
         advertisementRepository.save(advertisement);
         return "verified !";
-    }
-
-    public String deleteAdvertisement(String id) {
-        Advertisement advertisement = publicAdvertisementService.getAdvertisement(id);
-//        AppUser user = advertisement.getUser();
-//        user.getAdvertisements().remove(advertisement);
-//        userRepository.save(user);
-        advertisementRepository.delete(advertisement);
-        return "deleted !";
     }
 }

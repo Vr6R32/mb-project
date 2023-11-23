@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('a32.jpg');
-    background-image: url('kozak.png');
+    /*background-image: url('kozak.png');*/
     /*background-size: cover; !* Skaluje obraz do rozmiarów elementu nadrzędnego *!*/
     /*background-size: 80% 80%;*/
     background-size: 1920px auto;

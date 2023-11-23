@@ -56,11 +56,11 @@ public class AdvertisementFilteringService {
                 );
 
         specification = setAdvertisementFilterSpecification(request, specification);
-
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        setSpecification result = new setSpecification(specification, sort);
 
-        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
-        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        PageRequest pageable = PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE, result.sort());
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(result.specification(), pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
 
         List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
@@ -74,6 +74,9 @@ public class AdvertisementFilteringService {
 
         return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
                 .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+    }
+
+    private record setSpecification(Specification<Advertisement> specification, Sort sort) {
     }
 
 

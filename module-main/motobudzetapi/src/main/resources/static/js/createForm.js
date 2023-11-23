@@ -1,4 +1,4 @@
-let selectedFiles = []; // Store the selected files references in an array
+let selectedFiles = [];
 let descriptionContent;
 let quill;
 let dragSrcElement = null;
@@ -48,13 +48,12 @@ function fetchUserDetails() {
                 cityTextarea.value = data.cityName;
 
                 let optionState = document.createElement('option');
-                optionState.value = data.cityStateName; // Ustawiamy wartość na cityStateName
-                optionState.textContent = data.cityStateName; // Ustawiamy tekst widoczny dla użytkownika
+                optionState.value = data.cityStateName;
+                optionState.textContent = data.cityStateName;
 
-                // Dodajemy nowy element option do elementu select
                 cityStateSelect.appendChild(optionState);
 
-            }, 1000); // 2000ms (2 sekundy) opóźnienia
+            }, 1000);
         })
         .catch(error => {
             console.error("There was a problem with the fetch operation:", error.message);
@@ -73,12 +72,6 @@ function createForm() {
     title.textContent = 'Dodaj Nowe Ogłoszenie';
     titleContainer.appendChild(title);
 
-
-
-    // photoContainer.style.alignItems = 'center';
-    // photoContainer.style.justifyContent = 'center';
-    // photoContainer.style.justifySelf = 'center';
-    // photoContainer.style.justifyItems = 'center';
 
     const form = document.createElement('form');
     form.id = 'advertisementForm';
@@ -174,7 +167,7 @@ function createForm() {
         if (element.id === 'city') {
 
             const inputContainer = document.createElement("div");
-            inputContainer.style.position = "relative"; // Ustawiamy pozycję na "relative", aby umożliwić pozycjonowanie względem tego kontenera
+            inputContainer.style.position = "relative";
             inputContainer.setAttribute('autocomplete', 'off');
 
 
@@ -200,10 +193,7 @@ function createForm() {
             suggestionsList.style.minWidth = '200px';
             suggestionsList.style.overflowY = 'auto';
             suggestionsList.style.display = 'none';
-            suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
-            // suggestionsList.style.marginTop = '200px';
-            // suggestionsList.style.bottom = "-30px";
-            // suggestionsList.style.top = "100%";
+            suggestionsList.style.zIndex = '1000';
 
             suggestionsList.style.scrollbarWidth = 'thin';
             suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
@@ -213,7 +203,6 @@ function createForm() {
             suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
 
 
-            // Dodaj obsługę kliknięcia na propozycję miasta
             suggestionsList.addEventListener('click', function (event) {
                 if (event.target && event.target.nodeName === 'LI') {
                     input.value = event.target.textContent;
@@ -221,30 +210,25 @@ function createForm() {
                 }
             });
 
-            // Dodaj listę propozycji do pola miasta
+
             inputContainer.appendChild(input);
             inputContainer.appendChild(suggestionsList);
             form.appendChild(inputContainer);
 
-            // Obsługa wprowadzania tekstu w polu miasta
             let timeoutId;
             const debounceDelay = 200;
 
             input.addEventListener("input", function () {
-                // Anuluje poprzednie żądanie, jeśli istnieje
                 clearTimeout(timeoutId);
 
-                // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
                 const partialCityName = input.value;
 
                 // Ustawia nowe opóźnienie
                 timeoutId = setTimeout(function () {
-                    // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
                     fetch(`/api/cities?partialName=${partialCityName}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
-                            updateCitySuggestions(data); // przekazujemy listę sugestii jako drugi argument
+                            updateCitySuggestions(data);
                         })
                         .catch(error => {
                             console.error("Błąd podczas pobierania propozycji miast:", error);
@@ -257,27 +241,23 @@ function createForm() {
 
         if (element.additionalSelect) {
             const wrapper = document.createElement('div');
-            wrapper.style.display = 'flex'; // Use flex layout
-            wrapper.style.alignItems = 'center'; // Align items vertically centered
-            wrapper.style.gap = '10px'; // Gap between items
-            wrapper.style.justifyContent = 'space-between'; // Distribute space evenly between the items
-            wrapper.style.width = '500px'; // Same width as other form fields
-
-
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'center';
+            wrapper.style.gap = '10px';
+            wrapper.style.justifyContent = 'space-between';
+            wrapper.style.width = '500px';
 
             const additionalSelectLabel = document.createElement('label');
             additionalSelectLabel.setAttribute('for', element.additionalSelect.id);
             additionalSelectLabel.textContent = element.additionalSelect.label;
 
-
-
             const additionalSelectInput = document.createElement('select');
             additionalSelectInput.id = element.additionalSelect.id;
             additionalSelectInput.name = element.additionalSelect.name;
-            additionalSelectInput.style.width = '50px'; // Set width
+            additionalSelectInput.style.width = '50px';
 
             if(element.additionalSelect.id === 'cityState'){
-                additionalSelectInput.style.width = '50%'; // Set width
+                additionalSelectInput.style.width = '50%';
             }
 
             element.additionalSelect.options.forEach(optionValue => {
@@ -287,12 +267,9 @@ function createForm() {
                 additionalSelectInput.appendChild(option);
             });
 
-            // Set a flex-grow property to make mileage input take up remaining width
-            // input.style.flexGrow = '1';
-            // For the mileage input
-            input.style.flex = '1'; // This will allow it to grow and take up the remaining space
+            input.style.flex = '1';
 
-            additionalSelectInput.style.flex = 'none'; // This will prevent it from growing and it will only take up necessary space
+            additionalSelectInput.style.flex = 'none';
 
 
             form.appendChild(label);
@@ -320,9 +297,9 @@ function createForm() {
     submitButton.style.backgroundColor = "black";
     submitButton.style.color = "white";
     submitButton.style.border = "1px solid darkgoldenrod";
-    submitButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    submitButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    submitButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    submitButton.style.padding = "10px 20px";
+    submitButton.style.cursor = "pointer";
+    submitButton.style.transition = "0.3s";
     submitButton.style.borderRadius = '15px';
     submitButton.style.marginRight = '3px';
 
@@ -403,7 +380,6 @@ function uploadFiles(advertisementId) {
         formData.append('files', file); // Use the same parameter name 'files' for each file
     });
 
-    // const apiUrl = selectedFiles.length > 1 ? `/api/advertisement/images/${advertisementId}` : `/api/advertisement/image/${advertisementId}`;
     const apiUrl = `/api/advertisements/images/${advertisementId}`;
 
     console.log(selectedFiles.length);
@@ -417,13 +393,10 @@ function uploadFiles(advertisementId) {
             if(response.ok){
                 console.log('Odpowiedź serwera:', response);
                 resetFileDropArea();
-                // displayResult(data);
-                // Odczytaj nagłówek "Location" z odpowiedzi serwera
                 const redirectURL = response.headers.get('Location');
                 const parameter = response.headers.get('created');
                 console.log(redirectURL);
                 if (redirectURL) {
-                    // Wykonaj przekierowanie na określony adres URL
                     window.location.href = redirectURL + '&created='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
@@ -433,7 +406,6 @@ function uploadFiles(advertisementId) {
         .catch(error => {
             console.error(error.message);
             resetFileDropArea();
-            // displayResult('Błąd podczas przesyłania pliku.');
         });
 }
 
@@ -450,18 +422,14 @@ function handleDeleteZoneDrop(e) {
     }
 
     if (dragSrcElement) {
-        // Określ indeks miniaturki, która została przeciągnięta
         const thumbnailsContainer = document.getElementById('thumbnails');
         const thumbnails = thumbnailsContainer.getElementsByClassName('thumbnail');
         const sourceIndex = Array.from(thumbnails).indexOf(dragSrcElement);
 
-        console.log("Source Index:", sourceIndex); // Dodajemy debugowanie
-        // console.log("Dragged Element:", dragSrcElement); // Wyświetlamy przeciągnięty element
+        console.log("Source Index:", sourceIndex);
 
-        // Usuń miniaturkę z DOM
         dragSrcElement.remove();
 
-        // Usuń odpowiadający jej plik z selectedFiles
         if (sourceIndex > -1) {
             selectedFiles.splice(sourceIndex, 1);
         } else {
@@ -471,7 +439,7 @@ function handleDeleteZoneDrop(e) {
             resetFileDropAreamy();
         }
 
-        dragSrcElement = null; // Resetuj źródłowy element przeciągania
+        dragSrcElement = null;
     }
 
     return false;
@@ -507,17 +475,6 @@ function handleFileSelect(e) {
     const allowedExtensions = ["jpg", "png"];
     const validFiles = [];
 
-    // for (let i = 0; i < files.length; i++) {
-    //     const file = files[i];
-    //     const fileExtension = file.name.split(".").pop().toLowerCase();
-    //     if (allowedExtensions.includes(fileExtension)) {
-    //         const uniqueId = Date.now() + i; // Użyj unikalnego znacznika czasowego
-    //         const newFileName = `file_${uniqueId}.${fileExtension}`;
-    //         const renamedFile = new File([file], newFileName, { type: file.type });
-    //         validFiles.push(renamedFile);
-    //     }
-    // }
-
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -535,9 +492,6 @@ function handleFileSelect(e) {
     showThumbnails(validFiles);
     resetFileDropArea();
 
-    if (validFiles.length > 0) {
-        // uploadFiles(advertisementId); // Replace '123' with the appropriate advertisementId value
-    }
 }
 async function showThumbnails(files) {
     const thumbnailsContainer = document.getElementById('thumbnails');

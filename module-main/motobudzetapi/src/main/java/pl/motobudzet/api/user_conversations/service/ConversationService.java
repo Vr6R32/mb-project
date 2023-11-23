@@ -23,16 +23,9 @@ public class ConversationService {
     private final AppUserCustomService userCustomService;
     private final ConversationRepository conversationRepository;
 
-//    public Conversation getAllConversationsForAdvertisement(String advertisementId, String userOwnerName) {
-//
-//        AppUser user = userCustomService.getByName(userOwnerName);
-//        return conversationRepository.findByAdvertisementIdAndUserOwnerId(UUID.fromString(advertisementId), user.getId());
-//
-//    }
-
     public Long createConversation(String advertisementId, String loggedUser) {
 
-        AppUser userClient = userCustomService.getByName(loggedUser);
+        AppUser userClient = userCustomService.getUserByName(loggedUser);
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
         if(advertisement.getUser().getUsername().equals(loggedUser)){
@@ -55,26 +48,8 @@ public class ConversationService {
                 .findById(conversationId).orElse(null);
     }
 
-//    public Conversation findConversation(String advertisementId,Long userOwnerId,Long userClientId){
-//        return conversationRepository
-//                .findConversationByAdvertisement_IdAndUserOwner_IdAndUserClient_Id(UUID.fromString(advertisementId),userOwnerId,userClientId)
-//                .orElseThrow(() -> new RuntimeException("conversation didnt found !"));
-//    }
-
-    public List<ConversationDTO> getAllUserSellerConversations(String ownerName) {
-        AppUser user = userCustomService.getByName(ownerName);
-        List<Conversation> conversationList = conversationRepository.findAllByUserOwnerId(user.getId());
-        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, ownerName, advertisementService)).toList();
-    }
-
-    public List<ConversationDTO> getAllUserBuyerConversations(String ownerName) {
-        AppUser user = userCustomService.getByName(ownerName);
-        List<Conversation> conversationList = conversationRepository.findAllByUserClientId(user.getId());
-        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, ownerName, advertisementService)).toList();
-    }
-
     public List<ConversationDTO> getAllConversations(String userName) {
-        AppUser user = userCustomService.getByName(userName);
+        AppUser user = userCustomService.getUserByName(userName);
         List<Conversation> conversationList = conversationRepository.findAllConversationsByUserId(user.getId());
         return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, userName, advertisementService)).toList();
     }

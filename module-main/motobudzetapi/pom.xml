@@ -27,33 +27,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!-- only this origin -->
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>selenium-java</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; add belows for these dependencies version is not 4.0.0 when automatically generated &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>selenium-chrome-driver</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>selenium-api</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.seleniumhq.selenium</groupId>-->
-<!--            <artifactId>selenium-remote-driver</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>net.sf.ehcache</groupId>-->
-<!--            <artifactId>ehcache</artifactId>-->
-<!--            <version>2.10.9.2</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+            <version>1.2.0</version>
+        </dependency>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>

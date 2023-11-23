@@ -42,7 +42,7 @@ public class MessageService {
         String lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
 
         AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
-        AppUser messageSender = userCustomService.getByName(messageSenderName);
+        AppUser messageSender = userCustomService.getUserByName(messageSenderName);
 
         if (authorizeMessagePostAccess(messageSenderName, conversationUserOwner.getUsername(), conversationUserClient.getUsername())) {
             ConversationMessage newMessage = ConversationMessage.builder()

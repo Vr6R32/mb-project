@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdvertisementImageService {
+public class FileService {
 
-    public static final int PHOTO_TARGET_WIDTH = 1920;
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png","image/heif","image/heic");
@@ -36,7 +35,7 @@ public class AdvertisementImageService {
 
 
     @Transactional
-    public ResponseEntity<String> uploadAndProcessImages(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
+    public ResponseEntity<String> verifyAndSortImages(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
         List<String> existingImages = advertisement.getImageUrls();
@@ -45,9 +44,8 @@ public class AdvertisementImageService {
                 .filter(file -> !existingImages.contains(file.getOriginalFilename()))
                 .toList();
 
-        List<String> filenames = new ArrayList<>(files.stream()
-                .map(MultipartFile::getOriginalFilename)
-                .collect(Collectors.toList()));
+        List<String> filenames = files.stream()
+                .map(MultipartFile::getOriginalFilename).collect(Collectors.toList());
 
         for (MultipartFile file : filteredFilesToUpload) {
             if (file.isEmpty()) {
@@ -77,8 +75,6 @@ public class AdvertisementImageService {
         String redirectUrl = "/id?advertisementId=" + advertisement.getId();
         return ResponseEntity.ok().header("Location", redirectUrl).header("created","true").header("edited","true").body("inserted !" + rowAffected);
     }
-
-
 
     private void processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);

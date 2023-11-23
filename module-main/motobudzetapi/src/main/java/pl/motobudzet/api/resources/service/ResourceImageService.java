@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-import static pl.motobudzet.api.fileManager.service.AdvertisementImageService.PUBLIC_FILE_PATH;
+import static pl.motobudzet.api.fileManager.service.FileService.PUBLIC_FILE_PATH;
 
 @Service
 public class ResourceImageService {

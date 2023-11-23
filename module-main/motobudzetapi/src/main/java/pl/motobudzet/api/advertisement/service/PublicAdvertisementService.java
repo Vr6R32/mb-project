@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,19 +22,17 @@ import pl.motobudzet.api.locationCity.service.CityService;
 import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
-import pl.motobudzet.api.utils.MessageDateTimeExtractor;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
 import pl.motobudzet.api.vehicleModel.service.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PublicAdvertisementService {
 
@@ -91,9 +89,11 @@ public class PublicAdvertisementService {
     }
 
     public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request, String user) {
-        AppUser currentUser = userCustomService.getByName(user);
-        Advertisement advertisement = Advertisement.builder()
 
+        log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}",user);
+
+        AppUser currentUser = userCustomService.getUserByName(user);
+        Advertisement advertisement = Advertisement.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .model(modelService.getModelByBrand(request.getModel(),request.getBrand()))
@@ -118,11 +118,8 @@ public class PublicAdvertisementService {
                 .mainPhotoUrl(request.getMainPhotoUrl())
                 .build();
 
-
         insertAdvertisementIntoUser(advertisement, currentUser);
-
         advertisementRepository.saveAndFlush(advertisement);
-
         String id = advertisement.getId().toString();
 
         return ResponseEntity.ok().header("advertisementId", id).body("inserted !");
@@ -242,12 +239,11 @@ public class PublicAdvertisementService {
     @Modifying
     @Transactional
     public int insertNewPhotos(UUID id, LinkedHashSet<String> names) {
-        // First, delete the existing records associated with the advertisement_id
+
         Query deleteQuery = entityManager.createNativeQuery("DELETE FROM advertisement_images WHERE advertisement_id = ?");
         deleteQuery.setParameter(1, id);
         deleteQuery.executeUpdate();
 
-        // Now proceed with inserting new records
         String baseQuery = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES ";
         List<Object[]> params = new ArrayList<>();
 
@@ -257,7 +253,6 @@ public class PublicAdvertisementService {
             params.add(new Object[]{id, name});
         }
 
-        // Remove the last comma
         if (values.length() > 0) {
             values.setLength(values.length() - 1);
         }
@@ -274,7 +269,7 @@ public class PublicAdvertisementService {
 
     @Transactional
     public int deleteUserAdvertisement(UUID id, String username) {
-        AppUser user = userCustomService.getByName(username);
+        AppUser user = userCustomService.getUserByName(username);
         if(username.equals(user.getUsername())){
             return advertisementRepository.updateAdvertisementIsDeleted(id);
         }

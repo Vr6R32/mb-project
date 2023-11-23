@@ -62,7 +62,6 @@ function extractAdvertisementId() {
 function createForm() {
 
 
-
     const titleContainer = document.getElementById('title-container-hidden');
     const formContainer = document.getElementById('half-container-big1');
     const photoContainer = document.getElementById('half-container-big2');
@@ -75,17 +74,11 @@ function createForm() {
     titleContainer.appendChild(title);
 
 
-    // photoContainer.style.alignItems = 'center';
-    // photoContainer.style.justifyContent = 'center';
-    // photoContainer.style.justifySelf = 'center';
-    // photoContainer.style.justifyItems = 'center';
-
     const form = document.createElement('form');
     form.id = 'advertisementForm';
 
     const formElements = [
         {label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true},
-        // { label: 'Opis ogłoszenia:', type: 'div', id: 'description', name: 'description', required: true },
         {
             label: 'Marka:',
             type: 'select',
@@ -227,10 +220,7 @@ function createForm() {
             suggestionsList.style.minWidth = '200px';
             suggestionsList.style.overflowY = 'auto';
             suggestionsList.style.display = 'none';
-            suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
-            // suggestionsList.style.marginTop = '200px';
-            // suggestionsList.style.bottom = "-30px";
-            // suggestionsList.style.top = "100%";
+            suggestionsList.style.zIndex = '1000';
 
             suggestionsList.style.scrollbarWidth = 'thin';
             suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
@@ -240,7 +230,6 @@ function createForm() {
             suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
 
 
-            // Dodaj obsługę kliknięcia na propozycję miasta
             suggestionsList.addEventListener('click', function (event) {
                 if (event.target && event.target.nodeName === 'LI') {
                     input.value = event.target.textContent;
@@ -248,30 +237,24 @@ function createForm() {
                 }
             });
 
-            // Dodaj listę propozycji do pola miasta
             inputContainer.appendChild(input);
             inputContainer.appendChild(suggestionsList);
             form.appendChild(inputContainer);
 
-            // Obsługa wprowadzania tekstu w polu miasta
             let timeoutId;
             const debounceDelay = 200;
 
             input.addEventListener("input", function () {
-                // Anuluje poprzednie żądanie, jeśli istnieje
                 clearTimeout(timeoutId);
 
-                // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
                 const partialCityName = input.value;
 
                 // Ustawia nowe opóźnienie
                 timeoutId = setTimeout(function () {
-                    // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
                     fetch(`/api/cities?partialName=${partialCityName}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
-                            updateCitySuggestions(data); // przekazujemy listę sugestii jako drugi argument
+                            updateCitySuggestions(data);
                         })
                         .catch(error => {
                             console.error("Błąd podczas pobierania propozycji miast:", error);
@@ -283,11 +266,11 @@ function createForm() {
 
         if (element.additionalSelect) {
             const wrapper = document.createElement('div');
-            wrapper.style.display = 'flex'; // Use flex layout
-            wrapper.style.alignItems = 'center'; // Align items vertically centered
-            wrapper.style.gap = '10px'; // Gap between items
-            wrapper.style.justifyContent = 'space-between'; // Distribute space evenly between the items
-            wrapper.style.width = '500px'; // Same width as other form fields
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'center';
+            wrapper.style.gap = '10px';
+            wrapper.style.justifyContent = 'space-between';
+            wrapper.style.width = '500px';
 
 
             const additionalSelectLabel = document.createElement('label');
@@ -298,10 +281,10 @@ function createForm() {
             const additionalSelectInput = document.createElement('select');
             additionalSelectInput.id = element.additionalSelect.id;
             additionalSelectInput.name = element.additionalSelect.name;
-            additionalSelectInput.style.width = '50px'; // Set width
+            additionalSelectInput.style.width = '50px';
 
             if (element.additionalSelect.id === 'cityState') {
-                additionalSelectInput.style.width = '50%'; // Set width
+                additionalSelectInput.style.width = '50%';
             }
 
             element.additionalSelect.options.forEach(optionValue => {
@@ -311,12 +294,9 @@ function createForm() {
                 additionalSelectInput.appendChild(option);
             });
 
-            // Set a flex-grow property to make mileage input take up remaining width
-            // input.style.flexGrow = '1';
-            // For the mileage input
-            input.style.flex = '1'; // This will allow it to grow and take up the remaining space
+            input.style.flex = '1';
 
-            additionalSelectInput.style.flex = 'none'; // This will prevent it from growing and it will only take up necessary space
+            additionalSelectInput.style.flex = 'none';
 
 
             form.appendChild(label);
@@ -350,9 +330,9 @@ function createForm() {
     submitButton.style.backgroundColor = "black";
     submitButton.style.color = "white";
     submitButton.style.border = "1px solid darkgoldenrod";
-    submitButton.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    submitButton.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    submitButton.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    submitButton.style.padding = "10px 20px";
+    submitButton.style.cursor = "pointer";
+    submitButton.style.transition = "0.3s";
     submitButton.style.borderRadius = '15px';
     submitButton.style.marginRight = '3px';
 
@@ -372,7 +352,7 @@ function createForm() {
 
     const fileInput = document.createElement('input');
     fileInput.setAttribute('type', 'file');
-    fileInput.setAttribute('multiple', 'multiple'); // Allow multiple file selection
+    fileInput.setAttribute('multiple', 'multiple');
     fileInput.style.display = 'none';
     fileInput.addEventListener('change', handleFileSelect);
     fileDropArea.appendChild(fileInput);
@@ -430,11 +410,10 @@ function fetchImageFromFilename(filename) {
         })
         .catch(error => {
             console.error("Error fetching image:", error);
-            return null; // or handle this error more gracefully
+            return null;
         });
 }
 function populateFormData(data) {
-    // Here, you can populate each field in your form using the data
     document.getElementById('name').value = data.name || '';
     setSelectedOption(document.getElementById('fuelType'), data.fuelType);
     setSelectedOption(document.getElementById('driveType'), data.driveType);
@@ -451,7 +430,6 @@ function populateFormData(data) {
     quill.clipboard.dangerouslyPasteHTML(0, data.description || '');
 
 
-    // For selects, you may also need to ensure the correct option is selected based on data
     fetchModels(data.brand).then(() => {
         const modelSelect = document.getElementById('model');
         Array.from(modelSelect.options).forEach(option => {
@@ -461,7 +439,6 @@ function populateFormData(data) {
         });
     });
 
-    // ... (rest of your code to populate other fields)
     const brandSelect = document.getElementById('brand');
     Array.from(brandSelect.options).forEach(option => {
         if (option.value === data.brand) {
@@ -533,13 +510,12 @@ function uploadFiles(advertisementId) {
 
     selectedFiles.forEach((file) => {
         if (file.blob instanceof Blob) {
-            formData.append('files', file.blob , file.name); // Use the same parameter name 'files' for each file
+            formData.append('files', file.blob , file.name);
         } else {
             formData.append('files',file);
         }
     });
 
-    // const apiUrl = selectedFiles.length > 1 ? `/api/advertisement/images/${advertisementId}` : `/api/advertisement/image/${advertisementId}`;
     const apiUrl = `/api/advertisements/images/${advertisementId}`;
 
 

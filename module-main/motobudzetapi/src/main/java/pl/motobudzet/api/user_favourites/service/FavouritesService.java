@@ -50,8 +50,7 @@ public class FavouritesService {
     }
 
     private AppUser getUser(String loggedUser) {
-
-        return appUserCustomService.getByName(loggedUser);
+        return appUserCustomService.getUserByName(loggedUser);
 
     }
 

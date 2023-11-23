@@ -55,17 +55,6 @@ function createLoginForm()   {
             body: JSON.stringify(data)  // Przekształć dane formularza na JSON
         };
 
-        // fetch(form.action, requestOptions)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('Success:', data);
-        //         window.location.href = data.redirectUrl;
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
-
-
         fetch(form.action, requestOptions)
             .then(response => response.text())  // Get the response as text
             .then(text => {
@@ -165,7 +154,7 @@ function createLoginForm()   {
         submitButton.style.color = "black";
     });
 
-    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    submitButton.style.flexBasis = "15%";
 
     form.appendChild(heading);
     form.appendChild(cityLabel);
@@ -201,7 +190,7 @@ function createInput(type, id, placeholder,form) {
     if(id === 'city') {
 
     const inputContainer = document.createElement("div");
-    inputContainer.style.position = "relative"; // Ustawiamy pozycję na "relative", aby umożliwić pozycjonowanie względem tego kontenera
+    inputContainer.style.position = "relative";
     inputContainer.setAttribute('autocomplete', 'off');
 
 
@@ -209,13 +198,8 @@ function createInput(type, id, placeholder,form) {
     input.setAttribute('autocomplete', 'off');
 
     const suggestionsList = document.createElement('ul');
-
     suggestionsList.style.right = '-19px';
     suggestionsList.style.top = '140px';
-
-    // suggestionsList.style.top = 'calc(100% + 5px)'; // Dodaje 5px marginesu pomiędzy polem input a listą sugestii
-
-
     suggestionsList.id = 'suggestionsList';
     suggestionsList.setAttribute('autocomplete', 'off');
     suggestionsList.style.listStyleType = 'none';
@@ -230,20 +214,13 @@ function createInput(type, id, placeholder,form) {
     suggestionsList.style.minWidth = '200px';
     suggestionsList.style.overflowY = 'auto';
     suggestionsList.style.display = 'none';
-    suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
-    // suggestionsList.style.marginTop = '200px';
-    // suggestionsList.style.bottom = "-30px";
-    // suggestionsList.style.top = "100%";
-
+    suggestionsList.style.zIndex = '1000';
     suggestionsList.style.scrollbarWidth = 'thin';
     suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
     suggestionsList.style.WebkitScrollbar = 'thin';
     suggestionsList.style.WebkitScrollbarTrack = 'transparent';
     suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
     suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
-
-
-    // Dodaj obsługę kliknięcia na propozycję miasta
     suggestionsList.addEventListener('click', function (event) {
         if (event.target && event.target.nodeName === 'LI') {
             input.value = event.target.textContent;
@@ -251,30 +228,23 @@ function createInput(type, id, placeholder,form) {
         }
     });
 
-    // Dodaj listę propozycji do pola miasta
     inputContainer.appendChild(input);
     inputContainer.appendChild(suggestionsList);
     form.appendChild(inputContainer);
 
-    // Obsługa wprowadzania tekstu w polu miasta
     let timeoutId;
     const debounceDelay = 200;
 
     input.addEventListener("input", function () {
-        // Anuluje poprzednie żądanie, jeśli istnieje
         clearTimeout(timeoutId);
 
-        // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
         const partialCityName = input.value;
 
-        // Ustawia nowe opóźnienie
         timeoutId = setTimeout(function () {
-            // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
             fetch(`/api/cities?partialName=${partialCityName}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
-                    updateCitySuggestions(data); // przekazujemy listę sugestii jako drugi argument
+                    updateCitySuggestions(data);
                 })
                 .catch(error => {
                     console.error("Błąd podczas pobierania propozycji miast:", error);
