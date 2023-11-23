@@ -2,9 +2,9 @@ package pl.motobudzet.api.user_conversations.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.kafka.async.SpringMailSenderService;
-import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
-import pl.motobudzet.api.kafka.service.KafkaServiceInterface;
+import pl.motobudzet.api.emailSender.async.SpringMailSenderService;
+import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
+import pl.motobudzet.api.emailSender.service.KafkaServiceInterface;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
@@ -39,7 +39,6 @@ public class MessageService {
         AppUser conversationUserClient = conversation.getUserClient();
         AppUser conversationUserOwner = conversation.getUserOwner();
 
-        String lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
 
         AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
         AppUser messageSender = userCustomService.getUserByName(messageSenderName);
@@ -55,6 +54,8 @@ public class MessageService {
             updateConversation(conversation, newMessage);
             messagesRepository.save(newMessage);
         }
+
+        String lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
 
         if(!Objects.equals(lastMessageUserName, messageSenderName)){
             sendEmailMessageNotificationAsync(message,emailNotificationReceiver,messageSender,conversation);

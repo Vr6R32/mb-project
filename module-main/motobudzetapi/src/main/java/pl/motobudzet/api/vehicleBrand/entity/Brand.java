@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "brands")
 public class Brand {
 
     @Id

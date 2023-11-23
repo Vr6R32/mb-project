@@ -1,13 +1,13 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
+import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
 import pl.motobudzet.api.user_conversations.dto.ConversationDTO;
 import pl.motobudzet.api.user_conversations.entity.Conversation;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
 
 public class ConversationMapper {
 
-    public static ConversationDTO mapConversationToDTO(Conversation conversation, String ownerName, PublicAdvertisementService advertisementService) {
+    public static ConversationDTO mapConversationToDTO(Conversation conversation, String ownerName, UserAdvertisementService advertisementService) {
 
         String secondUserName;
 

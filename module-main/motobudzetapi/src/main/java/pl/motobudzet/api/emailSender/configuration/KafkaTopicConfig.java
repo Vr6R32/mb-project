@@ -1,4 +1,4 @@
-package pl.motobudzet.api.kafka.configuration;
+package pl.motobudzet.api.emailSender.configuration;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

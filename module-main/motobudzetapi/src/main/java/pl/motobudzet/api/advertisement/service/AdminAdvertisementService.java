@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
-import pl.motobudzet.api.user.repository.AppUserRepository;
 
 
 @Service
@@ -16,16 +15,16 @@ public class AdminAdvertisementService {
 
     public static final int PAGE_SIZE = 12;
     private final AdvertisementRepository advertisementRepository;
-    private final PublicAdvertisementService publicAdvertisementService;
+    private final UserAdvertisementService userAdvertisementService;
 
 
     public Page<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
-        return advertisementRepository.findAllToEnableAndVerify(PageRequest.of(publicAdvertisementService.getPage(pageNumber), PAGE_SIZE))
-                .map(advertisement -> publicAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+        return advertisementRepository.findAllToEnableAndVerify(PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE))
+                .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 
     public String verifyAndEnableAdvertisement(String id) {
-        Advertisement advertisement = publicAdvertisementService.getAdvertisement(id);
+        Advertisement advertisement = userAdvertisementService.getAdvertisement(id);
         advertisement.setVerified(true);
         advertisement.setActive(true);
         advertisementRepository.save(advertisement);

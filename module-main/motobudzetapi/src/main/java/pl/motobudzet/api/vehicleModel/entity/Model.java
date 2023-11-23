@@ -10,8 +10,8 @@ import pl.motobudzet.api.vehicleBrand.entity.Brand;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
+@Table(name = "models")
 public class Model {
 
     @Id

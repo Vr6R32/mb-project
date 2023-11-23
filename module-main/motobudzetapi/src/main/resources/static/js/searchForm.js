@@ -137,7 +137,7 @@ setTimeout(function setModelSelect() {
                 });
         }
     }
-}, 300); // Timeout to ensure this runs after the first set of dropdowns are populated
+}, 300);
 function fetchAllSpecifications() {
     fetch("/api/spec/driveTypes")
         .then(response => response.json())
@@ -162,9 +162,7 @@ function fetchAllSpecifications() {
     fetch("/api/brands")
         .then(response => response.json())
         .then(data => {
-            // Populate brand options
             populateSelectOptions(data, "brand");
-            // Add event listener to the brand select element after populating the options
             const modelSelect = document.getElementById("model");
             const brandSelect = document.getElementById("brand");
 

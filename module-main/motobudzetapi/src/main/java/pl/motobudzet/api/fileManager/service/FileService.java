@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
+import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -31,11 +31,11 @@ public class FileService {
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png","image/heif","image/heic");
 
-    private final PublicAdvertisementService advertisementService;
+    private final UserAdvertisementService advertisementService;
 
 
     @Transactional
-    public ResponseEntity<String> verifyAndSortImages(String advertisementId, String mainPhotoUrl, List<MultipartFile> files) {
+    public ResponseEntity<String> verifyAndSortImages(String advertisementId, List<MultipartFile> files) {
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
         List<String> existingImages = advertisement.getImageUrls();

@@ -1,5 +1,5 @@
 let advertisementId = null;
-let isMouseOverMessageIcon = false; // Zmienna flagi
+let isMouseOverMessageIcon = false;
 let advertisement = null;
 let currentPhotoIndex = 0;
 
@@ -115,7 +115,7 @@ function createHeaderTitle(advertisement, container, owner) {
 
     messageIcon.addEventListener('click', () => {
         createMessageBox(messageIcon, loggedUser);
-        isMouseOverMessageIcon = true; // Zablokuj działanie mouseleave
+        isMouseOverMessageIcon = true;
         messageIcon.src = '/api/resources/messageOpen';
     });
 
@@ -158,7 +158,7 @@ function createHeaderTitle(advertisement, container, owner) {
     heartIcon.addEventListener('mouseenter', (event) => {
         toolTipFavourite.style.display = 'block';
         heartIcon.style.cursor = 'pointer';
-        setTooltipText(heartIcon, toolTipFavourite); // Update tooltip text based on the current icon
+        setTooltipText(heartIcon, toolTipFavourite);
         document.addEventListener('mousemove', updateTooltipPosition);
     });
 
@@ -297,7 +297,6 @@ function createMessageBox(messageIcon, loggedUser) {
 
 
     const textArea = document.createElement('textarea');
-    // textArea.style.backgroundColor = '#181818';
     textArea.style.backgroundColor = 'transparent';
 
     textArea.style.color = 'white';
@@ -356,11 +355,10 @@ function createMessageBox(messageIcon, loggedUser) {
     textArea.focus();
 
 
-    // Dodaj obsługę zdarzenia do zamknięcia okna dialogowego
     overlay.addEventListener('click', (event) => {
         if (event.target === overlay) {
-            document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
-            isMouseOverMessageIcon = false; // Odblokuj działanie mouseleave
+            document.body.removeChild(overlay);
+            isMouseOverMessageIcon = false;
             messageIcon.src = '/api/resources/messageClosed';
         }
     });
@@ -372,7 +370,6 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
     formData.append("conversationId", conversationId);
     formData.append("advertisementId", advertisementId);
 
-    // Wysłanie danych jako żądanie POST z danymi formularza
     fetch("/api/messages", {
         method: "POST",
         body: formData,
@@ -384,17 +381,15 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
                 dialogBox.innerHTML = '';
                 dialogBoxTitle.textContent = "Wiadomość wysłana pomyślnie.";
                 dialogBox.appendChild(dialogBoxTitle);
-            } else {
-                let dialogBox = document.getElementById('dialogBox');
-                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
-                dialogBox.innerHTML = '';
-                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + response.status;
-                dialogBox.appendChild(dialogBoxTitle);
-                console.error();
             }
         })
         .catch(error => {
-            console.error("Błąd podczas wysyłania wiadomości:", error);
+                let dialogBox = document.getElementById('dialogBox');
+                let dialogBoxTitle = document.getElementById('dialogBoxTitle');
+                dialogBox.innerHTML = '';
+                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + error.message;
+                dialogBox.appendChild(dialogBoxTitle);
+                console.error();
         });
 }
 function createNewConversation() {

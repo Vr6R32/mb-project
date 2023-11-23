@@ -3,7 +3,7 @@ package pl.motobudzet.mailingmodule.mailSender.service;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
+import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;

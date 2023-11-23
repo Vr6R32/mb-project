@@ -1,8 +1,6 @@
 package pl.motobudzet.api.utils.dataextract;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import pl.motobudzet.api.vehicleBrand.entity.Brand;
 import pl.motobudzet.api.vehicleBrand.repository.BrandRepository;
@@ -22,6 +20,7 @@ import java.util.regex.Pattern;
 public class ModelBrandGenerationExtract {
 
     private final BrandRepository brandRepository;
+
     public void extractBrands() {
 
         try {
@@ -42,7 +41,8 @@ public class ModelBrandGenerationExtract {
             e.printStackTrace();
         }
     }
-//    @EventListener(ApplicationReadyEvent.class)
+
+    //    @EventListener(ApplicationReadyEvent.class)
     public void extractBrandsAndCountsToMap() {
         Map<String, Integer> brandMap = new HashMap<>();
 
@@ -67,14 +67,14 @@ public class ModelBrandGenerationExtract {
 
             List<String> brandNamesList = extractBrandsToStringList(brandMap);
 
-            extractBrandsTxtFilesWithModelNames("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\models",brandNamesList);
+            extractBrandsTxtFilesWithModelNames("C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\dataextract\\models", brandNamesList);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void extractBrandsTxtFilesWithModelNames(String folderPath,List<String> brandNamesList) throws IOException {
+    public void extractBrandsTxtFilesWithModelNames(String folderPath, List<String> brandNamesList) throws IOException {
         Path path = Paths.get(folderPath);
         brandNamesList.sort(Comparator.naturalOrder());
         System.out.println(brandNamesList.size());

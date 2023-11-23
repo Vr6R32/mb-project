@@ -18,9 +18,8 @@ public class FileController {
 
     @PostMapping(value = "images/{advertisementId}", consumes = "multipart/form-data")
     public ResponseEntity<String> uploadAdvertisementImages(@PathVariable String advertisementId,
-                                                            @RequestParam(required = false) String mainPhotoUrl,
                                                             @RequestParam List<MultipartFile> files) {
-        return fileService.verifyAndSortImages(advertisementId, mainPhotoUrl, files);
+        return fileService.verifyAndSortImages(advertisementId,files);
     }
 
 

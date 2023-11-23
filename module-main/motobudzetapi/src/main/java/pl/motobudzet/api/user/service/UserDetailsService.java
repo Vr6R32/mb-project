@@ -55,7 +55,7 @@ public class UserDetailsService {
     }
 
     private void setAuthentication(AppUser user, List<Role> roles) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList());
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 }

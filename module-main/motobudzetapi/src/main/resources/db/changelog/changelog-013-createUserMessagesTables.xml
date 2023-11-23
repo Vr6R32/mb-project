@@ -22,7 +22,7 @@
                 constraintName="fktn5mhp1euuy76ay51fbtnfcmj"
                 baseTableName="conversations"
                 baseColumnNames="advertisement_id"
-                referencedTableName="advertisement"
+                referencedTableName="advertisements"
                 referencedColumnNames="id"
                 onDelete="CASCADE"/>
     </changeSet>

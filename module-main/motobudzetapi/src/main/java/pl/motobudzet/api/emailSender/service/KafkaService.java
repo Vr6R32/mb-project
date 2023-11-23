@@ -1,12 +1,12 @@
-package pl.motobudzet.api.kafka.service;
+package pl.motobudzet.api.emailSender.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.kafka.dto.EmailMessageRequest;
+import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
 
-import static pl.motobudzet.api.kafka.configuration.KafkaTopicConfig.MESSAGE_NOTIFY_TOPIC;
+import static pl.motobudzet.api.emailSender.configuration.KafkaTopicConfig.MESSAGE_NOTIFY_TOPIC;
 
 @Service
 @RequiredArgsConstructor

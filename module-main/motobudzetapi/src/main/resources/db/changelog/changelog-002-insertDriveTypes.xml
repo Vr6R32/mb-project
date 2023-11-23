@@ -5,21 +5,21 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1" author="michal-k">
-        <insert tableName="drive_type">
+        <insert tableName="drive_types">
             <column name="id" value="1"/>
             <column name="name" value="AWD"/>
         </insert>
     </changeSet>
 
     <changeSet id="2" author="michal-k">
-        <insert tableName="drive_type">
+        <insert tableName="drive_types">
             <column name="id" value="2"/>
             <column name="name" value="RWD"/>
         </insert>
     </changeSet>
 
     <changeSet id="3" author="michal-k">
-        <insert tableName="drive_type">
+        <insert tableName="drive_types">
             <column name="id" value="3"/>
             <column name="name" value="FWD"/>
         </insert>

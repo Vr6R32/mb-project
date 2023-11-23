@@ -1,4 +1,4 @@
-package pl.motobudzet.api.kafka.dto;
+package pl.motobudzet.api.emailSender.dto;
 
 import lombok.*;
 

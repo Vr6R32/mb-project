@@ -1,9 +1,6 @@
 package pl.motobudzet.api.vehicleSpec.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -12,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@Table(name = "engine_types")
 public class EngineType {
 
     @Id

@@ -5,7 +5,7 @@
 
 
     <changeSet id="1" author="michal-k">
-        <addColumn tableName="advertisement">
+        <addColumn tableName="advertisements">
             <column name="user_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_app_user_advertisement"
                              references="app_user(id)"/>
@@ -34,22 +34,8 @@
         <addForeignKeyConstraint baseTableName="app_user_advertisements"
                                  baseColumnNames="advertisement_id"
                                  constraintName="fk6mci1ovu52iv36yngs0uk4bjq"
-                                 referencedTableName="advertisement"
+                                 referencedTableName="advertisements"
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
     </changeSet>
-
-<!--    <changeSet id="4" author="michal-k">-->
-<!--        <dropForeignKeyConstraint baseTableName="advertisement" constraintName="fk_app_user_advertisement"/>-->
-<!--    </changeSet>-->
-
-<!--    <changeSet id="5" author="michal-k">-->
-<!--        <addForeignKeyConstraint baseTableName="advertisement"-->
-<!--                                 baseColumnNames="user_id"-->
-<!--                                 constraintName="fk_app_user_advertisement"-->
-<!--                                 referencedTableName="app_user"-->
-<!--                                 referencedColumnNames="id"-->
-<!--                                 onDelete="CASCADE"/>-->
-<!--    </changeSet>-->
-
 </databaseChangeLog>

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PublicAdvertisementService {
+public class UserAdvertisementService {
 
     public static final int PAGE_SIZE = 10;
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");

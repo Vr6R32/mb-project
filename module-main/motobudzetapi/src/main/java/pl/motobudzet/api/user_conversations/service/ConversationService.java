@@ -3,7 +3,7 @@ package pl.motobudzet.api.user_conversations.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.service.PublicAdvertisementService;
+import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.user_conversations.dto.ConversationDTO;
@@ -19,7 +19,7 @@ import static pl.motobudzet.api.utils.ConversationMapper.mapConversationToDTO;
 @RequiredArgsConstructor
 public class ConversationService {
 
-    private final PublicAdvertisementService advertisementService;
+    private final UserAdvertisementService advertisementService;
     private final AppUserCustomService userCustomService;
     private final ConversationRepository conversationRepository;
 
