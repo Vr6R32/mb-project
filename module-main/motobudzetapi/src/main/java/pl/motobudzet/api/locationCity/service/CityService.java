@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.locationCity.dto.CityDTO;
 import pl.motobudzet.api.locationCity.entity.City;
 import pl.motobudzet.api.locationCity.repository.CityRepository;
+import pl.motobudzet.api.utils.mappers.CityMapper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,16 +19,7 @@ public class CityService {
 
     private final CityRepository cityRepository;
     public List<CityDTO> getAllCities() {
-        return cityRepository.getAllCitiesWithCityStates().stream().map(this::mapToCityDTO).collect(Collectors.toList());
-    }
-
-    private CityDTO mapToCityDTO(City city) {
-        return CityDTO.builder()
-                .cityId(String.valueOf(city.getId()))
-                .cityName(city.getName())
-                .cityStateId(String.valueOf(city.getCityState().getId()))
-                .cityStateName(city.getCityState().getName())
-                .build();
+        return cityRepository.getAllCitiesWithCityStates().stream().map(CityMapper::mapToCityDTO).collect(Collectors.toList());
     }
 
     public double calculateCityDistance(String cityOne, String cityTwo) {
@@ -76,6 +68,6 @@ public class CityService {
     }
 
     public List<CityDTO> getCityByPartialName(String partialName) {
-        return cityRepository.findByPartialName(partialName).stream().map(this::mapToCityDTO).collect(Collectors.toList());
+        return cityRepository.findByPartialName(partialName).stream().map(CityMapper::mapToCityDTO).collect(Collectors.toList());
     }
 }

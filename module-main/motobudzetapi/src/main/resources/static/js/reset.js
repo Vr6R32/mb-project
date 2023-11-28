@@ -51,7 +51,7 @@ function createForgotPasswordForm()  {
             resetCode: resetCode
         };
 
-        fetch("/api/user/resetPassword", {
+        fetch(getUrlSite() + "/api/user/resetPassword", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

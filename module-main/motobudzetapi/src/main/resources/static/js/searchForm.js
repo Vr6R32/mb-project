@@ -87,7 +87,8 @@ setTimeout(function setInputSelect() {
             engineType: formObj.querySelector('#engineType'),
             fuelType: formObj.querySelector('#fuelType'),
             transmissionType: formObj.querySelector('#transmissionType'),
-            cityState: formObj.querySelector('#cityState')
+            cityState: formObj.querySelector('#cityState'),
+            accidentFree: formObj.querySelector('#accidentFree')
         };
 
         for (let key in fields) {
@@ -109,7 +110,7 @@ setTimeout(function setModelSelect() {
     if (urlSearchParams) {
         let brandValue = urlSearchParams.get("brand");
         if (brandValue !== null && brandValue.trim() !== "") {
-            fetch(`/api/models/${encodeURIComponent(brandValue)}`)
+            fetch(getUrlSite() + `/api/models/${encodeURIComponent(brandValue)}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
@@ -139,27 +140,41 @@ setTimeout(function setModelSelect() {
     }
 }, 300);
 function fetchAllSpecifications() {
-    fetch("/api/spec/driveTypes")
+
+    const accidentSelect = [
+        {
+            "id": 1,
+            "name": "Tak"
+        },
+        {
+            "id": 2,
+            "name": "Nie"
+        }
+    ];
+
+    populateSelectOptions(accidentSelect,"accidentFree");
+
+    fetch(getUrlSite() + "/api/spec/driveTypes")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "driveType"));
 
-    fetch("/api/spec/engineTypes")
+    fetch(getUrlSite() + "/api/spec/engineTypes")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "engineType"));
 
-    fetch("/api/spec/fuelTypes")
+    fetch(getUrlSite() + "/api/spec/fuelTypes")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "fuelType"));
 
-    fetch("/api/spec/transmissionTypes")
+    fetch(getUrlSite() + "/api/spec/transmissionTypes")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "transmissionType"));
 
-    fetch("/api/cities/states")
+    fetch(getUrlSite() + "/api/cities/states")
         .then(response => response.json())
         .then(data => populateSelectOptions(data, "cityState"));
 
-    fetch("/api/brands")
+    fetch(getUrlSite() + "/api/brands")
         .then(response => response.json())
         .then(data => {
             populateSelectOptions(data, "brand");
@@ -170,7 +185,7 @@ function fetchAllSpecifications() {
                 const selectedBrand = event.target.value;
                 if (selectedBrand !== "") {
                     modelSelect.innerHTML = "";
-                    fetch(`/api/models/${selectedBrand}`)
+                    fetch(getUrlSite() + `/api/models/${selectedBrand}`)
                         .then(response => response.json())
                         .then(data => {
                             populateSelectOptions(data, "model");
@@ -203,9 +218,9 @@ function createTabbedMenu() {
 
 
     const tabs = [
-        { name: "Samochody", callback: createCarForm },
-        { name: "Motocykle", callback: createMotorcycleForm },
-        { name: "Części", callback: createPartForm }
+        { name: "Samochody", callback: createCarForm }
+        // { name: "Motocykle", callback: createMotorcycleForm },
+        // { name: "Części", callback: createPartForm }
     ];
 
     tabs.forEach((tab, index) => {
@@ -216,7 +231,7 @@ function createTabbedMenu() {
         tabButton.style.cursor = "pointer";
         tabButton.style.background = "black";
         tabButton.style.color = "white";
-        tabButton.style.width = '100px';
+        tabButton.style.width = '100%';
         tabButton.style.height = '69px';
         tabButton.style.lineHeight = '54px';
         tabButton.style.maxHeight = '100%';
@@ -260,6 +275,7 @@ function createTabbedMenu() {
     let mainContainer = document.getElementById('container-main');
     mainContainer.style.position = "relative";
     mainContainer.insertBefore(tabbedMenu, mainContainer.firstChild);
+    tabbedMenu.children[0].click();
 }
 async function createSearchFormContainer() {
 
@@ -311,7 +327,7 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("np. -> Gdańsk", "Miasto:", "text", "city", "city"));
     form.appendChild(createRowWithInputElement("np. -> Pomorskie", "Województwo:", "select", "cityState", "cityState"));
     form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
-    form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
+    form.appendChild(createRowWithInputElement(null, "Bezwypadkowy:", "select", "accidentFree", "accidentFree"));
 
     const searchButton = document.createElement("button");
     searchButton.setAttribute('id', 'searchButton');
@@ -580,6 +596,8 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         inputElement.appendChild(defaultOption);
     }
 
+
+
     if (inputId === 'city') {
 
         const inputContainer = document.createElement("div");
@@ -640,7 +658,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
             // Ustawia nowe opóźnienie
             timeoutId = setTimeout(function () {
                 // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
-                fetch(`/api/cities?partialName=${partialCityName}`)
+                fetch(getUrlSite() + `/api/cities?partialName=${partialCityName}`)
                     .then(response => response.json())
                     .then(data => {
                         // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
@@ -674,7 +692,7 @@ function applyLabelColor(element, label) {
 function getUserFavourites() {
 
 
-    fetch("/api/users/favourites/" + getUserName())
+    fetch(getUrlSite() + "/api/users/favourites/" + getUserName())
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1072,7 +1090,7 @@ function displayResults(data) {
             };
 
             if(getUserName()!=='KONTO'){
-                fetch('/api/users/favourites', {
+                fetch(getUrlSite() + '/api/users/favourites', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1125,22 +1143,11 @@ function displayResults(data) {
 
 
         conversationDetailsMain.appendChild(advertisementDetails);
-
         conversationDetailsDiv.appendChild(conversationDetailsHeader);
         conversationDetailsDiv.appendChild(conversationDetailsMain);
-
         conversationDetailsDiv.appendChild(bottomDetailsHeader);
-
-
-
-
         resultDiv.appendChild(conversationDetailsDiv);
-
-
         resultsDiv.appendChild(resultDiv);
-
-
-
         if (searchFormContainer) {
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
         } else {
@@ -1150,7 +1157,6 @@ function displayResults(data) {
 
     });
 
-// Display sort buttons if there are results
     if (data.content.length > 0) {
         const sortDiv = document.createElement("div");
         sortDiv.setAttribute('id', 'sortButtonDiv');
@@ -1419,7 +1425,7 @@ function executeSearch(formData) {
 
 
     // Make the GET request to the API endpoint with the sorting parameters
-    fetch("/api/advertisements/filter/search?" + searchParams.toString())
+    fetch(getUrlSite() + "/api/advertisements/filter/search?" + searchParams.toString())
         .then(response => response.json())
         .then(data => {
             // Display the results and pagination with sorting parameters
@@ -1453,6 +1459,7 @@ function createInfoContainer(iconPath, altText, value) {
 }
 
 function populateSelectOptions(options, selectId) {
+    console.log(options);
     const selectElement = document.getElementById(selectId);
 
 
@@ -1463,7 +1470,6 @@ function populateSelectOptions(options, selectId) {
         defaultOption.style.color = 'gray';
         defaultOption.textContent = "Wybierz...";
         selectElement.appendChild(defaultOption);
-    // defaultOption.selected = true; // Optional: make it selected by default
 
     if(options !== null) {
         options.forEach(option => {
@@ -1471,6 +1477,13 @@ function populateSelectOptions(options, selectId) {
             optionElement.value = option.name;
             optionElement.textContent = option.name;
             optionElement.style.color = 'white';
+            if(selectId==='accidentFree'){
+                if(option.name === 'Tak'){
+                    optionElement.value = true;
+                } else {
+                    optionElement.value = false;
+                }
+            }
             selectElement.appendChild(optionElement);
         });
     }

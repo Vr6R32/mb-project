@@ -90,8 +90,8 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.id = ?1 and a.isDeleted = false ORDER BY a.createDate DESC")
-    List<Advertisement> findAllAdvertisementsByUserId(Long userNameId);
+            "LEFT JOIN FETCH a.transmissionType t WHERE a.user.userName= ?1 and a.isDeleted = false ORDER BY a.createDate DESC")
+    List<Advertisement> findAllAdvertisementsByUserId(String userName);
 
     @Query("select a from Advertisement a " +
             "left join fetch a.city " +
@@ -109,7 +109,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
 
     @Modifying
     @Query("UPDATE Advertisement a SET a.isDeleted = true WHERE a.id = ?1")
-    int updateAdvertisementIsDeleted(UUID id);
+    int deleteAdvertisement(UUID id);
 
 
 

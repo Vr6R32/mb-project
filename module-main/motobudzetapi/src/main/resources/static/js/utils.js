@@ -2,6 +2,9 @@
 window.addEventListener('scroll', hideNavBar);
 window.addEventListener("load", displayLogo);
 
+function getUrlSite(){
+    return 'http://localhost:20134'
+}
 function displayLogo() {
     const xhr = new XMLHttpRequest();
     const url = "/api/resources/logo";

@@ -11,7 +11,7 @@ import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
 import pl.motobudzet.api.user_conversations.entity.Conversation;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
 import pl.motobudzet.api.user_conversations.repository.ConversationMessagesRepository;
-import pl.motobudzet.api.utils.MessageMapper;
+import pl.motobudzet.api.utils.mappers.MessageMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -101,7 +101,6 @@ public class MessageService {
 
     public List<ConversationMessageDTO> getAllMessages(Long conversationId, String loggedUser) {
         List<ConversationMessage> conversationMessagesList = messagesRepository.getAllMessages(conversationId);
-        if (conversationMessagesList.isEmpty()) return Collections.emptyList();
 
         if (authorizeMessageGetAccess(conversationMessagesList, loggedUser)) {
             updateMessagesRead(loggedUser, conversationMessagesList);

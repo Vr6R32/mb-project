@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static pl.motobudzet.api.utils.mappers.FavouriteMapper.mapToFavouriteDTO;
+
 @Service
 @RequiredArgsConstructor
 public class FavouritesService {
@@ -21,8 +23,7 @@ public class FavouritesService {
 
     public String manageUserFavourite(FavouriteRequest request, String loggedUser) {
 
-
-        AppUser appUser = getUser(loggedUser);
+        AppUser appUser = appUserCustomService.getUserByName(loggedUser);
         Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(appUser, request.getAdvertisementId());
 
             if(existingFavourite.isEmpty()){
@@ -41,30 +42,7 @@ public class FavouritesService {
         return false;
     }
 
-    private Favourite mapToFavouriteDTO(FavouriteRequest request, AppUser appUser) {
-        return Favourite.builder()
-                .appUser(appUser)
-                .advertisementId(request.getAdvertisementId())
-                .userName(appUser.getUsername())
-                .build();
-    }
-
-    private AppUser getUser(String loggedUser) {
-        return appUserCustomService.getUserByName(loggedUser);
-
-    }
-
-    public int getAllFavourites(String loggedUser, String principalName) {
-        if(loggedUser.equals(principalName)){
-           return favouritesRepository.findAllFavouritesByUserName(loggedUser);
-        }
-        return 0;
-    }
-
-    public List<UUID> getAllFavouritesId(String loggedUser, String principalName) {
-        if(loggedUser.equals(principalName)){
-            return favouritesRepository.findAllFavouritesIdByUserName(loggedUser);
-        }
-        return List.of(null);
+    public List<UUID> getAllFavouritesId(String principalName) {
+         return favouritesRepository.findAllFavouritesIdByUserName(principalName);
     }
 }

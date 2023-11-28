@@ -36,7 +36,7 @@ const createRegisterForm = () => {
             email: document.getElementById("email").value
         };
 
-        fetch("/api/user/register", {
+        fetch(getUrlSite() + "/api/user/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -359,7 +359,7 @@ function createForgotPasswordForm()  {
             email: document.getElementById("email").value
         };
 
-        fetch("/api/user/resetCode", {
+        fetch(getUrlSite() + "/api/user/resetCode", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -65,7 +65,7 @@ function createHeaderTitle(advertisement, container, owner) {
 
     heartIcon.addEventListener('click', () => {
 
-        fetch('/api/users/favourites', {
+        fetch(getUrlSite() + '/api/users/favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
         advertisementId: advertisementId,
     });
 
-    fetch('/api/users/favourites?' + queryParams.toString(), {
+    fetch(getUrlSite() + '/api/users/favourites?' + queryParams.toString(), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -370,7 +370,7 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
     formData.append("conversationId", conversationId);
     formData.append("advertisementId", advertisementId);
 
-    fetch("/api/messages", {
+    fetch(getUrlSite() + "/api/messages", {
         method: "POST",
         body: formData,
     })
@@ -396,7 +396,7 @@ function createNewConversation() {
     const formData = new FormData();
     formData.append("advertisementId", advertisementId);
 
-    return fetch("/api/conversations/create", {
+    return fetch(getUrlSite() + "/api/conversations/create", {
         method: "POST",
         body: formData,
     })
@@ -412,7 +412,7 @@ function createNewConversation() {
 function checkConversationId(messageValue) {
     let conversationId = null;
 
-    fetch("/api/conversations/id?advertisementId=" + advertisementId)
+    fetch(getUrlSite() + "/api/conversations/id?advertisementId=" + advertisementId)
         .then(response => {
             if (response.status === 200) {
                 return response.text();
@@ -449,7 +449,7 @@ function setTitleInUrl(data) {
     window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
 }
 function fetchAdvertisement() {
-    fetch('/api/advertisements/' + advertisementId)
+    fetch(getUrlSite() + '/api/advertisements/' + advertisementId)
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('container-main');

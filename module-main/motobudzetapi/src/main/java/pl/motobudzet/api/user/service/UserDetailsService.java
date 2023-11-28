@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.motobudzet.api.utils.mappers.AppUserMapper.mapUserToDTO;
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsService {
@@ -29,10 +31,6 @@ public class UserDetailsService {
     public AppUserDTO getUserDetails(String userName) {
         AppUser user = userRepository.findByUserNameForDto(userName).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
         return mapUserToDTO(user);
-    }
-
-    private AppUserDTO mapUserToDTO(AppUser user) {
-        return AppUserDTO.builder().name(user.getUsername()).cityName(user.getCity().getName()).cityStateName(user.getCity().getCityState().getName()).build();
     }
 
     public String updateFirstUserDetails(UserDetailsRequest request, String loggedUser) {

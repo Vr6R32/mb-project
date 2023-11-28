@@ -1,13 +1,18 @@
-package pl.motobudzet.api.utils;
+package pl.motobudzet.api.utils.mappers;
 
-import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
 import pl.motobudzet.api.user_conversations.dto.ConversationDTO;
 import pl.motobudzet.api.user_conversations.entity.Conversation;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
 
+import static pl.motobudzet.api.utils.mappers.AdvertisementMapper.mapToAdvertisementDTO;
+
 public class ConversationMapper {
 
-    public static ConversationDTO mapConversationToDTO(Conversation conversation, String ownerName, UserAdvertisementService advertisementService) {
+
+    private ConversationMapper() {
+    }
+
+    public static ConversationDTO mapConversationToDTO(Conversation conversation, String ownerName) {
 
         String secondUserName;
 
@@ -21,7 +26,7 @@ public class ConversationMapper {
 
         ConversationDTO.ConversationDTOBuilder builder = ConversationDTO.builder()
                 .conversationId(conversation.getId())
-                .advertisement(advertisementService.mapToAdvertisementDTO(conversation.getAdvertisement(),false))
+                .advertisement(mapToAdvertisementDTO(conversation.getAdvertisement(),false))
                 .secondUser(secondUserName);
 
         if (conversationLastMessage != null) {

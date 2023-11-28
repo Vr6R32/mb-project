@@ -32,7 +32,7 @@ function createLoginForm()   {
     form.setAttribute('id','detailsForm');
     form.className = "form-signin";
     form.style.backgroundColor = 'black';
-    form.action = "/api/user/updateDetails";
+    form.action = getUrlSite() + "/api/user/updateDetails";
     form.style.animation = "fade-in 1s ease-in-out forwards";
     form.style.display = "flex";
     form.style.flexDirection = "column";
@@ -241,7 +241,7 @@ function createInput(type, id, placeholder,form) {
         const partialCityName = input.value;
 
         timeoutId = setTimeout(function () {
-            fetch(`/api/cities?partialName=${partialCityName}`)
+            fetch(getUrlSite() + `/api/cities?partialName=${partialCityName}`)
                 .then(response => response.json())
                 .then(data => {
                     updateCitySuggestions(data);

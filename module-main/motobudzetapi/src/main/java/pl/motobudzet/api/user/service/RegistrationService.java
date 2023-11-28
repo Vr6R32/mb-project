@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
+import static pl.motobudzet.api.utils.RegistrationRequestValidation.validateRegistrationRequest;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
@@ -43,7 +45,8 @@ public class RegistrationService {
 
     public ResponseEntity<String> register(RegistrationRequest request) {
 
-        String validateResponse = RegistrationRequestValidation.validate(request, userRepository);
+        String dbResponse = userRepository.checkUsernameAndEmailAvailability(request.getUserName(), request.getEmail());
+        String validateResponse = validateRegistrationRequest(dbResponse);
 
         if (!validateResponse.equals("Both username and email are available")) {
             return ResponseEntity.badRequest()

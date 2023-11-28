@@ -48,7 +48,7 @@ public class ModelService {
         return new ResponseEntity<>("model inserted!", HttpStatus.CREATED);
     }
 
-    public List<ModelDTO> findAllModelsFromSpecifiedBrand(String brandName) {
+    public List<ModelDTO> findAllModelsByBrandName(String brandName) {
         return brandRepository.findModelsByBrandName(
                 brandName.toUpperCase())
                 .stream()
@@ -58,8 +58,8 @@ public class ModelService {
 
     public ResponseEntity<String> deleteModel(String modelName, String brandName) {
 
-        Model model = modelRepository.findByNameAndBrandName(modelName,brandName).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
-        Brand brand = brandRepository.findByName(model.getBrand().getName().toUpperCase()).orElseThrow(() -> new RuntimeException("BRAND_DOESNT_EXIST"));
+        Model model = modelRepository.findByNameAndBrandName(modelName,brandName).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
+        Brand brand = brandRepository.findByName(model.getBrand().getName().toUpperCase()).orElseThrow(() -> new InvalidParameterException("BRAND_DOESNT_EXIST"));
 
         model.setBrand(null);
         brand.deleteElement(model);
@@ -79,8 +79,4 @@ public class ModelService {
         return modelRepository.findByName(model.toUpperCase()).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
     }
 
-    public String getModel(Long modelId) {
-        Model model = modelRepository.findByAjdi(modelId).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
-        return model.getName();
-    }
 }

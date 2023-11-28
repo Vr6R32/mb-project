@@ -8,6 +8,8 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 
+import static pl.motobudzet.api.utils.mappers.AdvertisementMapper.mapToAdvertisementDTO;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class AdminAdvertisementService {
 
     public Page<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
         return advertisementRepository.findAllToEnableAndVerify(PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE))
-                .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+                .map(advertisement -> mapToAdvertisementDTO(advertisement, false));
     }
 
     public String verifyAndEnableAdvertisement(String id) {

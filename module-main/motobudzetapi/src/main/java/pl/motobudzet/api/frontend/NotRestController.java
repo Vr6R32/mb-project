@@ -15,18 +15,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NotRestController {
 
-    private final AppUserCustomService userCustomService;
-
-
     @GetMapping("/")
     public String index(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "index";
     }
 
-    //    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/id")
-    public String advertisement(@RequestParam String advertisementId, Model model, Principal principal) {
+    public String advertisement(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "advertisement";
     }
@@ -38,7 +34,7 @@ public class NotRestController {
     }
 
     @GetMapping("advertisement/edit")
-    public String editForm(Model model, Principal principal,@RequestParam("advertisementId") String advertisementId) {
+    public String editForm(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "editForm";
     }

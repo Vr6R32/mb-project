@@ -13,7 +13,7 @@ import pl.motobudzet.api.user_conversations.repository.ConversationRepository;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.motobudzet.api.utils.ConversationMapper.mapConversationToDTO;
+import static pl.motobudzet.api.utils.mappers.ConversationMapper.mapConversationToDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +51,7 @@ public class ConversationService {
     public List<ConversationDTO> getAllConversations(String userName) {
         AppUser user = userCustomService.getUserByName(userName);
         List<Conversation> conversationList = conversationRepository.findAllConversationsByUserId(user.getId());
-        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, userName, advertisementService)).toList();
+        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, userName)).toList();
     }
 
     public Long findConversationIdByAdvIdAndSender(String advertisementId, String name) {

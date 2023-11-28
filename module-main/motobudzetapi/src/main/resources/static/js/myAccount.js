@@ -44,7 +44,7 @@ function loadUserAdvertisements(){
 function fetchAdvertisements(){
     let loggedUser = document.getElementById('username').textContent;
     let resultContainerRight = document.getElementById('resultContainerRight');
-    fetch('/api/advertisements/user/' + loggedUser)
+    fetch(getUrlSite() + '/api/advertisements/user/' + loggedUser)
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('resultContainerRight');
@@ -64,7 +64,7 @@ function fetchAdvertisements(){
 }
 function loadFavourites() {
     let loggedUser = document.getElementById('username').textContent;
-    fetch('/api/users/favourites/' + loggedUser, {
+    fetch(getUrlSite() + '/api/users/favourites/' + loggedUser, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ function fetchFavouriteIds(uuidList) {
 
     uuidList = uuidList.map(uuid => uuid.replace(/^\"|\"$/g, ''));
 
-    fetch('/api/advertisements/favourites/' + loggedUser, {
+    fetch(getUrlSite() + '/api/advertisements/favourites/' + loggedUser, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ function fetchFavouriteIds(uuidList) {
 }
 function loadConversations() {
 
-    let url = `/api/conversations`;
+    let url = getUrlSite() + `/api/conversations`;
     let resultContainerRight = document.getElementById("resultContainerRight");
 
 
@@ -172,7 +172,7 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
 
 
     const conversationId = conversation.conversationId;
-    const url = `/api/messages?conversationId=${conversationId}`;
+    const url = getUrlSite() + `/api/messages?conversationId=${conversationId}`;
     let resultCount = 0;
 
     fetch(url)

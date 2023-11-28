@@ -99,6 +99,9 @@ function createLastUploadedHeader() {
     container.insertBefore(titleContainer,lastUploadedResults);
     return {container, prevPageButton, nextPageButton};
 }
+import * as utils from "../js/test.js";
+
+utils.exported();
 
 function getLastUploaded(pageNumber){
 
@@ -111,7 +114,7 @@ function getLastUploaded(pageNumber){
     results2.style.minHeight = '650px';
 
 
-    fetch('/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
+    fetch(getUrlSite() + '/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
 
         .then(response => response.json())
         .then(data => {

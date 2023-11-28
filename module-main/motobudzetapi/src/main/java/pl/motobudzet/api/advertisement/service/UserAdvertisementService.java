@@ -19,7 +19,6 @@ import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.locationCity.service.CityService;
-import pl.motobudzet.api.locationState.service.CityStateService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
 import pl.motobudzet.api.vehicleBrand.service.BrandService;
@@ -29,6 +28,8 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static pl.motobudzet.api.utils.mappers.AdvertisementMapper.mapToAdvertisementDTO;
 
 
 @Service
@@ -44,7 +45,6 @@ public class UserAdvertisementService {
     private final ModelService modelService;
     private final AppUserCustomService userCustomService;
     private final CityService cityService;
-    private final CityStateService cityStateService;
     private final EntityManager entityManager;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {
@@ -170,43 +170,6 @@ public class UserAdvertisementService {
         return ResponseEntity.badRequest().body("not inserted");
     }
 
-    public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
-
-        AdvertisementDTO builder = AdvertisementDTO.builder()
-                .id(adv.getId().toString())
-                .name(adv.getName())
-                .description(adv.getDescription())
-                .model(adv.getModel().getName())
-                .brand(adv.getBrand().getName())
-                .fuelType(adv.getFuelType().getName())
-                .driveType(adv.getDriveType().getName())
-                .engineType(adv.getEngineType().getName())
-                .transmissionType(adv.getTransmissionType().getName())
-                .user(adv.getUser().getUsername())
-                .city(adv.getCity().getName())
-                .cityState(adv.getCity().getCityState().getName())
-                .mileage(adv.getMileage())
-                .mileageUnit(adv.getMileageUnit())
-                .price(adv.getPrice())
-                .priceUnit(adv.getPriceUnit())
-                .engineCapacity(adv.getEngineCapacity())
-                .engineHorsePower(adv.getEngineHorsePower())
-                .firstRegistrationDate(adv.getFirstRegistrationDate())
-                .productionDate(adv.getProductionDate())
-                .createDate(adv.getCreateDate().toLocalDate())
-                .createTime(adv.getCreateDate().toLocalTime())
-                .mainPhotoUrl(adv.getMainPhotoUrl())
-                .isDeleted(adv.isDeleted())
-                .isVerified(adv.isVerified())
-                .isActive(adv.isActive())
-                .build();
-
-        if (includeImageUrls) {
-            builder.setUrlList(adv.getImageUrls());
-        }
-
-        return builder;
-    }
 
     public Advertisement getAdvertisement(String advertisementId) {
         return advertisementRepository.findByAjdi(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
@@ -221,8 +184,7 @@ public class UserAdvertisementService {
 
     public List<AdvertisementDTO> getAllUserAdvertisements(String username, String loggedUser) {
         if (username.equals(loggedUser)) {
-            Long userNameId = userCustomService.getUserIdByUserName(username);
-            return advertisementRepository.findAllAdvertisementsByUserId(userNameId)
+            return advertisementRepository.findAllAdvertisementsByUserId(loggedUser)
                     .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
         }
         return Collections.emptyList();
@@ -271,7 +233,7 @@ public class UserAdvertisementService {
     public int deleteUserAdvertisement(UUID id, String username) {
         AppUser user = userCustomService.getUserByName(username);
         if(username.equals(user.getUsername())){
-            return advertisementRepository.updateAdvertisementIsDeleted(id);
+            return advertisementRepository.deleteAdvertisement(id);
         }
         return 0;
     }

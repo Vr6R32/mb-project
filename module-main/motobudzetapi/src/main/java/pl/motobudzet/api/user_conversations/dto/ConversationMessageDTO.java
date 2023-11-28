@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @RequiredArgsConstructor
@@ -16,10 +18,10 @@ public class ConversationMessageDTO {
     private Long id;
     private String userSender;
     private String message;
-    private String messageSendDate;
-    private String messageSendTime;
-    private String messageReadDate;
-    private String messageReadTime;
+    private LocalDate messageSendDate;
+    private LocalTime messageSendTime;
+    private LocalDate messageReadDate;
+    private LocalTime messageReadTime;
     private LocalDateTime messageSendDateTime;
     private LocalDateTime messageReadDateTime;
 

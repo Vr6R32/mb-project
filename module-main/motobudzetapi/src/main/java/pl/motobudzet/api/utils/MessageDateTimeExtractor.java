@@ -1,23 +1,21 @@
 package pl.motobudzet.api.utils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+        import java.time.LocalDate;
+        import java.time.LocalDateTime;
+        import java.time.LocalTime;
 
 public class MessageDateTimeExtractor {
     private MessageDateTimeExtractor() {
     }
 
-    public static String extractDate(LocalDateTime messageDateTime) {
-        LocalDate date = messageDateTime.toLocalDate();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return date.format(dateFormatter);
+    public static LocalDate extractDate(LocalDateTime messageDateTime) {
+//        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return messageDateTime.toLocalDate();
     }
 
-    public static String extractTime(LocalDateTime messageDateTime) {
-        LocalTime time = messageDateTime.toLocalTime();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        return time.format(timeFormatter);
+    public static LocalTime extractTime(LocalDateTime messageDateTime) {
+        return messageDateTime.toLocalTime().withNano(0);
     }
 }
+

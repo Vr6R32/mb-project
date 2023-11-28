@@ -336,7 +336,7 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         formData.append("conversationId", conversationId);
 
         // Wysłanie danych jako żądanie POST z danymi formularza
-        fetch("/api/messages", {
+        fetch(getUrlSite() + "/api/messages", {
             method: "POST",
             body: formData,
         })

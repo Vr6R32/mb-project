@@ -3,6 +3,6 @@
       metrics_path: '/actuator/prometheus'
       scrape_interval: 3s
       static_configs:
-        - targets: [ '192.168.100.27:20134' ]
+        - targets: [ 'localhost:20134' ]
           labels:
             application: 'MotoBudzetApi'

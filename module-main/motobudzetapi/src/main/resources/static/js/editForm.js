@@ -43,7 +43,7 @@ function warnOnPageLeave(e) {
 function fetchAdvertisementDetails() {
     extractAdvertisementId();
 
-    return fetch(`/api/advertisements/${advertisementId}`)
+    return fetch(getUrlSite() + `/api/advertisements/${advertisementId}`)
         .then(response => {
             if (!response.ok) {
                 window.location = '/';
@@ -251,7 +251,7 @@ function createForm() {
 
                 // Ustawia nowe opóźnienie
                 timeoutId = setTimeout(function () {
-                    fetch(`/api/cities?partialName=${partialCityName}`)
+                    fetch(getUrlSite() + `/api/cities?partialName=${partialCityName}`)
                         .then(response => response.json())
                         .then(data => {
                             updateCitySuggestions(data);
@@ -395,7 +395,7 @@ async function showExistingThumbnails(filenames) {
     }
 }
 function fetchImageFromFilename(filename) {
-    return fetch(`/api/resources/advertisementPhoto/${filename}`)
+    return fetch(getUrlSite() + `/api/resources/advertisementPhoto/${filename}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch image for filename: ${filename}`);
@@ -450,7 +450,7 @@ function fetchModels(brand) {
     return new Promise((resolve, reject) => {
         const modelSelect = document.getElementById('model');
         if (brand) {
-            fetch(`/api/models/${brand}`)
+            fetch(getUrlSite() + `/api/models/${brand}`)
                 .then(response => response.json())
                 .then(data => {
                     modelSelect.innerHTML = '<option value="">Wybierz model</option>';
@@ -487,7 +487,7 @@ function submitFormWithFiles() {
 function submitForm() {
     const formData
         = advertisementFormDataExtract();
-    return fetch('/api/advertisements/'+ advertisementId, {
+    return fetch(getUrlSite() + '/api/advertisements/'+ advertisementId, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -516,7 +516,7 @@ function uploadFiles(advertisementId) {
         }
     });
 
-    const apiUrl = `/api/advertisements/images/${advertisementId}`;
+    const apiUrl = getUrlSite() + `/api/advertisements/images/${advertisementId}`;
 
 
     fetch(apiUrl, {

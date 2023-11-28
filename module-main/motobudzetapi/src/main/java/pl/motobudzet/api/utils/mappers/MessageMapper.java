@@ -1,9 +1,15 @@
-package pl.motobudzet.api.utils;
+package pl.motobudzet.api.utils.mappers;
 
 import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
 import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
+import pl.motobudzet.api.utils.MessageDateTimeExtractor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import static pl.motobudzet.api.utils.MessageDateTimeExtractor.extractDate;
+import static pl.motobudzet.api.utils.MessageDateTimeExtractor.extractTime;
 
 public class MessageMapper {
     private MessageMapper() {
@@ -12,28 +18,19 @@ public class MessageMapper {
     public static ConversationMessageDTO mapToConversationMessageDTO(ConversationMessage conversationMessage) {
 
         LocalDateTime messageSendDateTime = conversationMessage.getMessageSendDateTime();
-
-        String messageSendDate = MessageDateTimeExtractor.extractDate(messageSendDateTime);
-        String messageSendTime = MessageDateTimeExtractor.extractTime(messageSendDateTime);
-
+        LocalDateTime messageReadDateTime = conversationMessage.getMessageReadDateTime();
 
         ConversationMessageDTO build = ConversationMessageDTO.builder()
                 .id(conversationMessage.getId())
                 .message(conversationMessage.getMessage())
-                .messageSendDate(messageSendDate)
-                .messageSendTime(messageSendTime)
-//                .messageReadDate(messageReadDate)
-//                .messageReadTime(messageReadTime)
+                .messageSendDate(extractDate(messageSendDateTime))
+                .messageSendTime(extractTime(messageSendDateTime))
                 .userSender(conversationMessage.getMessageSender().getUsername())
                 .build();
 
-        LocalDateTime messageReadDateTime = conversationMessage.getMessageReadDateTime();
-
         if (messageReadDateTime != null) {
-            String messageReadDate = MessageDateTimeExtractor.extractDate(messageReadDateTime);
-            String messageReadTime = MessageDateTimeExtractor.extractTime(messageReadDateTime);
-            build.setMessageReadDate(messageReadDate);
-            build.setMessageReadTime(messageReadTime);
+            build.setMessageReadDate(extractDate(messageReadDateTime));
+            build.setMessageReadTime(extractTime(messageReadDateTime));
         }
 
         return build;

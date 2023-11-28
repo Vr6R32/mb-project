@@ -32,7 +32,7 @@ document.addEventListener('click', function(event) {
 });
 
 function fetchUserDetails() {
-    fetch("/api/user/details")
+    fetch(getUrlSite() + "/api/user/details")
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -225,7 +225,7 @@ function createForm() {
 
                 // Ustawia nowe opóźnienie
                 timeoutId = setTimeout(function () {
-                    fetch(`/api/cities?partialName=${partialCityName}`)
+                    fetch(getUrlSite() + `/api/cities?partialName=${partialCityName}`)
                         .then(response => response.json())
                         .then(data => {
                             updateCitySuggestions(data);
@@ -356,7 +356,7 @@ function submitFormWithFiles() {
 function submitForm() {
     const formData
         = advertisementFormDataExtract();
-    return fetch('/api/advertisements', {
+    return fetch(getUrlSite() + '/api/advertisements', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -380,7 +380,7 @@ function uploadFiles(advertisementId) {
         formData.append('files', file); // Use the same parameter name 'files' for each file
     });
 
-    const apiUrl = `/api/advertisements/images/${advertisementId}`;
+    const apiUrl = getUrlSite() + `/api/advertisements/images/${advertisementId}`;
 
     console.log(selectedFiles.length);
 

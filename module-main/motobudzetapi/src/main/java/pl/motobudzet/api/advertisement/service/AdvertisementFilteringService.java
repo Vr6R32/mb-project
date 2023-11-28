@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
 import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleSelectValue;
 import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleValueInRangeBetween;
+import static pl.motobudzet.api.utils.mappers.AdvertisementMapper.mapToAdvertisementDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +71,7 @@ public class AdvertisementFilteringService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
-                .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+                .map(advertisement -> mapToAdvertisementDTO(advertisement, false));
     }
 
 

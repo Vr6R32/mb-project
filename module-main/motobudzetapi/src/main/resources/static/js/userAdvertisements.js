@@ -398,7 +398,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
 
 
 
-        fetch('/api/advertisements/' + ad.id, {
+        fetch(getUrlSite() + '/api/advertisements/' + ad.id, {
             method: 'DELETE',
         })
             .then(response => {
@@ -495,7 +495,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
             advertisementId: ad.id
         };
 
-        fetch('/api/users/favourites', {
+        fetch(getUrlSite() + '/api/users/favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

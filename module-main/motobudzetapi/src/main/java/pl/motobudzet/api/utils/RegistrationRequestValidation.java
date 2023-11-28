@@ -1,18 +1,12 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.user.dto.RegistrationRequest;
-import pl.motobudzet.api.user.repository.AppUserRepository;
-
-
 
 public class RegistrationRequestValidation {
 
     private RegistrationRequestValidation() {
     }
 
-    public static String validate(RegistrationRequest request, AppUserRepository userRepository) {
-
-        String result = userRepository.checkUsernameAndEmailAvailability(request.getUserName(), request.getEmail());
+    public static String validateRegistrationRequest(String result) {
 
         switch (result) {
             case "Username is already taken" -> result = "Nazwa użytkownika jest już zajęta!";

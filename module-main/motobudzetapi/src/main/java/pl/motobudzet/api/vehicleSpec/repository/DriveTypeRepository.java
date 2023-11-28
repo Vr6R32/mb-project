@@ -11,15 +11,12 @@ import java.util.Optional;
 
 @Repository
 public interface DriveTypeRepository extends JpaRepository<DriveType, Long> {
-    @Cacheable("drive_type_cache_by_name")
     @Query("select d from DriveType d where d.name = ?1")
     Optional<DriveType> findByNejm(String driveTypeName);
 
-    @Cacheable(value = "drive_type_cache_by_id")
     @Query("select d from DriveType d where d.id = ?1")
     Optional<DriveType> findByAjdi(Long driveTypeId);
 
-    @Cacheable(value = "drive_type_cache_all")
     @Query("select d from DriveType d")
     List<DriveType> findAllCached();
 }

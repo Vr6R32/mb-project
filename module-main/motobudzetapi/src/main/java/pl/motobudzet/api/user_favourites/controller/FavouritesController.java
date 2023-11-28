@@ -38,15 +38,9 @@ public class FavouritesController {
         System.out.println(response);
         return ResponseEntity.ok(response);
     }
-//    @GetMapping("{loggedUser}")
-//    public ResponseEntity<String> getFavourites(@PathVariable String loggedUser,
-//                                                Principal principal) {
-//        int allFavourites = favouritesService.getAllFavourites(loggedUser, principal.getName());
-//        return ResponseEntity.ok(String.valueOf(allFavourites));
-//    }
     @GetMapping("{loggedUser}")
     public List<UUID> getFavouritesIds(@PathVariable String loggedUser,
                                        Principal principal) {
-        return favouritesService.getAllFavouritesId(loggedUser, principal.getName());
+        return favouritesService.getAllFavouritesId(principal.getName());
     }
 }
