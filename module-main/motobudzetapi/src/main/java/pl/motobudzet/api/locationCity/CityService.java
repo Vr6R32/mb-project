@@ -2,9 +2,6 @@ package pl.motobudzet.api.locationCity;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.locationCity.CityDTO;
-import pl.motobudzet.api.locationCity.City;
-import pl.motobudzet.api.locationCity.CityRepository;
 
 import java.util.LinkedList;
 import java.util.List;

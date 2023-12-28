@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const createRegisterForm = () => {
     let formContainer = document.getElementById("registerFormContainer");
-    let containerMain = document.getElementById("container-main");
 
     formContainer.innerHTML = '';
 

@@ -240,11 +240,11 @@
     margin: 150px auto 0;
     /*background-color: black;*/
     background-color: transparent;
-    border: 0px solid darkgoldenrod;
+    border: 0 solid darkgoldenrod;
     padding: 20px;
     display: flex;
     border-radius: 30px;
-    box-shadow: 0 0 0px moccasin;
+    box-shadow: 0 0 0 moccasin;
     animation: fade-in-main 1s ease-out;
     max-width: 100%;
     /*flex-wrap: wrap;*/

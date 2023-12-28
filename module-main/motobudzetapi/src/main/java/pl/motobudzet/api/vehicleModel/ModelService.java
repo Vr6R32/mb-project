@@ -6,9 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.vehicleBrand.Brand;
 import pl.motobudzet.api.vehicleBrand.BrandRepository;
-import pl.motobudzet.api.vehicleModel.ModelDTO;
-import pl.motobudzet.api.vehicleModel.Model;
-import pl.motobudzet.api.vehicleModel.ModelRepository;
 
 import java.security.InvalidParameterException;
 import java.util.List;

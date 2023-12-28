@@ -8,12 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.entity.Role;
 import pl.motobudzet.api.user.repository.AppUserRepository;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service

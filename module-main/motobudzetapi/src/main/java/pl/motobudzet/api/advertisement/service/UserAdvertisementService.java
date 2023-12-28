@@ -44,7 +44,6 @@ public class UserAdvertisementService {
     private final ModelService modelService;
     private final AppUserCustomService userCustomService;
     private final CityService cityService;
-    private final CityStateService cityStateService;
     private final EntityManager entityManager;
 
     public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {

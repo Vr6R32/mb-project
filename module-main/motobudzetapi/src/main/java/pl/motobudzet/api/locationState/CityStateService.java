@@ -2,9 +2,7 @@ package pl.motobudzet.api.locationState;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.locationState.CityStateDTO;
-import pl.motobudzet.api.locationState.CityState;
-import pl.motobudzet.api.locationState.CityStateRepository;
+
 
 import java.util.List;
 import java.util.stream.Collectors;

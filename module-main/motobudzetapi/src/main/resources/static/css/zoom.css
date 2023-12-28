@@ -70,11 +70,11 @@
 }
 
 .abc {
-    box-shadow: rgba(184, 134, 11, 0.8) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    box-shadow: rgba(184, 134, 11, 0.8) 6px 2px 16px 0, rgba(255, 255, 255, 0.8) -6px -2px 16px 0;
 }
 
 .dark-mode #container-main .abc {
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px !important;
+    box-shadow: rgb(38, 57, 77) 0 20px 30px -10px !important;
 }
 
 
@@ -140,7 +140,7 @@
     width: 75px;
     height: 75px;
     border-radius: 50%;
-    box-shadow: inset 28px -4px 0px 0px var(--light);
+    box-shadow: inset 28px -4px 0 0 var(--light);
     background-color: var(--dark);
     transition: 0.3s;
 }

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
-import pl.motobudzet.api.user_favourites.FavouriteRequest;
-import pl.motobudzet.api.user_favourites.Favourite;
-import pl.motobudzet.api.user_favourites.FavouritesRepository;
+
 
 import java.util.List;
 import java.util.Optional;

@@ -249,7 +249,7 @@ function showSuccessNotification(message) {
 }
 
 
-function createParalaxMiniatures(images,paralaxMinatureDiv,advertisementDetailsDiv) {
+function createParalaxMiniatures(images,paralaxMinatureDiv) {
 
     images.forEach(imageUrl => {
         const figure = document.createElement('figure');
@@ -455,7 +455,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     resultDiv.appendChild(descContainer);
 
-    createParalaxMiniatures(advertisement.urlList,paralaxMinatureDiv,advertisementDetailsDiv);
+    createParalaxMiniatures(advertisement.urlList,paralaxMinatureDiv);
 
     return resultDiv;
 }
@@ -801,7 +801,7 @@ function advertisementFormDataExtract(isEditMode) {
     }
 
 
-    const formData = {
+    return {
         name: getValue('name'),
         description: descriptionContent,
         brand: getValue('brand'),
@@ -822,7 +822,6 @@ function advertisementFormDataExtract(isEditMode) {
         cityState: getValue('cityState'),
         mainPhotoUrl: mainPhotoUrl
     };
-    return formData;
 }
 
 function createDropDeleteZone(){

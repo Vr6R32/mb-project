@@ -114,12 +114,12 @@ header {
     /*background-color: black;*/
     background-color: transparent;
     /*border: 2px solid darkgoldenrod;*/
-    border: 0px solid darkgoldenrod;
+    border: 0 solid darkgoldenrod;
     padding: 0 20px 20px;
     display: flex;
     /*opacity: 0.9;*/
     border-radius: 30px;
-    box-shadow: 0 0 0px moccasin;
+    box-shadow: 0 0 0 moccasin;
     flex-wrap: wrap;
     justify-content: center;
     transition: filter 0.5s ease;
@@ -151,8 +151,6 @@ header {
     height: 550px;
     margin: 20px;
     position: relative;
-
-    background-color: #181818;
     background-color: #000000;
     /*border: 1px solid darkgoldenrod;*/
     animation: fade-in-miniature 1s ease-out;
@@ -243,7 +241,7 @@ header {
 }
 
 .container-main .title-container-hidden {
-    box-shadow: 0 0 0px darkgoldenrod;
+    box-shadow: 0 0 0 darkgoldenrod;
     overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
     border-radius: 30px;
     width: 1400px;
@@ -257,7 +255,7 @@ header {
 }
 
 .container-main .title-container-miniature {
-    box-shadow: 0 0 0px darkgoldenrod;
+    box-shadow: 0 0 0 darkgoldenrod;
     overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
     border-radius: 30px;
     width: 400px;
