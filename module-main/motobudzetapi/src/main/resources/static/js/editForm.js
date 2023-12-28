@@ -486,7 +486,7 @@ function submitFormWithFiles() {
 }
 function submitForm() {
     const formData
-        = advertisementFormDataExtract();
+        = advertisementFormDataExtract(true);
     return fetch('/api/advertisements/'+ advertisementId, {
         method: 'PUT',
         headers: {
@@ -592,7 +592,7 @@ function handleFileDrop(e) {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     const totalFiles = files.concat(selectedFiles);
-    const allowedExtensions = ["jpg", "png", "heic", "heif"];
+    const allowedExtensions = ["jpg", "png", "heic", "heif","webp"];
     const validFiles = totalFiles.filter(file => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
         return allowedExtensions.includes(fileExtension);
@@ -616,7 +616,7 @@ function handleFileSelect(e) {
     const fileInput = e.target;
     const files = Array.from(fileInput.files);
     const totalFiles = files.concat(selectedFiles);
-    const allowedExtensions = ["jpg", "png", "heic", "heif"];
+    const allowedExtensions = ["jpg", "png", "heic", "heif","webp"];
     const validFiles = totalFiles.filter(file => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
         return allowedExtensions.includes(fileExtension);

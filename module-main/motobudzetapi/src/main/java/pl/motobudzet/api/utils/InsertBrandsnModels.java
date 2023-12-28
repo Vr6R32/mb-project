@@ -2,9 +2,7 @@ package pl.motobudzet.api.utils;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
@@ -14,10 +12,10 @@ import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.entity.Role;
 import pl.motobudzet.api.user.repository.AppUserRepository;
 import pl.motobudzet.api.user.repository.RoleRepository;
-import pl.motobudzet.api.vehicleBrand.entity.Brand;
-import pl.motobudzet.api.vehicleBrand.repository.BrandRepository;
-import pl.motobudzet.api.vehicleModel.entity.Model;
-import pl.motobudzet.api.vehicleModel.repository.ModelRepository;
+import pl.motobudzet.api.vehicleBrand.Brand;
+import pl.motobudzet.api.vehicleBrand.BrandRepository;
+import pl.motobudzet.api.vehicleModel.Model;
+import pl.motobudzet.api.vehicleModel.ModelRepository;
 import pl.motobudzet.api.vehicleSpec.entity.DriveType;
 import pl.motobudzet.api.vehicleSpec.entity.EngineType;
 import pl.motobudzet.api.vehicleSpec.entity.FuelType;
@@ -28,7 +26,6 @@ import pl.motobudzet.api.vehicleSpec.repository.FuelTypeRepository;
 import pl.motobudzet.api.vehicleSpec.repository.TransmissionTypeRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

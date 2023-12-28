@@ -1,21 +1,45 @@
 // window.addEventListener("load", getDeviceScreenInfo);
+document.addEventListener("DOMContentLoaded", preloadLogo);
+document.addEventListener("DOMContentLoaded", applySavedZoom);
 window.addEventListener('scroll', hideNavBar);
-window.addEventListener("load", displayLogo);
+document.addEventListener('DOMContentLoaded', (event) => {
+    const slider = document.getElementById('zoom-slider');
+    const defaultVal = 1; // ustaw wartość domyślną bezpośrednio
 
-function displayLogo() {
+    slider.oninput = (e) => {
+        const val = e.target.valueAsNumber;
+
+        // Jeśli wartość suwaka jest bliska domyślnej wartości, przesuń go na tę wartość
+        if (Math.abs(val - defaultVal) < 0.02) { // 0.02 to zakres 'snap', dostosuj wg potrzeb
+            slider.value = defaultVal;
+            changeZoom(defaultVal); // Wywołaj funkcję zmiany skali
+        } else {
+            changeZoom(val); // Kontynuuj normalną zmianę skali
+        }
+    };
+});
+
+// function resetZoom() {
+//     var slider = document.getElementById('zoom-slider');
+//     slider.value = 1; // wartość domyślna dla suwaka
+//     changeZoom(slider.value);
+// }
+
+function preloadLogo() {
     const xhr = new XMLHttpRequest();
     const url = "/api/resources/logo";
     xhr.open("GET", url, true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function() {
         if (xhr.status >= 200 && xhr.status < 300) {
-            const image = new Image();
             const arrayBufferView = new Uint8Array(xhr.response);
             const blob = new Blob([arrayBufferView], { type: "image/png" });
             const imageUrl = URL.createObjectURL(blob);
-            image.src = imageUrl;
-            image.alt = "Logo";
-            document.getElementById("logo").src = imageUrl;
+            const logoImageElement = document.getElementById("logo");
+            if (logoImageElement) {
+                logoImageElement.src = imageUrl;
+                logoImageElement.alt = "Logo";
+            }
         }
     };
     xhr.send();
@@ -28,6 +52,174 @@ function hideNavBar () {
         header.classList.remove('header-hidden');
     }
 }
+
+function changeZoom(value) {
+    var content = document.getElementById('container-main');
+    if (content) {
+        var rectBefore = content.getBoundingClientRect();
+        console.log('Przed skalowaniem:', rectBefore);
+
+        content.style.transform = 'scale(' + value + ')';
+        // Set the transform origin to the center of the content relative to the viewport
+        content.style.transformOrigin = '50% 0';
+
+        // Adjust position based on the change in height after scaling
+        var heightChange = rectBefore.height * (1 - value);
+        // content.style.top = (heightChange / 2) + 'px';
+
+        setTimeout(function() {
+            var rectAfter = content.getBoundingClientRect();
+            console.log('Po skalowaniu:', rectAfter);
+        }, 0);
+    }
+
+    localStorage.setItem('userZoom', value);
+}
+
+// window.addEventListener('load', applyDarkModeSetting);
+//
+// function toggleDarkMode() {
+//     // If the 'dark-mode' class is present, then dark mode is currently enabled
+//     let isDarkMode = document.body.classList.contains('dark-mode');
+//     // Toggle dark mode off if it's on, or on if it's off
+//     document.body.classList.toggle('dark-mode');
+//     // Save the updated state in localStorage
+//     localStorage.setItem('darkMode', !isDarkMode);
+// }
+//
+// function applyDarkModeSetting() {
+//     var darkModeSetting = localStorage.getItem('darkMode');
+//     // Compare the setting as a string, since localStorage stores strings
+//     if (darkModeSetting === 'true') {
+//         document.body.classList.add('dark-mode');
+//     } else {
+//         document.body.classList.remove('dark-mode');
+//     }
+function paralaxHover() {
+    /*
+   * Paralax Hover
+   */
+    (function() {
+
+        // TODO: Make these names suck less.
+        var config = {
+            rotation: 0.05, // Rotation modifier, larger number = less rotation
+            alpha: 0.2, // Alpha channel modifer
+            shadow: 5 // How much the shadow moves
+        }
+
+        var imagesList = document.querySelectorAll('.ph-image');
+        var imagesArray = Array.prototype.slice.call(imagesList);
+        var imageWidth, imageHeight, imageShadow, imageLighting;
+
+        if (imagesArray.length <= 0) {
+            return;
+        }
+
+        /*
+         * TODO: This could get seriously gnarly with too many images on screen
+         * Would be better to defer these to a single listener on a wrapping element.
+         */
+        imagesArray.forEach(function(image) {
+            image.addEventListener('mouseenter', handleMouseEnter);
+            image.addEventListener('mousemove', handleMouseMove);
+            image.addEventListener('mouseleave', handleMouseLeave);
+        });
+
+        function handleMouseEnter(e) {
+            imageWidth = this.offsetWidth || this.clientWidth || this.scrollWidth;
+            imageHeight = this.offsetHeight || this.clientHeight || this.scrollheight;
+
+            // TODO: Give these a unique ID for better selection later
+            imageShadow = this.querySelector('.ph-shadow');
+            imageLighting = this.querySelector('.ph-lighting');
+
+            this.style.transform = 'perspective(' + imageWidth * 3 + 'px)';
+        }
+
+        function handleMouseMove(e) {
+            var bounds = e.target.getBoundingClientRect();
+            var centerX = imageWidth / 2;
+            var centerY = imageHeight / 2;
+            var deltaX = e.offsetX - centerX;
+            var deltaY = e.offsetY - centerY;
+
+            // Invert the sign for rotateX to correct the vertical inversion
+            var rotateX = -deltaY / (config.rotation * 100); // Inverted rotation around X-axis for vertical movement
+            var rotateY = deltaX / (config.rotation * 100); // Rotation around Y-axis for horizontal movement
+
+            var angleRad = Math.atan2(deltaY, deltaX);
+            var angleDeg = angleRad * 180 / Math.PI - 90;
+
+            var movement = e.offsetY / bounds.top;
+            var lightAlpha = movement * config.alpha;
+            var shadowMovement = movement * 5;
+
+            if (angleDeg <= 0) {
+                angleDeg = angleDeg + 360;
+            }
+
+            this.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+            // imageLighting.style.background = 'linear-gradient(' + angleDeg + 'deg, rgba(255,255,255, ' + lightAlpha + ') 0%, rgba(255,255,255,0) 60%)';
+            // imageShadow.style.transform = 'translateX(' + shadowMovement + 'px) translateY(' + shadowMovement + 'px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+        }
+
+        function handleMouseLeave(e) {
+            this.style.transform = '';
+            imageLighting.style.background = '';
+            imageLighting.style.transform = '';
+        }
+
+    })();
+
+}
+document.addEventListener('DOMContentLoaded', function() {
+
+
+    var darkModeCheckbox = document.getElementById('darkModeCheckbox');
+    if (darkModeCheckbox) {
+        darkModeCheckbox.addEventListener('change', function() {
+            toggleDarkMode();
+        });
+    }
+
+    // Call this on page load to apply the dark mode setting
+    if(localStorage.getItem('darkMode') === 'true') {
+        let container = document.getElementById('container-main');
+        container.style.backgroundColor = 'black';
+        document.body.classList.add('dark-mode');
+        darkModeCheckbox.checked = true;
+    }
+});
+
+function toggleDarkMode() {
+    let container = document.getElementById('container-main');
+    let isDarkMode = document.body.classList.toggle('dark-mode');
+    container.style.backgroundColor = 'black';
+    localStorage.setItem('darkMode', isDarkMode);
+    if(!isDarkMode) {
+        container.style.backgroundColor = 'transparent';
+    }
+}
+
+function applySavedZoom() {
+    var savedZoom = localStorage.getItem('userZoom');
+    if (savedZoom) {
+        var content = document.getElementById('container-main');
+        if (content) {
+            content.style.transform = 'scale(' + savedZoom + ')';
+            content.style.transformOrigin = '50% 0';
+        }
+        var zoomSlider = document.getElementById('zoom-slider');
+        if (zoomSlider) {
+            zoomSlider.value = savedZoom;
+        }
+    }
+}
+
+
+
+
 function showSuccessNotification(message) {
     setTimeout(function() {
         let navbar = document.createElement('div');
@@ -44,41 +236,69 @@ function showSuccessNotification(message) {
 
         navbar.appendChild(successIcon);
         navbar.appendChild(text);
-        document.body.appendChild(navbar); // add the navbar to the body
+        document.body.appendChild(navbar);
 
-        // Start animation after 0.5 seconds
         setTimeout(function() {
-            navbar.style.top = '0'; // slides the navbar into view
+            navbar.style.top = '0';
         }, 500);
 
-        // Auto hide navbar after another 7 seconds
         setTimeout(function() {
-            navbar.style.top = '-120px'; // slides the navbar out of view
+            navbar.style.top = '-120px';
         }, 7000);
     });
 }
+
+
+function createParalaxMiniatures(images,paralaxMinatureDiv,advertisementDetailsDiv) {
+
+    images.forEach(imageUrl => {
+        const figure = document.createElement('figure');
+        figure.className = 'ph-image';
+        figure.style.width = '230px';
+        figure.style.height = '180px';
+        figure.style.marginRight = '20px';
+
+        const img = document.createElement('img');
+        img.src = '/api/resources/advertisementPhoto/' + imageUrl;
+
+
+
+        figure.appendChild(img);
+        paralaxMinatureDiv.appendChild(figure);
+
+        paralaxHover();
+    });
+}
+
 function createAdvertisementIndexDiv(mainContainer, advertisement) {
+
+
+
     const resultDiv = document.createElement("advertisementResultDiv");
     resultDiv.id = "advertisementResultDiv";
+    resultDiv.style.Width = "100%";
 
     const imageDiv = document.createElement('mainImageDiv');
-    imageDiv.style.width = '100%'; // Ustawienie tła na czarny
-    imageDiv.style.justifyContent = 'space-between'; // Wyrównanie elementów na krańcach w poziomie
+    imageDiv.style.width = '100%';
+    imageDiv.style.maxWidth = '100%';
+    imageDiv.style.minHeight = '675px';
+    imageDiv.style.justifyContent = 'space-between';
     imageDiv.style.display = 'flex';
-    imageDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-    // imageDiv.style.backgroundColor = 'transparent';
+    imageDiv.style.alignItems = 'center';
+    imageDiv.style.marginTop = '15px';
+    imageDiv.style.marginBottom = '15px';
 
-    console.log(advertisement);
 
     const mainPhoto = document.createElement('img');
+    mainPhoto.className = 'abc';
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[0];
-    mainPhoto.style.height = '675px';
+    mainPhoto.style.maxHeight = '675px';
     mainPhoto.alt = 'MainUrlPhoto';
     mainPhoto.id = 'mainUrlPhoto';
-    // mainPhoto.style.color = 'black';
-    // mainPhoto.style.backgroundColor = 'rgba(0,0,0, 0.9)'; // Ustawienie tła na czarny
-    mainPhoto.style.backgroundColor = 'transparent'; // Ustawienie tła na czarny
-    mainPhoto.style.width = '100%'; // Ustawienie tła na czarny
+    mainPhoto.style.backgroundColor = 'transparent';
+    mainPhoto.style.borderRadius = '20px';
+
+
 
     const previousArrow = document.createElement('span');
     previousArrow.setAttribute('id', 'previousArrow');
@@ -101,9 +321,9 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     fadeEffect.style.backgroundColor = 'transparent';
 
 
-    fadeEffect.appendChild(mainPhoto);
+    // fadeEffect.appendChild(mainPhoto);
     imageDiv.appendChild(previousArrow)
-    imageDiv.appendChild(fadeEffect)
+    imageDiv.appendChild(mainPhoto)
     imageDiv.appendChild(nextArrow)
 
 
@@ -204,6 +424,13 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     advertisementDetailsMain.appendChild(advertisementDetailsOwner);
     advertisementDetailsMain.appendChild(advertisementDetails);
 
+    let paralaxMinatureDiv = document.createElement('div');
+    paralaxMinatureDiv.style.display = 'flex';
+    paralaxMinatureDiv.style.marginTop = '20px';
+    paralaxMinatureDiv.style.marginBottom = '20px';
+
+
+    resultDiv.appendChild(paralaxMinatureDiv);
     resultDiv.appendChild(advertisementDetailsDiv);
 
     mainContainer.appendChild(resultDiv);
@@ -223,10 +450,13 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     descContainer.style.marginTop = '30px';
 
 
-    descContainer.style.backgroundColor = 'black';
+    descContainer.style.backgroundColor = 'transparent';
     descContainer.appendChild(descriptionContainer);
 
     resultDiv.appendChild(descContainer);
+
+    createParalaxMiniatures(advertisement.urlList,paralaxMinatureDiv,advertisementDetailsDiv);
+
     return resultDiv;
 }
 function updateTooltipPosition(event) {
@@ -295,6 +525,7 @@ function createDialogBox(message){
         dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
 
         const headerTitle = document.createElement('dialogBox');
+        headerTitle.style.width = "100%";
         headerTitle.setAttribute('id', 'dialogBoxTitle');
         headerTitle.textContent = message;
         headerTitle.style.color = 'darkgoldenrod';
@@ -386,15 +617,9 @@ function createDescriptionEditor() {
     editor.style.width = '1200px';
     editor.style.maxWidth = '100%';
     editor.style.padding = '40px';
-    // editor.style.marginBottom = '10px';
-    // editor.style.marginLeft = '30px';
-    // editor.style.marginRight = '30px';
     editor.style.height = '700px';
     editor.style.backgroundColor = 'black';
     editor.style.borderRadius = '10px';
-    // input.style.border = '0px';
-    // input.style.color = 'white';
-    // input.style.textAlign = 'center';
     editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
     editor.style.overflowY = 'auto'; // Dodane
 
@@ -559,9 +784,22 @@ function resetFileDropArea() {
     fileDropArea.innerHTML = "Możesz zmienić kolejność zdjęć za pomocą myszki.\n Pierwsze zdjęcie będzie główną miniaturką";
 }
 
-function advertisementFormDataExtract() {
+function advertisementFormDataExtract(isEditMode) {
     quill.format(0, quill.getLength(), 'color', '#fff');
     descriptionContent = quill.container.firstChild.innerHTML;
+
+    let mainPhotoUrl;
+    if (!isEditMode && selectedFiles && selectedFiles.length > 0) {
+        mainPhotoUrl = getValue('name') + '-' + selectedFiles[0].name;
+    } else {
+        let nameValue = getValue('name');
+        if (selectedFiles[0].name.indexOf(nameValue) === -1) {
+            mainPhotoUrl = nameValue + '-' + selectedFiles[0].name;
+        } else {
+            mainPhotoUrl = selectedFiles[0].name;
+        }
+    }
+
 
     const formData = {
         name: getValue('name'),
@@ -582,7 +820,7 @@ function advertisementFormDataExtract() {
         firstRegistrationDate: getValue('firstRegistrationDate'),
         city: getValue('city'),
         cityState: getValue('cityState'),
-        mainPhotoUrl: getValue('name') + '-' + selectedFiles[0].name
+        mainPhotoUrl: mainPhotoUrl
     };
     return formData;
 }
@@ -595,12 +833,21 @@ function createDropDeleteZone(){
         trashIcon.alt = 'trashIcon';
 
 
+        trashIcon.style.pointerEvents = 'none';
+        trashIcon.ondragstart = function() { return false; };
+
+        // Event listener to prevent right-click
+        trashIcon.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
         const deleteZone = document.createElement('div');
 
         deleteZone.id = 'deleteZone';
 
         deleteZone.style.position = 'absolute';
         deleteZone.style.top = '60px';
+
 
 
         deleteZone.appendChild(trashIcon);

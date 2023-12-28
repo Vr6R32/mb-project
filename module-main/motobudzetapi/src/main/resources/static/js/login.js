@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const createRegisterForm = () => {
     let formContainer = document.getElementById("registerFormContainer");
+    let containerMain = document.getElementById("container-main");
 
     formContainer.innerHTML = '';
 
@@ -67,7 +68,7 @@ const createRegisterForm = () => {
     const form = document.createElement("form");
     form.className = "form-signin";
     form.style.backgroundColor = 'black';
-    form.style.animation = "fade-in 1s ease-in-out forwards";
+    // form.style.animation = "fade-in 1s ease-in-out forwards";
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
@@ -135,7 +136,7 @@ const createRegisterForm = () => {
     submitButton.style.padding = "10px 20px";
     submitButton.style.borderRadius = "5px";
     submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    submitButton.style.transition = "background-position 0.3s ease-in-out";
+    // submitButton.style.transition = "background-position 0.3s ease-in-out";
 
     submitButton.addEventListener("mouseover", function () {
         submitButton.style.boxShadow = '0 0 20px moccasin';
@@ -204,7 +205,6 @@ function createLoginForm(){
     formContainer.style.height = "500px";
     formContainer.style.borderRadius = "30px";
     formContainer.style.border = "0px dashed moccasin";
-    formContainer.style.animation = "fade-in 1s ease-in-out forwards";
     formContainer.style.position = 'relative';
     formContainer.style.bottom = '150px';
 
@@ -213,7 +213,7 @@ function createLoginForm(){
     form.method = "post";
     form.style.backgroundColor = 'black';
     form.action = "/login";
-    form.style.animation = "fade-in 1s ease-in-out forwards";
+    // form.style.animation = "fade-in 1s ease-in-out forwards";
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
@@ -271,7 +271,7 @@ function createLoginForm(){
     submitButton.style.padding = "10px 20px";
     submitButton.style.borderRadius = "5px";
     submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    submitButton.style.transition = "background-position 0.3s ease-in-out";
+    // submitButton.style.transition = "background-position 0.3s ease-in-out";
 
 
     submitButton.addEventListener("mouseover", function () {
@@ -393,7 +393,7 @@ function createForgotPasswordForm()  {
     const form = document.createElement("form");
     form.className = "form-signin";
     form.style.backgroundColor = 'black';
-    form.style.animation = "fade-in 1s ease-in-out forwards";
+    // form.style.animation = "fade-in 1s ease-in-out forwards";
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
@@ -429,7 +429,7 @@ function createForgotPasswordForm()  {
     submitButton.style.padding = "10px 20px";
     submitButton.style.borderRadius = "5px";
     submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    submitButton.style.transition = "background-position 0.3s ease-in-out";
+    // submitButton.style.transition = "background-position 0.3s ease-in-out";
 
     submitButton.addEventListener("mouseover", function () {
         submitButton.style.boxShadow = '0 0 20px moccasin';

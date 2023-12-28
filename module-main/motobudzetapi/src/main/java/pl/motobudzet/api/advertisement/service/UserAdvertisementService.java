@@ -18,12 +18,12 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
-import pl.motobudzet.api.locationCity.service.CityService;
-import pl.motobudzet.api.locationState.service.CityStateService;
+import pl.motobudzet.api.locationCity.CityService;
+import pl.motobudzet.api.locationState.CityStateService;
 import pl.motobudzet.api.user.entity.AppUser;
 import pl.motobudzet.api.user.service.AppUserCustomService;
-import pl.motobudzet.api.vehicleBrand.service.BrandService;
-import pl.motobudzet.api.vehicleModel.service.ModelService;
+import pl.motobudzet.api.vehicleBrand.BrandService;
+import pl.motobudzet.api.vehicleModel.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
@@ -159,6 +159,7 @@ public class UserAdvertisementService {
             advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
             advertisement.setProductionDate(request.getProductionDate());
             advertisement.setCity(cityService.getCityByNameAndState(request.getCity(),request.getCityState()));
+            advertisement.setMainPhotoUrl(request.getMainPhotoUrl());
             advertisement.setVerified(false);
 
             advertisementRepository.save(advertisement);

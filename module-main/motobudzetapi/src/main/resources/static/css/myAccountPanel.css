@@ -137,7 +137,8 @@
     max-width: 100%; /* Maksymalna szerokość */
     min-height: 920px;
     max-height: 920px;
-    margin: 0 20px;
+
+    margin: 30px 20px 20px;
     /*background-color: #181818;*/
     /*background-color: #000000;*/
     background-color: rgba(0, 0, 0, 0.9);
@@ -160,7 +161,7 @@
     margin-left: 20px;
     margin-right: 20px;
     color: darkgoldenrod;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: transparent;
     max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -199,7 +200,7 @@
     max-width: 1500px; /* Maksymalna szerokość */
     height: 40px;
     margin: 5px;
-    background-color: #000000;
+    background-color: transparent;
     /*background-color: #181818;*/
     /*border-radius: 30px;*/
     /*box-shadow: 0 0 40px darkgoldenrod;*/

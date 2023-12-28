@@ -197,8 +197,8 @@ function createTabbedMenu() {
     tabbedMenu.style.display = "flex";
     tabbedMenu.style.justifyContent = "flex-start";
     tabbedMenu.style.position = "absolute";
-    tabbedMenu.style.top = "-40px";
-    tabbedMenu.style.left = "20px";
+    tabbedMenu.style.top = "-45px";
+    tabbedMenu.style.left = "15px";
     tabbedMenu.style.zIndex = '0';
 
 
@@ -226,16 +226,9 @@ function createTabbedMenu() {
         tabButton.style.justifyContent = 'center';
         tabButton.style.transform = 'translateY(-20px)';
 
-        if (index === 0) {
-            tabButton.style.borderRadius = "15px 0 0 0";
-            // tabButton.style.boxShadow = "10px 0 15px -5px darkgoldenrod, 0 -10px 15px -5px darkgoldenrod";
-        } else if (index === tabs.length - 1) {
-            tabButton.style.borderRadius = "0 15px 0 0";
-            // tabButton.style.boxShadow = "-10px 0 15px -5px darkgoldenrod, 0 -10px 15px -5px darkgoldenrod";
-        } else {
-            tabButton.style.borderRadius = "0";
-            // tabButton.style.boxShadow = "0 -10px 15px -5px darkgoldenrod";
-        }
+        tabButton.style.borderRadius = '15px 15px 0 0 ';
+
+
 
         tabButton.addEventListener('click', function() {
             for (let btn of tabbedMenu.children) {
@@ -250,8 +243,11 @@ function createTabbedMenu() {
             tab.callback();
         });
 
-
         tabbedMenu.appendChild(tabButton);
+
+        if (tabbedMenu.children.length > 0) {
+            tabbedMenu.children[0].click();
+        }
     });
     if (tabs.length > 1) {
         const lastButton = tabbedMenu.children[tabbedMenu.children.length - 1];
@@ -781,20 +777,28 @@ function displayResults(data) {
         photoElement.style.height = "200px";
         photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
         let maxPhotoWidth = 300;
-        photoElement.style.objectFit = "cover";
-        photoElement.onload = () => {
-            if (photoElement.width > maxPhotoWidth) {
-                maxPhotoWidth = photoElement.width;
-            }
-        };
+
+
+
+
+        // photoElement.style.objectFit = "cover";
+        // photoElement.onload = () => {
+        //     if (photoElement.width > maxPhotoWidth) {
+        //         maxPhotoWidth = photoElement.width;
+        //     }
+        // };
 
 
         const fadeEffect = document.createElement('div');
         fadeEffect.classList.add('fade-effect-miniature-search');
         fadeEffect.appendChild(photoElement);
-        fadeEffect.style.width = maxPhotoWidth + 'px';
+        fadeEffect.style.width = maxPhotoWidth + 'px'
+
 
         resultDiv.appendChild(fadeEffect);
+
+
+
 
         const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
         conversationDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
@@ -1220,6 +1224,7 @@ function displayResults(data) {
             }
             paginationDiv.appendChild(pageButton);
         }
+
         // Add next page button
         if (!data.last) {
             const nextPageButton = createPaginationButton(data.number + 1, ">", formData);
@@ -1229,35 +1234,69 @@ function displayResults(data) {
         resultsDiv.appendChild(paginationDiv);
     }
 }
+
+
 function updatePaginationButtons(data, sortBy, sortOrder) {
     const paginationDiv = document.querySelector(".pagination");
     if (!paginationDiv) return;
 
-    // Clear existing pagination buttons
     paginationDiv.innerHTML = "";
 
-    // Add previous page button
     if (!data.first) {
         const prevPageButton = createPaginationButton(data.number - 1, "<", sortBy, sortOrder);
         paginationDiv.appendChild(prevPageButton);
     }
 
-    // Add page number buttons
-    for (let i = 0; i < data.totalPages; i++) {
+    const sidePages = 2; // Liczba stron do pokazania przed i po aktualnej stronie
+    let startPage = Math.max(data.number - sidePages, 0);
+    let endPage = Math.min(startPage + sidePages * 2 + 1, data.totalPages);
+
+    if (data.number < sidePages) {
+        endPage = sidePages * 2 + 1;
+    }
+
+    if (data.number > data.totalPages - sidePages - 1) {
+        startPage = data.totalPages - sidePages * 2 - 1;
+    }
+
+    // Dodaj "..." jeśli istnieje luka
+    if (startPage > 0) {
+        paginationDiv.appendChild(createPaginationButton(0, 1, sortBy, sortOrder));
+        if (startPage > 1) {
+            paginationDiv.appendChild(createPaginationButton(startPage - 1, "...", sortBy, sortOrder, true));
+        }
+    }
+
+    let currentPage = null;
+
+    // Aktualne bloki stron
+    for (let i = startPage; i < endPage && i < data.totalPages; i++) {
         const pageButton = createPaginationButton(i, i + 1, sortBy, sortOrder);
         if (i === data.number) {
             pageButton.disabled = true;
             pageButton.classList.add("active");
+            pageButton.style.top = '-6px';
+            pageButton.onmouseover = null;
+            pageButton.onmouseout = null;
+            currentPage = i;
         }
         paginationDiv.appendChild(pageButton);
     }
 
-    // Add next page button
+    // Dodaj "..." jeśli istnieje luka
+    if (endPage < data.totalPages) {
+        if (endPage < data.totalPages - 1) {
+            paginationDiv.appendChild(createPaginationButton(endPage, "...", sortBy, sortOrder, true));
+        }
+        paginationDiv.appendChild(createPaginationButton(data.totalPages - 1, data.totalPages, sortBy, sortOrder));
+    }
+
     if (!data.last) {
         const nextPageButton = createPaginationButton(data.number + 1, ">", sortBy, sortOrder);
         paginationDiv.appendChild(nextPageButton);
     }
 }
+
 function extractSortParam() {
     const urlParams = new URLSearchParams(document.location.search);
     return urlParams.get('sortBy');
@@ -1267,39 +1306,47 @@ function extractPageNumber() {
     return Number(urlParams.get('pageNumber'));
 }
 function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
+
+    const container = document.createElement("div");
+    container.style.display = "inline-block";
+    container.style.marginRight = '3px';
+    container.style.position = 'relative'; // Position relative for the container
+    container.style.transition = "top 0.3s ease"; // Apply transition to the 'top' property
+
+
     const button = document.createElement("button");
     button.textContent = label;
-
-
 
     button.style.backgroundColor = "black";
     button.style.color = "white";
     button.style.border = "1px solid darkgoldenrod";
-    button.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    button.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    button.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    button.style.padding = "10px 20px";
+    button.style.cursor = "pointer";
+    button.style.transition = "0.3s";
     button.style.borderRadius = '15px';
-    button.style.marginRight = '3px';
+    // button.style.marginRight = '3px';
+    button.style.position = 'relative'; // Add position relative for hover effect
+
 
     let currentPageNumber = extractPageNumber();
 
     if(currentPageNumber+1 === label){
-        button.style.boxShadow = '0 0 20px moccasin';
+        button.style.boxShadow = '0 0 20px darkgoldenrod';
+        button.style.color = 'white';
+        button.style.fontSize = '18px';
+        button.style.fontStyle = 'bold';
     }
 
-
-    // if(pageNumber+1 === label){
-    //     button.style.color = 'green';
-    // }
-
+    container.onmouseover = function() {
+        container.style.top = '-6px';
+    };
+    container.onmouseout = function() {
+        container.style.top = '0';
+    };
 
 
     button.addEventListener("click", function () {
-        // Get the current form data
-        // const formData = new FormData(document.getElementById("advertisementFilterForm"));
 
-
-        // Set the new page number in the formData
         formData.set("pageNumber", pageNumber);
 
 
@@ -1308,10 +1355,9 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
             sortBy = "price";
         }
 
-        // Set the sorting parameters in the formData
         formData.set("sortBy", sortBy);
         formData.set("sortOrder", sortOrder);
-        // Call the search function with updated data
+
         executeSearch(formData);
         setTimeout(function() {
             window.scroll({
@@ -1321,7 +1367,8 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
             });
         }, 500);
     });
-    return button;
+    container.appendChild(button);
+    return container;
 }
 function createSortButton(sortBy) {
     const button = document.createElement("button");

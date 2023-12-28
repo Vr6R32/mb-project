@@ -1,23 +1,19 @@
 package pl.motobudzet.api.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.locationCity.entity.City;
-import pl.motobudzet.api.locationState.entity.CityState;
+import pl.motobudzet.api.locationCity.City;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.security.service.UserDetailsServiceImpl.mapRolesToAuthorities;
+import static pl.motobudzet.api.security.UserDetailsServiceImpl.mapRolesToAuthorities;
 
 @Entity
 @Setter

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Moto-Budżet</title>
+  <link rel="preload" href="/api/resources/logo" as="image">
   <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/css/createForm.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/css/quill.snow.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
 
   <script type="text/javascript" th:src="@{/js/utils.js}" ></script>
   <script type="text/javascript" th:src="@{/js/editForm.js}" ></script>
@@ -16,7 +18,7 @@
 <header>
   <div class="looogo">
     <a href="/">
-      <img alt="Logo" id="logo" src="">
+      <img id="logo" src="/api/resources/logo" alt="Logo">
     </a>
   </div>
   <div class="nav-buttons">
@@ -36,6 +38,18 @@
     <div class="fileContainer" id="fileDropArea"></div>  <div id="thumbnails"></div></div>
   <div class="half-container-horizontal" id="half-container-horizontal">
 </div>
+</div>
+<div id="zoom-controls">
+  <div style="display: flex">
+    <label style="font-size: 60px;align-items: center; justify-content: center;">🕵️</label>
+    <div class="custom-toggle-switch">
+      <label class="custom-label">
+        <input type="checkbox" id="darkModeCheckbox">
+        <span class="custom-slider"></span>
+      </label>
+    </div>
+  </div>
+  <input type="range" min="0.8" max="1.2" step="0.001" value="1" class="slider" id="zoom-slider" oninput="changeZoom(this.value)">
 </div>
 </body>
 </html>

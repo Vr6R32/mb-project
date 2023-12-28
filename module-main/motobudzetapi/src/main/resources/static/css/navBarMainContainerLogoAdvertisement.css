@@ -110,6 +110,7 @@ header {
 .container-main {
     width: 1500px;
     margin: 200px auto 0;
+
     /*background-color: black;*/
     background-color: transparent;
     /*border: 2px solid darkgoldenrod;*/
@@ -121,7 +122,9 @@ header {
     box-shadow: 0 0 0px moccasin;
     flex-wrap: wrap;
     justify-content: center;
-    animation: fade-in-main 1s ease-out;
+    transition: filter 0.5s ease;
+    /*animation: fade-in-main 1s ease-out;*/
+    animation: fade-in 1s ease-in-out forwards;
     max-width: 100%
 }
 
@@ -365,6 +368,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 }
 
 .fade-effect-miniature-search {
@@ -378,6 +382,7 @@ header {
     background-color: transparent;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 }
 
 
@@ -417,10 +422,6 @@ header {
     background-size: 100% 100%;
     /*background-color: rgba(24, 24, 24, 1);*/
     pointer-events: none;
-}
-
-#registerFormContainer {
-    animation: fade-in 1s ease-in-out forwards; /* Apply the fade-in animation */
 }
 
 @keyframes fade-in {

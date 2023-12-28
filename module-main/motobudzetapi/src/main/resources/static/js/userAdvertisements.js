@@ -57,12 +57,12 @@ function createUserAdvertisementsResultDiv(ad,container) {
     photoElement.style.height = "200px";
     photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
     let maxPhotoWidth = 300;
-    photoElement.style.objectFit = "cover";
-    photoElement.onload = () => {
-        if (photoElement.width > maxPhotoWidth) {
-            maxPhotoWidth = photoElement.width;
-        }
-    };
+    // photoElement.style.objectFit = "cover";
+    // photoElement.onload = () => {
+    //     if (photoElement.width > maxPhotoWidth) {
+    //         maxPhotoWidth = photoElement.width;
+    //     }
+    // };
 
 
     const fadeEffect = document.createElement('div');

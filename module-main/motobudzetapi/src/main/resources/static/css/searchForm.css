@@ -53,6 +53,7 @@ input[type=number] {
 /*}*/
 
 #results {
+    position: sticky;
     width: 100%;
     margin: 50px auto 0;
     display: flex;
@@ -60,8 +61,11 @@ input[type=number] {
     justify-content: center;
     box-sizing: border-box;
     max-width: 100%;
-    opacity: 0; /* Set initial opacity to 0 */
-    animation: fade-in 1s ease-in-out forwards; /* Apply the fade-in animation */
+}
+
+.last-uploaded-title {
+    font-size: 32px;
+    text-shadow: 1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black;
 }
 
 @keyframes fade-in {

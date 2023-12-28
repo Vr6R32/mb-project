@@ -55,8 +55,7 @@ function createLastUploadedHeader() {
 
     const title = document.createElement('h2');
     title.textContent = 'Ostatnio Dodane';
-    title.style.fontSize = '32px';
-    title.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+    title.classList.add('last-uploaded-title');
 
     const titleContainer = document.createElement('div');
     titleContainer.style.fontWeight = "bold";
@@ -307,6 +306,5 @@ function clearAdvertisements(container) {
     const advertisementElements = container.getElementsByClassName('sub-container-miniature');
     while (advertisementElements.length > 0) {
         advertisementElements[0].remove();
-        results2.style.minHeight = '650px';
     }
 }

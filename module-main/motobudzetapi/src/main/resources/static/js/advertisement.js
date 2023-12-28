@@ -35,15 +35,16 @@ function createHeaderTitle(advertisement, container, owner) {
     titleContainer.classList.add('title-container');
     titleContainer.style.color = 'darkgoldenrod';
     titleContainer.style.textAlign = 'center'
-    titleContainer.style.marginTop = '-30px';
-    titleContainer.style.width = '1460px';
+    titleContainer.style.marginTop = '-10px';
+    titleContainer.style.width = '100%';
     titleContainer.style.maxWidth = '100%';
+
 
 
     const titleDiv = document.createElement('div');
     titleDiv.style.display = 'grid';
     titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr';
-    titleDiv.style.backgroundColor = 'rgba(0,0,0, 1)'
+    titleDiv.style.backgroundColor = 'transparent'
 
     titleContainer.appendChild(titleDiv);
 
@@ -447,24 +448,35 @@ function setTitleInUrl(data) {
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set('name', data.name);
     window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
+
 }
 function fetchAdvertisement() {
-    fetch('/api/advertisements/' + advertisementId)
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('container-main');
-
-
-            advertisement = data;
-            if (data.deleted===true){
-                window.location = '/';
+    return fetch('/api/advertisements/' + advertisementId)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            return response.json();
+        })
+        .then(data => {
+            if (data.deleted === true) {
+                window.location = '/';
+                return null;
+            }
+            advertisement = data;
+
+            const container = document.getElementById('container-main');
+            container.style.maxWidth = "100%";
+
             setTitleInUrl(data);
-            createAdvertisementIndexDiv(container, advertisement);
-            createHeaderTitle(advertisement, container, advertisement.user);
+            createAdvertisementIndexDiv(container, data);
+            createHeaderTitle(data, container, data.user);
+
+            return data;
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
+            return null;
         });
 }
 function previousPhoto(mainPhoto) {

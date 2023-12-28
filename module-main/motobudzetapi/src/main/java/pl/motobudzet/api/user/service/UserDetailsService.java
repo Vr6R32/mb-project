@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.locationCity.service.CityService;
+import pl.motobudzet.api.locationCity.CityService;
 import pl.motobudzet.api.user.dto.AppUserDTO;
 import pl.motobudzet.api.user.dto.UserDetailsRequest;
 import pl.motobudzet.api.user.entity.AppUser;
@@ -16,7 +16,6 @@ import pl.motobudzet.api.user.repository.RoleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

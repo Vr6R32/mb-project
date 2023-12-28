@@ -15,10 +15,10 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.advertisement.service.utils.ServiceFunction;
-import pl.motobudzet.api.locationCity.entity.City;
-import pl.motobudzet.api.locationCity.service.CityService;
-import pl.motobudzet.api.vehicleBrand.service.BrandService;
-import pl.motobudzet.api.vehicleModel.service.ModelService;
+import pl.motobudzet.api.locationCity.City;
+import pl.motobudzet.api.locationCity.CityService;
+import pl.motobudzet.api.vehicleBrand.BrandService;
+import pl.motobudzet.api.vehicleModel.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.util.*;
@@ -113,7 +113,7 @@ public class AdvertisementFilteringService {
 
         String city = request.getCity();
         String cityState = request.getCityState();
-        Integer distanceFrom = (request.getDistanceFrom() != null) ? request.getDistanceFrom() : 0;
+        Integer distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
 
 // First check for cityState alone since it's the condition you want to prioritize.
         if (cityState != null && !cityState.isEmpty() && (city == null || city.isEmpty())) {

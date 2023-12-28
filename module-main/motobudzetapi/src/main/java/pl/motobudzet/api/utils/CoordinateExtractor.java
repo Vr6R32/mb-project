@@ -1,9 +1,8 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.locationCity.entity.City;
+import pl.motobudzet.api.locationCity.City;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

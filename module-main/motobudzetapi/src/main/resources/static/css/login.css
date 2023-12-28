@@ -48,7 +48,7 @@
     max-width: 100%;
     height: 100vh; /* Ustaw wysokość na 100% widoku (viewport height) */
     margin: 0 auto; /* Wycentruj w poziomie */
-    transition: box-shadow 0s ease-in-out;
+    /*transition: box-shadow 0s ease-in-out;*/
 }
 
 #registerFormContainer:hover {

@@ -1,0 +1,181 @@
+
+#zoom-controls {
+    position: fixed; /* Element jest pozycjonowany względem okna przeglądarki */
+    left: 0; /* Przypięcie do lewej krawędzi okna */
+    bottom: 0; /* Przypięcie do dolnej krawędzi okna */
+    background: transparent; /* Czarny kolor tła */
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 200px;
+    z-index: 1000; /* Upewnij się, że element jest na wierzchu innych elementów */
+}
+
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    max-width: 200px;
+    height: 25px;
+    background: darkgoldenrod; /* Zmieniono kolor suwaka na czarny */
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 10px;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #f1f1f1; /* Kolor kciuka suwaka - pozostaje jasny */
+    cursor: pointer;
+    border-radius: 50%;
+    max-width: 200px;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #f1f1f1; /* Kolor kciuka suwaka - pozostaje jasny */
+    cursor: pointer;
+    border-radius: 50%;
+    max-width: 200px;
+}
+#zoom-controls label {
+    color: darkgoldenrod;
+}
+#reset-zoom {
+    background-color: black;
+    color: white;
+    border: 1px solid darkgoldenrod;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+    margin-right: 3px;
+}
+
+
+.dark-mode #container-main {
+    filter: invert(1);
+}
+.dark-mode #container-main img {
+    filter: invert(1);
+}
+
+.abc {
+    box-shadow: rgba(184, 134, 11, 0.8) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+.dark-mode #container-main .abc {
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px !important;
+}
+
+
+/*.dark-mode #container-main .fade-effect-miniature::before,*/
+/*.dark-mode #container-main .fade-effect-miniature-search::before {*/
+/*    filter: invert(1); !* This attempts to revert the inverted filter on the fade effect *!*/
+/*}*/
+/*.dark-mode #container-main * {*/
+/*    color: white !important;*/
+/*}*/
+/*.dark-mode #container-main .last-uploaded-title {*/
+/*    color: black !important;*/
+/*}*/
+
+
+
+
+:root {
+    --light: #d8dbe0;
+    --dark: #28292c;
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
+}
+
+.custom-toggle-switch {
+    position: relative;
+    width: 100px;
+    scale: 45%;
+    left: -15px;
+}
+
+.custom-label {
+    position: absolute;
+    width: 200px;
+    height: 100px;
+    background-color: var(--dark);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.custom-toggle-switch input {
+    position: absolute;
+    display: none;
+}
+
+.custom-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+.custom-toggle-switch input:checked ~ .custom-slider {
+    background-color: var(--light);
+}
+
+.custom-slider::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 16px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    box-shadow: inset 28px -4px 0px 0px var(--light);
+    background-color: var(--dark);
+    transition: 0.3s;
+}
+
+.custom-toggle-switch input:checked ~ .custom-slider::before {
+    transform: translateX(95px);
+    background-color: var(--dark);
+    box-shadow: none;
+}
+
+.custom-toggle-switch a {
+    position: relative;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    top: 150px;
+    left: 10px;
+    font-size: 10px;
+    text-decoration: none;
+    color: var(--link);
+    font-weight: bold;
+    text-align: center;
+}
+
+.custom-toggle-switch a:hover {
+    color: var(--link-hover);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     loadFileDrop();
     fetchUserDetails();
     createDropDeleteZone();
+    handleImageUrl("https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhubHJ5ZHpwNDhkbzItT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.wqdGocguDvXytJOqUereVMNG5jyPJ-EWs7IpAIC8EJQ/image.webp");
+
 
     document.addEventListener('dragover', function (e) {
         e.preventDefault();
@@ -355,7 +357,7 @@ function submitFormWithFiles() {
 }
 function submitForm() {
     const formData
-        = advertisementFormDataExtract();
+        = advertisementFormDataExtract(false);
     return fetch('/api/advertisements', {
         method: 'POST',
         headers: {
@@ -446,58 +448,69 @@ function handleDeleteZoneDrop(e) {
 }
 function handleFileDrop(e) {
     e.preventDefault();
-    const files = e.dataTransfer.files;
-    const allowedExtensions = ["jpg", "png"];
-    const validFiles = [];
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExtension = file.name.split(".").pop().toLowerCase();
-        if (allowedExtensions.includes(fileExtension)) {
-            validFiles.push(file);
-        }
-    }
-
-
-
-    resetFileDropArea()
-    if (validFiles.length > 0) {
-        selectedFiles = validFiles;
-        showThumbnails(validFiles);
-    }
-    if(validFiles.length < 1){
-        resetFileDropAreamy();
-    }
+    const files = Array.from(e.dataTransfer.files);
+    updateSelectedFiles(files);
 }
 function handleFileSelect(e) {
-    const fileInput = e.target;
-    const files = Array.from(fileInput.files);
-    const allowedExtensions = ["jpg", "png"];
-    const validFiles = [];
+    const files = Array.from(e.target.files);
+    updateSelectedFiles(files);
+}
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExtension = file.name.split(".").pop().toLowerCase();
-        if (allowedExtensions.includes(fileExtension)) {
-            validFiles.push(file);
+function updateSelectedFiles(newFiles) {
+    const totalFiles = newFiles.concat(selectedFiles);
+    const allowedExtensions = ["jpg", "png", "heic", "heif", "webp"];
+
+    const validFiles = totalFiles.reduce((unique, file) => {
+        if (!unique.some(f => f.name === file.name && f.size === file.size) &&
+            allowedExtensions.includes(file.name.split(".").pop().toLowerCase())) {
+            unique.push(file);
         }
-    }
+        return unique;
+    }, []);
 
-    if (validFiles.length > 15) {
-        alert("Maximum 15 images can be uploaded.");
+    resetFileDropArea();
+
+    if (validFiles.length > 12) {
+        alert("Maximum 12 images can be uploaded.");
         return;
     }
 
     selectedFiles = validFiles;
-    showThumbnails(validFiles);
-    resetFileDropArea();
-
+    showThumbnails(selectedFiles);
 }
+
+async function handleImageUrl(url) {
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/heic", "image/heif", "image/webp"];
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok.');
+
+        const blob = await response.blob();
+
+        if (!allowedMimeTypes.includes(blob.type)) {
+            alert("Invalid file type. Only images with extensions jpg, png, heic, heif, and webp are allowed.");
+            return;
+        }
+
+        const file = new File([blob], "image." + blob.type.split("/")[1], { type: blob.type });
+
+        selectedFiles.push(file);
+        showThumbnails(selectedFiles);
+    } catch (error) {
+        console.error("Error fetching image:", error);
+        alert("Failed to load image. Please check the URL and try again.");
+    }
+}
+
+
 async function showThumbnails(files) {
     const thumbnailsContainer = document.getElementById('thumbnails');
     thumbnailsContainer.innerHTML = '';
 
-    const maxThumbnails = 15;
+    thumbnailsContainer.style.marginTop = '100px';
+
+    const maxThumbnails = 12;
     const numThumbnailsToShow = Math.min(files.length, maxThumbnails);
 
     if(files.length > 1){
