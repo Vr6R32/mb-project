@@ -12,6 +12,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.motobudzet.api.security.SessionListener.getActiveSessions;
+
 @RestController
 @RequestMapping(value = "api/advertisements")
 public class UserAdvertisementController {
@@ -25,6 +27,7 @@ public class UserAdvertisementController {
     @GetMapping("/last-uploaded")
     public List<AdvertisementDTO> findLastUploaded(@RequestParam(required = false) Integer pageNumber,
                                                    @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
+        System.out.println(getActiveSessions());
         return userAdvertisementService.findLastUploaded(pageNumber, pageSize);
     }
 

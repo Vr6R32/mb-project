@@ -18,11 +18,11 @@ public class AdvCloneService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public List<String> cloneThirdPartyAdvertisement(String url) {
+    public JsonNode cloneThirdPartyAdvertisement(String url) {
         JsonNode jsonResponse = fetchAdvertisement(url);
 
-//        return jsonResponse;
-        return extractJsonProperties(jsonResponse);
+        return jsonResponse;
+//        return extractJsonProperties(jsonResponse);
     }
 
     private List<String> extractJsonProperties(JsonNode jsonResponse) {

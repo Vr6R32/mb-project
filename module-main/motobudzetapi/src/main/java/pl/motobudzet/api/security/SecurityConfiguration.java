@@ -38,6 +38,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public SessionListener httpSessionListener(){
+        return new SessionListener();
+    }
+    @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

@@ -2,7 +2,6 @@ let row = 1;
 let resultCount = 0;
 let conversationRow = 1;
 let currentRow = 1;
-
 document.addEventListener("DOMContentLoaded", function () {
     createButtons();
     loadFunctionHref();
@@ -12,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadFunctionHref(){
     let loadFunctionValue = document.getElementById("loadFunction").textContent;
     window[loadFunctionValue](loadFunctionValue);
-    if (loadFunctionValue === "Wiadomosci" || loadFunctionValue === "Ulubione") {
+    if (loadFunctionValue === "Wiadomosci" || loadFunctionValue === "Ulubione" || loadFunctionValue === "Ogloszenia") {
         UkryjMenu();
     }
 }
@@ -217,7 +216,7 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
         )
         .catch(error => {
             console.error("Wystąpił błąd podczas pobierania wiadomości:", error);
-        });
+        })
 }
 function createHeader(buttonName){
 

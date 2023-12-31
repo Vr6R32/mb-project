@@ -205,6 +205,8 @@ function createResultDiv(conversation,resultContainerRight) {
 
     resultDiv.appendChild(conversationDetailsDiv);
 
+    handleDarkModeInverse(resultDiv);
+
     return resultDiv;
 }
 

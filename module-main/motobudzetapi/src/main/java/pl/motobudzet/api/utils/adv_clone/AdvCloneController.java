@@ -1,10 +1,9 @@
 package pl.motobudzet.api.utils.adv_clone;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api/v1/clone")
@@ -14,7 +13,7 @@ public class AdvCloneController {
     private final AdvCloneService advCloneService;
 
     @GetMapping
-    public List<String> cloneAdvertisement(@RequestParam String url){
+    public JsonNode cloneAdvertisement(@RequestParam String url){
         return advCloneService.cloneThirdPartyAdvertisement(url);
     }
 

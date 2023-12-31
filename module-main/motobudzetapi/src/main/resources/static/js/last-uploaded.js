@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
     getLastUploaded(0);
 
+    prevPageButton.style.userSelect = 'none';
+    nextPageButton.style.userSelect = 'none';
 
     prevPageButton.addEventListener('click', () => {
         if (currentMinIndex > 0) {
@@ -15,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             currentMinIndex -= resultsPerPage;
             currentMaxIndex -= resultsPerPage;
             displayLastUploaded(currentMinIndex, currentMaxIndex);
+            paralaxHover();
         }
     });
 
@@ -29,13 +32,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             displayLastUploaded(currentMinIndex, currentMaxIndex);
+            paralaxHover();
+
         }
     });
 
     function addHoverEffect(buttonElement) {
         buttonElement.addEventListener('mouseover', () => {
             buttonElement.style.textShadow = '0 0 10px moccasin';
-            buttonElement.style.cursor = 'crosshair';
+            buttonElement.style.cursor = 'pointer';
             buttonElement.style.color = 'moccasin';
         });
 
@@ -116,6 +121,7 @@ function getLastUploaded(pageNumber){
         .then(data => {
             advertisements = data;
             displayLastUploaded(currentMinIndex,currentMaxIndex);
+            paralaxHover();
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
@@ -131,7 +137,6 @@ function displayLastUploaded(min,max){
         subContainer.style.textAlign = 'center';
 
         subContainer.addEventListener('mouseout', () => {
-            const computedStyle = getComputedStyle(subContainer);
             subContainer.style.boxShadow = '0 0 20px darkgoldenrod';
         });
 
@@ -139,8 +144,8 @@ function displayLastUploaded(min,max){
             subContainer.style.boxShadow = '0 0 20px moccasin';
         });
 
-        const fadeEffect = document.createElement('div');
-        fadeEffect.classList.add('fade-effect-miniature');
+        // const fadeEffect = document.createElement('div');
+        // fadeEffect.classList.add('fade-effect-miniature');
 
         const titleContainerMiniature = document.createElement('div');
         titleContainerMiniature.classList.add('title-container-miniature');
@@ -155,15 +160,28 @@ function displayLastUploaded(min,max){
 
         const mainPhoto = document.createElement('img');
         mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
-        mainPhoto.style.height = '300px';
+        let photoHeight = mainPhoto.style.maxWidth = '300px';
+        let photoWidth = mainPhoto.style.maxHeight = '200px';
         mainPhoto.alt = 'MainUrlPhoto';
         mainPhoto.id = 'mainUrlPhoto';
 
-        fadeEffect.appendChild(mainPhoto);
-        subContainer.appendChild(fadeEffect);
+        const photoDiv = document.createElement('div');
+        photoDiv.style.display = 'flex';           // Enable flexbox
+        photoDiv.style.justifyContent = 'center';   // Center horizontally
+        photoDiv.style.alignItems = 'center';       // Center vertically
+            // Make sure the div takes up full width of its container
+
+
+        createParalaxMiniatureLastUploaded(mainPhoto, photoDiv,photoHeight,photoWidth);
+        // fadeEffect.appendChild(mainPhoto);
+        // subContainer.appendChild(fadeEffect);
+
+        subContainer.appendChild(photoDiv);
+
+
 
         mainPhoto.addEventListener('mouseover', () => {
-            mainPhoto.style.cursor = 'crosshair';
+            mainPhoto.style.cursor = 'pointer';
         });
 
         mainPhoto.addEventListener('mouseout', () => {
@@ -291,16 +309,23 @@ function displayLastUploaded(min,max){
         infoContainerSecond.appendChild(engineHorsePowerInfo)
 
 
+        infoContainerFirst.style.fontSize = '20px';
+        infoContainerSecond.style.fontSize = '20px';
+
         subContainer.appendChild(infoContainerFirst);
         subContainer.appendChild(infoContainerSecond);
 
+        handleDarkModeInverse(subContainer);
 
         container.appendChild(subContainer);
 
 
 
+
     });
 }
+
+
 
 function clearAdvertisements(container) {
     const advertisementElements = container.getElementsByClassName('sub-container-miniature');

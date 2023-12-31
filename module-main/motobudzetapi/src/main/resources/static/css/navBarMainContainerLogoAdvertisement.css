@@ -108,7 +108,7 @@ header {
 }
 
 .container-main {
-    width: 1500px;
+    width: 1550px;
     margin: 200px auto 0;
 
     /*background-color: black;*/
@@ -117,16 +117,22 @@ header {
     border: 0 solid darkgoldenrod;
     padding: 0 20px 20px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+
     /*opacity: 0.9;*/
     border-radius: 30px;
     box-shadow: 0 0 0 moccasin;
     flex-wrap: wrap;
-    justify-content: center;
     transition: filter 0.5s ease;
     /*animation: fade-in-main 1s ease-out;*/
     animation: fade-in 1s ease-in-out forwards;
     max-width: 100%
 }
+
 
 .container-main .sub-container-big {
     box-shadow: 0 0 40px darkgoldenrod;
@@ -438,4 +444,28 @@ header {
     margin: 200px auto;
     max-width: 100%;
     height: auto;
+}
+#userLogoutButton {
+    display: inline-block;
+    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    text-align: center;
+}
+
+
+#userLogoutButton .logout-text {
+    display: none;
+}
+#userLogoutButton:hover .logout-text {
+    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    display: block;
+}
+#userLogoutButton .username-text {
+    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    display: block;
+}
+#userLogoutButton:hover .username-text {
+    display: none;
+}
+#userLogoutButton:hover .logout-text {
+    display: block !important;
 }

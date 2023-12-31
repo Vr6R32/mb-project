@@ -4,6 +4,7 @@ let sortingBy = "price"; // Set the default sort by parameter to "price" (or any
 let urlSearchParams = null;
 let favouritesArray = [];
 let clickedButton = "";
+let darkModeCheckbox;
 
 document.addEventListener("DOMContentLoaded", function () {
     createSearchFormContainer();
@@ -12,10 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeParameters();
 });
 document.addEventListener('click', function(event) {
+    const cityStateInput = document.getElementById('cityState');
+    const cityStateLabel = document.getElementById('cityStatelabel');
+    const cityInput = document.getElementById('city');
+    const cityLabel = document.getElementById('citylabel');
     const suggestionsList = document.getElementById('suggestionsList');
 
     if (suggestionsList && !suggestionsList.contains(event.target)) {
+        if(cityInput.value === null || cityInput.value === '') {
+            cityLabel.style.color = 'darkgoldenrod';
+        }
         suggestionsList.style.display = 'none';
+        // cityStateInput.value = '';
+        // cityStateLabel.style.color = 'darkgoldenrod';
     }
 });
 
@@ -313,6 +323,8 @@ function createSearchForm(formContainer) {
     searchButton.setAttribute('id', 'searchButton');
     searchButton.type = "submit";
     searchButton.textContent = "Szukaj";
+    searchButton.style.fontSize = "16px";
+    searchButton.style.fontStyle = "bold";
     searchButton.style.backgroundColor = "darkgoldenrod";
     searchButton.style.border = "none";
     searchButton.style.color = "black";
@@ -403,6 +415,7 @@ function executeAdvertisementFilterResultCount() {
         .then(data => {
             let searchButton = document.getElementById('searchButton');
             searchButton.textContent = "Szukaj "+"("+data+")";
+            searchButton.style.fontStyle = 'bold';
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -692,6 +705,8 @@ function getUserFavourites() {
         })
         .catch(error => console.error("Error fetching data:", error));
 }
+
+
 function displayResults(data) {
 
     let mainContainer = document.getElementById('container-main');
@@ -727,7 +742,7 @@ function displayResults(data) {
     }
 
 
-
+    darkModeCheckbox = document.getElementById('darkModeCheckbox');
 
 
     // Display each advertisement result
@@ -735,9 +750,12 @@ function displayResults(data) {
 
         const resultDiv = document.createElement("messageResultDiv");
 
+        resultDiv.className = 'searchResult';
+
+
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
-        resultDiv.style.height = "200px";
+        resultDiv.style.height = "240px";
         resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 1)';
         // resultDiv.style.backgroundColor = "#000000";
         // resultDiv.style.backgroundColor = "#181818";
@@ -749,53 +767,38 @@ function displayResults(data) {
         resultDiv.style.alignItems = "center";
         resultDiv.style.justifyContent = "flex-start";
         resultDiv.style.borderRadius = "30px"; // Add rounded corners
-        resultDiv.style.boxShadow = "0 0 40px darkgoldenrod"; // Add initial box shadow
         resultDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
         resultDiv.style.maxWidth = "100%";
+        resultDiv.style.fontSize = "20px";
         // resultDiv.style.opacity = 0; // Set initial opacity to 0
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
-
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
         resultDiv.onclick = (event) => {
             event.preventDefault(); // To zatrzyma domyślne przewijanie strony
             window.location.href = `/id?advertisementId=${ad.id}`;
         };
 
-        // Add hover effect on mouseover
-        resultDiv.onmouseover = () => {
-            resultDiv.style.boxShadow = "0 0 20px moccasin";
-        };
-
-        // Remove hover effect on mouseout
-        resultDiv.onmouseout = () => {
-            resultDiv.style.boxShadow = "0 0 40px darkgoldenrod";
-        };
+        handleDarkModeInverse(resultDiv);
 
 
         const photoElement = document.createElement("img");
         photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
         photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
+        // photoElement.style.boxShadow =     box-shadow: rgba(255, 255, 255, 0.8) 0 20px 30px -10px !important;
         let maxPhotoWidth = 300;
 
 
 
-
-        // photoElement.style.objectFit = "cover";
-        // photoElement.onload = () => {
-        //     if (photoElement.width > maxPhotoWidth) {
-        //         maxPhotoWidth = photoElement.width;
-        //     }
-        // };
-
-
         const fadeEffect = document.createElement('div');
+        fadeEffect.className = 'search-result-image';
         fadeEffect.classList.add('fade-effect-miniature-search');
         fadeEffect.appendChild(photoElement);
         fadeEffect.style.width = maxPhotoWidth + 'px'
 
+        createParalaxMiniature(photoElement, resultDiv);
 
-        resultDiv.appendChild(fadeEffect);
+        // resultDiv.appendChild(fadeEffect);
 
 
 
@@ -864,6 +867,8 @@ function displayResults(data) {
         conversationDetailsDiv.style.display = 'flex-start';
         conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
         conversationDetailsDiv.style.marginBottom = '30px';
+        conversationDetailsDiv.style.marginLeft = '15px';
+
 
 
         const conversationDetailsMain = document.createElement("conversationDetailsMain");
@@ -898,6 +903,7 @@ function displayResults(data) {
         let engineCapacity = document.createElement('span');
         engineCapacity.style.color = 'darkgoldenrod';
         engineCapacity.textContent = 'CM';
+
         let smallerDigit = document.createElement('span');
         smallerDigit.textContent = '3';
         smallerDigit.style.fontSize = '10px'; // Zmniejszenie rozmiaru czcionki o 20%
@@ -1075,7 +1081,7 @@ function displayResults(data) {
                 advertisementId: ad.id
             };
 
-            if(getUserName()!=='KONTO'){
+            if(getUserName()!=='ZALOGUJ'){
                 fetch('/api/users/favourites', {
                     method: 'POST',
                     headers: {
@@ -1440,7 +1446,7 @@ function createSortButton(sortBy) {
 }
 function executeSearch(formData) {
 
-    if(getUserName()!=='KONTO'){
+    if(getUserName()!=='ZALOGUJ'){
         getUserFavourites();
     }
 
@@ -1471,6 +1477,7 @@ function executeSearch(formData) {
         .then(data => {
             // Display the results and pagination with sorting parameters
             displayResults(data, sortingBy, sortOrder);
+            paralaxHover();
             updatePaginationButtons(data, sortingBy, sortOrder);
             // updateSortButtons(data, sortBy, sortOrder);
         })

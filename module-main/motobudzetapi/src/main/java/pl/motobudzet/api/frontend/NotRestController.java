@@ -69,6 +69,12 @@ public class NotRestController {
         model.addAttribute("loadFunction", "Ulubione");
         return "account";
     }
+    @GetMapping("advertisements")
+    public String advertisements(Model model, Principal principal) {
+        ModelUtils.setButtonsAttributes(model, principal);
+        model.addAttribute("loadFunction", "Ogloszenia");
+        return "account";
+    }
 
     @GetMapping("reset")
     public String resetPassword(Model model, Principal principal) {
@@ -80,5 +86,10 @@ public class NotRestController {
     public String setUserDetails(Model model, Principal principal) {
         ModelUtils.setButtonsAttributes(model, principal);
         return "details";
+    }
+    @GetMapping("stream")
+    public String stream(Model model, Principal principal) {
+        ModelUtils.setButtonsAttributes(model, principal);
+        return "stream";
     }
 }

@@ -6,25 +6,35 @@ let currentPhotoIndex = 0;
 document.addEventListener("DOMContentLoaded", function () {
     extractAdvertisementId();
     fetchAdvertisement();
-    initializeParameters();
 });
 
 function extractAdvertisementId() {
     const urlParams = new URLSearchParams(document.location.search);
     advertisementId = urlParams.get('advertisementId');
 }
-function initializeParameters() {
+
+function setTitleInUrl(data) {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('name', data.name);
+    window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
+    initializeParameters(data);
+}
+
+function initializeParameters(data) {
     let urlParams = new URLSearchParams(window.location.search);
     let editedParam = "edited";
     let createdParam = "created";
+    let loggedUser = getUserName();
 
-
-    if (urlParams.has(createdParam) && urlParams.get(createdParam) === "true") {
+    if (urlParams.has(createdParam) && urlParams.get(createdParam) === "true" && loggedUser === data.user) {
         showSuccessNotification("Twoje ogłoszenie zostało utworzone pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
-    } else if (urlParams.has(editedParam) && urlParams.get(editedParam) === "true")  {
+    } else if (urlParams.has(editedParam) && urlParams.get(editedParam) === "true" && loggedUser=== data.user)  {
         showSuccessNotification("Twoje ogłoszenie zostało zmodyfikowane pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
     }
 }
+
+
+
 function createHeaderTitle(advertisement, container, owner) {
 
     let loggedUser = document.getElementById('username').textContent;
@@ -40,11 +50,12 @@ function createHeaderTitle(advertisement, container, owner) {
     titleContainer.style.maxWidth = '100%';
 
 
-
     const titleDiv = document.createElement('div');
     titleDiv.style.display = 'grid';
     titleDiv.style.gridTemplateColumns = '1fr 2fr 1fr';
     titleDiv.style.backgroundColor = 'transparent'
+    titleDiv.style.maxWidth = '100%';
+    titleDiv.style.width = '100%';
 
     titleContainer.appendChild(titleDiv);
 
@@ -53,10 +64,15 @@ function createHeaderTitle(advertisement, container, owner) {
     titleMidColumn.textContent = advertisement.name;
     titleMidColumn.style.fontSize = '32px';
     titleMidColumn.style.fontWeight = 'bold';
+    titleMidColumn.style.maxWidth = '100%';
+    titleMidColumn.style.width = '100%';
+
 
     const titleRightColumn = document.createElement('h2');
     titleRightColumn.style.gridColumn = '3';
     titleRightColumn.style.justifyContent = 'space-between';
+    titleRightColumn.style.maxWidth = '100%';
+    titleRightColumn.style.width = '100%';
 
     const heartIcon = document.createElement('img');
     heartIcon.setAttribute('id', 'hearticon');
@@ -182,34 +198,6 @@ function createHeaderTitle(advertisement, container, owner) {
     editIcon.addEventListener('click', () => {
         window.location.href = `/advertisement/edit?advertisementId=${advertisementId}`;
     });
-
-    //
-    // let nextArrow = document.getElementById('nextArrow');
-    //
-    // nextArrow.addEventListener('mouseenter', (event) => {
-    //     toolTipNextArrow.style.display = 'block';
-    //     nextArrow.style.cursor = 'pointer';
-    //     setTooltipText(nextArrow, toolTipNextArrow); // Update tooltip text based on the current icon
-    //     document.addEventListener('mousemove', updateTooltipPosition);
-    // });
-    //
-    // nextArrow.addEventListener('mouseleave', () => {
-    //     toolTipNextArrow.style.display = 'none';
-    //     document.removeEventListener('mousemove', updateTooltipPosition);
-    // });
-    //
-    //
-    // const toolTipNextArrow = document.createElement('span');
-    // toolTipNextArrow.textContent = 'Następne zdjęcie';
-    // toolTipNextArrow.className = 'tooltip';
-    // document.body.appendChild(toolTipNextArrow);  // Dodanie podpowiedzi do dokumentu
-    //
-    // const toolTipPreviousArrow = document.createElement('span');
-    // toolTipNextArrow.textContent = 'Poprzednie zdjęcie';
-    // toolTipNextArrow.className = 'tooltip';
-    // document.body.appendChild(toolTipPreviousArrow);  // Dodanie podpowiedzi do dokumentu
-
-
 
     if (loggedUser !== owner) {
         titleRightColumn.appendChild(messageIcon);
@@ -340,7 +328,7 @@ function createMessageBox(messageIcon, loggedUser) {
         }
     });
 
-    if (loggedUser === 'KONTO') {
+    if (loggedUser === 'ZALOGUJ') {
         headerTitle.textContent = 'Musisz się zalogować !';
         dialogBox.appendChild(headerTitle);
     } else {
@@ -444,12 +432,7 @@ function checkConversationId(messageValue) {
             console.error('Błąd:', error);
         });
 }
-function setTitleInUrl(data) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('name', data.name);
-    window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
 
-}
 function fetchAdvertisement() {
     return fetch('/api/advertisements/' + advertisementId)
         .then(response => {
@@ -498,5 +481,4 @@ function nextPhoto(mainPhoto) {
 function changePhoto(index, mainPhoto) {
     mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
 }
-
 

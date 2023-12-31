@@ -17,7 +17,54 @@ document.addEventListener('DOMContentLoaded', (event) => {
             changeZoom(val); // Kontynuuj normalną zmianę skali
         }
     };
+
+    showCookieConsent();
+
 });
+
+
+function showCookieConsent() {
+    // Sprawdź, czy zgoda na cookies została już udzielona
+    if (localStorage.getItem('cookieConsent') === 'true') {
+        return;
+    }
+
+    // Utwórz elementy paska zgody na cookies
+    const consentBar = document.createElement('div');
+    consentBar.id = 'cookieConsentBar';
+    consentBar.style.position = 'fixed';
+    consentBar.style.bottom = '0';
+    consentBar.style.left = '0';
+    consentBar.style.width = '100%';
+    consentBar.style.backgroundColor = 'black';
+    consentBar.style.color = 'white';
+    consentBar.style.textAlign = 'center';
+    consentBar.style.padding = '10px';
+    consentBar.style.zIndex = '1000';
+
+    const consentText = document.createElement('span');
+    consentText.textContent = 'Ta strona używa cookies. ';
+
+    const consentButton = document.createElement('button');
+    consentButton.textContent = 'OK';
+    consentButton.style.marginLeft = '15px';
+    consentButton.style.color = 'black';
+    consentButton.style.backgroundColor = 'white';
+    consentButton.style.border = 'none';
+    consentButton.style.padding = '5px 10px';
+    consentButton.style.cursor = 'pointer';
+
+    // Dodaj funkcjonalność przycisku
+    consentButton.onclick = function() {
+        // Zapisz zgodę w localStorage i ukryj pasek
+        localStorage.setItem('cookieConsent', 'true');
+        consentBar.style.display = 'none';
+    };
+
+    consentBar.appendChild(consentText);
+    consentBar.appendChild(consentButton);
+    document.body.appendChild(consentBar);
+}
 
 // function resetZoom() {
 //     var slider = document.getElementById('zoom-slider');
@@ -103,9 +150,9 @@ function paralaxHover() {
 
         // TODO: Make these names suck less.
         var config = {
-            rotation: 0.05, // Rotation modifier, larger number = less rotation
+            rotation: 0.035, // Rotation modifier, larger number = less rotation
             alpha: 0.2, // Alpha channel modifer
-            shadow: 5 // How much the shadow moves
+            shadow: 10 // How much the shadow moves
         }
 
         var imagesList = document.querySelectorAll('.ph-image');
@@ -152,8 +199,8 @@ function paralaxHover() {
             var angleDeg = angleRad * 180 / Math.PI - 90;
 
             var movement = e.offsetY / bounds.top;
-            var lightAlpha = movement * config.alpha;
-            var shadowMovement = movement * 5;
+            // var lightAlpha = movement * config.alpha;
+            // var shadowMovement = movement * 5;
 
             if (angleDeg <= 0) {
                 angleDeg = angleDeg + 360;
@@ -166,8 +213,9 @@ function paralaxHover() {
 
         function handleMouseLeave(e) {
             this.style.transform = '';
-            imageLighting.style.background = '';
-            imageLighting.style.transform = '';
+
+            // imageLighting.style.background = '';
+            // imageLighting.style.transform = '';
         }
 
     })();
@@ -218,6 +266,40 @@ function applySavedZoom() {
 }
 
 
+function handleDarkModeInverse(resultDiv) {
+    if (localStorage.getItem('darkMode') === 'true') {
+        resultDiv.style.boxShadow = "0 0 20px moccasin";
+    } else {
+        resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
+    }
+
+
+    if (darkModeCheckbox) {
+        darkModeCheckbox.addEventListener('change', function () {
+            if (darkModeCheckbox.checked) {
+                resultDiv.style.boxShadow = "0 0 20px moccasin";
+            } else {
+                resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
+            }
+        })
+    }
+
+    // Add hover effect on mouseover
+    resultDiv.onmouseover = () => {
+        if (localStorage.getItem('darkMode') === 'true') {
+            resultDiv.style.boxShadow = "0 0 20px cyan";
+        } else
+            resultDiv.style.boxShadow = "0 0 20px moccasin";
+    };
+
+    // Remove hover effect on mouseout
+    resultDiv.onmouseout = () => {
+        if (localStorage.getItem('darkMode') === 'true') {
+            resultDiv.style.boxShadow = "0 0 20px moccasin";
+        } else
+            resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
+    };
+}
 
 
 function showSuccessNotification(message) {
@@ -249,44 +331,119 @@ function showSuccessNotification(message) {
 }
 
 
-function createParalaxMiniatures(images,paralaxMinatureDiv) {
+function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
+    // Znajdź najbardziej równomierny podział zdjęć na wiersze
+    let rows = Math.ceil(images.length / 6);
+    let imagesPerRow = Math.ceil(images.length / rows);
 
-    images.forEach(imageUrl => {
+    // Stwórz kontener na wiersze
+    let rowContainers = [];
+    for (let i = 0; i < rows; i++) {
+        let row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.flexWrap = 'wrap'; // Pozwala elementom przechodzić do nowego wiersza
+        row.style.justifyContent = 'center';
+        row.style.alignItems = 'center';
+        parentDiv.appendChild(row);
+        rowContainers.push(row);
+    }
+
+    // Dodaj obrazy do wierszy
+    images.forEach((imageUrl, index) => {
         const figure = document.createElement('figure');
         figure.className = 'ph-image';
-        figure.style.width = '230px';
-        figure.style.height = '180px';
-        figure.style.marginRight = '20px';
+        figure.style.width = '220px'; // Stała szerokość
+        figure.style.height = '170px';
+        figure.style.margin = '10px';
+        figure.style.cursor = 'pointer';
+        figure.style.userSelect = 'none';
 
         const img = document.createElement('img');
         img.src = '/api/resources/advertisementPhoto/' + imageUrl;
-
-
-
         figure.appendChild(img);
-        paralaxMinatureDiv.appendChild(figure);
 
-        paralaxHover();
+        // Dodanie event listenera
+        figure.addEventListener('click', function() {
+            if(index!==currentPhotoIndex){
+                currentPhotoIndex = index;
+                changePhoto(currentPhotoIndex, mainPhoto);
+            }
+        });
+
+        // Dodaj figure do odpowiedniego wiersza
+        let rowIndex = Math.floor(index / imagesPerRow);
+        rowContainers[rowIndex].appendChild(figure);
     });
+}
+
+
+
+function createParalaxMiniatureLastUploaded(image,parrentDiv,height,width) {
+
+    const figure = document.createElement('figure');
+    figure.className = 'ph-image';
+    figure.style.width = height;
+    figure.style.height = width;
+    figure.style.marginLeft = '20px';
+    figure.style.marginRight = '20px';
+    figure.appendChild(image);
+    parrentDiv.appendChild(figure);
+
+}
+
+function createParalaxMiniatureThumbnail(image,parrentDiv,height,width) {
+
+    const figure = document.createElement('figure');
+    figure.className = 'ph-image';
+    figure.style.width = height;
+    figure.style.height = width;
+    figure.appendChild(image);
+    parrentDiv.appendChild(figure);
+
+}
+function createParalaxMiniature(image,parrentDiv) {
+
+        const figure = document.createElement('figure');
+        figure.className = 'ph-image';
+        figure.style.width = '350px';
+        figure.style.height = '200px';
+        figure.style.marginLeft = '20px';
+        figure.appendChild(image);
+        parrentDiv.appendChild(figure);
+
 }
 
 function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
 
-
-    const resultDiv = document.createElement("advertisementResultDiv");
+    const resultDiv = document.createElement("div");
     resultDiv.id = "advertisementResultDiv";
-    resultDiv.style.Width = "100%";
+    resultDiv.style.width = "100%";
+    resultDiv.style.maxWidth = "100%";
+    resultDiv.style.boxSizing = "border-box";
+    // resultDiv.style.flexShrink = '1';
 
-    const imageDiv = document.createElement('mainImageDiv');
+
+
+    const imageDiv = document.createElement('div');
+
+    imageDiv.style.position = 'relative'; // This makes it a positioned ancestor
+    imageDiv.style.display = 'flex'; // Use flex for centering the image
+    imageDiv.style.alignItems = 'center'; // Vertically align items in the center
+    imageDiv.style.justifyContent = 'center'; // Horizontally
+
     imageDiv.style.width = '100%';
     imageDiv.style.maxWidth = '100%';
+    imageDiv.style.maxHeight = '100%';
     imageDiv.style.minHeight = '675px';
-    imageDiv.style.justifyContent = 'space-between';
+    imageDiv.style.justifyContent = 'center';
     imageDiv.style.display = 'flex';
     imageDiv.style.alignItems = 'center';
     imageDiv.style.marginTop = '15px';
     imageDiv.style.marginBottom = '15px';
+    imageDiv.style.flexBasis = 'auto';
+    // imageDiv.style.boxSizing = "border-box";
+    // imageDiv.style.paddingRight = '25px';
 
 
     const mainPhoto = document.createElement('img');
@@ -297,6 +454,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     mainPhoto.id = 'mainUrlPhoto';
     mainPhoto.style.backgroundColor = 'transparent';
     mainPhoto.style.borderRadius = '20px';
+    // mainPhoto.style.flex = '1 1 auto'; // This allows the image to be flexible within the container
 
 
 
@@ -304,21 +462,49 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     previousArrow.setAttribute('id', 'previousArrow');
     previousArrow.textContent = '←';
     previousArrow.style.cursor = 'pointer';
-    previousArrow.style.fontSize = '72px';
     previousArrow.style.color = 'darkgoldenrod';
+    previousArrow.style.boxSizing = "border-box";
+    // previousArrow.style.flexShrink = '1';
+    previousArrow.style.marginRight = '1%';
+    previousArrow.style.fontSize = '6vw'; // or use '4em'
+    // previousArrow.style.flex = '0 1 auto'; // Flex settings for responsiveness
     previousArrow.addEventListener('click', () => previousPhoto(mainPhoto));
+    previousArrow.style.userSelect = 'none'; // Zapobieganie zaznaczaniu tekstu
+
+
+
+    previousArrow.style.position = 'absolute'; // Position it absolutely
+    previousArrow.style.left = '0'; // Align it to the left edge
+    previousArrow.style.top = '50%'; // Center it vertically
+    previousArrow.style.transform = 'translateY(-50%)'; // Offset by half its height to truly center
+
 
     const nextArrow = document.createElement('span');
     nextArrow.setAttribute('id', 'nextArrow');
     nextArrow.textContent = '→';
     nextArrow.style.cursor = 'pointer';
-    nextArrow.style.fontSize = '72px';
     nextArrow.style.color = 'darkgoldenrod';
+    nextArrow.style.marginLeft = '1%';
+    nextArrow.style.boxSizing = "border-box";
+    // nextArrow.style.flexShrink = '1';
+    nextArrow.style.fontSize = '6vw'; // or use '4em'
+    // nextArrow.style.flex = '0 1 auto'; // Flex settings for responsiveness
+
     nextArrow.addEventListener('click', () => nextPhoto(mainPhoto));
+    nextArrow.style.userSelect = 'none'; // Zapobieganie zaznaczaniu tekstu
+
+
+
+    nextArrow.style.position = 'absolute'; // Position it absolutely
+    nextArrow.style.right = '0'; // Align it to the right edge
+    nextArrow.style.top = '50%'; // Center it vertically
+    nextArrow.style.transform = 'translateY(-50%)'; // Offset by hal
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-big');
     fadeEffect.style.backgroundColor = 'transparent';
+
+    fadeEffect.style.maxWidth = '100%';
 
 
     // fadeEffect.appendChild(mainPhoto);
@@ -412,22 +598,29 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     containers.forEach(container => {
         container.style.width = maxTextWidth + 'px';
-        // container.style.maxWidth = "100%";
-        // container.style.boxSizing = "border-box";
-        // container.style.flexBasis = "auto";
+        container.style.maxWidth = "100%";
+        container.style.boxSizing = "border-box";
+        container.style.flexBasis = "auto";
         advertisementDetails.appendChild(container);
     });
 
-    advertisementDetailsDiv.appendChild(advertisementDetailsMain);
+
 
     advertisementDetailsMain.appendChild(advertisementDetailsHeader);
     advertisementDetailsMain.appendChild(advertisementDetailsOwner);
     advertisementDetailsMain.appendChild(advertisementDetails);
 
+    advertisementDetailsDiv.appendChild(advertisementDetailsMain);
+
     let paralaxMinatureDiv = document.createElement('div');
     paralaxMinatureDiv.style.display = 'flex';
-    paralaxMinatureDiv.style.marginTop = '20px';
-    paralaxMinatureDiv.style.marginBottom = '20px';
+    paralaxMinatureDiv.style.justifyContent = 'center'; // Wyśrodkowanie w poziomie
+    paralaxMinatureDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    paralaxMinatureDiv.style.flexWrap = 'wrap'; // Pozwala elementom przechodzić do nowego wiersza
+    paralaxMinatureDiv.style.marginTop = '40px';
+    paralaxMinatureDiv.style.marginBottom = '40px';
+    paralaxMinatureDiv.style.maxWidth = '100%';
+    paralaxMinatureDiv.style.width = '100%';
 
 
     resultDiv.appendChild(paralaxMinatureDiv);
@@ -443,7 +636,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     let descContainer = document.createElement('div');
     descContainer.className = "ql-editor";
-    descContainer.style.width = '1460px';
+    descContainer.style.width = '100%';
     descContainer.style.maxWidth = '100%';
     descContainer.style.borderRadius = '20px';
     descContainer.style.margin = '0 auto';
@@ -455,7 +648,9 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     resultDiv.appendChild(descContainer);
 
-    createParalaxMiniatures(advertisement.urlList,paralaxMinatureDiv);
+    createParalaxMiniaturesGallery(advertisement.urlList,paralaxMinatureDiv,mainPhoto);
+
+    paralaxHover();
 
     return resultDiv;
 }
@@ -484,9 +679,13 @@ function createAdvertisementIndexDetailsContainer(iconPath, altText, value) {
 
     return container;
 }
-function getUserName(){
-    let userName = document.getElementById('username');
-    return userName.textContent;
+function getUserName() {
+    let userNameElement = document.getElementById('username');
+    if (userNameElement) {
+        return userNameElement.textContent;
+    } else {
+        return null; // or any default value you want to return when not logged in
+    }
 }
 function createDialogBox(message){
     if(!document.getElementById('overlayId')){
@@ -541,6 +740,7 @@ function createDialogBox(message){
 function updateCitySuggestions(suggestions) {
     const cityInput = document.getElementById('city');
     const cityStateInput = document.getElementById('cityState');
+    const cityStateLabel = document.getElementById('cityStatelabel');
     const suggestionsList = document.getElementById('suggestionsList');
 
     // Usuń wszystkie istniejące propozycje z listy
@@ -556,6 +756,8 @@ function updateCitySuggestions(suggestions) {
             // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
             cityInput.value = suggestion.name;
             cityStateInput.value = suggestion.cityStateName;
+            cityStateInput.style.color = 'white';
+            cityStateLabel.style.color = 'white';
             suggestionsList.innerHTML = '';
         });
         suggestionsList.appendChild(suggestionItem);
@@ -787,7 +989,7 @@ function resetFileDropArea() {
 function advertisementFormDataExtract(isEditMode) {
     quill.format(0, quill.getLength(), 'color', '#fff');
     descriptionContent = quill.container.firstChild.innerHTML;
-
+        // TODO naprawic main photo
     let mainPhotoUrl;
     if (!isEditMode && selectedFiles && selectedFiles.length > 0) {
         mainPhotoUrl = getValue('name') + '-' + selectedFiles[0].name;

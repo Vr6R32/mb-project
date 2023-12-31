@@ -7021,7 +7021,7 @@
                     };
                     LinkedList.prototype.iterator = function (curNode) {
                         if (curNode === void 0) { curNode = this.head; }
-                        // TODO use yield when we can
+                        // KONTOTODO use yield when we can
                         return function () {
                             var ret = curNode;
                             if (curNode != null)

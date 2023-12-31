@@ -528,13 +528,9 @@ function uploadFiles(advertisementId) {
             if(response.ok){
                 console.log('Odpowiedź serwera:', response);
                 resetFileDropArea();
-                // displayResult(data);
-                // Odczytaj nagłówek "Location" z odpowiedzi serwera
                 const redirectURL = response.headers.get('Location');
                 const parameter = response.headers.get('edited');
-                console.log(redirectURL);
                 if (redirectURL) {
-                    // Wykonaj przekierowanie na określony adres URL
                     window.location.href = redirectURL + '&edited='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
@@ -544,7 +540,6 @@ function uploadFiles(advertisementId) {
         .catch(error => {
             console.error(error.message);
             resetFileDropArea();
-            // displayResult('Błąd podczas przesyłania pliku.');
         });
 }
 function handleDeleteZoneDragOver(e) {
@@ -637,6 +632,8 @@ async function showThumbnails(files) {
     const thumbnailsContainer = document.getElementById('thumbnails');
     thumbnailsContainer.innerHTML = '';
 
+    thumbnailsContainer.style.marginTop = '100px';
+
     const maxThumbnails = 12;
     const numThumbnailsToShow = Math.min(files.length, maxThumbnails);
 
@@ -648,12 +645,15 @@ async function showThumbnails(files) {
         const fileObj = files[i];
         const thumbnailElement = document.createElement('img');
 
+
         thumbnailElement.className = 'thumbnail';
         thumbnailElement.setAttribute('draggable', true);
         thumbnailElement.setAttribute('data-index', i);
         thumbnailElement.addEventListener('dragstart', handleDragStart);
         thumbnailElement.addEventListener('dragover', handleDragOver);
         thumbnailElement.addEventListener('drop', handleDrop);
+
+        // createParalaxMiniatureThumbnail(thumbnailElement, thumbnailsContainer);
 
         thumbnailsContainer.appendChild(thumbnailElement);
 
@@ -683,6 +683,7 @@ async function showThumbnails(files) {
             console.error("Error setting thumbnail source:", error);
         }
     }
+    // paralaxHover();
 }
 function resetFileDropAreamy() {
     fileDropArea.innerHTML = "Przeciągnij plik tutaj lub kliknij, aby wybrać plik do przesłania.\n Maksymalna ilość zdjęć to 12.";

@@ -573,5 +573,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
 
 
     container.appendChild(resultDiv);
+    handleDarkModeInverse(resultDiv);
     return resultDiv;
 }
