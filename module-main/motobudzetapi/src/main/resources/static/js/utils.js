@@ -1,5 +1,5 @@
 // window.addEventListener("load", getDeviceScreenInfo);
-document.addEventListener("DOMContentLoaded", preloadLogo);
+// document.addEventListener("DOMContentLoaded", preloadLogo);
 document.addEventListener("DOMContentLoaded", applySavedZoom);
 window.addEventListener('scroll', hideNavBar);
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -72,25 +72,25 @@ function showCookieConsent() {
 //     changeZoom(slider.value);
 // }
 
-function preloadLogo() {
-    const xhr = new XMLHttpRequest();
-    const url = "/api/resources/logo";
-    xhr.open("GET", url, true);
-    xhr.responseType = "arraybuffer";
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            const arrayBufferView = new Uint8Array(xhr.response);
-            const blob = new Blob([arrayBufferView], { type: "image/png" });
-            const imageUrl = URL.createObjectURL(blob);
-            const logoImageElement = document.getElementById("logo");
-            if (logoImageElement) {
-                logoImageElement.src = imageUrl;
-                logoImageElement.alt = "Logo";
-            }
-        }
-    };
-    xhr.send();
-}
+// function preloadLogo() {
+//     const xhr = new XMLHttpRequest();
+//     const url = "/api/static/logo";
+//     xhr.open("GET", url, true);
+//     xhr.responseType = "arraybuffer";
+//     xhr.onload = function() {
+//         if (xhr.status >= 200 && xhr.status < 300) {
+//             const arrayBufferView = new Uint8Array(xhr.response);
+//             const blob = new Blob([arrayBufferView], { type: "image/png" });
+//             const imageUrl = URL.createObjectURL(blob);
+//             const logoImageElement = document.getElementById("logo");
+//             if (logoImageElement) {
+//                 logoImageElement.src = imageUrl;
+//                 logoImageElement.alt = "Logo";
+//             }
+//         }
+//     };
+//     xhr.send();
+// }
 function hideNavBar () {
     const header = document.querySelector('header');
     if (window.pageYOffset > 300) {
@@ -266,7 +266,7 @@ function applySavedZoom() {
 }
 
 
-function handleDarkModeInverse(resultDiv) {
+function handleDarkModeInverse(resultDiv,iconWrapper) {
     if (localStorage.getItem('darkMode') === 'true') {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
     } else {
@@ -288,16 +288,20 @@ function handleDarkModeInverse(resultDiv) {
     resultDiv.onmouseover = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px cyan";
+            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
         } else
             resultDiv.style.boxShadow = "0 0 20px moccasin";
+            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
     };
 
     // Remove hover effect on mouseout
     resultDiv.onmouseout = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px moccasin";
+            iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
         } else
             resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
+            iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
     };
 }
 
@@ -313,7 +317,7 @@ function showSuccessNotification(message) {
         text.textContent = message;
 
         const successIcon = document.createElement('img');
-        successIcon.src = '/api/resources/successIcon';
+        successIcon.src = '/api/static/successIcon';
         successIcon.alt = 'successIcon';
 
         navbar.appendChild(successIcon);
@@ -359,7 +363,7 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
         figure.style.userSelect = 'none';
 
         const img = document.createElement('img');
-        img.src = '/api/resources/advertisementPhoto/' + imageUrl;
+        img.src = '/api/static/photo/' + imageUrl;
         figure.appendChild(img);
 
         // Dodanie event listenera
@@ -448,7 +452,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     const mainPhoto = document.createElement('img');
     mainPhoto.className = 'abc';
-    mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[0];
+    mainPhoto.src = '/api/static/photo/' + advertisement.urlList[0];
     mainPhoto.style.maxHeight = '675px';
     mainPhoto.alt = 'MainUrlPhoto';
     mainPhoto.id = 'mainUrlPhoto';
@@ -667,7 +671,7 @@ function createAdvertisementIndexDetailsContainer(iconPath, altText, value) {
     container.style.color = 'darkgoldenrod';
 
     const icon = document.createElement('img');
-    icon.src = `/api/resources/${iconPath}`;
+    icon.src = `/api/static/${iconPath}`;
     icon.alt = altText;
     icon.style.marginBottom = '2px';
 
@@ -897,17 +901,13 @@ function fetchSpecifications() {
 function handleResponse(response) {
     const errorMessagesElement = document.getElementById('errorMessages');
     errorMessagesElement.innerHTML = ''; // Wyczyść komunikaty błędów
-
-    if (!response.ok) {
         if (response.status === 400) {
             return response.text().then(errorMessage => {
-                throw new Error(errorMessage);
+                alert(errorMessage);
             });
         } else {
             throw new Error('Wystąpił błąd podczas przetwarzania formularza.');
         }
-    }
-    return response.headers.get('advertisementId');
 }
 function handleError(error) {
     console.error(error);
@@ -986,51 +986,56 @@ function resetFileDropArea() {
     fileDropArea.innerHTML = "Możesz zmienić kolejność zdjęć za pomocą myszki.\n Pierwsze zdjęcie będzie główną miniaturką";
 }
 
-function advertisementFormDataExtract(isEditMode) {
-    quill.format(0, quill.getLength(), 'color', '#fff');
-    descriptionContent = quill.container.firstChild.innerHTML;
-        // TODO naprawic main photo
+function advertisementFormDataExtract() {
+    const formData = new FormData();
+
+    // Założenie, że 'getValue' to funkcja pobierająca wartości z pól formularza
+    // np. document.getElementById(id).value
+
+    // Dodawanie wartości tekstowych do obiektu FormData
+    formData.append('name', getValue('name'));
+    formData.append('brand', getValue('brand'));
+    formData.append('model', getValue('model'));
+    formData.append('fuelType', getValue('fuelType'));
+    formData.append('driveType', getValue('driveType'));
+    formData.append('engineType', getValue('engineType'));
+    formData.append('transmissionType', getValue('transmissionType'));
+    formData.append('mileage', getValue('mileage'));
+    formData.append('mileageUnit', getValue('mileageUnit'));
+    formData.append('price', getValue('price'));
+    formData.append('priceUnit', getValue('priceUnit'));
+    formData.append('engineCapacity', getValue('engineCapacity'));
+    formData.append('engineHorsePower', getValue('engineHorsePower'));
+    formData.append('productionDate', getValue('productionDate'));
+    formData.append('firstRegistrationDate', getValue('firstRegistrationDate'));
+    formData.append('city', getValue('city'));
+    formData.append('cityState', getValue('cityState'));
+
+    const descriptionContent = quill.container.firstChild.innerHTML;
+    formData.append('description', descriptionContent);
+
     let mainPhotoUrl;
-    if (!isEditMode && selectedFiles && selectedFiles.length > 0) {
+    if (selectedFiles && selectedFiles.length > 0) {
         mainPhotoUrl = getValue('name') + '-' + selectedFiles[0].name;
-    } else {
-        let nameValue = getValue('name');
-        if (selectedFiles[0].name.indexOf(nameValue) === -1) {
-            mainPhotoUrl = nameValue + '-' + selectedFiles[0].name;
-        } else {
-            mainPhotoUrl = selectedFiles[0].name;
-        }
+        formData.append('mainPhotoUrl', mainPhotoUrl);
     }
 
+    selectedFiles.forEach((file) => {
+        if (file.blob instanceof Blob) {
+            formData.append('files', file.blob , file.name);
+        } else {
+            formData.append('files',file);
+        }
+    });
 
-    return {
-        name: getValue('name'),
-        description: descriptionContent,
-        brand: getValue('brand'),
-        model: getValue('model'),
-        fuelType: getValue('fuelType'),
-        driveType: getValue('driveType'),
-        engineType: getValue('engineType'),
-        transmissionType: getValue('transmissionType'),
-        mileage: getValue('mileage'),
-        mileageUnit: getValue('mileageUnit'),
-        price: getValue('price'),
-        priceUnit: getValue('priceUnit'),
-        engineCapacity: getValue('engineCapacity'),
-        engineHorsePower: getValue('engineHorsePower'),
-        productionDate: getValue('productionDate'),
-        firstRegistrationDate: getValue('firstRegistrationDate'),
-        city: getValue('city'),
-        cityState: getValue('cityState'),
-        mainPhotoUrl: mainPhotoUrl
-    };
+    return formData;
 }
 
 function createDropDeleteZone(){
     if(document.getElementById('deleteZone')===null){
 
         const trashIcon = document.createElement('img');
-        trashIcon.src = `/api/resources/trashClosed`;
+        trashIcon.src = `/api/static/trashClosed`;
         trashIcon.alt = 'trashIcon';
 
 
@@ -1054,20 +1059,20 @@ function createDropDeleteZone(){
         deleteZone.appendChild(trashIcon);
 
         deleteZone.addEventListener('mouseover', function() {
-            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
+            trashIcon.src = '/api/static/trashOpen'; // Switch to open trash icon
         });
         deleteZone.addEventListener('mouseout', function() {
-            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
+            trashIcon.src = '/api/static/trashClosed'; // Switch back to closed trash icon
         });
 
         deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
         deleteZone.addEventListener('drop', handleDeleteZoneDrop);
 
         deleteZone.addEventListener('dragenter', function() {
-            trashIcon.src = '/api/resources/trashOpen'; // Switch to open trash icon
+            trashIcon.src = '/api/static/trashOpen'; // Switch to open trash icon
         });
         deleteZone.addEventListener('dragleave', function() {
-            trashIcon.src = '/api/resources/trashClosed'; // Switch back to closed trash icon
+            trashIcon.src = '/api/static/trashClosed'; // Switch back to closed trash icon
         });
 
         let thumbnailzone = document.getElementById('half-container-big2');
@@ -1164,3 +1169,20 @@ function fetchModels(brand) {
         modelSelect.innerHTML = '<option value="">Wybierz model</option>';
     }
 }
+
+function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.classList.add('snowflake');
+    snowflake.style.left = Math.random() * window.innerWidth + 'px';
+    snowflake.style.animationDuration = Math.random() * 3 + 5 + 's'; // between 5 - 8 seconds
+    snowflake.style.opacity = Math.random();
+    snowflake.style.fontSize = Math.random() * 20 + 10 + 'px'; // większe rozmiary
+
+    document.getElementById('snowflakeContainer').appendChild(snowflake);
+
+    setTimeout(() => {
+        snowflake.remove();
+    }, 8000); // Zwiększony czas do 8 sekund
+}
+
+setInterval(createSnowflake, 300);

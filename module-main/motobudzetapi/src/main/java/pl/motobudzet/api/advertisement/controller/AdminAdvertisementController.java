@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.service.AdminAdvertisementService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(value = "api/advertisements")
 public class AdminAdvertisementController {
@@ -22,7 +24,7 @@ public class AdminAdvertisementController {
     }
 
     @PostMapping("verify/{id}")
-    public String verifyAndEnableAdvertisement(@PathVariable String id) {
+    public String verifyAndEnableAdvertisement(@PathVariable UUID id) {
         return adminAdvertisementService.verifyAndEnableAdvertisement(id);
     }
 

@@ -1,0 +1,25 @@
+
+.snowflake {
+    position: fixed;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    width: 10px;
+    height: 10px;
+}
+@keyframes fall {
+    0% { top: -10px; }
+    100% { top: 100vh; }
+}
+@keyframes sway {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(20px); }
+    100% { transform: translateX(-20px); }
+}
+
+.snowflake {
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation: fall 8s linear infinite, sway 3s ease-in-out infinite alternate;
+
+}

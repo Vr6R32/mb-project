@@ -47,7 +47,7 @@ function createResultDiv(conversation,resultContainerRight) {
 
 
     const photoElement = document.createElement("img");
-    photoElement.src = `/api/resources/advertisementPhoto/${conversation.advertisement.mainPhotoUrl}`;
+    photoElement.src = `/api/static/photo/${conversation.advertisement.mainPhotoUrl}`;
     photoElement.style.height = "150px";
     photoElement.style.width = "100px";
     photoElement.style.objectFit = "cover";
@@ -216,7 +216,7 @@ function createInfoContainer(iconPath, altText, value) {
     container.style.color = 'white';
 
     const icon = document.createElement('img');
-    icon.src = `/api/resources/${iconPath}`;
+    icon.src = `/api/static/${iconPath}`;
     icon.alt = altText;
     icon.style.marginBottom = '2px';
 

@@ -18,13 +18,13 @@ public class AdvertisementFilteringController {
     }
 
     @GetMapping("/search")
-    public Page<AdvertisementDTO> findAllPublicWithFilters(
+    public Page<AdvertisementDTO> getAdvertisementsByFilter(
             @ModelAttribute AdvertisementFilterRequest request,
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false, defaultValue = "price") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") String sortOrder
     ) {
-        return advertisementFilteringService.findAllPublicWithFilters(request, pageNumber, sortBy, sortOrder);
+        return advertisementFilteringService.getFilteredAdvertisements(request, pageNumber, sortBy, sortOrder);
 
     }
     @GetMapping("/count")

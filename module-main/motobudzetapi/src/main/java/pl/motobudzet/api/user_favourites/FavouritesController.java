@@ -21,27 +21,14 @@ public class FavouritesController {
         return favouritesService.manageUserFavourite(userRequest, principal.getName());
 
     }
-//    @GetMapping
-//    public ResponseEntity<String> checkIsFavourite(@RequestBody FavouriteRequest userRequest,
-//                                                      Principal principal){
-//        String response = String.valueOf(favouritesService.checkIsFavourite(userRequest, principal.getName()));
-//        System.out.println(response);
-//        return ResponseEntity.ok(response);
-//    }
     @GetMapping
     public ResponseEntity<String> checkIsFavourite(@RequestParam String userName,
                                                    @RequestParam String advertisementId,
                                                    Principal principal){
         String response = String.valueOf(favouritesService.checkIsFavourite(userName,advertisementId, principal.getName()));
-        System.out.println(response);
         return ResponseEntity.ok(response);
     }
-//    @GetMapping("{loggedUser}")
-//    public ResponseEntity<String> getFavourites(@PathVariable String loggedUser,
-//                                                Principal principal) {
-//        int allFavourites = favouritesService.getAllFavourites(loggedUser, principal.getName());
-//        return ResponseEntity.ok(String.valueOf(allFavourites));
-//    }
+
     @GetMapping("{loggedUser}")
     public List<UUID> getFavouritesIds(@PathVariable String loggedUser,
                                        Principal principal) {

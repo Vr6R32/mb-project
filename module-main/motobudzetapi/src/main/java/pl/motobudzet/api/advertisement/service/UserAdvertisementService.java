@@ -12,16 +12,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.advertisement.dto.AdvertisementCreateRequest;
+import org.springframework.web.multipart.MultipartFile;
+import pl.motobudzet.api.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.emailSender.SpringMailSenderService;
+import pl.motobudzet.api.fileManager.FileService;
 import pl.motobudzet.api.locationCity.CityService;
-import pl.motobudzet.api.locationState.CityStateService;
-import pl.motobudzet.api.user.entity.AppUser;
-import pl.motobudzet.api.user.service.AppUserCustomService;
+import pl.motobudzet.api.user_account.entity.AppUser;
+import pl.motobudzet.api.user_account.service.AppUserCustomService;
+import pl.motobudzet.api.user_account.service.UserDetailsService;
 import pl.motobudzet.api.vehicleBrand.BrandService;
 import pl.motobudzet.api.vehicleModel.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
@@ -29,6 +32,8 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.getPage;
 
 
 @Service
@@ -38,21 +43,22 @@ public class UserAdvertisementService {
 
     public static final int PAGE_SIZE = 10;
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
+
     private final AdvertisementRepository advertisementRepository;
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
     private final AppUserCustomService userCustomService;
+    private final UserDetailsService userDetailsService;
+    private final SpringMailSenderService mailSenderService;
     private final CityService cityService;
     private final EntityManager entityManager;
+    private final FileService fileService;
 
-    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(String username, String loggedUser, List<String> uuidStringList) {
-        if (username.equals(loggedUser)) {
+    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(List<String> uuidStringList) {
             List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
             return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()
                     .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
-        }
-        return Collections.emptyList();
     }
 
     public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
@@ -70,7 +76,6 @@ public class UserAdvertisementService {
                         criteriaBuilder.isFalse(root.get("isDeleted"))
                 );
 
-
         PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
@@ -87,7 +92,8 @@ public class UserAdvertisementService {
                 .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).collect(Collectors.toList());
     }
 
-    public ResponseEntity<String> createNewAdvertisement(AdvertisementCreateRequest request, String user) {
+    @Transactional
+    public ResponseEntity<String> createNewAdvertisement(AdvertisementRequest request, String user, List<MultipartFile> files) {
 
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}",user);
 
@@ -95,7 +101,7 @@ public class UserAdvertisementService {
         Advertisement advertisement = Advertisement.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .model(modelService.getModelByBrand(request.getModel(),request.getBrand()))
+                .model(modelService.getModelByBrand(request.getModel(), request.getBrand()))
                 .brand(brandService.getBrand(request.getBrand()))
                 .fuelType(specificationService.getFuelType(request.getFuelType()))
                 .driveType(specificationService.getDriveType(request.getDriveType()))
@@ -109,22 +115,26 @@ public class UserAdvertisementService {
                 .engineHorsePower(request.getEngineHorsePower())
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
-                .city(cityService.getCityByNameAndState(request.getCity(),request.getCityState()))
+                .city(cityService.getCityByNameAndState(request.getCity(), request.getCityState()))
                 .user(currentUser)
+                .imageUrls(new ArrayList<>())
                 .isVerified(false)
                 .isActive(false)
                 .isDeleted(false)
                 .mainPhotoUrl(request.getMainPhotoUrl())
                 .build();
 
-        insertAdvertisementIntoUser(advertisement, currentUser);
-        advertisementRepository.saveAndFlush(advertisement);
-        String id = advertisement.getId().toString();
+        assignAdvertisementToUser(advertisement, currentUser);
 
-        return ResponseEntity.ok().header("advertisementId", id).body("inserted !");
+
+        UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
+        fileService.verifySortAndSaveImages(advertisementId, files);
+        String redirectUrl = "/advertisement?id=" + advertisement.getId();
+        sendEmailNotificationToManagement(advertisementId);
+        return ResponseEntity.ok().header("location", redirectUrl).header("created","true").header("edited","true").body("inserted !");
     }
 
-    private void insertAdvertisementIntoUser(Advertisement advertisement, AppUser user) {
+    private void assignAdvertisementToUser(Advertisement advertisement, AppUser user) {
         if (user.getAdvertisements() == null) {
             user.setAdvertisements(Set.of(advertisement));
         } else {
@@ -134,13 +144,12 @@ public class UserAdvertisementService {
         }
     }
 
-    public ResponseEntity<String> editExistingAdvertisement(String advertisementId, AdvertisementCreateRequest request, String loggedUser) {
-
+    public ResponseEntity<String> editExistingAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
 
         Advertisement advertisement = getAdvertisement(advertisementId);
 
-        if (advertisement.getUser().getUsername().equals(loggedUser)) {
 
+        if (advertisement.getUser().getUsername().equals(loggedUser)) {
             advertisement.setName(request.getName());
             advertisement.setDescription(request.getDescription());
             advertisement.setModel(modelService.getModelByBrand(request.getModel(),request.getBrand()));
@@ -158,16 +167,25 @@ public class UserAdvertisementService {
             advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
             advertisement.setProductionDate(request.getProductionDate());
             advertisement.setCity(cityService.getCityByNameAndState(request.getCity(),request.getCityState()));
-            advertisement.setMainPhotoUrl(request.getMainPhotoUrl());
             advertisement.setVerified(false);
 
+
+            String mainPhotoUrl = fileService.verifySortAndSaveImages(advertisementId, files);
+
+            advertisement.setMainPhotoUrl(mainPhotoUrl);
             advertisementRepository.save(advertisement);
 
+            String redirectUrl = "/advertisement?id=" + advertisement.getId();
 
-            String id = advertisement.getId().toString();
-            return ResponseEntity.ok().header("advertisementId", id).body("inserted !");
+            sendEmailNotificationToManagement(advertisement.getId());
+            return ResponseEntity.ok().header("location", redirectUrl).header("created","true").header("edited","true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
+    }
+
+    private void sendEmailNotificationToManagement(UUID id) {
+        List<String> emailList = userDetailsService.findManagementEmails();
+        mailSenderService.sendEmailNotificationToManagement(emailList,id);
     }
 
     public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
@@ -208,16 +226,11 @@ public class UserAdvertisementService {
         return builder;
     }
 
-    public Advertisement getAdvertisement(String advertisementId) {
-        return advertisementRepository.findByAjdi(UUID.fromString(advertisementId)).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
+    public Advertisement getAdvertisement(UUID advertisementId) {
+        return advertisementRepository.findByAjdi(advertisementId).orElseThrow(() -> new InvalidParameterException("wrong advertisement"));
     }
 
-    public int getPage(Integer pageNumber) {
-        if (pageNumber == null) {
-            pageNumber = 0;
-        }
-        return Math.max(pageNumber, 0);
-    }
+
 
     public List<AdvertisementDTO> getAllUserAdvertisements(String username, String loggedUser) {
         if (username.equals(loggedUser)) {
@@ -226,14 +239,6 @@ public class UserAdvertisementService {
                     .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
         }
         return Collections.emptyList();
-    }
-
-    public void saveAdvertisement(Advertisement advertisement) {
-        advertisementRepository.save(advertisement);
-    }
-
-    public int insertPhotoToAdvertisement(UUID id, String fileName) {
-        return advertisementRepository.insertNewPhoto(id, fileName);
     }
 
     @Modifying

@@ -8,9 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchAdvertisement();
 });
 
+
 function extractAdvertisementId() {
     const urlParams = new URLSearchParams(document.location.search);
-    advertisementId = urlParams.get('advertisementId');
+    advertisementId = urlParams.get('id');
 }
 
 function setTitleInUrl(data) {
@@ -37,7 +38,7 @@ function initializeParameters(data) {
 
 function createHeaderTitle(advertisement, container, owner) {
 
-    let loggedUser = document.getElementById('username').textContent;
+    let loggedUser = getUserName();
 
 
     const titleContainer = document.createElement('div');
@@ -93,10 +94,10 @@ function createHeaderTitle(advertisement, container, owner) {
             .then(response => {
                 if (response.ok) {
                     if (heartIcon.src.endsWith('heartEmpty')) {
-                        heartIcon.src = '/api/resources/heartFull';
+                        heartIcon.src = '/api/static/heartFull';
                         toolTipFavourite.textContent = 'Usuń z ulubionych';
                     } else {
-                        heartIcon.src = '/api/resources/heartEmpty';
+                        heartIcon.src = '/api/static/heartEmpty';
                         toolTipFavourite.textContent = 'Dodaj do ulubionych';
                     }
                 } else {
@@ -110,7 +111,7 @@ function createHeaderTitle(advertisement, container, owner) {
 
     const messageIcon = document.createElement('img');
     messageIcon.setAttribute('id', 'msgicon');
-    messageIcon.src = '/api/resources/messageClosed';
+    messageIcon.src = '/api/static/messageClosed';
     messageIcon.alt = 'MessageIcon';
     messageIcon.style.marginBottom = '3px';
     messageIcon.style.marginRight = '15px';
@@ -118,14 +119,14 @@ function createHeaderTitle(advertisement, container, owner) {
 
     messageIcon.addEventListener('mouseenter', () => {
         if (!isMouseOverMessageIcon) {
-            messageIcon.src = '/api/resources/messageOpen';
+            messageIcon.src = '/api/static/messageOpen';
             messageIcon.style.cursor = 'pointer';
         }
     });
 
     messageIcon.addEventListener('mouseleave', () => {
         if (!isMouseOverMessageIcon) {
-            messageIcon.src = '/api/resources/messageClosed';
+            messageIcon.src = '/api/static/messageClosed';
             messageIcon.style.cursor = 'auto';
         }
     });
@@ -133,12 +134,12 @@ function createHeaderTitle(advertisement, container, owner) {
     messageIcon.addEventListener('click', () => {
         createMessageBox(messageIcon, loggedUser);
         isMouseOverMessageIcon = true;
-        messageIcon.src = '/api/resources/messageOpen';
+        messageIcon.src = '/api/static/messageOpen';
     });
 
     const editIcon = document.createElement('img');
     editIcon.setAttribute('id', 'editIcon');
-    editIcon.src = '/api/resources/editIcon';
+    editIcon.src = '/api/static/editIcon';
     editIcon.alt = 'editIcon';
     editIcon.style.marginBottom = '3px';
     editIcon.style.marginRight = '15px';
@@ -196,7 +197,7 @@ function createHeaderTitle(advertisement, container, owner) {
     });
 
     editIcon.addEventListener('click', () => {
-        window.location.href = `/advertisement/edit?advertisementId=${advertisementId}`;
+        window.location.href = `/advertisement/edit?id=${advertisementId}`;
     });
 
     if (loggedUser !== owner) {
@@ -238,13 +239,13 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
         })
         .then(data => {
             if (data.toString() === "true") {
-                heartIcon.src = '/api/resources/heartFull';
+                heartIcon.src = '/api/static/heartFull';
             } else if (data.toString() === "false") {
-                heartIcon.src = '/api/resources/heartEmpty';
+                heartIcon.src = '/api/static/heartEmpty';
             }
         })
         .catch(error => {
-            heartIcon.src = '/api/resources/heartEmpty';
+            heartIcon.src = '/api/static/heartEmpty';
         });
 }
 function createMessageBox(messageIcon, loggedUser) {
@@ -348,7 +349,7 @@ function createMessageBox(messageIcon, loggedUser) {
         if (event.target === overlay) {
             document.body.removeChild(overlay);
             isMouseOverMessageIcon = false;
-            messageIcon.src = '/api/resources/messageClosed';
+            messageIcon.src = '/api/static/messageClosed';
         }
     });
 }
@@ -415,7 +416,6 @@ function checkConversationId(messageValue) {
                 createNewConversation()
                     .then(result => {
                         if (result) {
-                            console.log(result);
                             sendNewMessage(messageValue, advertisementId, result);
                         } else {
                             console.error('NIE MOZESZ WYSYLAC WIADOMOSCI SAM DO SIEBIE !');
@@ -479,6 +479,6 @@ function nextPhoto(mainPhoto) {
     changePhoto(currentPhotoIndex, mainPhoto);
 }
 function changePhoto(index, mainPhoto) {
-    mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.urlList[index];
+    mainPhoto.src = '/api/static/photo/' + advertisement.urlList[index];
 }
 

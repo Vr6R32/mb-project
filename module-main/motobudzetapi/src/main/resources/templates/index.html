@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:image" content="http://178.37.196.42:20134/api/resources/logo"/>
-    <meta property="og:image:width" content="250" />  <!-- Recommended width -->
-    <meta property="og:image:height" content="74" />  <!-- Recommended height -->
-    <link rel="preload" href="/api/resources/logo" as="image">
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta property="og:image" content="https://motobudzet.pl/api/resources/logo"/>
+    <meta property="og:image:width" content="500" />  <!-- Recommended width -->
+    <meta property="og:image:height" content="145" />  <!-- Recommended height -->
+    <link rel="preload" href="/api/static/logo" as="image">
     <title>Moto-Budżet</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/snowflake.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/searchForm.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/test.css}" />
@@ -16,12 +16,11 @@
     <script type="text/javascript" th:src="@{/js/searchForm.js}" ></script>
     <script type="text/javascript" th:src="@{/js/last-uploaded.js}" ></script>
 </head>
-
 <body>
 <header>
     <div class="looogo">
         <a href="/">
-            <img id="logo" src="/api/resources/logo" alt="Logo">
+            <img id="logo" src="/api/static/logo" alt="Logo">
         </a>
     </div>
 
@@ -37,6 +36,8 @@
         </a>
     </div>
 </header>
+<div id="snowflakeContainer"></div>
+
 <div class="container-main" id="container-main">
     <div id="results"></div>
     <div id="results2"></div>
@@ -53,16 +54,5 @@
     </div>
     <input type="range" min="0.8" max="1.2" step="0.001" value="1" class="slider" id="zoom-slider" oninput="changeZoom(this.value)">
 </div>
-
-
-    <figure class='ph-image'>
-        <div class='ph-shadow'></div>
-        <div class='ph-content'>
-            <img src='http://localhost:20134/api/resources/advertisementPhoto/rs3.png' />
-        </div>
-        <div class='ph-lighting'></div>
-    </figure>
-
-
 </body>
 </html>

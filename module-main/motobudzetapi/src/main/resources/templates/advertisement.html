@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Moto-Budżet</title>
-    <link rel="preload" href="/api/resources/logo" as="image">
+    <meta property="og:image" th:content="${ogImage}" />
+    <meta property="og:image:width" content="1200" />  <!-- Recommended width -->
+    <meta property="og:image:height" content="630" />  <!-- Recommended height -->
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" th:content="${ogTitle}" />
+    <meta property="og:description" th:content="${ogDescription}" />
+    <meta property="fb:app_id" content="736642330008245" />
+
+
+    <link rel="preload" href="/api/static/logo" as="image">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/advertisement.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/snowflake.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/quill.snow.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/test.css}" />
@@ -18,7 +29,7 @@
 <header>
     <div class="looogo">
         <a href="/">
-            <img id="logo" src="/api/resources/logo" alt="Logo">
+            <img id="logo" src="/api/static/logo" alt="Logo">
         </a>
     </div>
     <div class="nav-buttons">
@@ -33,6 +44,7 @@
         </a>
     </div>
 </header>
+<div id="snowflakeContainer"></div>
 <div class="container-main" id="container-main"></div>
 <div id="zoom-controls">
     <div style="display: flex">

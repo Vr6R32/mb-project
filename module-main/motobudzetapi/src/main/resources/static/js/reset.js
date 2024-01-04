@@ -65,6 +65,9 @@ function createForgotPasswordForm()  {
                 if(responseText==='1'){
                     message = "Twoje hasło zostało zaktualizowane :)"
                     resetForm();
+                    setTimeout(function() {
+                        window.location = '/';
+                    }, 1000); // 1000 milisekund = 1 sekunda
                 } else {
                     message = "Coś poszło nie tak :(";
                 }

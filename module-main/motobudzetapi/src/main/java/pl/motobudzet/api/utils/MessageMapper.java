@@ -1,7 +1,7 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.user_conversations.dto.ConversationMessageDTO;
-import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
+import pl.motobudzet.api.user_messaging.dto.ConversationMessageDTO;
+import pl.motobudzet.api.user_messaging.entity.ConversationMessage;
 
 import java.time.LocalDateTime;
 

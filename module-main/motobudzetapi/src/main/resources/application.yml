@@ -4,6 +4,7 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
+
   mail:
     host: serwer2379308.home.pl
     port: 587
@@ -31,6 +32,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/motobudzet
     username: postgres
     password: dontgotosql
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -48,7 +50,7 @@ spring:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: true
+    drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
 management:
   endpoints:
@@ -67,7 +69,13 @@ management:
 
 server:
   port: 20134
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keystore.p12
+    key-store-password: odi123
+    key-alias: spring-boot
 
 mailing:
     module:
       enabled: false
+

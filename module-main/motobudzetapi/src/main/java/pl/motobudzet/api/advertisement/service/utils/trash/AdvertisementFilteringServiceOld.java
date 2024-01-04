@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.getPage;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +68,7 @@ public class AdvertisementFilteringServiceOld {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
-        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
+        PageRequest pageable = PageRequest.of(getPage(pageNumber), PAGE_SIZE, sort);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
 
@@ -245,7 +246,7 @@ public class AdvertisementFilteringServiceOld {
         specification = setAdvertisementFilterSpecification(request, distanceFrom, specification);
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
 
-        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE);
+        PageRequest pageable = PageRequest.of(getPage(pageNumber), PAGE_SIZE);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         return advertisementSpecificationIds.getTotalElements();
     }

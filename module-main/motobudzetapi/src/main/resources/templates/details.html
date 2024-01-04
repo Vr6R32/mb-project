@@ -3,9 +3,10 @@
 <head>
     <title>Moto-Budżet</title>
     <meta charset="utf-8">
-    <link rel="preload" href="/api/resources/logo" as="image">
+    <link rel="preload" href="/api/static/logo" as="image">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/details.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/snowflake.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <script type="text/javascript" th:src="@{/js/utils.js}" ></script>
     <script type="text/javascript" th:src="@{/js/userDetails.js}" ></script>
@@ -14,7 +15,7 @@
 <header>
     <div class="looogo">
         <a href="/">
-            <img id="logo" src="/api/resources/logo" alt="Logo">
+            <img id="logo" src="/api/static/logo" alt="Logo">
         </a>
     </div>
     <div class="nav-buttons">
@@ -29,6 +30,7 @@
         </a>
     </div>
 </header>
+<div id="snowflakeContainer"></div>
 <div class="container-main" id="container-main">
     <div id="userDetailsForm"></div>
 </div>

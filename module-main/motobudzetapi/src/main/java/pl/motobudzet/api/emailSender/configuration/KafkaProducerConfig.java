@@ -10,7 +10,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
+import pl.motobudzet.api.emailSender.EmailMessageRequest;
 
 import java.util.HashMap;
 import java.util.Map;
