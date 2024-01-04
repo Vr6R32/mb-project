@@ -111,7 +111,7 @@ public class AdvertisementFilteringServiceOld {
         }
 
         if (city != null && distanceFrom != null) {
-            List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
+            List<City> cityList = cityService.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );

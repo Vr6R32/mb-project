@@ -33,14 +33,12 @@ public class CityService {
         City secondCity = cityRepository.getCityByNameWithState(cityTwo).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
         return calculateDistance(firstCity.getNLatitude(),firstCity.getELongitude(),secondCity.getNLatitude(),secondCity.getELongitude());
     }
-    public List<City> getNeighbourCitiesByDistance(String mainCity, Integer distanceMax) {
-        System.out.println("city: " + mainCity);
+    public List<City> getCitiesWithinDistance(String mainCity, Integer distanceMax) {
         List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
         City mainLocation = allCitiesWithCityStates.stream()
                 .filter(city -> city.getName().equals(mainCity))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
-
 
         Double mainLatitude = mainLocation.getNLatitude();
         Double mainLongitude = mainLocation.getELongitude();

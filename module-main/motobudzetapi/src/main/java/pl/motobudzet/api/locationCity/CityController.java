@@ -26,7 +26,7 @@ public class CityController {
     }
     @GetMapping("neighbours")
     List<City> getCityNeighbourCitiesByDistance(@RequestParam String mainCity , Integer distanceMax){
-        return cityService.getNeighbourCitiesByDistance(mainCity,distanceMax);
+        return cityService.getCitiesWithinDistance(mainCity,distanceMax);
     }
     @GetMapping("test")
     public City findById(@RequestParam Long id){

@@ -99,35 +99,6 @@
     box-shadow: rgb(255, 255, 255) 0 20px 30px -10px !important;
 }
 
-
-
-
-/*.searchResult {*/
-/*    box-shadow: rgba(184, 134, 11, 0.8) 6px 2px 16px 0, rgba(255, 255, 255, 0.8) -6px -2px 16px 0;*/
-/*    max-width: 100%;*/
-/*    box-sizing: border-box;*/
-/*    flex-shrink: 1;*/
-/*}*/
-
-/*.dark-mode #container-main .searchResult {*/
-/*    box-shadow: rgb(255, 255, 255) 0 20px 30px -10px;*/
-/*}*/
-
-
-/*.dark-mode #container-main .fade-effect-miniature::before,*/
-/*.dark-mode #container-main .fade-effect-miniature-search::before {*/
-/*    filter: invert(1); !* This attempts to revert the inverted filter on the fade effect *!*/
-/*}*/
-/*.dark-mode #container-main * {*/
-/*    color: white !important;*/
-/*}*/
-/*.dark-mode #container-main .last-uploaded-title {*/
-/*    color: black !important;*/
-/*}*/
-
-
-
-
 :root {
     --light: #d8dbe0;
     --dark: #28292c;

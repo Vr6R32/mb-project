@@ -5,15 +5,6 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
 
-
-<!--    <changeSet id="create_city_states_table" author="michal-k">-->
-<!--        <sql>-->
-<!--                CREATE DATABASE motobudzet;-->
-<!--        </sql>-->
-<!--    </changeSet>-->
-
-
-
     <changeSet id="create_city_states_table" author="michal-k">
         <createTable tableName="city_states">
             <column name="id" type="bigint">

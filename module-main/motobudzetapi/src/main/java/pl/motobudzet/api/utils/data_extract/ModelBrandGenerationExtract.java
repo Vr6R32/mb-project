@@ -1,4 +1,4 @@
-package pl.motobudzet.api.utils.dataextract;
+package pl.motobudzet.api.utils.data_extract;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
@@ -24,7 +23,6 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
 import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.*;
 
 @Service
@@ -119,7 +117,7 @@ public class AdvertisementFilteringService {
         }
 
         else if (city != null && !city.isEmpty() && distanceFrom != null) {
-            List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
+            List<City> cityList = cityService.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );

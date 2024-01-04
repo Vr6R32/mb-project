@@ -1,11 +1,6 @@
 #searchFormContainer {
-    /*background-color: black;*/
-    /*background-color: #000000;*/
     background-color: rgba(0, 0, 0, 0.9);
-    /*background-color: #181818;*/
-    /*border-radius: 30px;*/
     border-radius: 0 30px 30px 30px;
-    /*box-shadow: 0 0 40px green;*/
     border: 0 dashed darkgoldenrod;
     width: 1500px;
     display: flex;
@@ -15,12 +10,6 @@
     padding: 20px;
     box-sizing: border-box;
     max-width: 100%;
-    /* height: auto; */ /* Remove fixed height */
-    /* max-height: 100%; */ /* Remove max height */
-    /* flex-grow: 1;*/
-
-    /* Dodaj zmianę box shadow po najechaniu myszką */
-    /*transition: box-shadow 0s ease-in-out;*/
 }
 
 input::-webkit-outer-spin-button,
@@ -28,12 +17,6 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
-
-/*input[list]::-webkit-calendar-picker-indicator {*/
-/*    height: 300px;*/
-/*    overflow-y: auto;*/
-/*}*/
 
 
 .custom-datalist {
@@ -45,12 +28,6 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
-
-/*#searchFormContainer:hover {*/
-/*    box-shadow: -10px 0 20px moccasin,*/
-/*    10px 0 20px moccasin,*/
-/*    0 10px 20px moccasin;*/
-/*}*/
 
 #results {
     position: sticky;
@@ -92,96 +69,22 @@ input[type=number] {
     align-items: center;
     border: 2px;
     color: darkgoldenrod;
-    margin-right: 100px; /* Odstęp między kontenerami */
+    margin-right: 100px;
 }
 
 .info-result-container:last-child {
-    margin-right: 0; /* Usuń odstęp dla ostatniego kontenera */
+    margin-right: 0;
 }
 
-
-
 #suggestionsList::-webkit-scrollbar {
-    width: 5px; /* Szerokość paska przewijania */
+    width: 5px;
 }
 
 #suggestionsList::-webkit-scrollbar-thumb {
-    background-color: darkgoldenrod; /* Kolor paska przewijania */
-    border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
+    background-color: darkgoldenrod;
+    border-radius: 10px;
 }
 
 #suggestionsList::-webkit-scrollbar-track {
-    background-color: transparent; /* Kolor tła paska przewijania */
+    background-color: transparent;
 }
-
-/*.fade-effect {*/
-/*    position: relative;*/
-/*}*/
-
-/*.fade-effect::before {*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);*/
-/*    pointer-events: none;*/
-/*}*/
-
-/*.row {*/
-/*    flex-basis: 25%;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    margin-bottom: 10px;*/
-/*    max-width: 100%;*/
-/*}*/
-
-/*!* Style for labelColumn (40% width within a row) *!*/
-/*.label-column {*/
-/*    flex-basis: 40%;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    margin-right: 10px;*/
-/*    max-width: 100%;*/
-/*}*/
-
-/*!* Style for label elements *!*/
-/*label {*/
-/*    width: 100%;*/
-/*    text-align: center;*/
-/*    max-width: 100%;*/
-/*}*/
-
-/*!* Style for inputColumn (60% width within a row) *!*/
-/*.input-column {*/
-/*    flex-basis: 60%;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    max-width: 100%;*/
-/*}*/
-
-/*!* Style for input and select elements *!*/
-/*input, select {*/
-/*    width: 100%;*/
-/*    padding: 5px;*/
-/*    box-sizing: border-box;*/
-/*    box-shadow: 0 0 10px moccasin;*/
-/*    border: darkgoldenrod;*/
-/*    background-color: darkgrey;*/
-/*    max-width: 100%;*/
-/*}*/
-
-/*!* Media query for smaller screen widths (adjust as needed) *!*/
-/*@media screen and (max-width: 768px) {*/
-/*    .row {*/
-/*        flex-basis: 50%; !* 2 columns per row *!*/
-/*    }*/
-/*}*/
-
-/*!* Media query for even smaller screen widths (adjust as needed) *!*/
-/*@media screen and (max-width: 480px) {*/
-/*    .row {*/
-/*        flex-basis: 100%; !* 1 column per row *!*/
-/*    }*/
-/*}*/
