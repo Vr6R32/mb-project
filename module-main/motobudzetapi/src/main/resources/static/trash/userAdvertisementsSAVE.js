@@ -1,5 +1,5 @@
 
-function createUserAdvertisementsResultDiv(ad,container) {
+function asd(ad,container) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
 

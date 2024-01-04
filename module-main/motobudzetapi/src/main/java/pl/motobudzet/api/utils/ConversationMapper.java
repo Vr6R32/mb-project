@@ -1,9 +1,9 @@
 package pl.motobudzet.api.utils;
 
 import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
-import pl.motobudzet.api.user_conversations.dto.ConversationDTO;
-import pl.motobudzet.api.user_conversations.entity.Conversation;
-import pl.motobudzet.api.user_conversations.entity.ConversationMessage;
+import pl.motobudzet.api.user_messaging.dto.ConversationDTO;
+import pl.motobudzet.api.user_messaging.entity.Conversation;
+import pl.motobudzet.api.user_messaging.entity.ConversationMessage;
 
 public class ConversationMapper {
 

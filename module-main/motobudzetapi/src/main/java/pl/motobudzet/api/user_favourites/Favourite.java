@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import pl.motobudzet.api.user.entity.AppUser;
+import pl.motobudzet.api.user_account.entity.AppUser;
 
 @Entity
 @Data

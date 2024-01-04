@@ -25,8 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
-import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleSelectValue;
-import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.handleValueInRangeBetween;
+import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,23 +39,16 @@ public class AdvertisementFilteringService {
     private final CityService cityService;
 
 
-    public Page<AdvertisementDTO> findAllPublicWithFilters(
+    public Page<AdvertisementDTO> getFilteredAdvertisements(
             AdvertisementFilterRequest request,
             Integer pageNumber,
             String sortBy, String sortOrder) {
 
-        Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
-                criteriaBuilder.and(
-                        criteriaBuilder.isTrue(root.get("isVerified")),
-                        criteriaBuilder.isTrue(root.get("isActive")),
-                        criteriaBuilder.isFalse(root.get("isDeleted"))
-                );
 
-        specification = setAdvertisementFilterSpecification(request, specification);
+        Specification<Advertisement> specification = setAdvertisementFilterSpecification(request);
 
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        PageRequest pageable = setPageRequest(pageNumber, sortBy, sortOrder);
 
-        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE, sort);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
 
@@ -73,26 +65,29 @@ public class AdvertisementFilteringService {
                 .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
     }
 
-
     public long getFilterResultCount(AdvertisementFilterRequest request,
                                      Integer pageNumber,
                                      String sortBy, String sortOrder) {
+
+        Specification<Advertisement> specification = setAdvertisementFilterSpecification(request);
+
+        PageRequest pageable = setPageRequest(pageNumber, sortBy, sortOrder);
+
+        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
+        return advertisementSpecificationIds.getTotalElements();
+    }
+
+
+
+
+    private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request) {
+
         Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(
                         criteriaBuilder.isTrue(root.get("isVerified")),
                         criteriaBuilder.isTrue(root.get("isActive")),
                         criteriaBuilder.isFalse(root.get("isDeleted"))
                 );
-        specification = setAdvertisementFilterSpecification(request, specification);
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-
-        PageRequest pageable = PageRequest.of(userAdvertisementService.getPage(pageNumber), PAGE_SIZE);
-        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
-        return advertisementSpecificationIds.getTotalElements();
-    }
-
-
-    private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
 
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
         serviceFunctionMap.put("brand", brandService::getBrand);
@@ -115,21 +110,21 @@ public class AdvertisementFilteringService {
         String cityState = request.getCityState();
         Integer distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
 
-// First check for cityState alone since it's the condition you want to prioritize.
+
         if (cityState != null && !cityState.isEmpty() && (city == null || city.isEmpty())) {
             specification = specification.and((root, query, criteriaBuilder) -> {
                 Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
         }
-// Then check for city and distance
+
         else if (city != null && !city.isEmpty() && distanceFrom != null) {
             List<City> cityList = cityService.getNeighbourCitiesByDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
         }
-// Then check for city alone
+
         else if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))

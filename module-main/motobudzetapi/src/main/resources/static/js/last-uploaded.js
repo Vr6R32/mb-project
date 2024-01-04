@@ -159,7 +159,7 @@ function displayLastUploaded(min,max){
         titleContainerMiniature.appendChild(title);
 
         const mainPhoto = document.createElement('img');
-        mainPhoto.src = '/api/resources/advertisementPhoto/' + advertisement.mainPhotoUrl;
+        mainPhoto.src = '/api/static/photo/' + advertisement.mainPhotoUrl;
         let photoHeight = mainPhoto.style.maxWidth = '300px';
         let photoWidth = mainPhoto.style.maxHeight = '200px';
         mainPhoto.alt = 'MainUrlPhoto';
@@ -189,7 +189,7 @@ function displayLastUploaded(min,max){
         });
 
         mainPhoto.addEventListener('click', () => {
-            window.location.href = '/id?advertisementId=' + advertisement.id;
+            window.location.href = '/advertisement?id=' + advertisement.id;
         });
 
         const infoContainerFirst = document.createElement('div');
@@ -213,7 +213,7 @@ function displayLastUploaded(min,max){
         mileageInfo.style.marginRight = '30px';
 
         const mileageIcon = document.createElement('img');
-        mileageIcon.src = '/api/resources/mileage';
+        mileageIcon.src = '/api/static/mileage';
         mileageIcon.alt = 'MileageIcon';
         mileageIcon.style.marginBottom = '2px';
 
@@ -228,7 +228,7 @@ function displayLastUploaded(min,max){
         productionDateInfo.style.alignItems = 'center';
 
         const productionDateIcon = document.createElement('img');
-        productionDateIcon.src = '/api/resources/productionDate';
+        productionDateIcon.src = '/api/static/productionDate';
         productionDateIcon.alt = 'ProductionDateIcon';
         productionDateIcon.style.marginBottom = '2px';
 
@@ -244,7 +244,7 @@ function displayLastUploaded(min,max){
         fuelTypeInfo.style.marginLeft = '30px';
 
         const fuelTypeIcon = document.createElement('img');
-        fuelTypeIcon.src = '/api/resources/fuelType';
+        fuelTypeIcon.src = '/api/static/fuelType';
         fuelTypeIcon.alt = 'FuelTypeIcon';
         fuelTypeIcon.style.marginBottom = '2px';
 
@@ -259,7 +259,7 @@ function displayLastUploaded(min,max){
         transmissionInfo.style.alignItems = 'center';
 
         const transmissionIcon = document.createElement('img');
-        transmissionIcon.src = '/api/resources/transmissionType/' + advertisement.transmissionType;
+        transmissionIcon.src = '/api/static/transmissionType/' + advertisement.transmissionType;
         transmissionIcon.alt = 'TransmissionIcon';
         transmissionIcon.style.marginBottom = '2px';
 
@@ -275,7 +275,7 @@ function displayLastUploaded(min,max){
         engineInfo.style.marginRight = '30px';
 
         const engineIcon = document.createElement('img');
-        engineIcon.src = '/api/resources/engineType/' + advertisement.engineType;
+        engineIcon.src = '/api/static/engineType/' + advertisement.engineType;
         engineIcon.alt = 'EngineIcon';
         engineIcon.style.marginBottom = '2px';
 
@@ -291,7 +291,7 @@ function displayLastUploaded(min,max){
         engineHorsePowerInfo.style.marginLeft = '30px';
 
         const engineHorsePowerIcon = document.createElement('img');
-        engineHorsePowerIcon.src = '/api/resources/engineHorsePower';
+        engineHorsePowerIcon.src = '/api/static/engineHorsePower';
         engineHorsePowerIcon.alt = 'EngineIcon';
         engineHorsePowerIcon.style.marginBottom = '2px';
 

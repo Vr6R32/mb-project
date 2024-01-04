@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.thymeleaf.MetaDataDTO;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,9 @@ import java.util.UUID;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, UUID>, JpaSpecificationExecutor<Advertisement> {
 
+
+    @Query("SELECT new pl.motobudzet.api.thymeleaf.MetaDataDTO(a.name, a.mainPhotoUrl,a.price,a.priceUnit,a.mileage,a.mileageUnit) FROM Advertisement a WHERE a.id = :id")
+    Optional<MetaDataDTO> findMetaDataById(@Param("id") UUID id);
 
     @Query("SELECT a FROM Advertisement a " +
             "LEFT JOIN FETCH a.imageUrls " +

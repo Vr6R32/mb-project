@@ -344,73 +344,32 @@ function createForm() {
 
 }
 function submitFormWithFiles() {
-    if(selectedFiles.length>0){
-        submitForm()
-            .then(advertisementId => {
-                if (advertisementId) {
-                    uploadFiles(advertisementId);
-                }
-            })
-            .catch(handleError);
-    } else { alert('Umieść zdjęcia!');
-    }
-}
-function submitForm() {
-    const formData
-        = advertisementFormDataExtract(false);
-    return fetch('/api/advertisements', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    })
-        .then(handleResponse)
-        .catch(handleError);
-}
-function uploadFiles(advertisementId) {
     if (selectedFiles.length === 0) {
-        console.error('Nie wybrano pliku.');
+        alert('Umieść zdjęcia!');
         return;
     }
+    const formData = advertisementFormDataExtract();
 
-    const formData = new FormData();
-    formData.append('advertisementId', advertisementId);
-    formData.append('mainPhotoUrl',selectedFiles[0].name)
-
-    selectedFiles.forEach((file) => {
-        formData.append('files', file); // Use the same parameter name 'files' for each file
-    });
-
-    const apiUrl = `/api/advertisements/images/${advertisementId}`;
-
-    console.log(selectedFiles.length);
-
-    fetch(apiUrl, {
+    fetch('/api/advertisements', {
         method: 'POST',
-        body: formData,
+        body: formData
     })
-
         .then(response => {
             if(response.ok){
-                console.log('Odpowiedź serwera:', response);
                 resetFileDropArea();
-                const redirectURL = response.headers.get('Location');
+                const redirectURL = response.headers.get('location');
                 const parameter = response.headers.get('created');
-                console.log(redirectURL);
                 if (redirectURL) {
                     window.location.href = redirectURL + '&created='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }
+            } else {
+                handleResponse(response);
             }
         })
-        .catch(error => {
-            console.error(error.message);
-            resetFileDropArea();
-        });
+        .catch(handleError);
 }
-
 function handleDeleteZoneDragOver(e) {
     if (e.preventDefault) {
         e.preventDefault();

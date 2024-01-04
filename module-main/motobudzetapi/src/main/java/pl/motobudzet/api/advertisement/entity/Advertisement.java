@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.locationCity.City;
-import pl.motobudzet.api.user.entity.AppUser;
+import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.Brand;
 import pl.motobudzet.api.vehicleModel.Model;
 import pl.motobudzet.api.vehicleSpec.entity.DriveType;

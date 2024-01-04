@@ -775,14 +775,14 @@ function displayResults(data) {
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
         resultDiv.onclick = (event) => {
             event.preventDefault(); // To zatrzyma domyślne przewijanie strony
-            window.location.href = `/id?advertisementId=${ad.id}`;
+            window.location.href = `/advertisement?id=${ad.id}`;
         };
 
         handleDarkModeInverse(resultDiv);
 
 
         const photoElement = document.createElement("img");
-        photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
+        photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
         photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
         // photoElement.style.boxShadow =     box-shadow: rgba(255, 255, 255, 0.8) 0 20px 30px -10px !important;
@@ -1050,14 +1050,14 @@ function displayResults(data) {
             favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
             bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
             if (favouritesArray.includes(ad.id)) {
-                heartIcon.src = "/api/resources/heartFull";
+                heartIcon.src = "/api/static/heartFull";
                 favouriteText.innerHTML = "Usuń z ulubionych";
             } else {
-                heartIcon.src = "/api/resources/heartEmpty";
+                heartIcon.src = "/api/static/heartEmpty";
                 favouriteText.innerHTML = "Dodaj do ulubionych";
             }
         } else if (getUserName() === ad.user) {
-            editIcon.src = "/api/resources/editIcon";
+            editIcon.src = "/api/static/editIcon";
             editText.innerHTML = "Edytuj ogłoszenie";
             editBottomHeaderDiv.appendChild(editWrapper);
             editIcon.style.marginBottom = '2px';
@@ -1070,10 +1070,10 @@ function displayResults(data) {
             event.stopPropagation();
 
             if (heartIcon.src.includes("heartFull")) {
-                heartIcon.src = "/api/resources/heartEmpty";
+                heartIcon.src = "/api/static/heartEmpty";
                 favouriteText.innerHTML = "Dodaj do ulubionych";
             } else if (heartIcon.src.includes("heartEmpty")) {
-                heartIcon.src = "/api/resources/heartFull";
+                heartIcon.src = "/api/static/heartFull";
                 favouriteText.innerHTML = "Usuń z ulubionych";
             }
 
@@ -1446,7 +1446,7 @@ function createSortButton(sortBy) {
 }
 function executeSearch(formData) {
 
-    if(getUserName()!=='ZALOGUJ'){
+    if(getUserName()!==null){
         getUserFavourites();
     }
 
@@ -1475,11 +1475,9 @@ function executeSearch(formData) {
     fetch("/api/advertisements/filter/search?" + searchParams.toString())
         .then(response => response.json())
         .then(data => {
-            // Display the results and pagination with sorting parameters
             displayResults(data, sortingBy, sortOrder);
             paralaxHover();
             updatePaginationButtons(data, sortingBy, sortOrder);
-            // updateSortButtons(data, sortBy, sortOrder);
         })
         .catch(error => console.error("Error fetching data:", error));
 }
@@ -1493,7 +1491,7 @@ function createInfoContainer(iconPath, altText, value) {
     container.style.marginRight = '30px';
     container.style.color = 'white';
     const icon = document.createElement('img');
-    icon.src = `/api/resources/${iconPath}`;
+    icon.src = `/api/static/${iconPath}`;
     icon.alt = altText;
     icon.style.marginBottom = '2px';
 

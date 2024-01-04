@@ -32,28 +32,13 @@ function createUserAdvertisementsResultDiv(ad,container) {
         const advertisementId = ad.id;
 
         // Przenieś na stronę /id/advertisement.id
-        window.location.href = `/id?advertisementId=${advertisementId}`;
+        window.location.href = `/advertisement?id=${advertisementId}`;
     });
-
-    resultDiv.onmouseover = () => {
-        resultDiv.style.boxShadow = "0 0 20px moccasin";
-        if (iconWrapper) {
-            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
-        }
-    };
-
-    resultDiv.onmouseout = () => {
-        resultDiv.style.boxShadow = "0 0 0px darkgoldenrod";
-        if (iconWrapper) {
-            iconWrapper.style.opacity = '0'; // Ukryj iconWrapper
-        }
-    };
-
 
 
 
     const photoElement = document.createElement("img");
-    photoElement.src = `/api/resources/advertisementPhoto/${ad.mainPhotoUrl}`;
+    photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
     photoElement.style.height = "200px";
     photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
     let maxPhotoWidth = 300;
@@ -313,7 +298,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     editIconDiv.addEventListener('click', function() {
         event.stopPropagation();
         if (!isEventListenerActive) return;
-        window.location = '/advertisement/edit?advertisementId=' + ad.id;
+        window.location = '/advertisement/edit?id=' + ad.id;
     });
 
 
@@ -372,8 +357,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
     deleteIcon.addEventListener('click', function(event) {
         event.stopPropagation();
 
-
-
                 isEventListenerActive = false;
 
                 // editIconDiv.removeEventListener('click', handleEditIconClick);
@@ -414,44 +397,41 @@ function createUserAdvertisementsResultDiv(ad,container) {
             });
     });
 
+    iconWrapper = document.createElement('div');
+    iconWrapper.style.display = 'flex';
+    iconWrapper.style.flexDirection = 'column';
+    iconWrapper.style.opacity = '0';
+
 
 
     if(getUserName()!==ad.user){
-        heartIcon.src = "/api/resources/heartFull";
+        heartIcon.src = "/api/static/heartFull";
         favouriteText.innerHTML = "Usuń z ulubionych";
         favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
         heartIcon.style.marginBottom = '2px';
         favouriteIconDiv.appendChild(heartIcon);
-        bottomDetailsHeader.appendChild(favouriteBottomHeaderDiv);
+        iconWrapper.appendChild(favouriteBottomHeaderDiv);
+        bottomDetailsHeader.appendChild(iconWrapper);
     }
     else if (getUserName()===ad.user) {
 
-        editIcon.src = "/api/resources/editIcon";
+        editIcon.src = "/api/static/editIcon";
         editText.innerHTML = "Edytuj ogłoszenie";
         editBottomHeaderDiv.appendChild(editWrapper);
         editIcon.style.marginBottom = '2px';
         editIconDiv.appendChild(editIcon);
 
-        deleteIcon.src = "/api/resources/deleteIcon";
+        deleteIcon.src = "/api/static/deleteIcon";
         deleteText.innerHTML = "Usuń ogłoszenie";
         deleteBottomHeaderDiv.appendChild(deleteWrapper);
         deleteIcon.style.marginBottom = '2px';
         deleteIconDiv.appendChild(deleteIcon);
 
-        iconWrapper = document.createElement('div');
-        iconWrapper.style.display = 'flex';
-        iconWrapper.style.flexDirection = 'column';
-        iconWrapper.style.opacity = '0';
-
         iconWrapper.appendChild(deleteBottomHeaderDiv);
         iconWrapper.appendChild(editBottomHeaderDiv);
         bottomDetailsHeader.appendChild(iconWrapper);
 
-        // bottomDetailsHeader.appendChild(editBottomHeaderDiv);
-
     }
-
-
 
 
     favouriteIconDiv.addEventListener('click', function(event) {
@@ -459,7 +439,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
         if (!isEventListenerActive) return;
 
         if (heartIcon.src.includes("heartFull")) {
-            heartIcon.src = "/api/resources/heartEmpty";
+            heartIcon.src = "/api/static/heartEmpty";
             favouriteText.innerHTML = "Dodaj do ulubionych";
 
             if (resultDiv && resultDiv.parentNode === container) {
@@ -487,7 +467,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
             }
 
         } else if (heartIcon.src.includes("heartEmpty")) {
-            heartIcon.src = "/api/resources/heartFull";
+            heartIcon.src = "/api/static/heartFull";
             favouriteText.innerHTML = "Usuń z ulubionych";
         }
 
@@ -573,6 +553,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
 
 
     container.appendChild(resultDiv);
-    handleDarkModeInverse(resultDiv);
+    handleDarkModeInverse(resultDiv,iconWrapper);
     return resultDiv;
 }

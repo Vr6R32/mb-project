@@ -1,5 +1,7 @@
 package pl.motobudzet.api.advertisement.service.utils;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
@@ -7,7 +9,22 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import static pl.motobudzet.api.advertisement.service.UserAdvertisementService.PAGE_SIZE;
+
 public class SpecificationFilterHelper {
+
+
+    public static PageRequest setPageRequest(Integer pageNumber, String sortBy, String sortOrder) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        return PageRequest.of(getPage(pageNumber), PAGE_SIZE,sort);
+    }
+
+    public static int getPage(Integer pageNumber) {
+        if (pageNumber == null) {
+            pageNumber = 0;
+        }
+        return Math.max(pageNumber, 0);
+    }
 
     public static <T extends Comparable<T>> Specification<Advertisement> handleValueInRangeBetween(Specification<Advertisement> specification, String fieldName, T min, T max) {
         if (min != null && max != null) {

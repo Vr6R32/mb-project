@@ -62,7 +62,7 @@ function fetchAdvertisements(){
         });
 }
 function loadFavourites() {
-    let loggedUser = document.getElementById('username').textContent;
+    let loggedUser = getUserName();
     fetch('/api/users/favourites/' + loggedUser, {
         method: 'GET',
         headers: {
@@ -97,11 +97,10 @@ function loadFavourites() {
         });
 }
 function fetchFavouriteIds(uuidList) {
-    let loggedUser = document.getElementById('username').textContent;
 
     uuidList = uuidList.map(uuid => uuid.replace(/^\"|\"$/g, ''));
 
-    fetch('/api/advertisements/favourites/' + loggedUser, {
+    fetch('/api/advertisements/favourites', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

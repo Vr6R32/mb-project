@@ -19,7 +19,6 @@ header.header-hidden {
     transition: opacity 1s ease;
 }
 
-
 #popupNavbar {
     position: fixed;
     top: -120px; /* starting position outside of the viewport */
@@ -43,7 +42,7 @@ header.header-hidden {
 header {
     position: fixed;
     top: 0;
-    left: 0;
+    /*left: -35px;*/
     right: 0;
     height: 5vw;
     z-index: 999;

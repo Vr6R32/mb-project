@@ -57,7 +57,7 @@ function fetchAdvertisementDetails() {
 }
 function extractAdvertisementId() {
     const urlParams = new URLSearchParams(document.location.search);
-    advertisementId = urlParams.get('advertisementId');
+    advertisementId = urlParams.get('id');
 }
 function createForm() {
 
@@ -395,7 +395,7 @@ async function showExistingThumbnails(filenames) {
     }
 }
 function fetchImageFromFilename(filename) {
-    return fetch(`/api/resources/advertisementPhoto/${filename}`)
+    return fetch(`/api/static/photo/${filename}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch image for filename: ${filename}`);
@@ -473,74 +473,31 @@ function fetchModels(brand) {
     });
 }
 function submitFormWithFiles() {
-    if(selectedFiles.length>0){
-        submitForm()
-            .then(advertisementId => {
-                if (advertisementId) {
-                    uploadFiles(advertisementId);
-                }
-            })
-            .catch(handleError);
-    } else { alert('Umieść zdjęcia!');
-    }
-}
-function submitForm() {
-    const formData
-        = advertisementFormDataExtract(true);
-    return fetch('/api/advertisements/'+ advertisementId, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    })
-        .then(handleResponse)
-        .catch(handleError);
-}
-function uploadFiles(advertisementId) {
     if (selectedFiles.length === 0) {
-        console.error('Nie wybrano pliku.');
+        alert('Umieść zdjęcia!');
         return;
     }
+    const formData = advertisementFormDataExtract();
 
-    const formData = new FormData();
-    formData.append('advertisementId', advertisementId);
-    // formData.append('mainPhotoUrl',selectedFiles[0].name)
-
-
-    selectedFiles.forEach((file) => {
-        if (file.blob instanceof Blob) {
-            formData.append('files', file.blob , file.name);
-        } else {
-            formData.append('files',file);
-        }
-    });
-
-    const apiUrl = `/api/advertisements/images/${advertisementId}`;
-
-
-    fetch(apiUrl, {
-        method: 'POST',
-        body: formData,
+    fetch('/api/advertisements/'+ advertisementId, {
+        method: 'PUT',
+        body: formData
     })
-
         .then(response => {
             if(response.ok){
-                console.log('Odpowiedź serwera:', response);
                 resetFileDropArea();
-                const redirectURL = response.headers.get('Location');
-                const parameter = response.headers.get('edited');
+                const redirectURL = response.headers.get('location');
+                const parameter = response.headers.get('created');
                 if (redirectURL) {
-                    window.location.href = redirectURL + '&edited='+parameter;
+                    window.location.href = redirectURL + '&created='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }
+            } else {
+                handleResponse(response);
             }
         })
-        .catch(error => {
-            console.error(error.message);
-            resetFileDropArea();
-        });
+        .catch(handleError);
 }
 function handleDeleteZoneDragOver(e) {
     if (e.preventDefault) {
