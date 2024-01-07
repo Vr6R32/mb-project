@@ -19,7 +19,6 @@ import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDT
 public class FavouritesService {
 
     private final FavouritesRepository favouritesRepository;
-    private final AppUserCustomService appUserCustomService;
     private final AdvertisementRepository advertisementRepository;
 
     public String manageUserFavourite(FavouriteRequest request, AppUser loggedUser) {

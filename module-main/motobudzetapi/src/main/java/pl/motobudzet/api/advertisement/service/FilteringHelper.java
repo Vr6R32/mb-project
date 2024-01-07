@@ -5,7 +5,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.service.ServiceFunction;
 
 import java.lang.reflect.Field;
 import java.util.Map;

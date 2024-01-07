@@ -45,7 +45,7 @@ public class NotRestController {
     }
 
     @GetMapping("advertisement/edit")
-    public String editForm(Model model, Authentication authentication, @RequestParam("id") String id) {
+    public String editForm(Model model, Authentication authentication) {
         ModelUtils.setAuthenticationAttributes(model, authentication);
         return "editForm";
     }
