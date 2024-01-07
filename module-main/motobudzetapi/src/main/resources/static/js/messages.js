@@ -320,7 +320,6 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
 
     const messageText = messageInput.value;
     const conversationId = conversation.conversationId;
-    const advertisementIde = conversation.advertisement.id;
 
     const messageObject = {
         message: messageText,
@@ -338,7 +337,7 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
         formData.append("conversationId", conversationId);
 
         // Wysłanie danych jako żądanie POST z danymi formularza
-        fetch("/api/messages", {
+        fetchWithAuth("/api/messages", {
             method: "POST",
             body: formData,
         })

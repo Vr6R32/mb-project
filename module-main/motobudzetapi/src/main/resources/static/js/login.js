@@ -1,19 +1,16 @@
 
-document.addEventListener('DOMContentLoaded', function () {
-
-
-    let containerMain = document.getElementById('container-main');
-    containerMain.style.minHeight = '1000px';
-    containerMain.style.justifyContent = 'center';
-    containerMain.style.alignItems = 'center';
-    containerMain.style.backgroundColor = 'transparent';
-    containerMain.style.border = '0px';
-    containerMain.style.boxShadow = 'none';
-
+document.addEventListener('DOMContentLoaded', async function () {
+    await checkIsTokenValid(false);
+    handleLogout();
     createLoginForm();
-
 });
 
+function handleLogout(){
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('logout') !== null){
+        localStorage.clear();
+    }
+}
 
 const createRegisterForm = () => {
     let formContainer = document.getElementById("registerFormContainer");
@@ -195,6 +192,16 @@ const createRegisterForm = () => {
 };
 
 function createLoginForm(){
+
+    let containerMain = document.getElementById('container-main');
+    containerMain.style.minHeight = '1000px';
+    containerMain.style.justifyContent = 'center';
+    containerMain.style.alignItems = 'center';
+    containerMain.style.backgroundColor = 'transparent';
+    containerMain.style.border = '0px';
+    containerMain.style.boxShadow = 'none';
+
+
     let formContainer = document.getElementById("registerFormContainer");
 
     formContainer.innerHTML = '';
@@ -207,12 +214,48 @@ function createLoginForm(){
     formContainer.style.position = 'relative';
     formContainer.style.bottom = '150px';
 
+    /** BASIC AUTH
+
+     const form = document.createElement("form");
+     form.className = "form-signin";
+     form.method = "post";
+     form.style.backgroundColor = 'black';
+     form.action = "/login";
+
+     **/
     const form = document.createElement("form");
     form.className = "form-signin";
-    form.method = "post";
     form.style.backgroundColor = 'black';
-    form.action = "/login";
-    // form.style.animation = "fade-in 1s ease-in-out forwards";
+
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => { data[key] = value });
+
+        let url = '/api/v1/auth/authenticate';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (response.ok) {
+                    handleLoginResponse(false);
+                }
+            })
+            .catch((error) => {
+                createDialogBox(error.message);
+            });
+    });
+
+
+
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";

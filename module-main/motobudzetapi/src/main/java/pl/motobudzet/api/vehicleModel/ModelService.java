@@ -26,7 +26,6 @@ public class ModelService {
         return modelRepository.findAll();
     }
 
-    @Transactional
     public ResponseEntity<String> insertNewModel(String modelName, String brandName) {
         String modelUpperCase = modelName.toUpperCase();
 

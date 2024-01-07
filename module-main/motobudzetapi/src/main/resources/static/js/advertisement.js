@@ -3,7 +3,8 @@ let isMouseOverMessageIcon = false;
 let advertisement = null;
 let currentPhotoIndex = 0;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    // await checkIsTokenValid();
     extractAdvertisementId();
     fetchAdvertisement();
 });
@@ -83,7 +84,7 @@ function createHeaderTitle(advertisement, container, owner) {
 
     heartIcon.addEventListener('click', () => {
 
-        fetch('/api/users/favourites', {
+        fetchWithAuth('/api/users/favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -221,11 +222,10 @@ function setTooltipText(heartIcon, toolTipFavourite) {
 }
 function updateHeartIconSrc(loggedUser, heartIcon) {
     const queryParams = new URLSearchParams({
-        userName: loggedUser,
         advertisementId: advertisementId,
     });
 
-    fetch('/api/users/favourites?' + queryParams.toString(), {
+    fetchWithAuth('/api/users/favourites?' + queryParams.toString(), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -238,9 +238,9 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
             return response.json();
         })
         .then(data => {
-            if (data.toString() === "true") {
+            if (data === true) {
                 heartIcon.src = '/api/static/heartFull';
-            } else if (data.toString() === "false") {
+            } else if (data === false) {
                 heartIcon.src = '/api/static/heartEmpty';
             }
         })
@@ -360,7 +360,7 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
     formData.append("conversationId", conversationId);
     formData.append("advertisementId", advertisementId);
 
-    fetch("/api/messages", {
+    fetchWithAuth("/api/messages", {
         method: "POST",
         body: formData,
     })
@@ -386,7 +386,7 @@ function createNewConversation() {
     const formData = new FormData();
     formData.append("advertisementId", advertisementId);
 
-    return fetch("/api/conversations/create", {
+    return fetchWithAuth("/api/conversations/create", {
         method: "POST",
         body: formData,
     })
@@ -402,7 +402,7 @@ function createNewConversation() {
 function checkConversationId(messageValue) {
     let conversationId = null;
 
-    fetch("/api/conversations/id?advertisementId=" + advertisementId)
+    fetchWithAuth("/api/conversations/id?advertisementId=" + advertisementId)
         .then(response => {
             if (response.status === 200) {
                 return response.text();

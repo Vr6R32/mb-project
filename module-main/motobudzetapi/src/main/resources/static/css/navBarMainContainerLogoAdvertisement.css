@@ -1,4 +1,60 @@
 
+
+
+
+.slide-left-enter {
+    transform: translateX(200%);
+    opacity: 0;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.slide-left-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.slide-right-enter {
+    transform: translateX(-200%);
+    opacity: 0;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.slide-right-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.slide-left-exit {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+}
+
+.slide-left-exit-active {
+    transform: translateX(-200%);
+    opacity: 0;
+}
+
+.slide-right-exit {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+}
+
+.slide-right-exit-active {
+    transform: translateX(200%);
+    opacity: 0;
+}
+
+.to-remove {
+    visibility: hidden;
+}
+
+
+
+
+
+
 body {
     background-color: rgba(0, 0, 0, 1);
     margin: 0;
@@ -150,7 +206,7 @@ header {
 
 .container-main .sub-container-miniature {
     box-shadow: 0 0 20px darkgoldenrod;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     border-radius: 30px;
     width: 330px;
     height: 550px;
@@ -158,7 +214,7 @@ header {
     position: relative;
     background-color: #000000;
     /*border: 1px solid darkgoldenrod;*/
-    animation: fade-in-miniature 1s ease-out;
+    /*animation: fade-in-miniature 1s ease-out;*/
     /*animation: scroll-from-left 1s ease-out;*/
     white-space: nowrap;
     max-width: 100%;

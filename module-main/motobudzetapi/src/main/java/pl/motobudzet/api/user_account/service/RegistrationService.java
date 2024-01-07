@@ -6,9 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +21,7 @@ import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.repository.AppUserRepository;
 import pl.motobudzet.api.user_account.repository.RoleRepository;
 import pl.motobudzet.api.user_account.RegistrationRequestValidation;
+import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -37,8 +36,8 @@ public class RegistrationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final SpringMailSenderService springMailSenderService;
-    private final SecurityContextRepository securityContextRepository;
     private final DateTimeProvider dateTimeProvider;
+    private final JwtService jwtService;
 
 
 
@@ -91,14 +90,13 @@ public class RegistrationService {
 //        return ResponseEntity.ok("Link nieaktwny!");
 //    }
 
-    public ResponseEntity<Void> confirmEmail(String activationLink, HttpServletResponse response, HttpServletRequest request) {
+    public void confirmEmail(String activationLink, HttpServletResponse response) {
         AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
         if(user != null && !user.getAccountEnabled()){
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
-            setAuthentication(response, request, enabledUser);
-
+            setAuthentication(response, enabledUser);
             try {
                 response.sendRedirect("/user/details?activation=true");
             } catch (IOException e) {
@@ -111,15 +109,20 @@ public class RegistrationService {
                 e.printStackTrace();
             }
         }
-        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
 
-    private void setAuthentication(HttpServletResponse response, HttpServletRequest request, AppUser enabledUser) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(enabledUser.getUsername(), null, enabledUser.getAuthorities());
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(authToken);
-        securityContextRepository.saveContext(sc, request, response);
+    private void setAuthentication(HttpServletResponse response, AppUser enabledUser) {
+        String jwtToken = jwtService.generateAccessToken(enabledUser);
+
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", jwtToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(24 * 60 * 60)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, String.valueOf(accessTokenCookie));
     }
 
     @Transactional

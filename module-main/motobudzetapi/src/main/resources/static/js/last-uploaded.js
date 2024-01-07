@@ -5,7 +5,7 @@ let currentMaxIndex = 4;
 const resultsPerPage = 4;
 
 document.addEventListener("DOMContentLoaded", function () {
-    const {container, prevPageButton, nextPageButton} = createLastUploadedHeader();
+    const {container, prevPageButton, nextPageButton} = createLastUploadedContainer();
     getLastUploaded(0);
 
     prevPageButton.style.userSelect = 'none';
@@ -13,27 +13,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     prevPageButton.addEventListener('click', () => {
         if (currentMinIndex > 0) {
-            clearAdvertisements(container);
             currentMinIndex -= resultsPerPage;
             currentMaxIndex -= resultsPerPage;
-            displayLastUploaded(currentMinIndex, currentMaxIndex);
-            paralaxHover();
+            clearAdvertisements(container, 'left');
+            setTimeout(() => {
+                displayLastUploaded(currentMinIndex, currentMaxIndex, 'right');
+            }, 500); // Opóźnienie dopasowane do czasu animacji
         }
     });
 
     nextPageButton.addEventListener('click', () => {
         if (currentMaxIndex < advertisements.length) {
-            clearAdvertisements(container);
             currentMinIndex += resultsPerPage;
             currentMaxIndex += resultsPerPage;
-
-            if (currentMaxIndex > advertisements.length) {
-                currentMaxIndex = advertisements.length;
-            }
-
-            displayLastUploaded(currentMinIndex, currentMaxIndex);
-            paralaxHover();
-
+            clearAdvertisements(container, 'right');
+            setTimeout(() => {
+                displayLastUploaded(currentMinIndex, currentMaxIndex, 'left');
+            }, 500); // Opóźnienie dopasowane do czasu animacji
         }
     });
 
@@ -55,86 +51,39 @@ document.addEventListener("DOMContentLoaded", function () {
     addHoverEffect(nextPageButton);
 });
 
-function createLastUploadedHeader() {
-    const container = document.getElementById('container-main');
 
-    const title = document.createElement('h2');
-    title.textContent = 'Ostatnio Dodane';
-    title.classList.add('last-uploaded-title');
 
-    const titleContainer = document.createElement('div');
-    titleContainer.style.fontWeight = "bold";
-    titleContainer.style.color = "darkgoldenrod";
-    titleContainer.style.textAlign = 'center';
-    titleContainer.style.width = '1400px';
-    titleContainer.style.height = '70px';
-    titleContainer.style.display = 'flex';
-    titleContainer.style.justifyContent = 'space-between';
-    titleContainer.style.alignItems = 'center';
-
-    const arrowButtonContainer = document.createElement('div');
-    arrowButtonContainer.style.display = 'flex';
-    arrowButtonContainer.style.justifyContent = 'space-between';
-    arrowButtonContainer.style.alignItems = 'center';
-    arrowButtonContainer.style.marginTop = '10px';
-
-    const prevPageButton = document.createElement('buttonPrev');
-    prevPageButton.textContent = '←';
-    prevPageButton.id = 'prevPageButton';
-    prevPageButton.style.fontSize = '72px';
-    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
-
-    const nextPageButton = document.createElement('buttonNext');
-    nextPageButton.textContent = '→';
-    nextPageButton.id = 'nextPageButton';
-    nextPageButton.style.fontSize = '72px';
-    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
-
-    arrowButtonContainer.appendChild(prevPageButton);
-    arrowButtonContainer.appendChild(nextPageButton);
-
-    titleContainer.style.marginTop = '15px';
-
-    titleContainer.appendChild(prevPageButton);
-    titleContainer.appendChild(title);
-    titleContainer.appendChild(nextPageButton);
-
-    let lastUploadedResults = document.getElementById('results2');
-    container.insertBefore(titleContainer,lastUploadedResults);
-    return {container, prevPageButton, nextPageButton};
+function animateImages(container, addAnimationClass, activeAnimationClass) {
+    const images = container.querySelectorAll('img');
+    images.forEach(image => {
+        image.classList.add(addAnimationClass);
+        setTimeout(() => {
+            image.classList.add(activeAnimationClass);
+        }, 500);
+    });
+    const figures = container.querySelectorAll('figure');
+    figures.forEach(figure => {
+        figure.classList.add(addAnimationClass);
+        setTimeout(() => {
+            figure.classList.add(activeAnimationClass);
+        }, 500);
+    });
 }
-
-function getLastUploaded(pageNumber){
-
-    const results2 = document.getElementById('results2');
-    results2.style.marginTop = "50px";
-    results2.style.width = "100%";
-    results2.style.marginBottom = "0px";
-    results2.style.maxWidth = "100%";
-    results2.innerHTML = "";
-    results2.style.minHeight = '650px';
-
-
-    fetch('/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
-
-        .then(response => response.json())
-        .then(data => {
-            advertisements = data;
-            displayLastUploaded(currentMinIndex,currentMaxIndex);
-            paralaxHover();
-        })
-        .catch(error => {
-            console.error('Błąd pobierania danych:', error);
-        });
-}
-
-function displayLastUploaded(min,max){
+function displayLastUploaded(min,max,direction){
     const container = document.getElementById('results2');
     advertisements.slice(min,max).forEach(advertisement => {
         const subContainer = document.createElement('div');
         subContainer.classList.add('sub-container-miniature');
         subContainer.style.color = 'darkgoldenrod';
         subContainer.style.textAlign = 'center';
+
+        subContainer.classList.add(direction === 'left' ? 'slide-left-enter' : 'slide-right-enter');
+        setTimeout(() => {
+            subContainer.classList.add(direction === 'left' ? 'slide-left-enter-active' : 'slide-right-enter-active');
+        }, 50);
+
+        animateImages(subContainer, direction === 'left' ? 'slide-left-enter' : 'slide-right-enter',
+            direction === 'left' ? 'slide-left-enter-active' : 'slide-right-enter-active');
 
         subContainer.addEventListener('mouseout', () => {
             subContainer.style.boxShadow = '0 0 20px darkgoldenrod';
@@ -144,8 +93,6 @@ function displayLastUploaded(min,max){
             subContainer.style.boxShadow = '0 0 20px moccasin';
         });
 
-        // const fadeEffect = document.createElement('div');
-        // fadeEffect.classList.add('fade-effect-miniature');
 
         const titleContainerMiniature = document.createElement('div');
         titleContainerMiniature.classList.add('title-container-miniature');
@@ -316,20 +263,29 @@ function displayLastUploaded(min,max){
         subContainer.appendChild(infoContainerSecond);
 
         handleDarkModeInverse(subContainer);
+        paralaxHover();
 
         container.appendChild(subContainer);
-
-
-
 
     });
 }
 
 
+function clearAdvertisements(container, direction) {
+    const advertisementElements = [...container.getElementsByClassName('sub-container-miniature')];
+    advertisementElements.forEach(elem => {
 
-function clearAdvertisements(container) {
-    const advertisementElements = container.getElementsByClassName('sub-container-miniature');
-    while (advertisementElements.length > 0) {
-        advertisementElements[0].remove();
-    }
+        animateImages(elem, direction === 'right' ? 'slide-left-exit' : 'slide-right-exit',
+            direction === 'right' ? 'slide-left-exit-active' : 'slide-right-exit-active');
+
+        elem.classList.add(direction === 'right' ? 'slide-left-exit' : 'slide-right-exit');
+        setTimeout(() => {
+            elem.classList.add('to-remove');
+            elem.classList.add(direction === 'right' ? 'slide-left-exit-active' : 'slide-right-exit-active');
+        }, 50);
+    });
+
+    setTimeout(() => {
+        advertisementElements.filter(elem => elem.classList.contains('to-remove')).forEach(elem => elem.remove());
+    }, 500);
 }

@@ -25,7 +25,7 @@ figure {
   transform-style: preserve-3d;
   position: relative;
   transition: all 0.3s ease-out;
-  box-shadow: rgba(255, 255, 255, 0.8) 0 20px 30px -10px !important;
+  box-shadow: rgba(184, 134, 11, 0.5) 6px 2px 16px 0, rgba(255, 255, 255, 0.5) -6px -2px 16px 0px;
 }
 .ph-image img {
   width: 100%;

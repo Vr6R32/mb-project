@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +26,11 @@ public class SessionListener implements HttpSessionListener {
 
     public static ConcurrentHashMap<String, HttpSession> getActiveSessions() {
         return sessions;
+    }
+
+
+    public String getAllSessions(){
+        return sessions.toString();
     }
 
     public Map<String, Object> getSessionDetails(String sessionId) {

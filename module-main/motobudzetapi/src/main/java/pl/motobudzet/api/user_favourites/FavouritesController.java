@@ -2,36 +2,33 @@ package pl.motobudzet.api.user_favourites;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
+import pl.motobudzet.api.user_account.entity.AppUser;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "api/users/favourites")
 public class FavouritesController {
 
     private final FavouritesService favouritesService;
 
     @PostMapping
-    public String manageUserFavourite(@RequestBody FavouriteRequest userRequest,
-                                                      Principal principal){
-        return favouritesService.manageUserFavourite(userRequest, principal.getName());
-
+    public String manageUserFavourite(@RequestBody FavouriteRequest userRequest, Authentication authentication){
+        AppUser user = (AppUser) authentication.getPrincipal();
+        return favouritesService.manageUserFavourite(userRequest, user);
     }
     @GetMapping
-    public ResponseEntity<String> checkIsFavourite(@RequestParam String userName,
-                                                   @RequestParam String advertisementId,
-                                                   Principal principal){
-        String response = String.valueOf(favouritesService.checkIsFavourite(userName,advertisementId, principal.getName()));
+    public ResponseEntity<Boolean> checkIsFavourite(@RequestParam String advertisementId, Authentication authentication){
+        boolean response = favouritesService.checkIsFavourite(advertisementId, authentication.getName());
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{loggedUser}")
-    public List<UUID> getFavouritesIds(@PathVariable String loggedUser,
-                                       Principal principal) {
-        return favouritesService.getAllFavouritesId(loggedUser, principal.getName());
+    @GetMapping("all")
+    public List<AdvertisementDTO> getFavouritesIds(Authentication authentication) {
+        return favouritesService.getAllFavouritesAdvertisements(authentication.getName());
     }
 }

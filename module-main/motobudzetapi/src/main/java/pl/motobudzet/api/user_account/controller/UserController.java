@@ -24,8 +24,8 @@ public class UserController {
         return registrationService.register(request);
     }
     @GetMapping("confirm")
-    public ResponseEntity<Void> confirmEmail(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request){
-        return registrationService.confirmEmail(activationCode,response,request);
+    public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response){
+        registrationService.confirmEmail(activationCode,response);
     }
     @GetMapping("details")
     public AppUserDTO getUserDetails(Authentication authentication){

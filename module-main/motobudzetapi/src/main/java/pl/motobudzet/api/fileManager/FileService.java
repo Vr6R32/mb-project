@@ -1,8 +1,12 @@
 package pl.motobudzet.api.fileManager;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
@@ -22,14 +26,16 @@ import java.util.stream.Collectors;
 public class FileService {
 
     private final UserAdvertisementService advertisementService;
+    private final EntityManager entityManager;
 
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
     public static final String PRIVATE_FILE_PATH = "module-main/files/private/";
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png", "image/heif", "image/heic", "image/webp");
 
 
-    public FileService(@Lazy UserAdvertisementService advertisementService) {
+    public FileService(@Lazy UserAdvertisementService advertisementService,EntityManager entityManager) {
         this.advertisementService = advertisementService;
+        this.entityManager = entityManager;
     }
 
 
@@ -71,7 +77,7 @@ public class FileService {
 
         LinkedHashSet<String> uniqueFilenamesSet = new LinkedHashSet<>(filenames);
 
-        int photosInsertedCount = advertisementService.insertNewPhotos(advertisementId, uniqueFilenamesSet);
+        int photosInsertedCount = insertNewPhotos(advertisementId, uniqueFilenamesSet);
 
         return uniqueFilenamesSet.stream().findFirst().get();
     }
@@ -83,6 +89,39 @@ public class FileService {
         }  catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+
+
+    @Modifying
+    @Transactional
+    public int insertNewPhotos(UUID id, LinkedHashSet<String> names) {
+
+        Query deleteQuery = entityManager.createNativeQuery("DELETE FROM advertisement_images WHERE advertisement_id = ?");
+        deleteQuery.setParameter(1, id);
+        deleteQuery.executeUpdate();
+
+        String baseQuery = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES ";
+        List<Object[]> params = new ArrayList<>();
+
+        StringBuilder values = new StringBuilder();
+        for (String name : names) {
+            values.append("(?, ?),");
+            params.add(new Object[]{id, name});
+        }
+
+        if (values.length() > 0) {
+            values.setLength(values.length() - 1);
+        }
+
+        Query query = entityManager.createNativeQuery(baseQuery + values.toString());
+        for (int i = 0; i < params.size(); i++) {
+            Object[] paramSet = params.get(i);
+            query.setParameter((i * 2) + 1, paramSet[0]);
+            query.setParameter((i * 2) + 2, paramSet[1]);
+        }
+
+        return query.executeUpdate();
     }
 
 //    private void processAndSaveImageWithLogo(MultipartFile file, String fileName, Advertisement advertisement) {

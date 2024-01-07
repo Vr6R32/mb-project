@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class SessionController {
+
     private final SessionListener sessionListener;
 
     @GetMapping("api/session")
     public void getSession(@RequestParam String sessionId) {
         sessionListener.getSessionDetails(sessionId);
+    }
+    @GetMapping("api/session/all")
+    public String getSessions() {
+        return sessionListener.getAllSessions();
     }
 
 }

@@ -1,4 +1,4 @@
-package pl.motobudzet.api.z_configuration.security;
+package pl.motobudzet.api.z_configuration.security_basic;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

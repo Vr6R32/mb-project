@@ -1,15 +1,32 @@
-// window.addEventListener("load", getDeviceScreenInfo);
-// document.addEventListener("DOMContentLoaded", preloadLogo);
-document.addEventListener("DOMContentLoaded", applySavedZoom);
+
 window.addEventListener('scroll', hideNavBar);
-document.addEventListener('DOMContentLoaded', (event) => {
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    applySavedZoom();
+    handleZoomSlider();
+});
+
+
+
+
+async function fetchWithAuth(url, options = {}) {
+    if (!options.headers) {
+        options.headers = {};
+    }
+    await checkIsTokenValid(true);
+    return fetch(url, options);
+}
+
+
+function handleZoomSlider() {
     const slider = document.getElementById('zoom-slider');
     const defaultVal = 1; // ustaw wartość domyślną bezpośrednio
 
     slider.oninput = (e) => {
         const val = e.target.valueAsNumber;
 
-        // Jeśli wartość suwaka jest bliska domyślnej wartości, przesuń go na tę wartość
         if (Math.abs(val - defaultVal) < 0.02) { // 0.02 to zakres 'snap', dostosuj wg potrzeb
             slider.value = defaultVal;
             changeZoom(defaultVal); // Wywołaj funkcję zmiany skali
@@ -17,13 +34,82 @@ document.addEventListener('DOMContentLoaded', (event) => {
             changeZoom(val); // Kontynuuj normalną zmianę skali
         }
     };
+    showCookieBarNotification();
+}
 
-    showCookieConsent();
+function getLastUploaded(pageNumber){
 
-});
+    const results2 = document.getElementById('results2');
+    results2.style.marginTop = "50px";
+    results2.style.width = "100%";
+    results2.style.marginBottom = "0px";
+    results2.style.maxWidth = "100%";
+    results2.innerHTML = "";
+    results2.style.minHeight = '650px';
 
 
-function showCookieConsent() {
+    fetchWithAuth('/api/advertisements/last-uploaded?pageNumber=' + pageNumber)
+
+        .then(response => response.json())
+        .then(data => {
+            advertisements = data;
+            displayLastUploaded(currentMinIndex,currentMaxIndex,'left');
+            paralaxHover();
+        })
+        .catch(error => {
+            console.error('Błąd pobierania danych:', error);
+        });
+}
+
+function createLastUploadedContainer() {
+    const container = document.getElementById('container-main');
+
+    const title = document.createElement('h2');
+    title.textContent = 'Ostatnio Dodane';
+    title.classList.add('last-uploaded-title');
+
+    const titleContainer = document.createElement('div');
+    titleContainer.style.fontWeight = "bold";
+    titleContainer.style.color = "darkgoldenrod";
+    titleContainer.style.textAlign = 'center';
+    titleContainer.style.width = '1400px';
+    titleContainer.style.height = '70px';
+    titleContainer.style.display = 'flex';
+    titleContainer.style.justifyContent = 'space-between';
+    titleContainer.style.alignItems = 'center';
+
+    const arrowButtonContainer = document.createElement('div');
+    arrowButtonContainer.style.display = 'flex';
+    arrowButtonContainer.style.justifyContent = 'space-between';
+    arrowButtonContainer.style.alignItems = 'center';
+    arrowButtonContainer.style.marginTop = '10px';
+
+    const prevPageButton = document.createElement('buttonPrev');
+    prevPageButton.textContent = '←';
+    prevPageButton.id = 'prevPageButton';
+    prevPageButton.style.fontSize = '72px';
+    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+
+    const nextPageButton = document.createElement('buttonNext');
+    nextPageButton.textContent = '→';
+    nextPageButton.id = 'nextPageButton';
+    nextPageButton.style.fontSize = '72px';
+    prevPageButton.style.textShadow = '1px 0px black, -1px 0px black, 0px 1px black, 0px -1px black';
+
+    arrowButtonContainer.appendChild(prevPageButton);
+    arrowButtonContainer.appendChild(nextPageButton);
+
+    titleContainer.style.marginTop = '15px';
+
+    titleContainer.appendChild(prevPageButton);
+    titleContainer.appendChild(title);
+    titleContainer.appendChild(nextPageButton);
+
+    let lastUploadedResults = document.getElementById('results2');
+    container.insertBefore(titleContainer,lastUploadedResults);
+    return {container, prevPageButton, nextPageButton};
+}
+function showCookieBarNotification() {
     // Sprawdź, czy zgoda na cookies została już udzielona
     if (localStorage.getItem('cookieConsent') === 'true') {
         return;
@@ -56,7 +142,6 @@ function showCookieConsent() {
 
     // Dodaj funkcjonalność przycisku
     consentButton.onclick = function() {
-        // Zapisz zgodę w localStorage i ukryj pasek
         localStorage.setItem('cookieConsent', 'true');
         consentBar.style.display = 'none';
     };
@@ -66,31 +151,6 @@ function showCookieConsent() {
     document.body.appendChild(consentBar);
 }
 
-// function resetZoom() {
-//     var slider = document.getElementById('zoom-slider');
-//     slider.value = 1; // wartość domyślna dla suwaka
-//     changeZoom(slider.value);
-// }
-
-// function preloadLogo() {
-//     const xhr = new XMLHttpRequest();
-//     const url = "/api/static/logo";
-//     xhr.open("GET", url, true);
-//     xhr.responseType = "arraybuffer";
-//     xhr.onload = function() {
-//         if (xhr.status >= 200 && xhr.status < 300) {
-//             const arrayBufferView = new Uint8Array(xhr.response);
-//             const blob = new Blob([arrayBufferView], { type: "image/png" });
-//             const imageUrl = URL.createObjectURL(blob);
-//             const logoImageElement = document.getElementById("logo");
-//             if (logoImageElement) {
-//                 logoImageElement.src = imageUrl;
-//                 logoImageElement.alt = "Logo";
-//             }
-//         }
-//     };
-//     xhr.send();
-// }
 function hideNavBar () {
     const header = document.querySelector('header');
     if (window.pageYOffset > 300) {
@@ -123,25 +183,6 @@ function changeZoom(value) {
     localStorage.setItem('userZoom', value);
 }
 
-// window.addEventListener('load', applyDarkModeSetting);
-//
-// function toggleDarkMode() {
-//     // If the 'dark-mode' class is present, then dark mode is currently enabled
-//     let isDarkMode = document.body.classList.contains('dark-mode');
-//     // Toggle dark mode off if it's on, or on if it's off
-//     document.body.classList.toggle('dark-mode');
-//     // Save the updated state in localStorage
-//     localStorage.setItem('darkMode', !isDarkMode);
-// }
-//
-// function applyDarkModeSetting() {
-//     var darkModeSetting = localStorage.getItem('darkMode');
-//     // Compare the setting as a string, since localStorage stores strings
-//     if (darkModeSetting === 'true') {
-//         document.body.classList.add('dark-mode');
-//     } else {
-//         document.body.classList.remove('dark-mode');
-//     }
 function paralaxHover() {
     /*
    * Paralax Hover
@@ -173,7 +214,7 @@ function paralaxHover() {
             image.addEventListener('mouseleave', handleMouseLeave);
         });
 
-        function handleMouseEnter(e) {
+        function handleMouseEnter() {
             imageWidth = this.offsetWidth || this.clientWidth || this.scrollWidth;
             imageHeight = this.offsetHeight || this.clientHeight || this.scrollheight;
 
@@ -185,20 +226,20 @@ function paralaxHover() {
         }
 
         function handleMouseMove(e) {
-            var bounds = e.target.getBoundingClientRect();
-            var centerX = imageWidth / 2;
-            var centerY = imageHeight / 2;
-            var deltaX = e.offsetX - centerX;
-            var deltaY = e.offsetY - centerY;
+            let bounds = e.target.getBoundingClientRect();
+            let centerX = imageWidth / 2;
+            let centerY = imageHeight / 2;
+            let deltaX = e.offsetX - centerX;
+            let deltaY = e.offsetY - centerY;
 
-            // Invert the sign for rotateX to correct the vertical inversion
-            var rotateX = -deltaY / (config.rotation * 100); // Inverted rotation around X-axis for vertical movement
-            var rotateY = deltaX / (config.rotation * 100); // Rotation around Y-axis for horizontal movement
+            //Invert the sign for rotateX to correct the vertical inversion
+            let rotateX = -deltaY / (config.rotation * 100); // Inverted rotation around X-axis for vertical movement
+            let rotateY = deltaX / (config.rotation * 100); // Rotation around Y-axis for horizontal movement
 
-            var angleRad = Math.atan2(deltaY, deltaX);
-            var angleDeg = angleRad * 180 / Math.PI - 90;
+            let angleRad = Math.atan2(deltaY, deltaX);
+            let angleDeg = angleRad * 180 / Math.PI - 90;
 
-            var movement = e.offsetY / bounds.top;
+            // var movement = e.offsetY / bounds.top;
             // var lightAlpha = movement * config.alpha;
             // var shadowMovement = movement * 5;
 
@@ -288,21 +329,29 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
     resultDiv.onmouseover = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px cyan";
-            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+            if(iconWrapper) {
+                iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+            }
         } else
             resultDiv.style.boxShadow = "0 0 20px moccasin";
+        if(iconWrapper){
             iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+        }
     };
 
     // Remove hover effect on mouseout
     resultDiv.onmouseout = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px moccasin";
-            iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
+            if(iconWrapper) {
+                iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
+            }
         } else
             resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
-            iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
-    };
+            if(iconWrapper) {
+                iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
+            }
+    }
 }
 
 
@@ -797,71 +846,7 @@ function loadFileDrop(){
         e.preventDefault();
     });
 }
-function createDescriptionEditor() {
-    let horizontalContainer = document.getElementById('half-container-horizontal');
-    let editor = document.createElement('div'); // zamiast 'textarea'
-    editor.id = "editor";
 
-    let label = document.createElement('div');
-    label.textContent = 'Opis Ogłoszenia:'
-    label.style.marginTop = '15px';
-    label.style.marginBottom = '15px';
-    label.style.color = 'darkgoldenrod';
-    label.style.width = '1300px';
-    label.style.textAlign = 'center';
-    label.style.fontSize = '18px';
-
-    editor.style.scrollbarWidth = 'thin';
-    editor.style.scrollbarColor = 'darkgoldenrod transparent';
-    editor.style.WebkitScrollbar = 'thin';
-    editor.style.WebkitScrollbarTrack = 'transparent';
-    editor.style.WebkitScrollbarThumb = 'darkgoldenrod';
-    editor.style.WebkitScrollbarThumbHover = 'goldenrod';
-
-
-    // Stylizacja dla textarea
-    editor.style.width = '1200px';
-    editor.style.maxWidth = '100%';
-    editor.style.padding = '40px';
-    editor.style.height = '700px';
-    editor.style.backgroundColor = 'black';
-    editor.style.borderRadius = '10px';
-    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
-    editor.style.overflowY = 'auto'; // Dodane
-
-    // Dodanie elementów do kontenera
-    horizontalContainer.appendChild(label);
-    horizontalContainer.appendChild(editor);
-    horizontalContainer.appendChild(document.createElement('br'));
-
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        // ['blockquote', 'code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        // ['clean']
-    ];
-
-    quill = new Quill('#editor', {
-        modules: {
-            toolbar: toolbarOptions
-        },
-        theme: 'snow'
-    });
-
-    quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
-    quill.format(0, quill.getLength(), 'color', '#fff');
-
-
-}
 function fetchSpecifications() {
     function populateSelect(selectId, data) {
         const select = document.getElementById(selectId);
@@ -1177,6 +1162,7 @@ function createSnowflake() {
     snowflake.style.animationDuration = Math.random() * 3 + 5 + 's'; // between 5 - 8 seconds
     snowflake.style.opacity = Math.random();
     snowflake.style.fontSize = Math.random() * 20 + 10 + 'px'; // większe rozmiary
+    snowflake.style.zIndex = '-100';
 
     document.getElementById('snowflakeContainer').appendChild(snowflake);
 
@@ -1186,3 +1172,150 @@ function createSnowflake() {
 }
 
 setInterval(createSnowflake, 300);
+
+
+function createDescriptionEditor() {
+    let horizontalContainer = document.getElementById('half-container-horizontal');
+    let editor = document.createElement('div'); // zamiast 'textarea'
+    editor.id = "editor";
+
+    let label = document.createElement('div');
+    label.textContent = 'Opis Ogłoszenia:'
+    label.style.marginTop = '15px';
+    label.style.marginBottom = '15px';
+    label.style.color = 'darkgoldenrod';
+    label.style.width = '1300px';
+    label.style.textAlign = 'center';
+    label.style.fontSize = '18px';
+
+    editor.style.scrollbarWidth = 'thin';
+    editor.style.scrollbarColor = 'darkgoldenrod transparent';
+    editor.style.WebkitScrollbar = 'thin';
+    editor.style.WebkitScrollbarTrack = 'transparent';
+    editor.style.WebkitScrollbarThumb = 'darkgoldenrod';
+    editor.style.WebkitScrollbarThumbHover = 'goldenrod';
+
+
+    // Stylizacja dla textarea
+    editor.style.width = '1200px';
+    editor.style.maxWidth = '100%';
+    editor.style.padding = '40px';
+    editor.style.height = '700px';
+    editor.style.backgroundColor = 'black';
+    editor.style.borderRadius = '10px';
+    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
+    editor.style.overflowY = 'auto'; // Dodane
+
+    // Dodanie elementów do kontenera
+    horizontalContainer.appendChild(label);
+    horizontalContainer.appendChild(editor);
+    horizontalContainer.appendChild(document.createElement('br'));
+
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],
+        // ['blockquote', 'code-block'],
+        [{ 'header': 1 }, { 'header': 2 }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': [] }],
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+        // ['clean']
+    ];
+
+    quill = new Quill('#editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow'
+    });
+
+    quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
+    quill.format(0, quill.getLength(), 'color', '#fff');
+}
+
+
+
+async function checkIsTokenValid(isFetch) {
+    let accessTokenExpirationTime = localStorage.getItem("accessTokenExpirationTime");
+    let refreshTokenExpirationTime = localStorage.getItem("refreshTokenExpirationTime");
+    let currentDate = Date.now();
+
+    let accessTokenValid = accessTokenExpirationTime && !isNaN(accessTokenExpirationTime);
+    let refreshTokenValid = refreshTokenExpirationTime && !isNaN(refreshTokenExpirationTime) && parseInt(refreshTokenExpirationTime, 10) > currentDate;
+
+    if (accessTokenValid) {
+        let accessTokenExpirationDate = new Date(parseInt(accessTokenExpirationTime, 10));
+        let tenMinutesBeforeExpiration = new Date(accessTokenExpirationDate.getTime() - 10 * 600);
+
+        if (currentDate >= tenMinutesBeforeExpiration.getTime()) {
+            console.log("Token za chwilę wygaśnie. Odświeżanie tokenu.");
+            await refreshToken(isFetch);
+        } else {
+            console.log("Token jest jeszcze ważny.");
+        }
+    } else if (refreshTokenValid) {
+        console.log("AccessToken jest nieważny, ale refreshToken jest ważny. Odświeżanie tokenu.");
+        await refreshToken(isFetch);
+    } else {
+        console.log("Oba tokeny są nieważne lub nie istnieją. Użytkownik może być zmuszony do ponownego logowania.");
+    }
+}
+
+function handleLoginResponse(isFetch) {
+    const accessTokenExpirationTime = getCookie("accessTokenExpirationTime");
+    if (accessTokenExpirationTime) {
+        localStorage.setItem("accessTokenExpirationTime", accessTokenExpirationTime);
+    }
+
+    const refreshTokenExpirationTime = getCookie("refreshTokenExpirationTime");
+    if (refreshTokenExpirationTime) {
+        localStorage.setItem("refreshTokenExpirationTime", refreshTokenExpirationTime);
+    }
+
+    if(!isFetch){
+        window.location.href = getRedirectLink();
+    }
+
+}
+
+async function refreshToken(isFetch) {
+    let url = '/api/v1/auth/refresh-token';
+
+    try {
+        let response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Problem z odświeżeniem tokenu.');
+        }
+
+        handleLoginResponse(isFetch);
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function getCookie(name) {
+    let cookieArray = document.cookie.split(';');
+    for (let cookie of cookieArray) {
+        let [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) {
+            return cookieValue;
+        }
+    }
+    return null;
+}
+
+function getRedirectLink() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirect = urlParams.get('redirect');
+    return redirect ? redirect : '/';
+}

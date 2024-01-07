@@ -4,7 +4,6 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
-
   mail:
     host: serwer2379308.home.pl
     port: 587
@@ -74,6 +73,19 @@ server:
     key-store: classpath:keystore.p12
     key-store-password: odi123
     key-alias: spring-boot
+
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B59701231BZCZWQWRXCVXQWEQWREYGCX34234VXCVERW
+#      expiration: 86400000 # a day
+#      expiration: 3600000 # an hour
+#      expiration: 660000 # an hour
+      expiration: 15000 # an hour
+      refresh-token:
+        expiration: 604800000 # 7 days
+
 
 mailing:
     module:

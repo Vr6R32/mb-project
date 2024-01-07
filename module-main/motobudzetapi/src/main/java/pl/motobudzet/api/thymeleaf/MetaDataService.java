@@ -13,7 +13,7 @@ public class MetaDataService {
 
     private final AdvertisementRepository advertisementRepository;
 
-    MetaDataDTO findMetaDataForAdvertisementById(UUID uuid) {
+    public MetaDataDTO findMetaDataForAdvertisementById(UUID uuid) {
         return advertisementRepository.findMetaDataById(uuid).orElse(null);
     }
 }

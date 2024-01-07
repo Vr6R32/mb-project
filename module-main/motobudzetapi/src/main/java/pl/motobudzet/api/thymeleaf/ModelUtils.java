@@ -1,19 +1,32 @@
 package pl.motobudzet.api.thymeleaf;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
-
-import java.security.Principal;
 
 public class ModelUtils {
 
-    private static final String USER_LOGGED_BUTTON = "username";
+    private static final String USER_LOGGED_PARAMETER = "username";
     private static final String USER_NOT_LOGGED_BUTTON_VALUE = "ZALOGUJ";
+    public static final String ROLE_PARAMETER = "ROLE";
+    public static final String ROLE_PARAMETER_VALUE = "ROLE_ADMIN";
 
-    public static void setButtonsAttributes(Model model, Principal principal) {
-        if (principal != null) {
-            model.addAttribute(USER_LOGGED_BUTTON, principal.getName());
+    public static void setAuthenticationAttributes(Model model, Authentication authentication) {
+        if (authentication != null) {
+            model.addAttribute(USER_LOGGED_PARAMETER, authentication.getName());
+
+            if (isAdmin(authentication)) {
+                model.addAttribute(ROLE_PARAMETER, ROLE_PARAMETER_VALUE);
+            }
+
         } else {
-            model.addAttribute(USER_LOGGED_BUTTON, USER_NOT_LOGGED_BUTTON_VALUE);
+            model.addAttribute(USER_LOGGED_PARAMETER, USER_NOT_LOGGED_BUTTON_VALUE);
         }
+    }
+
+    private static boolean isAdmin(Authentication authentication) {
+        return authentication
+                .getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getAuthority().equals(ROLE_PARAMETER_VALUE));
     }
 }

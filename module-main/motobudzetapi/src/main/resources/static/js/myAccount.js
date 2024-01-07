@@ -5,7 +5,6 @@ let currentRow = 1;
 document.addEventListener("DOMContentLoaded", function () {
     createButtons();
     loadFunctionHref();
-    // loadPreviousButton();
 });
 
 function loadFunctionHref(){
@@ -24,11 +23,11 @@ function Ogloszenia(buttonName) {
 }
 function Wiadomosci(buttonName) {
     createHeader(buttonName);
-    loadConversations();
+    loadUserConversations();
 }
 function Ulubione(buttonName) {
     createHeader(buttonName);
-    loadFavourites();
+    loadUserFavourites();
 }
 function Ustawienia(buttonName) {
     createHeader(buttonName);
@@ -38,12 +37,7 @@ function UkryjMenu(buttonName) {
     leftContainer.remove();
 }
 function loadUserAdvertisements(){
-    fetchAdvertisements();
-}
-function fetchAdvertisements(){
-    let loggedUser = document.getElementById('username').textContent;
-    let resultContainerRight = document.getElementById('resultContainerRight');
-    fetch('/api/advertisements/user/' + loggedUser)
+    fetchWithAuth('/api/advertisements/all')
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('resultContainerRight');
@@ -51,88 +45,50 @@ function fetchAdvertisements(){
                 container.textContent = "Nie masz jeszcze żadnych ogłoszeń";
             } else {
                 data.forEach(advertisementData => {
-                        createUserAdvertisementsResultDiv(advertisementData,container);
-                        row++;
-                        resultCount++
-                    });
+                    createUserAdvertisementsResultDiv(advertisementData,container);
+                    row++;
+                    resultCount++
+                });
             }
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
         });
 }
-function loadFavourites() {
-    let loggedUser = getUserName();
-    fetch('/api/users/favourites/' + loggedUser, {
+
+function loadUserFavourites() {
+
+    fetchWithAuth('/api/users/favourites/all', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Błąd podczas pobierania ulubionego statusu');
-            }
-            return response.text();
-        })
-        .then(data => {
-
-            data = data.slice(1, -1);
-            const uuidArray = data.split(',').map(item => item.trim());
-            const uuidList = [];
-
-            uuidArray.forEach(item => {
-                uuidList.push(item);
-            });
-
-            if (data.length < 1) {
-                let resultContainerRight = document.getElementById('resultContainerRight');
-                resultContainerRight.textContent = "Nie masz jeszcze żadnych ogłoszeń";
-                return;
-            }
-            fetchFavouriteIds(uuidList)
-        })
-        .catch(error => {
-            console.error('Błąd: ' + error.message);
-        });
-}
-function fetchFavouriteIds(uuidList) {
-
-    uuidList = uuidList.map(uuid => uuid.replace(/^\"|\"$/g, ''));
-
-    fetch('/api/advertisements/favourites', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(uuidList),
-    })
-        .then(response => {
-            if (!response.ok) {
-                let resultContainerRight = document.getElementById('resultContainerRight');
-                resultContainerRight.textContent = "Nie masz jeszcze żadnych ogłoszeń";
-            }
             return response.json();
         })
         .then(data => {
-            let resultContainerRight = document.getElementById('resultContainerRight');
-            data.forEach(advertisement => {
-                createUserAdvertisementsResultDiv(advertisement,resultContainerRight);
-                row++;
-                resultCount++
-            });
+            if(data.length < 1) {
+                let resultContainerRight = document.getElementById('resultContainerRight');
+                resultContainerRight.textContent = "Nie posiadasz jeszcze żadnych obserwowanych ogłoszeń";
+            } else {
+                let resultContainerRight = document.getElementById('resultContainerRight');
+                data.forEach(advertisement => {
+                    createUserAdvertisementsResultDiv(advertisement,resultContainerRight);
+                    row++;
+                    // resultCount++
+                });
+            }
         })
         .catch(error => {
             console.error('Błąd: ' + error.message);
         });
 }
-function loadConversations() {
+function loadUserConversations() {
 
-    let url = `/api/conversations`;
     let resultContainerRight = document.getElementById("resultContainerRight");
 
-
-    fetch(url)
+    fetchWithAuth(`/api/conversations`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -140,13 +96,13 @@ function loadConversations() {
             return response.json();
         })
         .then((data) => {
-            let resultCount = 0;
+            // let resultCount = 0;
             if (data.length === 0) {
-                resultContainerRight.textContent = "Nie znaleziono żadnych wiadomości";
+                resultContainerRight.textContent = "Nie posiadasz jeszcze żadnych konwersacji";
             } else {
                 data.forEach(conversation => {
                     const resultDiv = createResultDiv(conversation,resultContainerRight);
-                    resultCount++;
+                    // resultCount++;
                     conversationRow++
                     resultContainerRight.appendChild(resultDiv);
                 });
@@ -173,7 +129,7 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
     const url = `/api/messages?conversationId=${conversationId}`;
     let resultCount = 0;
 
-    fetch(url)
+    fetchWithAuth(url)
         .then(response => response.json())
         .then(messages => {
                 messages.forEach(message => {
@@ -219,7 +175,6 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
 }
 function createHeader(buttonName){
 
-
     let headerContainer = document.getElementById("headerContainer");
     headerContainer.textContent = buttonName.replace("_", " ");
 
@@ -228,15 +183,15 @@ function createHeader(buttonName){
 
     headerContainer.appendChild(hrLine);
 
-    cleanMessages();
+    cleanResultsDiv();
 
     setTimeout(() => {
         hrLine.style.transform = "scaleX(1)";
         hrLine.style.borderTopColor = "darkgoldenrod";
 
-    }, 100);
+    }, 500);
 }
-function cleanMessages() {
+function cleanResultsDiv() {
     let childConversationMessageInputElement = document.getElementById('messageInputDiv');
 
     let childConversationResultElements = document.querySelectorAll('#rightContainer [id^="messageResultDiv"]');

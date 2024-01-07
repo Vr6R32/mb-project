@@ -13,7 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static pl.motobudzet.api.z_configuration.security.UserDetailsServiceImpl.mapRolesToAuthorities;
+import static pl.motobudzet.api.z_configuration.security_basic.UserDetailsServiceImpl.mapRolesToAuthorities;
+
 
 @Entity
 @Setter

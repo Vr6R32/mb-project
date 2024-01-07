@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
-
-@SpringBootApplication
 @EnableAsync
 @EnableCaching
+@SpringBootApplication
 public class MotoBudzetApplication {
     public static void main(String[] args) {
         SpringApplication.run(MotoBudzetApplication.class, args);

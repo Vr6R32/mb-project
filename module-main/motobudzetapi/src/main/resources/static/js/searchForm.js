@@ -6,7 +6,8 @@ let favouritesArray = [];
 let clickedButton = "";
 let darkModeCheckbox;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    // await checkIsTokenValid();
     createSearchFormContainer();
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
@@ -681,26 +682,16 @@ function applyLabelColor(element, label) {
     }
 }
 function getUserFavourites() {
-
-
-    fetch("/api/users/favourites/" + getUserName())
+    fetch("/api/users/favourites/all")
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.text();
+            return response.json();
         })
         .then(data => {
-            // Przekształć ciąg znaków w tablicę UUID
-            let ids = data.replace(/[\[\]]/g, '').split(',').filter(Boolean);
-
-            ids.forEach(id => {
-                id = id.trim();  // Usuń ewentualne białe znaki
-
-                // Usuń cudzysłowy z początku i końca ciągu znaków
-                id = id.replace(/^"|"$/g, '');
-
-                favouritesArray.push(id);
+            data.forEach(advertisement => {
+                favouritesArray.push(advertisement.id);
             });
         })
         .catch(error => console.error("Error fetching data:", error));
@@ -757,9 +748,6 @@ function displayResults(data) {
         resultDiv.style.width = "100%";
         resultDiv.style.height = "240px";
         resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 1)';
-        // resultDiv.style.backgroundColor = "#000000";
-        // resultDiv.style.backgroundColor = "#181818";
-        // adDiv.style.backgroundColor = "black";
         resultDiv.style.color = 'darkgoldenrod';
         resultDiv.style.marginBottom = "20px";
         resultDiv.style.padding = "10px";
@@ -770,8 +758,8 @@ function displayResults(data) {
         resultDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
         resultDiv.style.maxWidth = "100%";
         resultDiv.style.fontSize = "20px";
-        // resultDiv.style.opacity = 0; // Set initial opacity to 0
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
+
         // Set the onclick event to redirect to the /id/{ad.id} endpoint
         resultDiv.onclick = (event) => {
             event.preventDefault(); // To zatrzyma domyślne przewijanie strony
@@ -780,12 +768,10 @@ function displayResults(data) {
 
         handleDarkModeInverse(resultDiv);
 
-
         const photoElement = document.createElement("img");
         photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
         photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
-        // photoElement.style.boxShadow =     box-shadow: rgba(255, 255, 255, 0.8) 0 20px 30px -10px !important;
         let maxPhotoWidth = 300;
 
 
@@ -1258,11 +1244,13 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
     let endPage = Math.min(startPage + sidePages * 2 + 1, data.totalPages);
 
     if (data.number < sidePages) {
-        endPage = sidePages * 2 + 1;
+        endPage = Math.min(sidePages * 2 + 1, data.totalPages);
+        startPage = 0; // Ustaw startPage na 0, aby uniknąć wartości ujemnych
     }
 
     if (data.number > data.totalPages - sidePages - 1) {
-        startPage = data.totalPages - sidePages * 2 - 1;
+        startPage = Math.max(data.totalPages - sidePages * 2 - 1, 0);
+        endPage = data.totalPages;
     }
 
     // Dodaj "..." jeśli istnieje luka

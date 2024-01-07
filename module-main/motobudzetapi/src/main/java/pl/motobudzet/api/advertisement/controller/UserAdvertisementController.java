@@ -53,14 +53,9 @@ public class UserAdvertisementController {
         return userAdvertisementService.editExistingAdvertisement(id, request, authentication.getName(),files);
     }
 
-    @GetMapping(value = "user/{username}")
-    public List<AdvertisementDTO> getAllUserAdvertisements(@PathVariable String username,
-                                                           Principal principal) {
-        return userAdvertisementService.getAllUserAdvertisements(username, principal.getName());
+    @GetMapping(value = "all")
+    public List<AdvertisementDTO> getAllUserAdvertisements(Authentication authentication) {
+        return userAdvertisementService.getAllUserAdvertisements(authentication.getName());
     }
 
-    @PostMapping(value = "favourites")
-    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(@RequestBody List<String> uuidStringList) {
-        return userAdvertisementService.getAllUserFavouritesAdvertisements(uuidStringList);
-    }
 }

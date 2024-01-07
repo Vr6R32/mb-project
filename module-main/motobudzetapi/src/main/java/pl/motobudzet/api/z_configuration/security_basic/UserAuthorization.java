@@ -1,4 +1,4 @@
-package pl.motobudzet.api.z_configuration.security;
+package pl.motobudzet.api.z_configuration.security_basic;
 
 import pl.motobudzet.api.user_messaging.entity.ConversationMessage;
 

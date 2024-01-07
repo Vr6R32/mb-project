@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadFileDrop();
     fetchUserDetails();
     createDropDeleteZone();
-    handleImageUrl("https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhubHJ5ZHpwNDhkbzItT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.wqdGocguDvXytJOqUereVMNG5jyPJ-EWs7IpAIC8EJQ/image.webp");
+    // handleImageUrl("https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhubHJ5ZHpwNDhkbzItT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.wqdGocguDvXytJOqUereVMNG5jyPJ-EWs7IpAIC8EJQ/image.webp");
 
 
     document.addEventListener('dragover', function (e) {
@@ -66,6 +66,9 @@ function createForm() {
     const titleContainer = document.getElementById('title-container-hidden');
     const formContainer = document.getElementById('half-container-big1');
     const photoContainer = document.getElementById('half-container-big2');
+    const containerMain = document.getElementById('container-main');
+
+    containerMain.style.opacity = '1';
 
     titleContainer.style.color = 'darkgoldenrod';
     titleContainer.style.textAlign = 'center';

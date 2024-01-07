@@ -44,6 +44,9 @@
 </div>
 <span id="loadFunction" th:text="${loadFunction}" style="display: none;"></span>
 <div id="zoom-controls">
+    <div class="nav-buttons">
+        <a href="/management" th:if="${ROLE == 'ROLE_ADMIN'}" class="nav-buttons">ADMIN</a>
+    </div>
     <div style="display: flex">
         <label style="font-size: 60px;align-items: center; justify-content: center;">🕵️</label>
         <div class="custom-toggle-switch">

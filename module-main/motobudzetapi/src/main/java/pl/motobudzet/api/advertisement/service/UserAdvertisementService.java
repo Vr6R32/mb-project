@@ -52,14 +52,8 @@ public class UserAdvertisementService {
     private final UserDetailsService userDetailsService;
     private final SpringMailSenderService mailSenderService;
     private final CityService cityService;
-    private final EntityManager entityManager;
     private final FileService fileService;
 
-    public List<AdvertisementDTO> getAllUserFavouritesAdvertisements(List<String> uuidStringList) {
-            List<UUID> uuidsList = uuidStringList.stream().map(UUID::fromString).toList();
-            return advertisementRepository.getAllAdvertisementsByListOfIds(uuidsList).stream()
-                    .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
-    }
 
     public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
         return advertisementRepository.findOneByIdWithFetch(uuid)
@@ -188,7 +182,7 @@ public class UserAdvertisementService {
         mailSenderService.sendEmailNotificationToManagement(emailList,id);
     }
 
-    public AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
+    public static AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
 
         AdvertisementDTO builder = AdvertisementDTO.builder()
                 .id(adv.getId().toString())
@@ -232,44 +226,11 @@ public class UserAdvertisementService {
 
 
 
-    public List<AdvertisementDTO> getAllUserAdvertisements(String username, String loggedUser) {
-        if (username.equals(loggedUser)) {
-            Long userNameId = userCustomService.getUserIdByUserName(username);
-            return advertisementRepository.findAllAdvertisementsByUserId(userNameId)
-                    .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
-        }
-        return Collections.emptyList();
-    }
+    public List<AdvertisementDTO> getAllUserAdvertisements(String loggedUser) {
+        Long userNameId = userCustomService.getUserIdByUserName(loggedUser);
+        return advertisementRepository.findAllAdvertisementsByUserId(userNameId)
+                .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
 
-    @Modifying
-    @Transactional
-    public int insertNewPhotos(UUID id, LinkedHashSet<String> names) {
-
-        Query deleteQuery = entityManager.createNativeQuery("DELETE FROM advertisement_images WHERE advertisement_id = ?");
-        deleteQuery.setParameter(1, id);
-        deleteQuery.executeUpdate();
-
-        String baseQuery = "INSERT INTO advertisement_images (advertisement_id, image_urls) VALUES ";
-        List<Object[]> params = new ArrayList<>();
-
-        StringBuilder values = new StringBuilder();
-        for (String name : names) {
-            values.append("(?, ?),");
-            params.add(new Object[]{id, name});
-        }
-
-        if (values.length() > 0) {
-            values.setLength(values.length() - 1);
-        }
-
-        Query query = entityManager.createNativeQuery(baseQuery + values.toString());
-        for (int i = 0; i < params.size(); i++) {
-            Object[] paramSet = params.get(i);
-            query.setParameter((i * 2) + 1, paramSet[0]);
-            query.setParameter((i * 2) + 2, paramSet[1]);
-        }
-
-        return query.executeUpdate();
     }
 
     @Transactional

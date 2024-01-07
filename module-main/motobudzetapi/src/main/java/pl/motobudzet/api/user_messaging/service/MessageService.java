@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.z_configuration.security.UserAuthorization.authorizeMessageGetAccess;
-import static pl.motobudzet.api.z_configuration.security.UserAuthorization.authorizeMessagePostAccess;
+import static pl.motobudzet.api.z_configuration.security_basic.UserAuthorization.authorizeMessageGetAccess;
+import static pl.motobudzet.api.z_configuration.security_basic.UserAuthorization.authorizeMessagePostAccess;
 
 @Service
 @RequiredArgsConstructor
