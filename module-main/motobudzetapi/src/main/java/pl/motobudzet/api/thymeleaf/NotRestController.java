@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.UUID;
 
 import static pl.motobudzet.api.utils.NumberFormatter.formatNumber;
@@ -33,7 +34,7 @@ public class NotRestController {
         model.addAttribute("ogTitle", metadata.title());
         model.addAttribute("ogDescription",
                 formatNumber(metadata.price()) + " " + metadata.priceUnit() + ", " +
-                            formatNumber(metadata.mileage()) + " " + String.valueOf(metadata.mileageUnit()).toLowerCase());
+                        formatNumber(metadata.mileage()) + " " + String.valueOf(metadata.mileageUnit()).toLowerCase());
         return "advertisement";
     }
 
@@ -44,7 +45,7 @@ public class NotRestController {
     }
 
     @GetMapping("advertisement/edit")
-    public String editForm(Model model, Authentication authentication,@RequestParam("id") String id) {
+    public String editForm(Model model, Authentication authentication, @RequestParam("id") String id) {
         ModelUtils.setAuthenticationAttributes(model, authentication);
         return "editForm";
     }
@@ -75,6 +76,7 @@ public class NotRestController {
         model.addAttribute("loadFunction", "Ulubione");
         return "account";
     }
+
     @GetMapping("advertisements")
     public String advertisements(Model model, Authentication authentication) {
         ModelUtils.setAuthenticationAttributes(model, authentication);

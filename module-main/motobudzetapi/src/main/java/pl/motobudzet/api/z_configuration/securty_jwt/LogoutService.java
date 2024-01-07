@@ -23,8 +23,8 @@ public class LogoutService implements LogoutHandler {
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
 
         tokenRepository.setTokensExpiredAndRevoked(requestCookies.accessToken(), requestCookies.refreshToken());
-        HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("","",0,0);
-        jwtService.applyHttpHeaders(response,httpHeaders);
+        HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
+        jwtService.applyHttpHeaders(response, httpHeaders);
 
         SecurityContextHolder.clearContext();
     }

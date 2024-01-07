@@ -1,26 +1,24 @@
 package pl.motobudzet.api.user_account.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.http.*;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
+import pl.motobudzet.api.user_account.RegistrationRequestValidation;
 import pl.motobudzet.api.user_account.dto.NewPasswordRequest;
 import pl.motobudzet.api.user_account.dto.RegistrationRequest;
 import pl.motobudzet.api.user_account.dto.ResetPasswordRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.repository.AppUserRepository;
 import pl.motobudzet.api.user_account.repository.RoleRepository;
-import pl.motobudzet.api.user_account.RegistrationRequestValidation;
 import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 
 import java.io.IOException;
@@ -38,8 +36,6 @@ public class RegistrationService {
     private final SpringMailSenderService springMailSenderService;
     private final DateTimeProvider dateTimeProvider;
     private final JwtService jwtService;
-
-
 
 
     public ResponseEntity<String> register(RegistrationRequest request) {
@@ -93,7 +89,7 @@ public class RegistrationService {
     public void confirmEmail(String activationLink, HttpServletResponse response) {
         AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
-        if(user != null && !user.getAccountEnabled()){
+        if (user != null && !user.getAccountEnabled()) {
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
             setAuthentication(response, enabledUser);

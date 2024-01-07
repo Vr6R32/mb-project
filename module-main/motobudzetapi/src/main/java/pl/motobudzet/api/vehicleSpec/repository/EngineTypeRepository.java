@@ -20,7 +20,7 @@ public interface EngineTypeRepository extends JpaRepository<EngineType, Long> {
     @Query("select e from EngineType e where e.id = ?1")
     Optional<EngineType> findByAjdi(Long engineTypeId);
 
-//    @Cacheable(value = "engine_type_cache_all")
+    //    @Cacheable(value = "engine_type_cache_all")
     @Query("select e from EngineType e")
     List<EngineType> findAllCached();
 }

@@ -27,6 +27,7 @@ public class AdvertisementFilteringController {
         return advertisementFilteringService.getFilteredAdvertisements(request, pageNumber, sortBy, sortOrder);
 
     }
+
     @GetMapping("/count")
     public long getAdvertisementsCount(
             @ModelAttribute AdvertisementFilterRequest request,

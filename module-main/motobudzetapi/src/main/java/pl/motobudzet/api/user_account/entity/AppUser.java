@@ -6,14 +6,14 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.locationCity.City;
+import pl.motobudzet.api.location_city.City;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static pl.motobudzet.api.z_configuration.security_basic.UserDetailsServiceImpl.mapRolesToAuthorities;
+import static pl.motobudzet.api.z_configuration.securty_jwt.UserDetailsServiceImpl.mapRolesToAuthorities;
 
 
 @Entity
@@ -43,7 +43,7 @@ public class AppUser implements UserDetails {
     private Boolean accountNotExpired;
     private Boolean credentialsNotExpired;
     private LocalDateTime resetPasswordCodeExpiration;
-    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private City city;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JsonManagedReference

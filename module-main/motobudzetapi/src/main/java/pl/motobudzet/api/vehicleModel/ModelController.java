@@ -36,7 +36,7 @@ public class ModelController {
 
     @DeleteMapping("/")
     public ResponseEntity<String> deleteModel(@RequestParam String modelName, @RequestParam String brandName) {
-        return modelService.deleteModel(modelName.toUpperCase(),brandName.toUpperCase());
+        return modelService.deleteModel(modelName.toUpperCase(), brandName.toUpperCase());
     }
 
 }

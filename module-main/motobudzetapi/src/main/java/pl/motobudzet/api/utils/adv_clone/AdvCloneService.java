@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static pl.motobudzet.api.utils.adv_clone.HtmlStringExtractor.*;
+import static pl.motobudzet.api.utils.adv_clone.HtmlStringExtractor.extractStringifiedJsonFromHtml;
 import static pl.motobudzet.api.utils.adv_clone.JsonObjectExtractor.*;
 
 @Service

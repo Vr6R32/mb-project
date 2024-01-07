@@ -3,7 +3,10 @@ package pl.motobudzet.api.vehicleModel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import pl.motobudzet.api.vehicleBrand.Brand;
 
 @Entity

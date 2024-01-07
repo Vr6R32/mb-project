@@ -13,7 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
-import pl.motobudzet.api.locationCity.City;
+import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.Brand;
 import pl.motobudzet.api.vehicleModel.Model;
@@ -64,7 +64,7 @@ public class Advertisement {
     private MileageUnit mileageUnit;
     @Enumerated(EnumType.STRING)
     private PriceUnit priceUnit;
-    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private City city;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private EngineType engineType;

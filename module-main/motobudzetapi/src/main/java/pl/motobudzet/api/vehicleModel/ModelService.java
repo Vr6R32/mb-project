@@ -1,6 +1,5 @@
 package pl.motobudzet.api.vehicleModel;
 
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class ModelService {
 
         Brand brand = brandRepository.findByName(brandName.toUpperCase()).orElseThrow(() -> new RuntimeException("brand doesnt exists!"));
 
-        if (modelRepository.findByNameAndBrandName(modelUpperCase,brandName).isPresent()) {
+        if (modelRepository.findByNameAndBrandName(modelUpperCase, brandName).isPresent()) {
             throw new RuntimeException("model already exists!");
         }
 
@@ -46,7 +45,7 @@ public class ModelService {
 
     public List<ModelDTO> findAllModelsFromSpecifiedBrand(String brandName) {
         return brandRepository.findModelsByBrandName(
-                brandName.toUpperCase())
+                        brandName.toUpperCase())
                 .stream()
                 .map(model -> ModelDTO.builder().name(model.getName()).build())
                 .collect(Collectors.toList());
@@ -54,7 +53,7 @@ public class ModelService {
 
     public ResponseEntity<String> deleteModel(String modelName, String brandName) {
 
-        Model model = modelRepository.findByNameAndBrandName(modelName,brandName).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
+        Model model = modelRepository.findByNameAndBrandName(modelName, brandName).orElseThrow(() -> new RuntimeException("MODEL_DOESNT_EXIST"));
         Brand brand = brandRepository.findByName(model.getBrand().getName().toUpperCase()).orElseThrow(() -> new RuntimeException("BRAND_DOESNT_EXIST"));
 
         model.setBrand(null);
@@ -67,8 +66,8 @@ public class ModelService {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    public Model getModelByBrand(String model,String brandName) {
-        return modelRepository.findByNameAndBrandName(model,brandName).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
+    public Model getModelByBrand(String model, String brandName) {
+        return modelRepository.findByNameAndBrandName(model, brandName).orElseThrow(() -> new InvalidParameterException("MODEL_DOESNT_EXIST"));
     }
 
     public Model getModel(String model) {

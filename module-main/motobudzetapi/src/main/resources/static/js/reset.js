@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has("code")){
+    if (urlParams.has("code")) {
         resetCode = urlParams.get("code");
         createForgotPasswordForm();
     } else {
@@ -19,15 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
     containerMain.style.boxShadow = 'none';
 
 
-
 });
 
-function createForgotPasswordForm()  {
+function createForgotPasswordForm() {
     let formContainer = document.getElementById("registerFormContainer");
 
     formContainer.innerHTML = '';
 
-    const addEnterKeyListener = (element)=> {
+    const addEnterKeyListener = (element) => {
         element.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !document.getElementById('overlayId')) {
                 event.preventDefault();
@@ -62,10 +61,10 @@ function createForgotPasswordForm()  {
                 return response.text();
             })
             .then(responseText => {
-                if(responseText==='1'){
+                if (responseText === '1') {
                     message = "Twoje hasło zostało zaktualizowane :)"
                     resetForm();
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location = '/';
                     }, 1000); // 1000 milisekund = 1 sekunda
                 } else {

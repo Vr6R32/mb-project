@@ -1,4 +1,5 @@
 package pl.motobudzet.api.utils;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 

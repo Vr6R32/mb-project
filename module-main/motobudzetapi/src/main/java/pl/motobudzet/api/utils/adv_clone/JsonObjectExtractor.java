@@ -24,6 +24,7 @@ public class JsonObjectExtractor {
         }
         return photoUrls;
     }
+
     public static String extractTitle(JsonNode jsonResponse) {
         JsonNode titleNode = jsonResponse.get("title");
         return titleNode.asText();
@@ -34,14 +35,17 @@ public class JsonObjectExtractor {
         JsonNode currencyNode = jsonResponse.get("price").get("currency");
         return priceNode.asText();
     }
+
     public static String extractCurrency(JsonNode jsonResponse) {
         JsonNode currencyNode = jsonResponse.get("price").get("currency");
         return currencyNode.asText();
     }
+
     public static String extractPhoneNumber(JsonNode jsonResponse) {
         JsonNode phoneNumberNode = jsonResponse.get("phoneNumbers").get(0);
         return phoneNumberNode.asText();
     }
+
     public static String extractDescription(JsonNode jsonResponse) {
         JsonNode descriptionNode = jsonResponse.get("description");
         return descriptionNode.asText();

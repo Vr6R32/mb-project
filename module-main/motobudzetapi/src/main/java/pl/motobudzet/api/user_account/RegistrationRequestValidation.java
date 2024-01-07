@@ -4,7 +4,6 @@ import pl.motobudzet.api.user_account.dto.RegistrationRequest;
 import pl.motobudzet.api.user_account.repository.AppUserRepository;
 
 
-
 public class RegistrationRequestValidation {
 
     private RegistrationRequestValidation() {

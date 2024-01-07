@@ -1,6 +1,5 @@
 package pl.motobudzet.api.user_account.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +22,27 @@ public class UserController {
     public ResponseEntity<String> register(@RequestBody @Valid RegistrationRequest request) {
         return registrationService.register(request);
     }
+
     @GetMapping("confirm")
-    public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response){
-        registrationService.confirmEmail(activationCode,response);
+    public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response) {
+        registrationService.confirmEmail(activationCode, response);
     }
+
     @GetMapping("details")
-    public AppUserDTO getUserDetails(Authentication authentication){
+    public AppUserDTO getUserDetails(Authentication authentication) {
         return userDetailsService.getUserDetails(authentication.getName());
     }
-    @PutMapping ("updateDetails")
-    public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication){
-        return userDetailsService.updateFirstUserDetails(userDetailsRequest,authentication.getName());
+
+    @PutMapping("updateDetails")
+    public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication) {
+        return userDetailsService.updateFirstUserDetails(userDetailsRequest, authentication.getName());
     }
+
     @PostMapping("resetCode")
     public int generatePasswordResetCode(@RequestBody @Valid ResetPasswordRequest request) {
         return registrationService.generatePasswordResetCode(request);
     }
+
     @PostMapping("resetPassword")
     public int changeUserPassword(@RequestBody @Valid NewPasswordRequest request) {
         return registrationService.changeUserPassword(request);

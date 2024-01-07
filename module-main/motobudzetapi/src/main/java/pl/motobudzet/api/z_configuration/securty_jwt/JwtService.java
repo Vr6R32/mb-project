@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.user_account.entity.AppUser;
@@ -18,10 +20,12 @@ import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenRepository;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenType;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -47,6 +51,20 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Collection<? extends GrantedAuthority> extractAuthorities(String token) {
+        return extractClaim(token, claims -> {
+            List<?> rolesList = claims.get("roles", List.class);
+            return rolesList.stream()
+                    .map(roleMap -> {
+                        if (roleMap instanceof Map<?, ?> roleDetails) {
+                            return new SimpleGrantedAuthority((String) roleDetails.get("authority"));
+                        }
+                        throw new IllegalArgumentException("Invalid role format in token");
+                    })
+                    .collect(Collectors.toList());
+        });
+    }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -54,12 +72,13 @@ public class JwtService {
 
     public String generateAccessToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(),"userId",user.getId());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId());
         return buildToken(userClaims, userDetails, jwtExpiration);
     }
+
     public String generateRefreshToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(),"userId",user.getId());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId());
         return buildToken(userClaims, userDetails, refreshExpiration);
     }
 
@@ -129,16 +148,16 @@ public class JwtService {
 
         if (username != null) {
             AppUser user = userRepository.findByUserName(username).orElseThrow();
-            if (isTokenValid(refreshToken, user)) {
-                return setAuthenticationResponse(user, response);
-            }
+//            if (isTokenValid(refreshToken, user)) {
+            return setAuthenticationResponse(user, response);
+//            }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
         return null;
     }
 
-    public void authenticate(AppUser user,HttpServletResponse response){
+    public void authenticate(AppUser user, HttpServletResponse response) {
         setAuthenticationResponse(user, response);
     }
 
@@ -174,7 +193,6 @@ public class JwtService {
     }
 
 
-
     public void applyHttpHeaders(HttpServletResponse response, HttpHeaders httpHeaders) {
         httpHeaders.forEach((headerName, headerValues) -> {
             headerValues.forEach(value -> {
@@ -182,20 +200,21 @@ public class JwtService {
             });
         });
     }
+
     HttpHeaders buildHttpTokenHeaders(String accessToken, String refreshToken, long jwtExpiration, long refreshExpiration) {
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(jwtExpiration /1000)
+                .maxAge(jwtExpiration / 1000)
                 .build();
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(refreshExpiration /7 * 24 * 60 * 60)
+                .maxAge(refreshExpiration / 7 * 24 * 60 * 60)
                 .build();
         return getHttpHeaders(accessTokenCookie, refreshTokenCookie);
     }

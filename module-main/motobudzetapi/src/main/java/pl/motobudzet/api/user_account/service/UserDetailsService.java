@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.locationCity.CityService;
+import pl.motobudzet.api.location_city.CityService;
 import pl.motobudzet.api.user_account.dto.AppUserDTO;
 import pl.motobudzet.api.user_account.dto.UserDetailsRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
@@ -26,7 +26,7 @@ public class UserDetailsService {
     private final CityService cityService;
 
 
-    public List<String> findManagementEmails(){
+    public List<String> findManagementEmails() {
         Role admin = roleRepository.findByName("ROLE_ADMIN").orElse(null);
         return userRepository.findAllManagementEmails(admin);
     }

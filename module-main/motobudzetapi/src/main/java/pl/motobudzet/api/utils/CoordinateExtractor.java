@@ -1,6 +1,6 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.locationCity.City;
+import pl.motobudzet.api.location_city.City;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,8 +33,8 @@ public class CoordinateExtractor {
                     String n_latitude = words[words.length - 1];
                     String e_longitude = words[words.length - 2];
 
-                    n_latitude = n_latitude.replace("N", "").replace(",",".");
-                    e_longitude = e_longitude.replace("E", "").replace(",",".");
+                    n_latitude = n_latitude.replace("N", "").replace(",", ".");
+                    e_longitude = e_longitude.replace("E", "").replace(",", ".");
 
                     City build = City.builder()
                             .name(city)

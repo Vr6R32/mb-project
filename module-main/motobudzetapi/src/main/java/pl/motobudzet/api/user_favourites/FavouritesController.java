@@ -17,12 +17,13 @@ public class FavouritesController {
     private final FavouritesService favouritesService;
 
     @PostMapping
-    public String manageUserFavourite(@RequestBody FavouriteRequest userRequest, Authentication authentication){
+    public String manageUserFavourite(@RequestBody FavouriteRequest userRequest, Authentication authentication) {
         AppUser user = (AppUser) authentication.getPrincipal();
         return favouritesService.manageUserFavourite(userRequest, user);
     }
+
     @GetMapping
-    public ResponseEntity<Boolean> checkIsFavourite(@RequestParam String advertisementId, Authentication authentication){
+    public ResponseEntity<Boolean> checkIsFavourite(@RequestParam String advertisementId, Authentication authentication) {
         boolean response = favouritesService.checkIsFavourite(advertisementId, authentication.getName());
         return ResponseEntity.ok(response);
     }

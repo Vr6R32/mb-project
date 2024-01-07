@@ -3,8 +3,8 @@ package pl.motobudzet.api.utils.db_inserter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.motobudzet.api.locationCity.City;
-import pl.motobudzet.api.locationCity.CityRepository;
+import pl.motobudzet.api.location_city.City;
+import pl.motobudzet.api.location_city.CityRepository;
 import pl.motobudzet.api.utils.CoordinateExtractor;
 
 import java.util.List;
@@ -15,15 +15,15 @@ public class DBInserter {
 
     private final CityRepository cityRepository;
 
-//    @EventListener(ApplicationReadyEvent.class)
-    public void insertCoordinates(){
+    //    @EventListener(ApplicationReadyEvent.class)
+    public void insertCoordinates() {
         List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
 
         List<City> txtList = CoordinateExtractor.extractCoordinates();
 
-        for (City newCity:txtList) {
-            for (City oldCity:allCitiesWithCityStates) {
-                if (newCity.getName().equals(oldCity.getName())){
+        for (City newCity : txtList) {
+            for (City oldCity : allCitiesWithCityStates) {
+                if (newCity.getName().equals(oldCity.getName())) {
                     oldCity.setELongitude(newCity.getELongitude());
                     oldCity.setNLatitude(newCity.getNLatitude());
                 }

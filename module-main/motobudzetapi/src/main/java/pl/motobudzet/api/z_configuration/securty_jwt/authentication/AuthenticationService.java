@@ -26,6 +26,6 @@ public class AuthenticationService {
         );
 
         AppUser user = (AppUser) authentication.getPrincipal();
-        jwtService.authenticate(user,response);
+        jwtService.authenticate(user, response);
     }
 }

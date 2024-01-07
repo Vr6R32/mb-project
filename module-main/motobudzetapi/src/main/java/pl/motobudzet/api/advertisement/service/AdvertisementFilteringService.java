@@ -13,9 +13,8 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
-import pl.motobudzet.api.advertisement.service.utils.ServiceFunction;
-import pl.motobudzet.api.locationCity.City;
-import pl.motobudzet.api.locationCity.CityService;
+import pl.motobudzet.api.location_city.City;
+import pl.motobudzet.api.location_city.CityService;
 import pl.motobudzet.api.vehicleBrand.BrandService;
 import pl.motobudzet.api.vehicleModel.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
@@ -23,14 +22,15 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.advertisement.service.utils.SpecificationFilterHelper.*;
+import static pl.motobudzet.api.advertisement.service.FilteringHelper.*;
+import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDTO;
 
 @Service
 @RequiredArgsConstructor
 public class AdvertisementFilteringService {
 
     private final AdvertisementRepository advertisementRepository;
-    private final UserAdvertisementService userAdvertisementService;
+    private final AdvertisementService advertisementService;
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
@@ -60,7 +60,7 @@ public class AdvertisementFilteringService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
-                .map(advertisement -> userAdvertisementService.mapToAdvertisementDTO(advertisement, false));
+                .map(advertisement -> mapToAdvertisementDTO(advertisement, false));
     }
 
     public long getFilterResultCount(AdvertisementFilterRequest request,
@@ -74,8 +74,6 @@ public class AdvertisementFilteringService {
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         return advertisementSpecificationIds.getTotalElements();
     }
-
-
 
 
     private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request) {
@@ -114,16 +112,12 @@ public class AdvertisementFilteringService {
                 Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
-        }
-
-        else if (city != null && !city.isEmpty() && distanceFrom != null) {
+        } else if (city != null && !city.isEmpty() && distanceFrom != null) {
             List<City> cityList = cityService.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
-        }
-
-        else if (city != null && !city.isEmpty()) {
+        } else if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))
             );

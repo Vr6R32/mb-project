@@ -23,17 +23,16 @@ public class YahooFinanceController {
     public static final String NKLA_URL = "https://finance.yahoo.com/quote/NKLA?p=NKLA&.tsrc=fin-srch";
 
 
-
     @GetMapping("amc")
 //    @Scheduled(fixedRate = 6000)
-    public String getAmcPrice(){
+    public String getAmcPrice() {
         RestTemplate restTemplate = new RestTemplate();
 
         return getString(restTemplate, AMC_URL);
     }
 
     @GetMapping("nkla")
-    public String getNklaPrice(HttpServletRequest request){
+    public String getNklaPrice(HttpServletRequest request) {
         RestTemplate restTemplate = new RestTemplate();
 
 
@@ -45,7 +44,7 @@ public class YahooFinanceController {
 
         System.out.println(lastAccessedTime);
         System.out.println(creationTime);
-        while(attributeNames.hasMoreElements()){
+        while (attributeNames.hasMoreElements()) {
             System.out.println(attributeNames.nextElement());
         }
 
@@ -69,4 +68,4 @@ public class YahooFinanceController {
         }
         return extractedText;
     }
-    }
+}

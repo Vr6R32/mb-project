@@ -15,6 +15,7 @@ public class SessionController {
     public void getSession(@RequestParam String sessionId) {
         sessionListener.getSessionDetails(sessionId);
     }
+
     @GetMapping("api/session/all")
     public String getSessions() {
         return sessionListener.getAllSessions();

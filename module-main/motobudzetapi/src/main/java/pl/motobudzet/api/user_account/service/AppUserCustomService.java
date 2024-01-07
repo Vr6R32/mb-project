@@ -14,6 +14,7 @@ public class AppUserCustomService {
     public AppUser getUserByName(String userName) {
         return userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User doesnt' exists!"));
     }
+
     public Long getUserIdByUserName(String userName) {
         return userRepository.getAppUserIdByUserName(userName).orElseThrow(() -> new RuntimeException("User doesnt' exists!"));
     }

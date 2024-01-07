@@ -46,8 +46,8 @@ public class InsertBrandsnModels {
     PasswordEncoder passwordEncoder;
 
 
-//    @EventListener(ApplicationReadyEvent.class)
-    public void fillUser(){
+    //    @EventListener(ApplicationReadyEvent.class)
+    public void fillUser() {
 
         Role roleUser = Role.builder().name("ROLE_USER").build();
         Role roleAdmin = Role.builder().name("ROLE_ADMIN").build();
@@ -74,16 +74,15 @@ public class InsertBrandsnModels {
                 .roles(List.of(roleUser))
                 .build();
 
-            userRepository.save(admin);
-            userRepository.save(user);
+        userRepository.save(admin);
+        userRepository.save(user);
         roleRepository.save(roleAwaitingDetails);
 
-        fillBrandDB(admin,user);
+        fillBrandDB(admin, user);
     }
 
 
-
-    public void fillBrandDB(AppUser admin,AppUser user){
+    public void fillBrandDB(AppUser admin, AppUser user) {
 
         EngineType silnikRzedowy = EngineType.builder().name("Rzedowy").build();
         EngineType silnikWidlasty = EngineType.builder().name("Widlasty").build();
@@ -135,9 +134,8 @@ public class InsertBrandsnModels {
         bmw.addElement(e36);
         bmw.addElement(e34);
         bmw.addElement(e90);
-        brandRepository.saveAll(List.of(audi,bmw,mazda,nissan,mercedes));
-        modelRepository.saveAll(List.of(e34,e36,e46,e90,C63,gelenda,rs3,rx8,rs6,rs8q8,z350,z370));
-
+        brandRepository.saveAll(List.of(audi, bmw, mazda, nissan, mercedes));
+        modelRepository.saveAll(List.of(e34, e36, e46, e90, C63, gelenda, rs3, rx8, rs6, rs8q8, z350, z370));
 
 
         Advertisement ad1 = Advertisement.builder()
@@ -154,9 +152,9 @@ public class InsertBrandsnModels {
                 .price(102500L)
                 .engineCapacity(2497L)
                 .engineHorsePower(350L)
-                .firstRegistrationDate(LocalDate.of(2014,4,30))
+                .firstRegistrationDate(LocalDate.of(2014, 4, 30))
                 .productionDate(2016L)
-                .imageUrls(List.of("rs3.png","rs3-2.jpg"))
+                .imageUrls(List.of("rs3.png", "rs3-2.jpg"))
                 .user(admin)
                 .isVerified(true)
                 .build();
@@ -174,9 +172,9 @@ public class InsertBrandsnModels {
                 .price(254500L)
                 .engineCapacity(4497L)
                 .engineHorsePower(500L)
-                .firstRegistrationDate(LocalDate.of(2013,4,24))
+                .firstRegistrationDate(LocalDate.of(2013, 4, 24))
                 .productionDate(2015L)
-                .imageUrls(List.of("rs6.jpg","rs6-2.jpg"))
+                .imageUrls(List.of("rs6.jpg", "rs6-2.jpg"))
                 .user(admin)
                 .isVerified(true)
                 .build();
@@ -196,9 +194,9 @@ public class InsertBrandsnModels {
                 .priceUnit(PriceUnit.USD)
                 .engineCapacity(4197L)
                 .engineHorsePower(800L)
-                .firstRegistrationDate(LocalDate.of(2006,12,24))
+                .firstRegistrationDate(LocalDate.of(2006, 12, 24))
                 .productionDate(2022L)
-                .imageUrls(List.of("rsq8.jpg","rsq8-2.jpg"))
+                .imageUrls(List.of("rsq8.jpg", "rsq8-2.jpg"))
                 .user(admin)
                 .isVerified(true)
                 .build();
@@ -216,9 +214,9 @@ public class InsertBrandsnModels {
                 .price(232000L)
                 .engineCapacity(3897L)
                 .engineHorsePower(649L)
-                .firstRegistrationDate(LocalDate.of(1996,11,4))
+                .firstRegistrationDate(LocalDate.of(1996, 11, 4))
                 .productionDate(2012L)
-                .imageUrls(List.of("c63.jpg","c63-2.jpg"))
+                .imageUrls(List.of("c63.jpg", "c63-2.jpg"))
                 .user(user)
                 .isVerified(true)
                 .build();
@@ -236,9 +234,9 @@ public class InsertBrandsnModels {
                 .price(154000L)
                 .engineCapacity(4997L)
                 .engineHorsePower(532L)
-                .firstRegistrationDate(LocalDate.of(2019,7,9))
+                .firstRegistrationDate(LocalDate.of(2019, 7, 9))
                 .productionDate(2007L)
-                .imageUrls(List.of("gklasa.jpg","gklasa-2.jpg"))
+                .imageUrls(List.of("gklasa.jpg", "gklasa-2.jpg"))
                 .user(user)
                 .isVerified(true)
                 .build();
@@ -257,20 +255,19 @@ public class InsertBrandsnModels {
                 .price(154000L)
                 .engineCapacity(4997L)
                 .engineHorsePower(532L)
-                .firstRegistrationDate(LocalDate.of(2019,7,9))
+                .firstRegistrationDate(LocalDate.of(2019, 7, 9))
                 .productionDate(2005L)
-                .imageUrls(List.of("rx8.jpg","rx8-2.jpg"))
+                .imageUrls(List.of("rx8.jpg", "rx8-2.jpg"))
                 .user(user)
                 .isVerified(true)
                 .build();
 
 
-        admin.setAdvertisements(Set.of(ad1,ad2,ad3));
-        user.setAdvertisements(Set.of(ad4,ad5,ad6));
+        admin.setAdvertisements(Set.of(ad1, ad2, ad3));
+        user.setAdvertisements(Set.of(ad4, ad5, ad6));
 
         userRepository.save(admin);
         userRepository.save(user);
-
 
 
     }

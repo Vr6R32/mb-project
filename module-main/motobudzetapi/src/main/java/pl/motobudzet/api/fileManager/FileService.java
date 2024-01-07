@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.service.UserAdvertisementService;
+import pl.motobudzet.api.advertisement.service.AdvertisementService;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -18,14 +18,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
 public class FileService {
 
-    private final UserAdvertisementService advertisementService;
+    private final AdvertisementService advertisementService;
     private final EntityManager entityManager;
 
     public static final String PUBLIC_FILE_PATH = "module-main/files/public/";
@@ -33,7 +32,7 @@ public class FileService {
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png", "image/heif", "image/heic", "image/webp");
 
 
-    public FileService(@Lazy UserAdvertisementService advertisementService,EntityManager entityManager) {
+    public FileService(@Lazy AdvertisementService advertisementService, EntityManager entityManager) {
         this.advertisementService = advertisementService;
         this.entityManager = entityManager;
     }
@@ -68,7 +67,7 @@ public class FileService {
 
             String fileName = advertisement.getName() + '-' + file.getOriginalFilename();
             int indexToUpdate = filenames.indexOf(file.getOriginalFilename());
-            if(indexToUpdate != -1) {
+            if (indexToUpdate != -1) {
                 filenames.set(indexToUpdate, fileName);
             }
 
@@ -86,11 +85,10 @@ public class FileService {
         Path targetPath = Paths.get(PUBLIC_FILE_PATH, fileName);
         try {
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-        }  catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
 
 
     @Modifying

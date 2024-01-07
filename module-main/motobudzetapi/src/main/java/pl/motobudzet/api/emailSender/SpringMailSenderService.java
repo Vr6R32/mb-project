@@ -41,28 +41,28 @@ public class SpringMailSenderService {
 
     @Async
     public void sendMessageNotificationHtml(EmailMessageRequest request) {
-        sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request),request.getReceiverEmail());
+        sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.getReceiverEmail());
     }
 
     @Async
     public void sendRegisterActivationNotificationHtml(AppUser user) {
-        sendEmail(REGISTRATION_ACTIVATION_TITLE, createHtmlStringRegisterActivation(user),user.getEmail());
+        sendEmail(REGISTRATION_ACTIVATION_TITLE, createHtmlStringRegisterActivation(user), user.getEmail());
     }
 
     @Async
     public void sendResetPasswordNotificationCodeLink(AppUser user) {
-        sendEmail(RESET_PASSWORD_TITLE, createHtmlStringResetPassword(user),user.getEmail());
+        sendEmail(RESET_PASSWORD_TITLE, createHtmlStringResetPassword(user), user.getEmail());
     }
 
     @Async
     public void sendAdvertisementActivationConfirmNotification(AppUser user, Advertisement advertisement) {
-        sendEmail(ADVERTISEMENT_ACTIVATION_TITLE, createHtmlStringActivationConfirmation(user,advertisement),user.getEmail());
+        sendEmail(ADVERTISEMENT_ACTIVATION_TITLE, createHtmlStringActivationConfirmation(user, advertisement), user.getEmail());
     }
 
     @Async
     public void sendEmailNotificationToManagement(List<String> emailList, UUID id) {
         String[] to = emailList.toArray(new String[0]);
-        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id),to);
+        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), to);
     }
 
 
@@ -136,7 +136,7 @@ public class SpringMailSenderService {
                 "</center>";
     }
 
-    private String createHtmlStringActivationConfirmation(AppUser user,Advertisement advertisement) {
+    private String createHtmlStringActivationConfirmation(AppUser user, Advertisement advertisement) {
         return "<center>" +
                 "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
                 "<tr><td>" +

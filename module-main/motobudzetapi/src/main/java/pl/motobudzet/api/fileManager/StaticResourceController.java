@@ -46,6 +46,7 @@ public class StaticResourceController {
     public Resource getEngineHorsePower() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "engineHorsePower.png");
     }
+
     @GetMapping(value = "/engineCapacity", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getEngineCapacity() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "engineCapacity.png");
@@ -110,6 +111,7 @@ public class StaticResourceController {
     public Resource getTrashIconOpen() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "trashOpen.png");
     }
+
     @GetMapping(value = "/trashClosed", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getTrashIconClosed() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "trashClosed.png");

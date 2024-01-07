@@ -29,7 +29,7 @@ public class SessionListener implements HttpSessionListener {
     }
 
 
-    public String getAllSessions(){
+    public String getAllSessions() {
         return sessions.toString();
     }
 
