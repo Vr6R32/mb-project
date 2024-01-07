@@ -49,7 +49,7 @@ spring:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: false
+    drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 management:
   endpoints:
@@ -85,7 +85,11 @@ application:
       expiration: 15000 # an hour
       refresh-token:
         expiration: 604800000 # 7 days
-
+token:
+  key:
+    value: Udh5YQlFnpMuEwltT7m4q8Dcsvz+G28Iqru3kk3vJx8=
+  ivParameter:
+    value: anjbBT/W+R6ycBK2Akx1Ug==
 
 mailing:
     module:

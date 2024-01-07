@@ -15,7 +15,7 @@ async function fetchWithAuth(url, options = {}) {
     if (!options.headers) {
         options.headers = {};
     }
-    await checkIsTokenValid(true);
+    // await checkIsTokenValid(true);
     return fetch(url, options);
 }
 
@@ -1267,15 +1267,15 @@ async function checkIsTokenValid(isFetch) {
 }
 
 function handleLoginResponse(isFetch) {
-    const accessTokenExpirationTime = getCookie("accessTokenExpirationTime");
-    if (accessTokenExpirationTime) {
-        localStorage.setItem("accessTokenExpirationTime", accessTokenExpirationTime);
-    }
-
-    const refreshTokenExpirationTime = getCookie("refreshTokenExpirationTime");
-    if (refreshTokenExpirationTime) {
-        localStorage.setItem("refreshTokenExpirationTime", refreshTokenExpirationTime);
-    }
+    // const accessTokenExpirationTime = getCookie("accessTokenExpirationTime");
+    // if (accessTokenExpirationTime) {
+    //     localStorage.setItem("accessTokenExpirationTime", accessTokenExpirationTime);
+    // }
+    //
+    // const refreshTokenExpirationTime = getCookie("refreshTokenExpirationTime");
+    // if (refreshTokenExpirationTime) {
+    //     localStorage.setItem("refreshTokenExpirationTime", refreshTokenExpirationTime);
+    // }
 
     if(!isFetch){
         window.location.href = getRedirectLink();

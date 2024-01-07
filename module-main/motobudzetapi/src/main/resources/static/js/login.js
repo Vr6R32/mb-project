@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', async function () {
-    await checkIsTokenValid(false);
+    // await checkIsTokenValid(false);
     handleLogout();
     createLoginForm();
 });

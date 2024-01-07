@@ -1,18 +1,16 @@
 package pl.motobudzet.api.z_configuration.securty_jwt;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.repository.AppUserRepository;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.Token;
@@ -21,6 +19,7 @@ import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenType;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -36,10 +35,12 @@ public class JwtService {
 
     private final AppUserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final TokenEncryption tokenEncryption;
 
-    public JwtService(AppUserRepository userRepository, TokenRepository tokenRepository) {
+    public JwtService(AppUserRepository userRepository, TokenRepository tokenRepository, TokenEncryption tokenEncryption) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
+        this.tokenEncryption = tokenEncryption;
     }
 
     public String extractUsername(String token) {
@@ -112,7 +113,7 @@ public class JwtService {
     }
 
     private void revokeAllUserTokens(AppUser user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
@@ -122,36 +123,56 @@ public class JwtService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void refreshToken(String refreshToken, HttpServletRequest request, HttpServletResponse response) {
+    public String refreshToken(String refreshToken, HttpServletResponse response) {
 
         final String username = extractUsername(refreshToken);
 
         if (username != null) {
             AppUser user = userRepository.findByUserName(username).orElseThrow();
-
             if (isTokenValid(refreshToken, user)) {
-                setAuthenticationResponse(user, response);
+                return setAuthenticationResponse(user, response);
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+        return null;
     }
 
     public void authenticate(AppUser user,HttpServletResponse response){
         setAuthenticationResponse(user, response);
     }
 
-    private void setAuthenticationResponse(AppUser user, HttpServletResponse response) {
+    private String setAuthenticationResponse(AppUser user, HttpServletResponse response) {
         var accessToken = generateAccessToken(user);
         var refreshToken = generateRefreshToken(user);
+
+        String encryptedAccessToken;
+        String encryptedRefreshToken;
+
+        try {
+            encryptedAccessToken = encryptToken(accessToken);
+            encryptedRefreshToken = encryptToken(refreshToken);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
-        HttpHeaders httpHeaders = buildHttpTokenHeaders(accessToken, refreshToken);
+        HttpHeaders httpHeaders = buildHttpTokenHeaders(encryptedAccessToken, encryptedRefreshToken, jwtExpiration, refreshExpiration);
         applyHttpHeaders(response, httpHeaders);
-        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        response.setStatus(HttpServletResponse.SC_OK);
+        return accessToken;
     }
+
+    public String encryptToken(String token) throws Exception {
+        return tokenEncryption.encrypt(token);
+    }
+
+    public String decryptToken(String token) throws Exception {
+        return tokenEncryption.decrypt(token);
+    }
+
 
 
     public void applyHttpHeaders(HttpServletResponse response, HttpHeaders httpHeaders) {
@@ -161,82 +182,29 @@ public class JwtService {
             });
         });
     }
-    private HttpHeaders buildHttpTokenHeaders(String accessToken, String refreshToken) {
-
-        String accessTokenExpirationTime = String.valueOf(extractClaim(accessToken, Claims::getExpiration).getTime());
-        String refreshTokenExpirationTime = String.valueOf(extractClaim(refreshToken, Claims::getExpiration).getTime());
+    HttpHeaders buildHttpTokenHeaders(String accessToken, String refreshToken, long jwtExpiration, long refreshExpiration) {
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(jwtExpiration/1000)
+                .maxAge(jwtExpiration /1000)
                 .build();
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(refreshExpiration/7 * 24 * 60 * 60)
+                .maxAge(refreshExpiration /7 * 24 * 60 * 60)
                 .build();
-
-        ResponseCookie accessTokenExpirationTimeCookie = ResponseCookie.from("accessTokenExpirationTime", accessTokenExpirationTime)
-                .httpOnly(false)
-                .secure(true)
-                .path("/")
-                .maxAge(jwtExpiration/1000)
-                .build();
-
-        ResponseCookie refreshTokenExpirationTimeCookie = ResponseCookie.from("refreshTokenExpirationTime", refreshTokenExpirationTime)
-                .httpOnly(false)
-                .secure(true)
-                .path("/")
-                .maxAge(refreshExpiration/7 * 24 * 60 * 60)
-                .build();
-
-        return getHttpHeaders(accessTokenCookie, refreshTokenCookie, accessTokenExpirationTimeCookie, refreshTokenExpirationTimeCookie);
+        return getHttpHeaders(accessTokenCookie, refreshTokenCookie);
     }
 
-    public HttpHeaders resetHttpTokenHeaders() {
-
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", "")
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        ResponseCookie accessTokenExpirationTimeCookie = ResponseCookie.from("accessTokenExpirationTime", "")
-                .httpOnly(false)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        ResponseCookie refreshTokenExpirationTimeCookie = ResponseCookie.from("refreshTokenExpirationTime", "")
-                .httpOnly(false)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        return getHttpHeaders(accessTokenCookie, refreshTokenCookie, accessTokenExpirationTimeCookie, refreshTokenExpirationTimeCookie);
-    }
-
-    private HttpHeaders getHttpHeaders(ResponseCookie accessTokenCookie, ResponseCookie refreshTokenCookie, ResponseCookie accessTokenExpirationTimeCookie, ResponseCookie refreshTokenExpirationTimeCookie) {
+    private HttpHeaders getHttpHeaders(ResponseCookie accessTokenCookie, ResponseCookie refreshTokenCookie) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.add(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
-        headers.add(HttpHeaders.SET_COOKIE, accessTokenExpirationTimeCookie.toString());
-        headers.add(HttpHeaders.SET_COOKIE, refreshTokenExpirationTimeCookie.toString());
         return headers;
     }
 }

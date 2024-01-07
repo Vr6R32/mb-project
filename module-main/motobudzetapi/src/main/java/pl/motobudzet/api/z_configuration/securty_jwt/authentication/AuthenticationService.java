@@ -1,12 +1,7 @@
 package pl.motobudzet.api.z_configuration.securty_jwt.authentication;
 
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,25 +27,5 @@ public class AuthenticationService {
 
         AppUser user = (AppUser) authentication.getPrincipal();
         jwtService.authenticate(user,response);
-    }
-
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = null;
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("refreshToken")) {
-                    refreshToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (refreshToken == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-        jwtService.refreshToken(refreshToken,request,response);
     }
 }
