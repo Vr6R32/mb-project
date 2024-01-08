@@ -1024,7 +1024,7 @@ function displayResults(data) {
 
         editIconDiv.addEventListener('click', function(event) {
             event.stopPropagation();
-            window.location = '/advertisement/edit?advertisementId=' + ad.id;
+            window.location = '/advertisement/edit?id=' + ad.id;
         });
 
         editWrapper.appendChild(editText);

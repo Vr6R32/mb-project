@@ -12,6 +12,7 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,7 @@ public class SpringMailSenderService {
 
     @Async
     public void sendMessageNotificationHtml(EmailMessageRequest request) {
+        System.out.println(request);
         sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.getReceiverEmail());
     }
 
@@ -61,7 +63,8 @@ public class SpringMailSenderService {
 
     @Async
     public void sendEmailNotificationToManagement(List<String> emailList, UUID id) {
-        String[] to = emailList.toArray(new String[0]);
+        String[] to = emailList.toArray(new String[1]);
+        System.out.println(Arrays.toString(to));
         sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), to);
     }
 
@@ -79,6 +82,7 @@ public class SpringMailSenderService {
             addStaticResources(helper);
 
             mailSender.send(message);
+            System.out.println("send message");
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email.", e);
         }

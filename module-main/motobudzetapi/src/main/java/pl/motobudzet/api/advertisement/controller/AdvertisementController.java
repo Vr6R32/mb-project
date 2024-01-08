@@ -68,5 +68,9 @@ public class AdvertisementController {
     public String verifyAndEnableAdvertisement(@PathVariable UUID id) {
         return advertisementService.verifyAndEnableAdvertisement(id);
     }
+    @PostMapping("reject/{id}")
+    public String rejectAdvertisement(@PathVariable UUID id) {
+        return advertisementService.rejectAdvertisement(id);
+    }
 
 }

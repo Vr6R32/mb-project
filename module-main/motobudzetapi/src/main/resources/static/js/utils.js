@@ -1176,6 +1176,9 @@ setInterval(createSnowflake, 300);
 
 function createDescriptionEditor() {
     let horizontalContainer = document.getElementById('half-container-horizontal');
+    horizontalContainer.style.marginBottom = '200px';
+    horizontalContainer.style.padding = '20px'; // na przykład 20 pikseli
+
     let editor = document.createElement('div'); // zamiast 'textarea'
     editor.id = "editor";
 
@@ -1201,6 +1204,8 @@ function createDescriptionEditor() {
     editor.style.maxWidth = '100%';
     editor.style.padding = '40px';
     editor.style.height = '700px';
+
+
     editor.style.backgroundColor = 'black';
     editor.style.borderRadius = '10px';
     editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
@@ -1319,3 +1324,69 @@ function getRedirectLink() {
     const redirect = urlParams.get('redirect');
     return redirect ? redirect : '/';
 }
+
+
+
+function setFailGif(submitButton) {
+    submitButton.style.display = 'none';
+    const failGif = document.createElement('img');
+    failGif.src = '/api/static/validationFail'; // Ścieżka do gif niepowodzenia walidacji
+    failGif.id = 'failGif';
+    failGif.style.height = '200px';
+    failGif.style.width = '200px';
+    submitButton.parentNode.insertBefore(failGif, submitButton);
+
+    // Po 3 sekundach ukryj gif i pokaż ponownie przycisk
+    setTimeout(function () {
+        failGif.parentNode.removeChild(failGif);
+        submitButton.style.display = 'block';
+    }, 4000);
+}
+
+function setSuccessGif(submitButton) {
+    submitButton.style.display = 'none';
+    const loadingGif = document.createElement('img');
+    loadingGif.src = '/api/static/loading';
+    loadingGif.id = 'loadingGif';
+    loadingGif.style.height = '100px';
+    loadingGif.style.width = '100px';
+    loadingGif.style.marginBottom = '15px';
+    submitButton.parentNode.insertBefore(loadingGif, submitButton);
+
+    setTimeout(function () {
+        loadingGif.parentNode.removeChild(loadingGif);
+        submitButton.style.display = 'block';
+    }, 6000);
+}
+
+
+
+function validatePhotos() {
+    if (selectedFiles.length === 0) {
+        alert('Umieść zdjęcia!');
+        return false;
+    }
+    return true;
+}
+
+function validateForm(formElements) {
+    for (let element of formElements) {
+        if (element.required) {
+            const input = document.getElementById(element.id);
+            if (!input.value.trim()) {
+                alert(`Pole ${element.label} jest wymagane.`);
+                return false; // Formularz jest niepoprawny
+            }
+        }
+
+        if (element.type === 'select' && element.required) {
+            const select = document.getElementById(element.id);
+            if (select.selectedIndex === 0) {
+                alert(`Pole ${element.label} jest wymagane.`);
+                return false; // Formularz jest niepoprawny
+            }
+        }
+    }
+    return true; // Formularz jest poprawny
+}
+

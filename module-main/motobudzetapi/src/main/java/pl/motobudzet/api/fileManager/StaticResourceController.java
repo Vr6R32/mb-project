@@ -32,6 +32,15 @@ public class StaticResourceController {
                 .body(photoResource);
     }
 
+    @GetMapping(value = "/validationFail", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getValidationFailGif() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "validationFail.webp");
+    }
+    @GetMapping(value = "/loading", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getLoadingGif() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "loadingCircle.webp");
+    }
+
     @GetMapping(value = "/engineType/{engineType}", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getEngineType(@PathVariable String engineType) {
         return new FileSystemResource(PRIVATE_FILE_PATH + engineType.toLowerCase() + ".png");
@@ -120,6 +129,10 @@ public class StaticResourceController {
     @GetMapping(value = "/successIcon", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getSuccessIcon() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "successIcon.png");
+    }
+    @GetMapping(value = "/rejectIcon", produces = MediaType.IMAGE_PNG_VALUE)
+    public Resource getRejectIcon() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "rejectIcon.png");
     }
 
     @GetMapping(value = "/deleteIcon", produces = MediaType.IMAGE_PNG_VALUE)

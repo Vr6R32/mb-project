@@ -291,13 +291,6 @@ function createForm() {
     submitButton.type = 'button';
     submitButton.value = 'Zapisz';
     submitButton.style.marginBottom = '15px';
-    submitButton.onclick = function() {
-
-        window.removeEventListener('beforeunload', warnOnPageLeave);
-        submitFormWithFiles();
-
-
-    };
     submitButton.style.backgroundColor = "black";
     submitButton.style.color = "white";
     submitButton.style.border = "1px solid darkgoldenrod";
@@ -306,6 +299,25 @@ function createForm() {
     submitButton.style.transition = "0.3s";
     submitButton.style.borderRadius = '15px';
     submitButton.style.marginRight = '3px';
+
+    submitButton.addEventListener('click', function() {
+
+        window.removeEventListener('beforeunload', warnOnPageLeave);
+
+        if (!validatePhotos(submitButton)) {
+            setFailGif(submitButton);
+            return;
+        }
+
+        if (!validateForm(formElements,submitButton)) {
+            setFailGif(submitButton);
+            return;
+        }
+
+        setSuccessGif(submitButton);
+
+        submitFormWithFiles();
+    });
 
     submitButton.addEventListener("mouseover", ev => {
             submitButton.style.boxShadow = '0 0 20px moccasin';
@@ -501,10 +513,10 @@ function handleDeleteZoneDrop(e) {
             resetFileDropAreamy();
         }
 
-        if (selectedFiles.length < 2) {
-            let thumbnailzone = document.getElementById('deleteZone');
-            thumbnailzone.parentNode.removeChild(thumbnailzone);
-        }
+        // if (selectedFiles.length < 2) {
+        //     let thumbnailzone = document.getElementById('deleteZone');
+        //     thumbnailzone.parentNode.removeChild(thumbnailzone);
+        // }
 
         dragSrcElement = null; // Resetuj źródłowy element przeciągania
     }

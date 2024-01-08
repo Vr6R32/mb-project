@@ -257,6 +257,7 @@ function createMessageContainer(message,resultContainerRight,conversation,curren
 
     messageElement.setAttribute('id', 'singleMessageValueDiv');
     messageElement.textContent = message.message;
+    messageElement.style.fontStyle = 'bold';
 
 
 

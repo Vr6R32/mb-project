@@ -222,4 +222,8 @@ public class AdvertisementService {
         }
         return 0;
     }
+
+    public String rejectAdvertisement(UUID id) {
+        return "Odrzucono ogłoszenie";
+    }
 }

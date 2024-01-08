@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     createLoginForm();
+
 });
 
 
@@ -89,6 +90,9 @@ function createLoginForm()   {
     // City State
     const cityStateLabel = createLabel("cityState", "Województwo");
     const cityStateInput = createInput("text", "cityState", "Województwo");
+
+
+
 
     // Name
     const nameLabel = createLabel("name", "Imię");

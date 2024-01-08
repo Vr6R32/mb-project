@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -91,16 +92,16 @@ public class SecurityConfig {
             "/api/advertisements/filter/search",
             "/test"};
 
-    @Bean
+@Bean
     @SuppressWarnings("deprecation")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
-                .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
-                .addFilterBefore(new UserAwaitingDetailsFilter(), SecurityContextPersistenceFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
+                .addFilterAfter(new UserAwaitingDetailsFilter(), JwtAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()

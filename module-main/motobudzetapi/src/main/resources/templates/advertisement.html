@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/test.css}" />
 
+    <script th:if="${ROLE == 'ROLE_ADMIN'}" type="text/javascript" th:src="@{/js/management.js}"></script>
     <script type="text/javascript" th:src="@{/js/advertisement.js}" ></script>
     <script type="text/javascript" th:src="@{/js/utils.js}" ></script>
     <script type="text/javascript" th:src="@{/js/quill.js}" ></script>

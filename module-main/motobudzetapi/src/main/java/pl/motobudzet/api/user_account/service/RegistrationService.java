@@ -34,7 +34,6 @@ public class RegistrationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final SpringMailSenderService springMailSenderService;
-    private final DateTimeProvider dateTimeProvider;
     private final JwtService jwtService;
 
 
@@ -92,7 +91,9 @@ public class RegistrationService {
         if (user != null && !user.getAccountEnabled()) {
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
-            setAuthentication(response, enabledUser);
+
+            jwtService.authenticate(enabledUser,response);
+
             try {
                 response.sendRedirect("/user/details?activation=true");
             } catch (IOException e) {
@@ -105,20 +106,6 @@ public class RegistrationService {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    private void setAuthentication(HttpServletResponse response, AppUser enabledUser) {
-        String jwtToken = jwtService.generateAccessToken(enabledUser);
-
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", jwtToken)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(24 * 60 * 60)
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, String.valueOf(accessTokenCookie));
     }
 
     @Transactional

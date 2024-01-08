@@ -329,7 +329,7 @@ function createMessageBox(messageIcon, loggedUser) {
         }
     });
 
-    if (loggedUser === 'ZALOGUJ') {
+    if (loggedUser === 'null') {
         headerTitle.textContent = 'Musisz się zalogować !';
         dialogBox.appendChild(headerTitle);
     } else {
@@ -445,15 +445,19 @@ function fetchAdvertisement() {
             if (data.deleted === true) {
                 window.location = '/';
                 return null;
+            } else if ((data.verified === false || data.active === false) && getUserName() !== data.user){
+                window.location = '/';
+                return null;
             }
             advertisement = data;
 
-            const container = document.getElementById('container-main');
-            container.style.maxWidth = "100%";
+            const containerMain = document.getElementById('container-main');
+            // container.style.maxWidth = "100%";
+            containerMain.style.marginBottom = '150px';
 
             setTitleInUrl(data);
-            createAdvertisementIndexDiv(container, data);
-            createHeaderTitle(data, container, data.user);
+            createAdvertisementIndexDiv(containerMain, data);
+            createHeaderTitle(data, containerMain, data.user);
 
             return data;
         })

@@ -61,6 +61,7 @@ function fetchUserDetails() {
             console.error("There was a problem with the fetch operation:", error.message);
         });
 }
+
 function createForm() {
 
     const titleContainer = document.getElementById('title-container-hidden');
@@ -298,7 +299,6 @@ function createForm() {
     submitButton.type = 'button';
     submitButton.value = 'Wyślij';
     submitButton.style.marginBottom = '15px';
-    submitButton.onclick = submitFormWithFiles;
     submitButton.style.backgroundColor = "black";
     submitButton.style.color = "white";
     submitButton.style.border = "1px solid darkgoldenrod";
@@ -307,6 +307,23 @@ function createForm() {
     submitButton.style.transition = "0.3s";
     submitButton.style.borderRadius = '15px';
     submitButton.style.marginRight = '3px';
+
+    submitButton.addEventListener('click', function() {
+        if (!validatePhotos(submitButton)) {
+            setFailGif(submitButton);
+            return;
+        }
+
+        if (!validateForm(formElements,submitButton)) {
+            setFailGif(submitButton);
+            return;
+        }
+
+        setSuccessGif(submitButton);
+
+        submitFormWithFiles();
+    });
+
 
     submitButton.addEventListener("mouseover", ev => {
         submitButton.style.boxShadow = '0 0 20px moccasin';
@@ -346,11 +363,10 @@ function createForm() {
     photoContainer.appendChild(fileDropArea);
 
 }
+
 function submitFormWithFiles() {
-    if (selectedFiles.length === 0) {
-        alert('Umieść zdjęcia!');
-        return;
-    }
+
+
     const formData = advertisementFormDataExtract();
 
     fetch('/api/advertisements', {
