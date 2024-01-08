@@ -15,11 +15,13 @@ public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime,
 
     @Override
     public LocalDateTime convertToDatabaseColumn(LocalDateTime attribute) {
-        return attribute == null ? null : attribute.atZone(APPLICATION_ZONE_ID).withZoneSameInstant(DB_ZONE_ID).toLocalDateTime();
-    }
+//        return attribute == null ? null : attribute.atZone(APPLICATION_ZONE_ID).withZoneSameInstant(DB_ZONE_ID).toLocalDateTime();
+        return attribute;
+}
 
     @Override
     public LocalDateTime convertToEntityAttribute(LocalDateTime dbData) {
-        return dbData == null ? null : dbData.atZone(DB_ZONE_ID).withZoneSameInstant(APPLICATION_ZONE_ID).toLocalDateTime();
+//        return dbData == null ? null : dbData.atZone(DB_ZONE_ID).withZoneSameInstant(APPLICATION_ZONE_ID).toLocalDateTime();
+        return dbData;
     }
 }

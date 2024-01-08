@@ -43,6 +43,7 @@ public class FileService {
         return new FileSystemResource(file);
     }
 
+    @Transactional
     public String verifySortAndSaveImages(UUID advertisementId, List<MultipartFile> files) {
 
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);

@@ -98,7 +98,7 @@ public class MessageService {
             String messageSenderUsername = message.getMessageSender().getUsername();
             if (!loggedUser.equals(messageSenderUsername)) {
                 if (message.getMessageReadDateTime() == null) {
-                    message.setMessageReadDateTime(LocalDateTime.now(ZoneId.of("Europe/Warsaw")));
+                    message.setMessageReadDateTime(LocalDateTime.now());
                 }
             }
         }

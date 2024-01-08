@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenRepository;
 
 import java.io.IOException;
@@ -119,11 +120,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // TODO : think is it okay to pass user data without fetching user from db ?
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
-
         if (isTokenValid(accessToken)) {
+            Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
+            Long userId = jwtService.extractUserId(accessToken);
+            AppUser principal = AppUser.builder().userName(username).id(userId).build();
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    username, null, authorities);
+                    principal, null, authorities);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }

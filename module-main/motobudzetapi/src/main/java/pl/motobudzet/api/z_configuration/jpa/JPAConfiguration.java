@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import pl.motobudzet.api.user_account.service.AppUserCustomService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

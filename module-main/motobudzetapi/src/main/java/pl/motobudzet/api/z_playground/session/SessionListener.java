@@ -3,6 +3,9 @@ package pl.motobudzet.api.z_playground.session;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +13,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionListener implements HttpSessionListener {
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
 
     private static final ConcurrentHashMap<String, HttpSession> sessions = new ConcurrentHashMap<>();
 

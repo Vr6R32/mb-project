@@ -49,7 +49,7 @@ spring:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: false
+    drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 management:
   endpoints:

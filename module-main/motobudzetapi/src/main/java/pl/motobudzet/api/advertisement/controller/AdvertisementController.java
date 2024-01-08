@@ -22,7 +22,6 @@ public class AdvertisementController {
         this.advertisementService = advertisementService;
     }
 
-
     @PostMapping
     public ResponseEntity<String> createNewAdvertisement(@ModelAttribute @Valid AdvertisementRequest request,
                                                          @RequestParam List<MultipartFile> files,

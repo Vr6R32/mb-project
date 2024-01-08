@@ -76,6 +76,15 @@ public class JwtService {
         return buildToken(userClaims, userDetails, jwtExpiration);
     }
 
+    public Long extractUserId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("userId", Long.class);
+    }
+
     public String generateRefreshToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
         Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId());

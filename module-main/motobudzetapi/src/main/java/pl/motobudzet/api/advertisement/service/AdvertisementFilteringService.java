@@ -30,7 +30,6 @@ import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDT
 public class AdvertisementFilteringService {
 
     private final AdvertisementRepository advertisementRepository;
-    private final AdvertisementService advertisementService;
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;

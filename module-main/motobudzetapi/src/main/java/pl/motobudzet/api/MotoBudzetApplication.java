@@ -14,9 +14,5 @@ public class MotoBudzetApplication {
     public static void main(String[] args) {
         SpringApplication.run(MotoBudzetApplication.class, args);
     }
-    @Bean
-    public SecurityContextRepository securityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
-    }
 
 }
