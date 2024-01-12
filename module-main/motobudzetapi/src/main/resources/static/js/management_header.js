@@ -115,7 +115,13 @@ function createManagementDiv() {
             })
                 .then(response => {
                     if (response.ok) {
-                        return response.text();
+                        response.text().then(text => {
+                            if (text === "verified !") {
+                                window.location.href = '/management';
+                            } else {
+                                console.log("Response Text:", text);
+                            }
+                        });
                     }
                     throw new Error('Wystąpił problem z żądaniem');
                 })

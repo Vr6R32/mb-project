@@ -1,8 +1,7 @@
 package pl.motobudzet.api.advertisement.service;
 
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,13 +13,12 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.location_city.City;
-import pl.motobudzet.api.location_city.CityService;
+import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.vehicleBrand.BrandService;
 import pl.motobudzet.api.vehicleModel.ModelService;
 import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static pl.motobudzet.api.advertisement.service.FilteringHelper.*;
 import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDTO;
@@ -33,58 +31,43 @@ public class AdvertisementFilteringService {
     private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
-    private final CityService cityService;
+    private final LocationService locationService;
 
 
-    public Page<AdvertisementDTO> getFilteredAdvertisements(
-            AdvertisementFilterRequest request,
-            Integer pageNumber,
-            String sortBy, String sortOrder) {
-
+    public Page<AdvertisementDTO> getFilteredAdvertisements(AdvertisementFilterRequest request, Integer pageNumber, String sortBy, String sortOrder) {
 
         Specification<Advertisement> specification = setAdvertisementFilterSpecification(request);
-
         PageRequest pageable = setPageRequest(pageNumber, sortBy, sortOrder);
 
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
+        List<AdvertisementDTO> advertisementList = advertisementRepository.findByListOfUUIDs(uuidList)
+                        .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
 
-        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
-        List<Advertisement> advertisementDetails = uuidList.stream()
-                .map(uuid -> fetchedAdvertisementDetails.stream()
-                        .filter(adv -> adv.getId().equals(uuid))
-                        .findFirst()
-                        .orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(advertisementDetails, pageable, advertisementSpecificationIds.getTotalElements())
-                .map(advertisement -> mapToAdvertisementDTO(advertisement, false));
+        return new PageImpl<>(advertisementList, pageable, advertisementSpecificationIds.getTotalElements());
     }
 
-    public long getFilterResultCount(AdvertisementFilterRequest request,
-                                     Integer pageNumber,
-                                     String sortBy, String sortOrder) {
-
+    public long getFilterResultCount(AdvertisementFilterRequest request) {
         Specification<Advertisement> specification = setAdvertisementFilterSpecification(request);
-
-        PageRequest pageable = setPageRequest(pageNumber, sortBy, sortOrder);
-
-        Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
-        return advertisementSpecificationIds.getTotalElements();
+        return advertisementRepository.count(specification);
     }
 
 
     private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request) {
 
-        Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
-                criteriaBuilder.and(
-                        criteriaBuilder.isTrue(root.get("isVerified")),
-                        criteriaBuilder.isTrue(root.get("isActive")),
-                        criteriaBuilder.isFalse(root.get("isDeleted"))
-                );
+        String titleQueryParam = request.getTitle();
+
+        Specification<Advertisement> specification = (root, query, criteriaBuilder) -> {
+            Predicate isVerifiedPredicate = criteriaBuilder.isTrue(root.get("isVerified"));
+            Predicate isActivePredicate = criteriaBuilder.isTrue(root.get("isActive"));
+            Predicate isDeletedPredicate = criteriaBuilder.isFalse(root.get("isDeleted"));
+            Predicate combinedPredicate = criteriaBuilder.and(isVerifiedPredicate, isActivePredicate, isDeletedPredicate);
+            combinedPredicate = handleTitleQueryPredicate(titleQueryParam, root, criteriaBuilder, combinedPredicate);
+            return combinedPredicate;
+        };
 
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
+
         serviceFunctionMap.put("brand", brandService::getBrand);
         serviceFunctionMap.put("model", modelName -> modelService.getModelByBrand(request.getModel(), request.getBrand()));
         serviceFunctionMap.put("fuelType", specificationService::getFuelType);
@@ -92,8 +75,7 @@ public class AdvertisementFilteringService {
         serviceFunctionMap.put("engineType", specificationService::getEngineType);
         serviceFunctionMap.put("transmissionType", specificationService::getTransmissionType);
 
-        specification = handleSelectValue(request, specification, serviceFunctionMap);
-
+        specification = handleSelectValues(request, specification, serviceFunctionMap);
         specification = handleValueInRangeBetween(specification, "price", request.getPriceMin(), request.getPriceMax());
         specification = handleValueInRangeBetween(specification, "mileage", request.getMileageFrom(), request.getMileageTo());
         specification = handleValueInRangeBetween(specification, "engineCapacity", request.getEngineCapacityFrom(), request.getEngineCapacityTo());
@@ -101,6 +83,12 @@ public class AdvertisementFilteringService {
         specification = handleValueInRangeBetween(specification, "productionDate", request.getProductionDateFrom(), request.getProductionDateTo());
 
 
+        specification = handleCityAndStateValue(request, specification);
+
+        return specification;
+    }
+
+    private Specification<Advertisement> handleCityAndStateValue(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
         String city = request.getCity();
         String cityState = request.getCityState();
         Integer distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
@@ -112,15 +100,31 @@ public class AdvertisementFilteringService {
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
         } else if (city != null && !city.isEmpty() && distanceFrom != null) {
-            List<City> cityList = cityService.getCitiesWithinDistance(city, distanceFrom);
+            List<City> cityList = locationService.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
         } else if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("city"), cityService.getCityByNameWithout(city))
+                    criteriaBuilder.equal(root.get("city"), locationService.getCityByNameWithout(city))
             );
         }
         return specification;
     }
+
+    private Predicate handleTitleQueryPredicate(String titleQueryParam, Root<Advertisement> root, CriteriaBuilder criteriaBuilder, Predicate combinedPredicate) {
+        if (titleQueryParam != null && !titleQueryParam.isEmpty()) {
+            String[] words = titleQueryParam.toLowerCase().split("\\s+");
+            Predicate titlePredicate = criteriaBuilder.disjunction();
+            for (String word : words) {
+                String searchWord = "%" + word + "%";
+                titlePredicate = criteriaBuilder.or(titlePredicate,
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), searchWord));
+            }
+            combinedPredicate = criteriaBuilder.and(combinedPredicate, titlePredicate);
+        }
+        return combinedPredicate;
+    }
+
 }
+

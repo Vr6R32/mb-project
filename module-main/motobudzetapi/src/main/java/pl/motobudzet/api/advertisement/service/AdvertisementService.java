@@ -18,7 +18,7 @@ import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.fileManager.FileService;
-import pl.motobudzet.api.location_city.CityService;
+import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.service.AppUserCustomService;
 import pl.motobudzet.api.user_account.service.UserDetailsService;
@@ -49,7 +49,7 @@ public class AdvertisementService {
     private final AppUserCustomService userCustomService;
     private final UserDetailsService userDetailsService;
     private final SpringMailSenderService mailSenderService;
-    private final CityService cityService;
+    private final LocationService locationService;
     private final FileService fileService;
 
 
@@ -107,7 +107,7 @@ public class AdvertisementService {
                 .engineHorsePower(request.getEngineHorsePower())
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
-                .city(cityService.getCityByNameAndState(request.getCity(), request.getCityState()))
+                .city(locationService.getCityByNameAndState(request.getCity(), request.getCityState()))
                 .user(currentUser)
                 .imageUrls(new ArrayList<>())
                 .isVerified(false)
@@ -158,7 +158,7 @@ public class AdvertisementService {
             advertisement.setEngineHorsePower(request.getEngineHorsePower());
             advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
             advertisement.setProductionDate(request.getProductionDate());
-            advertisement.setCity(cityService.getCityByNameAndState(request.getCity(), request.getCityState()));
+            advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
             advertisement.setVerified(false);
 
 
@@ -169,7 +169,7 @@ public class AdvertisementService {
 
             String redirectUrl = "/advertisement?id=" + advertisement.getId();
 
-            sendEmailNotificationToManagement(advertisement.getId());
+//            sendEmailNotificationToManagement(advertisement.getId());
             return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");

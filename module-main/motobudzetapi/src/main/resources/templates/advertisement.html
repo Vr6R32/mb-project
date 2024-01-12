@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+
     <title>Moto-Budżet</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/api/static/favicon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="/api/static/favicon"/>
+    <meta name="description" content="Darmowe ogłoszenia motoryzacyjne samochody, motocykle, części, akcesoria motobudzet.pl"/>
+
+
+
+
     <meta property="og:image" th:content="${ogImage}" />
     <meta property="og:image:width" content="1200" />  <!-- Recommended width -->
     <meta property="og:image:height" content="630" />  <!-- Recommended height -->
@@ -21,7 +29,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/test.css}" />
 
-    <script th:if="${ROLE == 'ROLE_ADMIN'}" type="text/javascript" th:src="@{/js/management.js}"></script>
+    <script th:if="${ROLE == 'ROLE_ADMIN'}" type="text/javascript" th:src="@{/js/management_header.js}"></script>
     <script type="text/javascript" th:src="@{/js/advertisement.js}" ></script>
     <script type="text/javascript" th:src="@{/js/utils.js}" ></script>
     <script type="text/javascript" th:src="@{/js/quill.js}" ></script>
@@ -48,6 +56,7 @@
 <div id="snowflakeContainer"></div>
 <div class="container-main" id="container-main"></div>
 <div id="zoom-controls">
+    <div id="ROLE" style="display: none;" th:text="${ROLE}"></div>
     <div class="nav-buttons">
         <a href="/management" th:if="${ROLE == 'ROLE_ADMIN'}" class="nav-buttons">ADMIN</a>
     </div>

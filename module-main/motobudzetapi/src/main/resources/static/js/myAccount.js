@@ -32,7 +32,7 @@ function Ulubione(buttonName) {
 function Ustawienia(buttonName) {
     createHeader(buttonName);
 }
-function UkryjMenu(buttonName) {
+function UkryjMenu() {
     let leftContainer = document.getElementById('left-container');
     leftContainer.remove();
 }
@@ -172,42 +172,6 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
         .catch(error => {
             console.error("Wystąpił błąd podczas pobierania wiadomości:", error);
         })
-}
-function createHeader(buttonName){
-
-    let headerContainer = document.getElementById("headerContainer");
-    headerContainer.textContent = buttonName.replace("_", " ");
-
-    let hrLine = document.createElement("hr");
-    hrLine.setAttribute('id', 'headerLine');
-
-    headerContainer.appendChild(hrLine);
-
-    cleanResultsDiv();
-
-    setTimeout(() => {
-        hrLine.style.transform = "scaleX(1)";
-        hrLine.style.borderTopColor = "darkgoldenrod";
-
-    }, 500);
-}
-function cleanResultsDiv() {
-    let childConversationMessageInputElement = document.getElementById('messageInputDiv');
-
-    let childConversationResultElements = document.querySelectorAll('#rightContainer [id^="messageResultDiv"]');
-
-    childConversationResultElements.forEach(element => {
-        element.parentNode.removeChild(element);
-    });
-
-    if (childConversationMessageInputElement) {
-        childConversationMessageInputElement.parentNode.removeChild(childConversationMessageInputElement);
-    }
-
-    let resultContainerRight = document.getElementById("resultContainerRight");
-    resultContainerRight.innerHTML = "";
-
-    resultContainerRight.style.display = 'flex';
 }
 function createButtons() {
     const leftContainer = document.getElementById('left-container');

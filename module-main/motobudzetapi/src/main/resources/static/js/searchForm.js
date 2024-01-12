@@ -4,32 +4,37 @@ let sortingBy = "price"; // Set the default sort by parameter to "price" (or any
 let urlSearchParams = null;
 let favouritesArray = [];
 let clickedButton = "";
-let darkModeCheckbox;
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // await checkIsTokenValid();
     createSearchFormContainer();
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
     initializeParameters();
 });
 document.addEventListener('click', function(event) {
-    const cityStateInput = document.getElementById('cityState');
-    const cityStateLabel = document.getElementById('cityStatelabel');
+
     const cityInput = document.getElementById('city');
     const cityLabel = document.getElementById('citylabel');
+    const cityStateInput = document.getElementById('cityState');
+    const cityStateLabel = document.getElementById('cityStatelabel');
     const suggestionsList = document.getElementById('suggestionsList');
+
+    cityInput.addEventListener('change', function() {
+        if (cityInput.value === '') {
+            cityStateInput.value = '';
+            formData.set('cityState', '');
+            cityStateInput.style.color = 'gray';
+            cityStateLabel.style.color = 'darkgoldenrod';
+        }
+    })
 
     if (suggestionsList && !suggestionsList.contains(event.target)) {
         if(cityInput.value === null || cityInput.value === '') {
             cityLabel.style.color = 'darkgoldenrod';
         }
         suggestionsList.style.display = 'none';
-        // cityStateInput.value = '';
-        // cityStateLabel.style.color = 'darkgoldenrod';
     }
 });
-
 
 function initializeParameters() {
     let urlParams = new URLSearchParams(window.location.search);
@@ -77,10 +82,9 @@ function setFormValuesFromUrlParams(urlSearchParams) {
                 let element = document.getElementById(paramsMapping[param]);
                 element.value = urlSearchParams.get(param);
 
-                // Pobierz etykietę powiązaną z elementem
                 let label = document.querySelector(`label[for='${paramsMapping[param]}']`);
                 if (label) {
-                    applyLabelColor(element, label); // Zastosuj kolor etykiety
+                    applyLabelColor(element, label);
                 }
             } else {
                 window[param] = urlSearchParams.get(param);
@@ -219,7 +223,7 @@ function createTabbedMenu() {
         { name: "Części", callback: createPartForm }
     ];
 
-    tabs.forEach((tab, index) => {
+    tabs.forEach((tab, ) => {
         const tabButton = document.createElement("button");
         tabButton.textContent = tab.name;
         tabButton.style.padding = "10px 20px";
@@ -272,23 +276,89 @@ async function createSearchFormContainer() {
 
     let mainContainer = document.getElementById('container-main');
     const formContainer = document.createElement("div");
-
-
-
-
     formContainer.setAttribute('id', 'searchFormContainer');
     mainContainer.insertBefore(formContainer, mainContainer.firstChild);
     createSearchForm(formContainer);
     createTabbedMenu();
-
 }
+
+function createSearchFormButton(form) {
+    const searchButton = document.createElement("button");
+    searchButton.setAttribute('id', 'searchButton');
+    searchButton.type = "submit";
+    searchButton.textContent = "Szukaj";
+    searchButton.style.fontSize = "16px";
+    searchButton.style.fontStyle = "bold";
+    searchButton.style.backgroundColor = "darkgoldenrod";
+    searchButton.style.border = "none";
+    searchButton.style.color = "black";
+    searchButton.style.padding = "10px 20px";
+    searchButton.style.borderRadius = "5px";
+    // searchButton.style.marginTop = "20px";
+    searchButton.style.boxShadow = "0 0 20px darkgoldenrod";
+    searchButton.style.transition = "background-position 0.3s ease-in-out";
+    searchButton.style.float = "right";
+
+    searchButton.addEventListener("mouseover", function () {
+        searchButton.style.boxShadow = '0 0 20px moccasin';
+        searchButton.style.color = "white";
+    });
+
+// Przywrócenie efektu fade po opuszczeniu przycisku
+    searchButton.addEventListener("mouseout", function () {
+        searchButton.style.boxShadow = '0 0 20px darkgoldenrod';
+        searchButton.style.color = "black";
+    });
+
+    searchButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    form.appendChild(searchButton);
+}
+
+function handleFilterAutoResultCountFetch(form) {
+    let inputs = form.querySelectorAll('input, select, textarea');
+
+// Funkcja debounce, która opóźnia wywołanie funkcji do czasu, aż przestaną napływać wywołania
+    const debounce = (func, delay) => {
+        let inDebounce;
+        return function () {
+            const context = this;
+            const args = arguments;
+            clearTimeout(inDebounce);
+            inDebounce = setTimeout(() => func.apply(context, args), delay);
+        };
+    };
+
+    inputs.forEach(input => {
+        if (input.name === 'city') {
+            input.addEventListener('change', debounce(function () {
+                input.value = input.value.trim();
+
+                formData.set(input.name, input.value);
+                executeAdvertisementFilterResultCount();
+            }, 500)); // Opóźnienie 500ms
+        } else {
+            input.addEventListener('input', debounce(function () {
+                input.value = input.value.trim();
+
+                formData.set(input.name, input.value);
+                if (input.name === 'brand') {
+                    let modelLabel = document.getElementById('modellabel');
+                    modelLabel.style.color = 'darkgoldenrod';
+                    formData.set("model", "");
+                }
+                executeAdvertisementFilterResultCount();
+            }, 500)); // Opóźnienie 500ms
+        }
+    });
+}
+
 function createSearchForm(formContainer) {
     const form = document.createElement("form");
     form.setAttribute('id', 'advertisementFilterForm');
     form.style.display = "flex";
     form.style.color = 'white';
     form.style.flexWrap = "wrap";
-    form.style.justifyContent = "center";
+    form.style.justifyContent = "flex-end";
     form.style.boxSizing = "border-box";
     form.style.maxWidth = "100%";
 
@@ -320,61 +390,24 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
     form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
 
-    const searchButton = document.createElement("button");
-    searchButton.setAttribute('id', 'searchButton');
-    searchButton.type = "submit";
-    searchButton.textContent = "Szukaj";
-    searchButton.style.fontSize = "16px";
-    searchButton.style.fontStyle = "bold";
-    searchButton.style.backgroundColor = "darkgoldenrod";
-    searchButton.style.border = "none";
-    searchButton.style.color = "black";
-    searchButton.style.padding = "10px 20px";
-    searchButton.style.borderRadius = "5px";
-    searchButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    searchButton.style.transition = "background-position 0.3s ease-in-out";
-
-    searchButton.addEventListener("mouseover", function () {
-        searchButton.style.boxShadow = '0 0 20px moccasin';
-        searchButton.style.color = "white";
-    });
-
-// Przywrócenie efektu fade po opuszczeniu przycisku
-    searchButton.addEventListener("mouseout", function () {
-        searchButton.style.boxShadow = '0 0 20px darkgoldenrod';
-        searchButton.style.color = "black";
-    });
-
-    searchButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
-    form.appendChild(searchButton);
-
-    let inputs = form.querySelectorAll('input, select, textarea');
+    let queryWithButtonDiv = document.createElement('div');
+    queryWithButtonDiv.style.display = 'flex';
+    queryWithButtonDiv.style.width = '100%';
+    queryWithButtonDiv.style.justifyContent = 'center';
+    queryWithButtonDiv.style.alignItems = 'center';
+    queryWithButtonDiv.style.marginTop = '20px';
 
 
+    let queryTextInput = createRowWithInputElement("np. -> gruz drift kjs", "Filtruj po tytułach ogłoszeń", "text", "title", "title");
+    queryTextInput.style.marginRight = '20px';
 
-    inputs.forEach(input => {
-        input.addEventListener('change', function() {
-            let delay = 100;
+    queryWithButtonDiv.appendChild(queryTextInput);
+    createSearchFormButton(queryWithButtonDiv);
+    form.appendChild(queryWithButtonDiv);
 
-            if (input.name === 'city' || input.name === 'brand') {
-                input.value = input.value.trim();
-                delay = 500;
-            }
+    executeAdvertisementFilterResultCount();
 
-            setTimeout(() => {
-                formData.set(input.name, input.value);
-                if(input.name === 'brand'){
-                    let modelLabel = document.getElementById('modellabel');
-                    modelLabel.style.color = 'darkgoldenrod';
-                    formData.set("model","");
-                }
-                executeAdvertisementFilterResultCount();
-            }, delay);
-
-        });
-    });
-
-
+    handleFilterAutoResultCountFetch(form);
 
     formContainer.appendChild(form);
 
@@ -382,7 +415,13 @@ function createSearchForm(formContainer) {
         event.preventDefault();
         formData = new FormData(event.target);
         executeSearch(formData);
+    });
 
+    let cityInput = document.getElementById('city');
+    let cityStateInput = document.getElementById('cityState');
+
+    cityInput.addEventListener("input", function() {
+        cityStateInput.disabled = cityInput.value !== '';
     });
 
 }
@@ -485,7 +524,7 @@ function handleProposalOptions(inputId,proposeElements) {
     }
     return proposeElements;
 }
-function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions = null) {
+function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions) {
     const rowDiv = document.createElement("div");
     rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
     rowDiv.style.display = "flex";
@@ -510,6 +549,8 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     label.style.textAlign = "center";
     label.style.maxWidth = "100%";
     label.style.color = 'darkgoldenrod';
+    label.style.fontWeight = 'bold';
+    label.style.fontSize = '17px';
     labelColumn.appendChild(label);
     rowDiv.appendChild(labelColumn);
 
@@ -569,6 +610,11 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     }
 
 
+    if(inputId ==='title') {
+        rowDiv.style.flexBasis = "40%"; // Cztery kolumny - 25% szerokości wiersza
+        rowDiv.style.marginBottom = "0px";
+    }
+
 
 
     if (selectOptions) {
@@ -591,6 +637,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     }
 
     if (inputId === 'city') {
+
 
         const inputContainer = document.createElement("div");
         inputContainer.style.position = "relative";
@@ -643,8 +690,10 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         inputElement.addEventListener("input", function () {
             // Anuluje poprzednie żądanie, jeśli istnieje
             clearTimeout(timeoutId);
+            if (inputElement.value.length > 0) {
+                inputElement.value = inputElement.value.charAt(0).toUpperCase() + inputElement.value.slice(1);
+            }
 
-            // Pobiera częściową nazwę miasta wprowadzoną przez użytkownika
             const partialCityName = inputElement.value;
 
             // Ustawia nowe opóźnienie
@@ -653,7 +702,6 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
                 fetch(`/api/cities?partialName=${partialCityName}`)
                     .then(response => response.json())
                     .then(data => {
-                        // Aktualizuje listę propozycji miast na podstawie odpowiedzi od serwera
                         updateCitySuggestions(data);
                     })
                     .catch(error => {
@@ -669,8 +717,6 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
 
     inputColumn.appendChild(inputElement);
     rowDiv.appendChild(inputColumn);
-
-
 
     return rowDiv;
 }
@@ -698,11 +744,51 @@ function getUserFavourites() {
 }
 
 
+function createSortParamContainer(sortDiv) {
+    const actualSortParam = document.createElement('div');
+    let sortingByView = sortingBy;
+
+    switch (sortingBy) {
+        case 'price':
+            sortingByView = 'Ceny pojazdu';
+            break;
+        case 'mileage':
+            sortingByView = 'Przebiegu pojazdu';
+            break;
+        case 'engineCapacity':
+            sortingByView = 'Pojemności silnika';
+            break;
+        case 'engineHorsePower':
+            sortingByView = 'Mocy silnika';
+            break;
+        case 'productionDate':
+            sortingByView = 'Daty produkcji';
+            break;
+        default :
+            sortingByView = 'Ceny pojazdu';
+            break;
+    }
+
+    actualSortParam.textContent = (sortOrder !== 'desc' ? 'Sortowanie według ' + sortingByView + ' rosnąco ⇧' : 'Sortowanie według ' + sortingByView + ' malejąco ⇩');
+    actualSortParam.style.color = 'white';
+    actualSortParam.style.fontStyle = 'bold';
+    actualSortParam.style.fontSize = '24px';
+    actualSortParam.style.display = 'flex';
+    actualSortParam.style.justifyContent = 'center';
+    actualSortParam.style.marginBottom = '15px';
+
+    const sortableParams = ["price", "mileage", "engineCapacity", "engineHorsePower", "productionDate"];
+    sortableParams.forEach(sortBy => {
+        const sortButton = createSortButton(sortBy);
+        sortDiv.appendChild(sortButton);
+    });
+    return actualSortParam;
+}
+
 function displayResults(data) {
 
     let mainContainer = document.getElementById('container-main');
     const searchFormContainer = document.getElementById('searchFormContainer');
-
     let existingResultsDiv = document.getElementById('results');
     if (existingResultsDiv) {
         mainContainer.removeChild(existingResultsDiv);
@@ -710,12 +796,10 @@ function displayResults(data) {
 
     const resultsDiv = document.createElement("div");
     resultsDiv.setAttribute('id', 'results');
-
     resultsDiv.style.marginTop = "50px";
     resultsDiv.style.width = "100%";
     resultsDiv.style.marginBottom = "20px";
     resultsDiv.style.maxWidth = "100%";
-
     resultsDiv.innerHTML = "";
 
     if(data.content.length === 0){
@@ -723,27 +807,14 @@ function displayResults(data) {
         emptySearchDiv.textContent = 'Brak wyników wyszukiwania dla podanych filtrów';
         emptySearchDiv.style.color = 'white';
         resultsDiv.appendChild(emptySearchDiv);
-        if (searchFormContainer) {
-            mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
-        } else {
-
-            mainContainer.appendChild(resultsDiv);
-        }
+        mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
         return;
     }
 
-
-    darkModeCheckbox = document.getElementById('darkModeCheckbox');
-
-
-    // Display each advertisement result
     data.content.forEach(ad => {
 
         const resultDiv = document.createElement("messageResultDiv");
-
         resultDiv.className = 'searchResult';
-
-
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "240px";
@@ -754,17 +825,22 @@ function displayResults(data) {
         resultDiv.style.display = "flex";
         resultDiv.style.alignItems = "center";
         resultDiv.style.justifyContent = "flex-start";
-        resultDiv.style.borderRadius = "30px"; // Add rounded corners
-        resultDiv.style.cursor = "pointer"; // Change cursor to pointer on hover
+        resultDiv.style.borderRadius = "30px";
+        resultDiv.style.cursor = "pointer";
         resultDiv.style.maxWidth = "100%";
         resultDiv.style.fontSize = "20px";
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
 
-        // Set the onclick event to redirect to the /id/{ad.id} endpoint
         resultDiv.onclick = (event) => {
             event.preventDefault(); // To zatrzyma domyślne przewijanie strony
             window.location.href = `/advertisement?id=${ad.id}`;
         };
+        resultDiv.addEventListener('mouseup', (event) => {
+            if (event.button === 1) {
+                event.preventDefault();
+                window.open(`/advertisement?id=${ad.id}`, '_blank');
+            }
+        });
 
         handleDarkModeInverse(resultDiv);
 
@@ -783,11 +859,6 @@ function displayResults(data) {
         fadeEffect.style.width = maxPhotoWidth + 'px'
 
         createParalaxMiniature(photoElement, resultDiv);
-
-        // resultDiv.appendChild(fadeEffect);
-
-
-
 
         const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
         conversationDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
@@ -853,9 +924,7 @@ function displayResults(data) {
         conversationDetailsDiv.style.display = 'flex-start';
         conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
         conversationDetailsDiv.style.marginBottom = '30px';
-        conversationDetailsDiv.style.marginLeft = '15px';
-
-
+        conversationDetailsDiv.style.marginLeft = '25px';
 
         const conversationDetailsMain = document.createElement("conversationDetailsMain");
         conversationDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
@@ -869,6 +938,7 @@ function displayResults(data) {
         advertisementDetails.style.flexBasis = 'auto';
         advertisementDetails.style.display = 'flex';
         advertisementDetails.style.marginTop = '15px';
+        advertisementDetails.style.marginLeft = '5%';
 
         let priceUnitValue = document.createElement('span');
         priceUnitValue.style.color = 'darkgoldenrod';
@@ -899,10 +969,10 @@ function displayResults(data) {
 
 
         const bottomDetailsHeader = document.createElement("bottomDetailsHeader");
-        bottomDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-        bottomDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-        bottomDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-        bottomDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        bottomDetailsHeader.style.width = '100%';
+        bottomDetailsHeader.style.display = 'flex';
+        bottomDetailsHeader.style.justifyContent = 'space-between';
+        bottomDetailsHeader.style.alignItems = 'center';
         bottomDetailsHeader.style.boxSizing = "border-box";
         bottomDetailsHeader.style.flexBasis = "auto";
 
@@ -913,7 +983,6 @@ function displayResults(data) {
         locationDetailsDiv.style.bottom = '10px';
 
         const locationDetails = document.createElement("div");
-        locationDetails.textContent = ad.city + ', ' + ad.cityState;
         locationDetails.style.color = "white"; // Dostosuj kolor tekstu
         locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
         locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
@@ -923,11 +992,26 @@ function displayResults(data) {
         locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
         locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
         locationDetails.style.display = 'flex'; // Ustawienie flexbox
-        locationDetails.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
+        // locationDetails.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
         locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
         locationDetails.style.boxSizing = "border-box";
         locationDetails.style.flexBasis = "auto";
         locationDetails.style.textAlign = 'left';
+
+        const citySpan = document.createElement("span");
+        citySpan.textContent = ad.city + ',';
+        citySpan.style.fontSize = "22px";
+
+        const stateSpan = document.createElement("span");
+        // stateSpan.textContent = ad.cityState;
+        stateSpan.textContent = ' \t' + ad.cityState;
+        stateSpan.style.color = 'darkgoldenrod';
+        stateSpan.style.fontSize = "14px";
+        // stateSpan.style.verticalAlign = "bottom";
+        stateSpan.style.marginTop = "6px";
+
+        locationDetails.appendChild(citySpan);
+        locationDetails.appendChild(stateSpan);
 
 
         locationDetailsDiv.appendChild(locationDetails);
@@ -1063,17 +1147,13 @@ function displayResults(data) {
                 favouriteText.innerHTML = "Usuń z ulubionych";
             }
 
-            const requestBody = {
-                advertisementId: ad.id
-            };
-
             if(getUserName()!=='ZALOGUJ'){
                 fetch('/api/users/favourites', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify({ advertisementId: ad.id })
                 })
                     .then(response => response.text())
                     .catch(error => {
@@ -1121,10 +1201,8 @@ function displayResults(data) {
 
 
         conversationDetailsMain.appendChild(advertisementDetails);
-
         conversationDetailsDiv.appendChild(conversationDetailsHeader);
         conversationDetailsDiv.appendChild(conversationDetailsMain);
-
         conversationDetailsDiv.appendChild(bottomDetailsHeader);
 
 
@@ -1146,60 +1224,30 @@ function displayResults(data) {
 
     });
 
-// Display sort buttons if there are results
+
     if (data.content.length > 0) {
         const sortDiv = document.createElement("div");
-        sortDiv.setAttribute('id', 'sortButtonDiv');
-        sortDiv.className = "sort-buttons";
+        sortDiv.style.width = '100%';
+        sortDiv.style.display = 'flex';
+        sortDiv.style.justifyContent = 'center';
+        sortDiv.style.alignItems = 'center'; // To wy
+        sortDiv.style.marginBottom = '15px'
 
-        const actualSortParam = document.createElement('div');
-
-        let sortingByView = sortingBy;
-
-        switch (sortingBy) {
-            case 'price':
-                sortingByView = 'Ceny';
-                break;
-            case 'mileage':
-                sortingByView = 'Przebiegu';
-                break;
-            case 'engineCapacity':
-                sortingByView = 'Pojemności silnika';
-                break;
-            case 'engineHorsePower':
-                sortingByView = 'Mocy silnika';
-                break;
-            case 'productionDate':
-                sortingByView = 'Daty produkcji';
-                break;
-            default :
-                sortingByView = 'Ceny';
-                break;
-        }
-
-        actualSortParam.textContent = (sortOrder !== 'desc' ? 'Sortowanie według ' + sortingByView + ' rosnąco 🢁' : 'Sortowanie według ' + sortingByView + ' malejąco 🢃');
-        actualSortParam.style.color = 'darkgoldenrod';
-        actualSortParam.style.display = 'flex';
-        actualSortParam.style.justifyContent = 'center';
-        actualSortParam.style.marginBottom = '15px';
-
-        sortDiv.appendChild(actualSortParam);
-
-        // List of sortable parameters
-        const sortableParams = ["price", "mileage", "engineCapacity", "engineHorsePower", "productionDate"];
-        // Create and append sort buttons for each sortable parameter
-        sortableParams.forEach(sortBy => {
-            const sortButton = createSortButton(sortBy);
-            sortDiv.appendChild(sortButton);
-        });
+        const actualSortParam = createSortParamContainer(sortDiv);
 
         resultsDiv.insertBefore(sortDiv, resultsDiv.firstChild);
+        resultsDiv.insertBefore(actualSortParam, resultsDiv.firstChild);
     }
 
     // Display pagination links if there are multiple pages
     if (data.totalPages > 1) {
         const paginationDiv = document.createElement("div");
         paginationDiv.className = "pagination";
+        paginationDiv.style.width = '100%';
+        paginationDiv.style.display = 'flex';
+        paginationDiv.style.justifyContent = 'center';
+        paginationDiv.style.alignItems = 'center'; // To wy
+        paginationDiv.style.marginTop = '30px'; // To wy
 
         // Add previous page button
         if (!data.first) {
@@ -1217,7 +1265,6 @@ function displayResults(data) {
             paginationDiv.appendChild(pageButton);
         }
 
-        // Add next page button
         if (!data.last) {
             const nextPageButton = createPaginationButton(data.number + 1, ">", formData);
             paginationDiv.appendChild(nextPageButton);
@@ -1239,13 +1286,13 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
         paginationDiv.appendChild(prevPageButton);
     }
 
-    const sidePages = 2; // Liczba stron do pokazania przed i po aktualnej stronie
+    const sidePages = 2;
     let startPage = Math.max(data.number - sidePages, 0);
     let endPage = Math.min(startPage + sidePages * 2 + 1, data.totalPages);
 
     if (data.number < sidePages) {
         endPage = Math.min(sidePages * 2 + 1, data.totalPages);
-        startPage = 0; // Ustaw startPage na 0, aby uniknąć wartości ujemnych
+        startPage = 0;
     }
 
     if (data.number > data.totalPages - sidePages - 1) {
@@ -1253,7 +1300,7 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
         endPage = data.totalPages;
     }
 
-    // Dodaj "..." jeśli istnieje luka
+
     if (startPage > 0) {
         paginationDiv.appendChild(createPaginationButton(0, 1, sortBy, sortOrder));
         if (startPage > 1) {
@@ -1263,13 +1310,12 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
 
     let currentPage = null;
 
-    // Aktualne bloki stron
     for (let i = startPage; i < endPage && i < data.totalPages; i++) {
         const pageButton = createPaginationButton(i, i + 1, sortBy, sortOrder);
         if (i === data.number) {
             pageButton.disabled = true;
             pageButton.classList.add("active");
-            pageButton.style.top = '-6px';
+            pageButton.style.top = '-10px';
             pageButton.onmouseover = null;
             pageButton.onmouseout = null;
             currentPage = i;
@@ -1277,7 +1323,6 @@ function updatePaginationButtons(data, sortBy, sortOrder) {
         paginationDiv.appendChild(pageButton);
     }
 
-    // Dodaj "..." jeśli istnieje luka
     if (endPage < data.totalPages) {
         if (endPage < data.totalPages - 1) {
             paginationDiv.appendChild(createPaginationButton(endPage, "...", sortBy, sortOrder, true));
@@ -1301,57 +1346,57 @@ function extractPageNumber() {
 }
 function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
 
-    const container = document.createElement("div");
-    container.style.display = "inline-block";
-    container.style.marginRight = '3px';
-    container.style.position = 'relative'; // Position relative for the container
-    container.style.transition = "top 0.3s ease"; // Apply transition to the 'top' property
-
-
-    const button = document.createElement("button");
-    button.textContent = label;
-
-    button.style.backgroundColor = "black";
-    button.style.color = "white";
-    button.style.border = "1px solid darkgoldenrod";
-    button.style.padding = "10px 20px";
-    button.style.cursor = "pointer";
-    button.style.transition = "0.3s";
-    button.style.borderRadius = '15px';
-    // button.style.marginRight = '3px';
-    button.style.position = 'relative'; // Add position relative for hover effect
-
-
     let currentPageNumber = extractPageNumber();
 
-    if(currentPageNumber+1 === label){
-        button.style.boxShadow = '0 0 20px darkgoldenrod';
-        button.style.color = 'white';
-        button.style.fontSize = '18px';
-        button.style.fontStyle = 'bold';
-    }
+    const container = document.createElement("div");
+    container.style.display = "flex"; // Użycie Flexboxa
+    container.style.justifyContent = 'center'; // Wyśrodkowanie w poziomie
+    container.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    container.style.position = 'relative';
+    container.style.transition = "top 0.3s ease-in-out";
+    container.style.width = '7%';
+    container.style.marginLeft = '1%';
+    container.style.marginRight = '1%';
 
     container.onmouseover = function() {
-        container.style.top = '-6px';
+        container.style.top = '-5px';
     };
     container.onmouseout = function() {
         container.style.top = '0';
     };
 
 
+
+
+    const button = document.createElement("button");
+    button.textContent = label;
+    button.style.backgroundColor = "black";
+    button.style.color = "white";
+    button.style.border = "1px solid darkgoldenrod";
+    button.style.padding = "10px 10px";
+    button.style.cursor = "pointer";
+    button.style.transition = "0.3s";
+    button.style.borderRadius = '15px';
+    button.style.position = 'relative';
+    button.style.width = '100%';
+    button.style.fontStyle = 'bold';
+    button.style.fontSize = '22px';
+
+
+    if(currentPageNumber+1 === label){
+        button.style.boxShadow = '0 0 20px darkgoldenrod';
+        button.style.fontSize = '34px';
+    }
+
+
     button.addEventListener("click", function () {
-
         formData.set("pageNumber", pageNumber);
-
-
         if (sortOrder == null) {
             sortOrder = "asc";
             sortBy = "price";
         }
-
         formData.set("sortBy", sortBy);
         formData.set("sortOrder", sortOrder);
-
         executeSearch(formData);
         setTimeout(function() {
             window.scroll({
@@ -1365,41 +1410,35 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     return container;
 }
 function createSortButton(sortBy) {
-    const button = document.createElement("button");
-    // button.textContent = sortBy;
 
+    clickedButton = "";
+
+    const button = document.createElement("button");
+    button.style.fontStyle = 'bold';
+    button.style.fontSize = '16px';
     button.style.backgroundColor = "black";
     button.style.color = "white";
     button.style.border = "1px solid darkgoldenrod";
-    button.style.padding = "10px 20px";  // Dodane dla lepszego wyglądu przycisku
-    button.style.cursor = "pointer";     // Zmienia kursor na dłoń, gdy najedziesz na przycisk
-    button.style.transition = "0.3s";    // Dodane dla efektu płynnego przejścia
+    button.style.padding = "10px 20px";
+    button.style.cursor = "pointer";
+    button.style.transition = "0.3s";
     button.style.borderRadius = '15px';
     button.style.marginRight = '10px';
+    button.style.width = '13%';
 
     if(extractSortParam() === sortBy){
         button.style.boxShadow = '0 0 20px moccasin';
     }
-
-
-
-    // let currentPageNumber = extractPageNumber();
-    //
-    // if(sortingByView === sortBy){
-    //     button.style.boxShadow = '0 0 20px moccasin';
-    // }
-
-
 
     switch (sortBy) {
         case 'price':
             if(extractSortParam() === null){
                 button.style.boxShadow = '0 0 20px moccasin';
             }
-            button.textContent = 'Cena';
+            button.textContent = 'Cena pojazdu';
             break;
         case 'mileage':
-            button.textContent = 'Przebieg';
+            button.textContent = 'Przebieg pojazdu';
             break;
         case 'engineCapacity':
             button.textContent = 'Pojemność silnika';
@@ -1415,9 +1454,6 @@ function createSortButton(sortBy) {
             break;
     }
 
-
-    clickedButton = "";
-
     button.style.marginBottom = '20px';
     button.addEventListener("click", function () {
         sortOrder = sortOrder === "desc" ? "asc" : "desc";
@@ -1427,39 +1463,33 @@ function createSortButton(sortBy) {
         clickedButton = button.textContent;
         sortingBy = sortBy;
         executeSearch(formData);
-        // Call the search function with updatedw data
     });
-
     return button;
 }
 function executeSearch(formData) {
 
+    let cityStateInput = document.getElementById('cityState');
+    let cityInput = document.getElementById('city');
+
+    if(cityStateInput && cityInput.value !== ''){
+        formData.append('cityState', cityStateInput.value);
+    }
+    //TODO think about it ^^
+
+    let searchParams= new URLSearchParams();
     if(getUserName()!==null){
         getUserFavourites();
     }
+    formData.forEach((value, key) => {
+        if (value) {
+            searchParams.append(key, value);
+        }
+        sortingBy = formData.get("sortBy");
+        sortOrder = formData.get("sortOrder");
+        const newUrl = window.location.pathname + "?" + searchParams.toString();
+        history.pushState(null, null, newUrl);
+    });
 
-
-    let searchParams;
-    // Remove the sortBy and sortOrder parameters from formData to avoid confusion
-    if(formData){
-        searchParams = new URLSearchParams();
-        formData.forEach((value, key) => {
-            if (value) {
-                searchParams.append(key, value);
-            }
-            // formData.get("pageNumber")
-            sortingBy = formData.get("sortBy");
-            sortOrder = formData.get("sortOrder");
-
-
-            const newUrl = window.location.pathname + "?" + searchParams.toString();
-            history.pushState(null, null, newUrl);
-        });
-    }
-
-
-
-    // Make the GET request to the API endpoint with the sorting parameters
     fetch("/api/advertisements/filter/search?" + searchParams.toString())
         .then(response => response.json())
         .then(data => {

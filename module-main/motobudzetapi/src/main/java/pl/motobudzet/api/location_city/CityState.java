@@ -1,4 +1,4 @@
-package pl.motobudzet.api.location_state;
+package pl.motobudzet.api.location_city;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

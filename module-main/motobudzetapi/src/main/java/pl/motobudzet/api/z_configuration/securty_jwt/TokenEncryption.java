@@ -1,5 +1,6 @@
 package pl.motobudzet.api.z_configuration.securty_jwt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Slf4j
 @Component
 public class TokenEncryption {
 
@@ -53,21 +55,33 @@ public class TokenEncryption {
         return new IvParameterSpec(iv);
     }
 
-    public String encrypt(String token) throws Exception {
+    public String encrypt(String token) {
         SecretKey key = decodeKeyFromString(keyString);
         IvParameterSpec iv = new IvParameterSpec(Base64.getDecoder().decode(ivString));
-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-        byte[] cipherText = cipher.doFinal(token.getBytes());
+        byte[] cipherText = new byte[0];
+
+        try {
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+            cipherText = cipher.doFinal(token.getBytes());
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+
         return Base64.getEncoder().encodeToString(cipherText);
     }
 
-    public String decrypt(String token) throws Exception {
+    public String decrypt(String token) {
         SecretKey key = decodeKeyFromString(keyString);
         IvParameterSpec iv = new IvParameterSpec(Base64.getDecoder().decode(ivString));
-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
-        byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(token));
+        byte[] plainText = new byte[0];
+        try {
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            cipher.init(Cipher.DECRYPT_MODE, key, iv);
+            plainText = cipher.doFinal(Base64.getDecoder().decode(token));
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
         return new String(plainText);
     }
 

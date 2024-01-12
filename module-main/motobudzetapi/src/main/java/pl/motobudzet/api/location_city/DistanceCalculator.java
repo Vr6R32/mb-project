@@ -1,7 +1,11 @@
-package pl.motobudzet.api.utils;
+package pl.motobudzet.api.location_city;
 
 
 public class DistanceCalculator {
+
+
+    private DistanceCalculator() {
+    }
 
     // Średni promień Ziemi w kilometrach
     private static final double EARTH_RADIUS_KM = 6371.0;

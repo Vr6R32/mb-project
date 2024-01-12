@@ -79,7 +79,7 @@ function createHeaderTitle(advertisement, container, owner) {
     const heartIcon = document.createElement('img');
     heartIcon.setAttribute('id', 'hearticon');
     heartIcon.alt = 'HeartIcon';
-
+    heartIcon.src = '/api/static/heartEmpty';
 
 
     heartIcon.addEventListener('click', () => {
@@ -225,28 +225,32 @@ function updateHeartIconSrc(loggedUser, heartIcon) {
         advertisementId: advertisementId,
     });
 
-    fetchWithAuth('/api/users/favourites?' + queryParams.toString(), {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Błąd podczas pobierania ulubionego statusu');
-            }
-            return response.json();
+    if(loggedUser!== null) {
+        fetchWithAuth('/api/users/favourites?' + queryParams.toString(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-        .then(data => {
-            if (data === true) {
-                heartIcon.src = '/api/static/heartFull';
-            } else if (data === false) {
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Błąd podczas pobierania ulubionego statusu');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data === true) {
+                    heartIcon.src = '/api/static/heartFull';
+                } else if (data === false) {
+                    heartIcon.src = '/api/static/heartEmpty';
+                }
+            })
+            .catch(error => {
                 heartIcon.src = '/api/static/heartEmpty';
-            }
-        })
-        .catch(error => {
-            heartIcon.src = '/api/static/heartEmpty';
-        });
+            });
+    }
+
+
 }
 function createMessageBox(messageIcon, loggedUser) {
 
@@ -445,7 +449,7 @@ function fetchAdvertisement() {
             if (data.deleted === true) {
                 window.location = '/';
                 return null;
-            } else if ((data.verified === false || data.active === false) && getUserName() !== data.user){
+            } else if ((!data.verified || !data.active) && !(getUserName() === data.user || getUserRole() === 'ROLE_ADMIN')){
                 window.location = '/';
                 return null;
             }
@@ -465,6 +469,13 @@ function fetchAdvertisement() {
             console.error('Błąd pobierania danych:', error);
             return null;
         });
+}
+
+function getUserRole() {
+    let roleElement = document.getElementById('ROLE');
+    if (roleElement) {
+        return roleElement.textContent;
+    }
 }
 function previousPhoto(mainPhoto) {
     if (currentPhotoIndex > 0) {

@@ -45,7 +45,8 @@ public class FilteringHelper {
         return specification;
     }
 
-    public static Specification<Advertisement> handleSelectValue(AdvertisementFilterRequest request, Specification<Advertisement> specification, Map<String, ServiceFunction> serviceFunctionMap) {
+    public static Specification<Advertisement> handleSelectValues(AdvertisementFilterRequest request, Specification<Advertisement> specification, Map<String, ServiceFunction> serviceFunctionMap) {
+
         for (Field field : AdvertisementFilterRequest.class.getDeclaredFields()) {
             field.setAccessible(true);
             try {

@@ -1,3 +1,4 @@
+
 function createUserAdvertisementsResultDiv(ad,container) {
     const resultDiv = document.createElement("messageResultDiv");
     resultDiv.id = "messageResultDiv";
@@ -42,18 +43,13 @@ function createUserAdvertisementsResultDiv(ad,container) {
     photoElement.style.height = "200px";
     photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
     let maxPhotoWidth = 300;
-    // photoElement.style.objectFit = "cover";
-    // photoElement.onload = () => {
-    //     if (photoElement.width > maxPhotoWidth) {
-    //         maxPhotoWidth = photoElement.width;
-    //     }
-    // };
 
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-miniature-search');
     fadeEffect.appendChild(photoElement);
     fadeEffect.style.width = maxPhotoWidth + 'px';
+    fadeEffect.style.minWidth = maxPhotoWidth-100 + 'px';
 
     resultDiv.appendChild(fadeEffect);
 
@@ -135,6 +131,7 @@ function createUserAdvertisementsResultDiv(ad,container) {
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
+    advertisementDetails.style.marginLeft = '5%';
 
     let priceUnitValue = document.createElement('span');
     priceUnitValue.style.color = 'darkgoldenrod';
@@ -398,40 +395,12 @@ function createUserAdvertisementsResultDiv(ad,container) {
     });
 
     iconWrapper = document.createElement('div');
+    iconWrapper.setAttribute('id', 'iconWrapper');
     iconWrapper.style.display = 'flex';
     iconWrapper.style.flexDirection = 'column';
     iconWrapper.style.opacity = '0';
 
-
-
-    if(getUserName()!==ad.user){
-        heartIcon.src = "/api/static/heartFull";
-        favouriteText.innerHTML = "Usuń z ulubionych";
-        favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
-        heartIcon.style.marginBottom = '2px';
-        favouriteIconDiv.appendChild(heartIcon);
-        iconWrapper.appendChild(favouriteBottomHeaderDiv);
-        bottomDetailsHeader.appendChild(iconWrapper);
-    }
-    else if (getUserName()===ad.user) {
-
-        editIcon.src = "/api/static/editIcon";
-        editText.innerHTML = "Edytuj ogłoszenie";
-        editBottomHeaderDiv.appendChild(editWrapper);
-        editIcon.style.marginBottom = '2px';
-        editIconDiv.appendChild(editIcon);
-
-        deleteIcon.src = "/api/static/deleteIcon";
-        deleteText.innerHTML = "Usuń ogłoszenie";
-        deleteBottomHeaderDiv.appendChild(deleteWrapper);
-        deleteIcon.style.marginBottom = '2px';
-        deleteIconDiv.appendChild(deleteIcon);
-
-        iconWrapper.appendChild(deleteBottomHeaderDiv);
-        iconWrapper.appendChild(editBottomHeaderDiv);
-        bottomDetailsHeader.appendChild(iconWrapper);
-
-    }
+    handleIcons(ad, heartIcon, favouriteText, favouriteBottomHeaderDiv, favouriteWrapper, favouriteIconDiv, iconWrapper, bottomDetailsHeader, editIcon, editText, editBottomHeaderDiv, editWrapper, editIconDiv, deleteIcon, deleteText, deleteBottomHeaderDiv, deleteWrapper, deleteIconDiv);
 
 
     favouriteIconDiv.addEventListener('click', function(event) {
@@ -523,21 +492,14 @@ function createUserAdvertisementsResultDiv(ad,container) {
         ...containers.map(container => container.querySelector('span').offsetWidth)
     );
 
-    // Ustaw taką samą szerokość dla wszystkich kontenerów
     containers.forEach(container => {
         container.style.width = maxTextWidth + '65px';
     });
 
-
     conversationDetailsMain.appendChild(advertisementDetails);
-
     conversationDetailsDiv.appendChild(conversationDetailsHeader);
     conversationDetailsDiv.appendChild(conversationDetailsMain);
-
     conversationDetailsDiv.appendChild(bottomDetailsHeader);
-
-
-
 
 
 
@@ -556,3 +518,30 @@ function createUserAdvertisementsResultDiv(ad,container) {
     handleDarkModeInverse(resultDiv,iconWrapper);
     return resultDiv;
 }
+
+function handleIcons(ad, heartIcon, favouriteText, favouriteBottomHeaderDiv, favouriteWrapper, favouriteIconDiv, iconWrapper, bottomDetailsHeader, editIcon, editText, editBottomHeaderDiv, editWrapper, editIconDiv, deleteIcon, deleteText, deleteBottomHeaderDiv, deleteWrapper, deleteIconDiv) {
+    if (getUserName() !== ad.user) {
+        heartIcon.src = "/api/static/heartFull";
+        favouriteText.innerHTML = "Usuń z ulubionych";
+        favouriteBottomHeaderDiv.appendChild(favouriteWrapper);
+        heartIcon.style.marginBottom = '2px';
+        favouriteIconDiv.appendChild(heartIcon);
+        iconWrapper.appendChild(favouriteBottomHeaderDiv);
+        bottomDetailsHeader.appendChild(iconWrapper);
+    } else if (getUserName() === ad.user) {
+        editIcon.src = "/api/static/editIcon";
+        editText.innerHTML = "Edytuj ogłoszenie";
+        editBottomHeaderDiv.appendChild(editWrapper);
+        editIcon.style.marginBottom = '2px';
+        editIconDiv.appendChild(editIcon);
+        deleteIcon.src = "/api/static/deleteIcon";
+        deleteText.innerHTML = "Usuń ogłoszenie";
+        deleteBottomHeaderDiv.appendChild(deleteWrapper);
+        deleteIcon.style.marginBottom = '2px';
+        deleteIconDiv.appendChild(deleteIcon);
+        iconWrapper.appendChild(deleteBottomHeaderDiv);
+        iconWrapper.appendChild(editBottomHeaderDiv);
+        bottomDetailsHeader.appendChild(iconWrapper);
+    }
+}
+

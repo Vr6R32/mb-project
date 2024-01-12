@@ -226,6 +226,7 @@ function createLoginForm(){
     const form = document.createElement("form");
     form.className = "form-signin";
     form.style.backgroundColor = 'black';
+    form.setAttribute('id', 'loginForm');
 
 
     form.addEventListener('submit', function(event) {
@@ -246,15 +247,14 @@ function createLoginForm(){
         })
             .then(response => {
                 if (response.ok) {
-                    handleLoginResponse(false);
+                    handleLoginResponse();
+                } else if (response.status === 401) {
+                    handleLoginResponse(true);
+                } else {
+                    throw new Error('Wystąpił problem z logowaniem. Proszę spróbować ponownie.');
                 }
             })
-            .catch((error) => {
-                createDialogBox(error.message);
-            });
     });
-
-
 
 
     const heading = document.createElement("h2");
@@ -380,6 +380,16 @@ function createLoginForm(){
     formContainer.appendChild(form);
 
 }
+
+function clearForm() {
+    let form = document.getElementById('loginForm');
+    Array.from(form.elements).forEach(function(input) {
+        if (input.tagName === 'INPUT') {
+            input.value = '';
+        }
+    });
+}
+
 
 function createForgotPasswordForm()  {
     let formContainer = document.getElementById("registerFormContainer");

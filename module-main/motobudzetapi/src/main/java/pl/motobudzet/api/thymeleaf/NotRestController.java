@@ -31,10 +31,10 @@ public class NotRestController {
 
         MetaDataDTO metadata = metaService.findMetaDataForAdvertisementById(id);
         model.addAttribute("ogImage", PHOTO_RESOURCE_URL + metadata.miniatureUrl());
-        model.addAttribute("ogTitle", metadata.title());
-        model.addAttribute("ogDescription",
-                formatNumber(metadata.price()) + " " + metadata.priceUnit() + ", " +
-                        formatNumber(metadata.mileage()) + " " + String.valueOf(metadata.mileageUnit()).toLowerCase());
+        model.addAttribute("ogTitle", metadata.title() + " " + formatNumber(metadata.price()) + " " + metadata.priceUnit() + ", " +
+                formatNumber(metadata.mileage()) + " " + String.valueOf(metadata.mileageUnit()).toLowerCase());
+
+        model.addAttribute("ogDescription", "motobudzet.pl - Darmowe ogloszenia motoryzacyjne");
         return "advertisement";
     }
 
@@ -99,7 +99,8 @@ public class NotRestController {
     @GetMapping("management")
     public String managementPage(Model model, Authentication authentication) {
         ModelUtils.setAuthenticationAttributes(model, authentication);
-        return "details";
+        model.addAttribute("loadFunction", "Management");
+        return "management";
     }
 
 

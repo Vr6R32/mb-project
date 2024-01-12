@@ -21,13 +21,7 @@ public class LogoutService implements LogoutHandler {
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
-
-        try {
-            tokenRepository.setTokensExpiredAndRevoked(jwtService.decryptToken(requestCookies.accessToken()), jwtService.decryptToken(requestCookies.refreshToken()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        tokenRepository.setTokensExpiredAndRevoked(requestCookies.accessToken(), requestCookies.refreshToken());
         HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
         jwtService.applyHttpHeaders(response, httpHeaders);
 

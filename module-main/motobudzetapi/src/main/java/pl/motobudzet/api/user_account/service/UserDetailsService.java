@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.location_city.CityService;
+import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.dto.AppUserDTO;
 import pl.motobudzet.api.user_account.dto.UserDetailsRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
@@ -23,7 +23,7 @@ public class UserDetailsService {
 
     private final AppUserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final CityService cityService;
+    private final LocationService locationService;
 
 
     public List<String> findManagementEmails() {
@@ -46,7 +46,7 @@ public class UserDetailsService {
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new IllegalArgumentException("ROLE_DOESNT_EXIST")));
 
-        user.setCity(cityService.getCityByNameAndState(request.getCity(), request.getCityState()));
+        user.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setPhoneNumber(request.getPhoneNumber());

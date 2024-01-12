@@ -12,6 +12,7 @@ public class AdvertisementFilterRequest {
 
     private Integer pageNumber;
     private Integer distanceFrom;
+    private String title;
     private String brand;
     private String model;
     private String fuelType;

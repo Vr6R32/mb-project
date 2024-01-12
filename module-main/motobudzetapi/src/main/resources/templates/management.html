@@ -9,12 +9,16 @@
 
     <link rel="preload" href="/api/static/logo" as="image">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navBarMainContainerLogoAdvertisement.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/details.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/searchForm.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/snowflake.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myAccountPanel.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/zoom.css}" />
     <script type="text/javascript" th:src="@{/js/utils.js}" ></script>
-    <script type="text/javascript" th:src="@{/js/userDetails.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/messages.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/userAdvertisements.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/management_panel.js}" ></script>
 </head>
+
 <body>
 <header>
     <div class="looogo">
@@ -36,11 +40,15 @@
 </header>
 <div id="snowflakeContainer"></div>
 <div class="container-main" id="container-main">
-    <div id="userDetailsForm"></div>
+    <div class="right-container" id="rightContainer">
+        <div class="header-container-account" id="headerContainer"></div>
+        <div class="result-container-right" id="resultContainerRight"></div>
+    </div>
 </div>
+<span id="loadFunction" th:text="${loadFunction}" style="display: none;"></span>
 <div id="zoom-controls">
     <div class="nav-buttons">
-        <a href="/management" th:if="${ROLE == 'ROLE_ADMIN'}" class="nav-buttons">ADMIN</a>
+        <a href="/management" th:if="${ROLE == 'ROLE_ADMIN'}" class="nav-button">ADMIN</a>
     </div>
     <div style="display: flex">
         <label style="font-size: 60px;align-items: center; justify-content: center;">🕵️</label>

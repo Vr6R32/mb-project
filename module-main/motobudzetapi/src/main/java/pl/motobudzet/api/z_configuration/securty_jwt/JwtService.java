@@ -157,9 +157,7 @@ public class JwtService {
 
         if (username != null) {
             AppUser user = userRepository.findByUserName(username).orElseThrow();
-//            if (isTokenValid(refreshToken, user)) {
             return setAuthenticationResponse(user, response);
-//            }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
@@ -177,15 +175,11 @@ public class JwtService {
         String encryptedAccessToken;
         String encryptedRefreshToken;
 
-        try {
-            encryptedAccessToken = encryptToken(accessToken);
-            encryptedRefreshToken = encryptToken(refreshToken);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        encryptedAccessToken = encryptToken(accessToken);
+        encryptedRefreshToken = encryptToken(refreshToken);
 
         revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
+        saveUserToken(user, encryptedRefreshToken);
 
         HttpHeaders httpHeaders = buildHttpTokenHeaders(encryptedAccessToken, encryptedRefreshToken, jwtExpiration, refreshExpiration);
         applyHttpHeaders(response, httpHeaders);
@@ -193,11 +187,11 @@ public class JwtService {
         return accessToken;
     }
 
-    public String encryptToken(String token) throws Exception {
+    public String encryptToken(String token){
         return tokenEncryption.encrypt(token);
     }
 
-    public String decryptToken(String token) throws Exception {
+    public String decryptToken(String token){
         return tokenEncryption.decrypt(token);
     }
 

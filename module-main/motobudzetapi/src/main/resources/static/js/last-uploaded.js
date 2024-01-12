@@ -113,15 +113,12 @@ function displayLastUploaded(min,max,direction){
         mainPhoto.id = 'mainUrlPhoto';
 
         const photoDiv = document.createElement('div');
-        photoDiv.style.display = 'flex';           // Enable flexbox
-        photoDiv.style.justifyContent = 'center';   // Center horizontally
-        photoDiv.style.alignItems = 'center';       // Center vertically
-            // Make sure the div takes up full width of its container
+        photoDiv.style.display = 'flex';
+        photoDiv.style.justifyContent = 'center';
+        photoDiv.style.alignItems = 'center';
 
 
         createParalaxMiniatureLastUploaded(mainPhoto, photoDiv,photoHeight,photoWidth);
-        // fadeEffect.appendChild(mainPhoto);
-        // subContainer.appendChild(fadeEffect);
 
         subContainer.appendChild(photoDiv);
 

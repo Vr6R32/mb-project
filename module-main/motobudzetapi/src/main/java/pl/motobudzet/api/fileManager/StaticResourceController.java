@@ -31,7 +31,10 @@ public class StaticResourceController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(photoResource);
     }
-
+    @GetMapping(value = "favicon", produces = "image/x-icon")
+    public Resource getFavicon() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "favicon.ico");
+    }
     @GetMapping(value = "/validationFail", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getValidationFailGif() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "validationFail.webp");
@@ -89,6 +92,10 @@ public class StaticResourceController {
     @GetMapping(value = "/logo", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getLogo() {
         return new FileSystemResource(PRIVATE_FILE_PATH + "logo.png");
+    }
+    @GetMapping(value = "logo/facebookLogo", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Resource getLogoEnlarged() {
+        return new FileSystemResource(PRIVATE_FILE_PATH + "lamboFacebook.jpg");
     }
 
     @GetMapping(value = "/heartEmpty", produces = MediaType.IMAGE_PNG_VALUE)

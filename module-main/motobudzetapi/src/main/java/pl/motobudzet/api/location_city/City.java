@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import pl.motobudzet.api.location_state.CityState;
 
 @Entity
 @Data

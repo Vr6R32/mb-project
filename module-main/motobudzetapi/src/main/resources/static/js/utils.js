@@ -3,7 +3,6 @@ window.addEventListener('scroll', hideNavBar);
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-
     applySavedZoom();
     handleZoomSlider();
 });
@@ -110,7 +109,7 @@ function createLastUploadedContainer() {
     return {container, prevPageButton, nextPageButton};
 }
 function showCookieBarNotification() {
-    // Sprawdź, czy zgoda na cookies została już udzielona
+
     if (localStorage.getItem('cookieConsent') === 'true') {
         return;
     }
@@ -123,10 +122,12 @@ function showCookieBarNotification() {
     consentBar.style.left = '0';
     consentBar.style.width = '100%';
     consentBar.style.backgroundColor = 'black';
+    consentBar.style.borderTop = '1px solid white';
     consentBar.style.color = 'white';
     consentBar.style.textAlign = 'center';
     consentBar.style.padding = '10px';
     consentBar.style.zIndex = '1000';
+    consentBar.style.transition = 'bottom 1s'; // Dodanie animacji
 
     const consentText = document.createElement('span');
     consentText.textContent = 'Ta strona używa cookies. ';
@@ -143,7 +144,11 @@ function showCookieBarNotification() {
     // Dodaj funkcjonalność przycisku
     consentButton.onclick = function() {
         localStorage.setItem('cookieConsent', 'true');
-        consentBar.style.display = 'none';
+        consentBar.style.bottom = '-100px'; // Zmiana pozycji paska do "zjechania" w dół
+
+        setTimeout(function() {
+            consentBar.style.display = 'none'; // Ukrycie paska po zakończeniu animacji
+        }, 1000); // Czas trwania animacji (w milisekundach)
     };
 
     consentBar.appendChild(consentText);
@@ -684,7 +689,9 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     let descriptionContainer = document.createElement('div');
     let descriptionElement = document.createElement('div');
+
     descriptionElement.innerHTML = advertisement.description;
+    descriptionElement.style.color = 'white';
     descriptionContainer.appendChild(descriptionElement);
 
     let descContainer = document.createElement('div');
@@ -694,6 +701,7 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     descContainer.style.borderRadius = '20px';
     descContainer.style.margin = '0 auto';
     descContainer.style.marginTop = '30px';
+
 
 
     descContainer.style.backgroundColor = 'transparent';
@@ -893,6 +901,44 @@ function handleResponse(response) {
         } else {
             throw new Error('Wystąpił błąd podczas przetwarzania formularza.');
         }
+}
+
+function createHeader(buttonName){
+
+    let headerContainer = document.getElementById("headerContainer");
+    headerContainer.textContent = buttonName.replace("_", " ");
+
+    let hrLine = document.createElement("hr");
+    hrLine.setAttribute('id', 'headerLine');
+
+    headerContainer.appendChild(hrLine);
+
+    cleanResultsDiv();
+
+    setTimeout(() => {
+        hrLine.style.transform = "scaleX(1)";
+        hrLine.style.borderTopColor = "darkgoldenrod";
+
+    }, 500);
+}
+
+function cleanResultsDiv() {
+    let childConversationMessageInputElement = document.getElementById('messageInputDiv');
+
+    let childConversationResultElements = document.querySelectorAll('#rightContainer [id^="messageResultDiv"]');
+
+    childConversationResultElements.forEach(element => {
+        element.parentNode.removeChild(element);
+    });
+
+    if (childConversationMessageInputElement) {
+        childConversationMessageInputElement.parentNode.removeChild(childConversationMessageInputElement);
+    }
+
+    let resultContainerRight = document.getElementById("resultContainerRight");
+    resultContainerRight.innerHTML = "";
+
+    resultContainerRight.style.display = 'flex';
 }
 function handleError(error) {
     console.error(error);
@@ -1226,7 +1272,7 @@ function createDescriptionEditor() {
         [{ 'direction': 'rtl' }],
         [{ 'size': ['small', false, 'large', 'huge'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': [] }],
+        [{ 'color': ['white','blue','yellow','red','pink','green',] }, { 'background': ['black'] }],
         [{ 'font': [] }],
         [{ 'align': [] }],
         // ['clean']
@@ -1239,6 +1285,7 @@ function createDescriptionEditor() {
         theme: 'snow'
     });
 
+    quill.root.style.color = '#fff';
     quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
     quill.format(0, quill.getLength(), 'color', '#fff');
 }
@@ -1271,24 +1318,16 @@ async function checkIsTokenValid(isFetch) {
     }
 }
 
-function handleLoginResponse(isFetch) {
-    // const accessTokenExpirationTime = getCookie("accessTokenExpirationTime");
-    // if (accessTokenExpirationTime) {
-    //     localStorage.setItem("accessTokenExpirationTime", accessTokenExpirationTime);
-    // }
-    //
-    // const refreshTokenExpirationTime = getCookie("refreshTokenExpirationTime");
-    // if (refreshTokenExpirationTime) {
-    //     localStorage.setItem("refreshTokenExpirationTime", refreshTokenExpirationTime);
-    // }
-
-    if(!isFetch){
-        window.location.href = getRedirectLink();
+function handleLoginResponse(errorOccurred) {
+    if (errorOccurred) {
+        clearForm();
+        createDialogBox('Nieprawidłowe dane logowania.');
+    } else {
+        window.location = getRedirectLink();
     }
-
 }
 
-async function refreshToken(isFetch) {
+async function refreshToken() {
     let url = '/api/v1/auth/refresh-token';
 
     try {
@@ -1301,7 +1340,7 @@ async function refreshToken(isFetch) {
             throw new Error('Problem z odświeżeniem tokenu.');
         }
 
-        handleLoginResponse(isFetch);
+        handleLoginResponse();
 
     } catch (error) {
         console.error('Error:', error);

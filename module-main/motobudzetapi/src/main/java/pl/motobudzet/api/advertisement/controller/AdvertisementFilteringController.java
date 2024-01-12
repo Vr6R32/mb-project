@@ -30,11 +30,8 @@ public class AdvertisementFilteringController {
 
     @GetMapping("/count")
     public long getAdvertisementsCount(
-            @ModelAttribute AdvertisementFilterRequest request,
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false, defaultValue = "price") String sortBy,
-            @RequestParam(required = false, defaultValue = "ASC") String sortOrder) {
-        return advertisementFilteringService.getFilterResultCount(request, pageNumber, sortBy, sortOrder);
+            @ModelAttribute AdvertisementFilterRequest request) {
+        return advertisementFilteringService.getFilterResultCount(request);
     }
 }
 

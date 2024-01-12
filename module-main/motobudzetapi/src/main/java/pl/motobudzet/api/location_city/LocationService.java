@@ -7,27 +7,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.utils.DistanceCalculator.calculateDistance;
+import static pl.motobudzet.api.location_city.DistanceCalculator.calculateDistance;
 
 @Service
 @AllArgsConstructor
-public class CityService {
+public class LocationService {
 
     private final CityRepository cityRepository;
+    private final CityStateRepository stateRepository;
 
     public List<CityDTO> getAllCities() {
         return cityRepository.getAllCitiesWithCityStates().stream().map(this::mapToCityDTO).collect(Collectors.toList());
     }
-
-    private CityDTO mapToCityDTO(City city) {
-        return CityDTO.builder()
-                .cityId(city.getId())
-                .cityName(city.getName())
-                .cityStateId(city.getCityState().getId())
-                .cityStateName(city.getCityState().getName())
-                .build();
-    }
-
     public double calculateCityDistance(String cityOne, String cityTwo) {
         City firstCity = cityRepository.getCityByNameWithState(cityOne).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
         City secondCity = cityRepository.getCityByNameWithState(cityTwo).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
@@ -74,5 +65,25 @@ public class CityService {
 
     public List<CityDTO> getCityByPartialName(String partialName) {
         return cityRepository.findByPartialName(partialName).stream().map(this::mapToCityDTO).collect(Collectors.toList());
+    }
+
+    public List<CityStateDTO> getAllCitiesStates() {
+        return stateRepository.findAllCitiesStates().stream().map(this::mapToCityStateDTO).collect(Collectors.toList());
+    }
+
+    private CityDTO mapToCityDTO(City city) {
+        return CityDTO.builder()
+                .cityId(city.getId())
+                .cityName(city.getName())
+                .cityStateId(city.getCityState().getId())
+                .cityStateName(city.getCityState().getName())
+                .build();
+    }
+
+    public CityStateDTO mapToCityStateDTO(CityState cityState) {
+        return CityStateDTO.builder()
+                .id(String.valueOf(cityState.getId()))
+                .name(cityState.getName())
+                .build();
     }
 }

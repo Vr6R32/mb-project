@@ -73,11 +73,15 @@ public class SecurityConfig {
             "/actuator/**",
             "/api/session/**",
             "/reset",
+            "/apple-touch-icon-precomposed.png",
+            "/login",
             "/register",
             "/favicon.ico",
+            "/favicon",
             "/api/spec/**",
             "/api/models/**",
             "/api/cities",
+            "/api/resources/logo",
             "/api/cities/states",
             "/api/brands",
             "/api/user/forgot",
@@ -105,7 +109,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/", "index", "advertisement").permitAll()
                                 .requestMatchers("/user/details/**").hasRole("AWAITING_DETAILS")
                                 .requestMatchers("/api/user/updateDetails/**").hasRole("AWAITING_DETAILS")

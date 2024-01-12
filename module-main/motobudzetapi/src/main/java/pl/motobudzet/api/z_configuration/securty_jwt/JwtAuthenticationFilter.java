@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,8 +34,6 @@ import static pl.motobudzet.api.z_configuration.securty_jwt.SecurityConfig.WHITE
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -57,8 +56,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean isRequestWhiteListed(String path) {
+    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
+        String accessToken = requestCookies.accessToken();
+        String refreshToken = requestCookies.refreshToken();
+        String decryptedAccessToken = null;
+        String decryptedRefreshToken = null;
 
+        if (accessToken != null) {
+            decryptedAccessToken = jwtService.decryptToken(accessToken);
+        }
+        if (refreshToken != null) {
+            decryptedRefreshToken = jwtService.decryptToken(refreshToken);
+        }
+
+        if (decryptedAccessToken == null && decryptedRefreshToken != null) {
+            try {
+                handleRefreshTokenAuthentication(request, response, filterChain, decryptedRefreshToken);
+                return;
+            } catch (ExpiredJwtException e) {
+                clearTokensAndSendRedirect(response);
+                return;
+            }
+        }
+        try {
+            if (decryptedAccessToken != null) {
+                authenticateAccessToken(request, response, filterChain, decryptedAccessToken);
+            }
+        } catch (ExpiredJwtException e) {
+            if (decryptedRefreshToken != null) {
+                handleRefreshTokenAuthentication(request, response, filterChain, decryptedRefreshToken);
+            }
+        }
+    }
+
+
+    private boolean isRequestWhiteListed(String path) {
         return Arrays.stream(WHITE_LIST_URL)
                 .anyMatch(whiteListedPath -> path.matches(whiteListedPath.replace("**", ".*")));
     }
@@ -68,41 +101,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return requestCookies.accessToken() == null && requestCookies.refreshToken() == null;
     }
 
-    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
-        String accessToken = requestCookies.accessToken();
-        String refreshToken = requestCookies.refreshToken();
-
-        String decryptedAccessToken = null;
-        String decryptedRefreshToken = null;
-
-        try {
-            if (accessToken != null) {
-                decryptedAccessToken = jwtService.decryptToken(accessToken);
-            }
-            if (refreshToken != null) {
-                decryptedRefreshToken = jwtService.decryptToken(refreshToken);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (decryptedAccessToken == null && decryptedRefreshToken != null) {
-            handleRefreshTokenAuthentication(request, response, filterChain, decryptedRefreshToken);
-            return;
-        }
-
-        try {
-            if (decryptedAccessToken != null) {
-                authenticateAccessToken(request, response, filterChain, decryptedAccessToken);
-            }
-        } catch (ExpiredJwtException e) {
-            if (decryptedRefreshToken != null) {
-                handleRefreshTokenAuthentication(request, response, filterChain, decryptedRefreshToken);
-            } else {
-                throw e;
-            }
-        }
+    private void clearTokensAndSendRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/login");
+        HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
+        jwtService.applyHttpHeaders(response, httpHeaders);
     }
 
     private void authenticateAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken) throws IOException, ServletException {
@@ -120,7 +122,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // TODO : think is it okay to pass user data without fetching user from db ?
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (isTokenValid(accessToken)) {
             Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
             Long userId = jwtService.extractUserId(accessToken);
             AppUser principal = AppUser.builder().userName(username).id(userId).build();
@@ -128,14 +129,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     principal, null, authorities);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
-        }
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
     }
 
-    private boolean isTokenValid(String accessToken) {
-        return tokenRepository.findByToken(accessToken)
-//                .map(t -> !t.isExpired() && !t.isRevoked() && jwtService.isTokenValid(accessToken, userDetails))
-                .map(t -> !t.isExpired() && !t.isRevoked())
-                .orElse(false);
-    }
+//    private boolean isTokenValid(String accessToken) {
+//        return tokenRepository.findByToken(accessToken)
+////                .map(t -> !t.isExpired() && !t.isRevoked() && jwtService.isTokenValid(accessToken, userDetails))
+//                .map(t -> !t.isExpired() && !t.isRevoked())
+//                .orElse(false);
+//    }
 }
