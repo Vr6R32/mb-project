@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: mb-api
+  zipkin:
+    baseUrl: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+  mail:
+    host: serwer2379308.home.pl
+    port: 587
+    username: info@motobudzet.pl
+    password: dontgotosql
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+            auth: true
+            starttls:
+              enable: true
+            connection-timeout: 5000
+            timeout: 3000
+            write timeout: 5000
+  datasource:
+    hikari:
+      max-lifetime: 600000
+    url: jdbc:postgresql://postgres-db:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: postgres
+    password: dontgotosql
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 25MB
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        generate_statistics: false
+        show_sql: false
+        hbm2ddl:
+          auto: none
+  #          auto: create-drop
+  banner:
+    location: classpath:banner.txt
+  liquibase:
+    enabled: true
+    drop-first: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    metrics:
+      enabled: true
+    shutdown:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+server:
+  port: 20134
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keystore.p12
+    key-store-password: odi123
+    key-alias: spring-boot
+
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B59701231BZCZWQWRXCVXQWEQWREYGCX34234VXCVERW
+      expiration: 660000 # an hour
+      refresh-token:
+        expiration: 604800000 # 7 days
+token:
+  key:
+    value: Udh5YQlFnpMuEwltT7m4q8Dcsvz+G28Iqru3kk3vJx8=
+  ivParameter:
+    value: anjbBT/W+R6ycBK2Akx1Ug==
+
+paths:
+  public: "app/files/public/"
+  private: "app/files/private/"
+
+
+mailing:
+  module:
+    enabled: false
+
