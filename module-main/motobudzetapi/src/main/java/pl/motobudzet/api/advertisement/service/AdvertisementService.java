@@ -71,17 +71,9 @@ public class AdvertisementService {
         PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
-        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
-        List<Advertisement> advertisementDetails = uuidList.stream()
-                .map(uuid -> fetchedAdvertisementDetails.stream()
-                        .filter(adv -> adv.getId().equals(uuid))
-                        .findFirst()
-                        .orElse(null))
-                .filter(Objects::nonNull)
-                .toList();
 
-        return advertisementDetails.stream()
-                .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).collect(Collectors.toList());
+        return advertisementRepository.findByListOfUUIDs(uuidList)
+                .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
     }
 
     @Transactional

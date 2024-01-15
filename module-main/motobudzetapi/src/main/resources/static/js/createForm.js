@@ -67,9 +67,6 @@ function createForm() {
     const titleContainer = document.getElementById('title-container-hidden');
     const formContainer = document.getElementById('half-container-big1');
     const photoContainer = document.getElementById('half-container-big2');
-    const containerMain = document.getElementById('container-main');
-
-    containerMain.style.opacity = '1';
 
     titleContainer.style.color = 'darkgoldenrod';
     titleContainer.style.textAlign = 'center';
@@ -83,20 +80,14 @@ function createForm() {
     form.id = 'advertisementForm';
 
     const formElements = [
-        { label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true },
-        // { label: 'Opis ogłoszenia:', type: 'div', id: 'description', name: 'description', required: true },
-        { label: 'Marka:', type: 'select', id: 'brand', name: 'brand', onchange: 'fetchModels(this.value)', required: true },
-        { label: 'Model:', type: 'select', id: 'model', name: 'model', required: true },
-        { label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true },
-        { label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true },
-        { label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true },
-        { label: 'Rodzaj skrzyni biegów:', type: 'select', id: 'transmissionType', name: 'transmissionType', required: true },
-        {
-            label: 'Przebieg:',
-            type: 'number',
-            id: 'mileage',
-            name: 'mileage',
-            required: true,
+        {label: 'Tytuł:', type: 'text', id: 'name', name: 'name', required: true},
+        {label: 'Marka:', type: 'select', id: 'brand', name: 'brand', onchange: 'fetchModels(this.value)', required: true},
+        {label: 'Model:', type: 'select', id: 'model', name: 'model', required: true},
+        {label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true},
+        {label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true},
+        {label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true},
+        {label: 'Rodzaj skrzyni biegów:', type: 'select', id: 'transmissionType', name: 'transmissionType', required: true},
+        {label: 'Przebieg:', type: 'number', id: 'mileage', name: 'mileage', required: true,
             additionalSelect: {
                 label: 'Jednostka:',
                 id: 'mileageUnit',
@@ -104,23 +95,19 @@ function createForm() {
                 options: ['KM', 'MIL']
             }
         },
-        { label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true ,
+        {label: 'Cena:', type: 'number', id: 'price', name: 'price', required: true,
             additionalSelect: {
                 label: 'Jednostka:',
                 id: 'priceUnit',
                 name: 'priceUnit',
                 options: ['PLN', 'EUR', 'USD']
-            }},
-        { label: 'Pojemność silnika (w cm³):', type: 'number', id: 'engineCapacity', name: 'engineCapacity', required: true },
-        { label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true },
-        { label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true },
-        { label: 'Data pierwszej rejestracji:', type: 'date', id: 'firstRegistrationDate', name: 'firstRegistrationDate', required: true },
-        {
-            label: 'Lokalizacja:',
-            type: 'text',
-            id: 'city',
-            name: 'city',
-            required: true,
+            }
+        },
+        {label: 'Pojemność silnika (w cm³):', type: 'number', id: 'engineCapacity', name: 'engineCapacity', required: true},
+        {label: 'Moc silnika (KM):', type: 'number', id: 'engineHorsePower', name: 'engineHorsePower', required: true},
+        {label: 'Data produkcji:', type: 'number', id: 'productionDate', name: 'productionDate', required: true},
+        {label: 'Data pierwszej rejestracji:', type: 'date', id: 'firstRegistrationDate', name: 'firstRegistrationDate', required: true},
+        {label: 'Lokalizacja:', type: 'text', id: 'city', name: 'city', required: true,
             additionalSelect: {
                 label: 'Województwo:',
                 id: 'cityState',
@@ -159,6 +146,17 @@ function createForm() {
         input.type = element.type;
         input.id = element.id;
         input.name = element.name;
+
+        if (element.type === 'number') {
+            // Dodajemy naszą walidację dla pól number przy użyciu zdarzenia 'change'
+            input.addEventListener('change', function () {
+                // Sprawdzamy czy wartość jest ujemna
+                if (parseFloat(this.value) < 0) {
+                    this.value = 0; // Ustawiamy wartość na 0
+                    alert('Wartość ' + element.label + ' nie może być ujemna. Zmieniono na 0.');
+                }
+            });
+        }
         if (element.required) {
             input.required = true;
         }
@@ -168,8 +166,6 @@ function createForm() {
         if (element.type === 'select') {
             input.style.textAlign = 'center';
         }
-
-
         if (element.id === 'city') {
 
             const inputContainer = document.createElement("div");
@@ -215,7 +211,6 @@ function createForm() {
                     suggestionsList.style.display = 'none';
                 }
             });
-
 
             inputContainer.appendChild(input);
             inputContainer.appendChild(suggestionsList);

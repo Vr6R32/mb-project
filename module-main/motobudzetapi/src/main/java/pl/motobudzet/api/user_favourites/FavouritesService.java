@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.service.AppUserCustomService;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,17 +37,23 @@ public class FavouritesService {
         return favouritesRepository.checkIsFavourite(loggedUser, advertisementId);
     }
 
+    public List<UUID> getUserFavouriteAdvertisementIds(String loggedUser) {
+        //        return advertisementRepository.findByListOfUUIDs(favouritesList).stream()
+//                .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
+        return favouritesRepository.findAllFavouritesIdByUserName(loggedUser);
+    }
+
+    public List<AdvertisementDTO> getUserFavouriteAdvertisements(String loggedUser) {
+        List<UUID> uuidList = favouritesRepository.findAllFavouritesIdByUserName(loggedUser);
+        return advertisementRepository.findByListOfUUIDs(uuidList).stream()
+                .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
+    }
+
     private Favourite mapToFavouriteDTO(FavouriteRequest request, AppUser appUser) {
         return Favourite.builder()
                 .appUser(appUser)
                 .advertisementId(request.getAdvertisementId())
                 .userName(appUser.getUsername())
                 .build();
-    }
-
-    public List<AdvertisementDTO> getAllFavouritesAdvertisements(String loggedUser) {
-        List<UUID> favouritesList = favouritesRepository.findAllFavouritesIdByUserName(loggedUser);
-        return advertisementRepository.findByListOfUUIDs(favouritesList).stream()
-                .map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
     }
 }

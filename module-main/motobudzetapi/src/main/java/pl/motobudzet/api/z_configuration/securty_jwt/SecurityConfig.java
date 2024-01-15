@@ -70,7 +70,7 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-            "/actuator/**",
+//            "/actuator/**",
             "/api/session/**",
             "/reset",
             "/apple-touch-icon-precomposed.png",

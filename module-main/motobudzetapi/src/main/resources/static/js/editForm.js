@@ -61,7 +61,6 @@ function extractAdvertisementId() {
 }
 function createForm() {
 
-
     const titleContainer = document.getElementById('title-container-hidden');
     const formContainer = document.getElementById('half-container-big1');
     const photoContainer = document.getElementById('half-container-big2');
@@ -144,6 +143,17 @@ function createForm() {
         input.type = element.type;
         input.id = element.id;
         input.name = element.name;
+
+        if (element.type === 'number') {
+            // Dodajemy naszą walidację dla pól number przy użyciu zdarzenia 'change'
+            input.addEventListener('change', function () {
+                // Sprawdzamy czy wartość jest ujemna
+                if (parseFloat(this.value) < 0) {
+                    this.value = 0; // Ustawiamy wartość na 0
+                    alert('Wartość ' + element.label + ' nie może być ujemna. Zmieniono na 0.');
+                }
+            });
+        }
         if (element.required) {
             input.required = true;
         }
@@ -153,14 +163,6 @@ function createForm() {
         if (element.type === 'select') {
             input.style.textAlign = 'center';
         }
-
-        if (element.type === 'date') {
-            input.addEventListener('focus', function() {
-                this.click();
-            });
-        }
-
-
 
         if (element.id === 'city') {
 

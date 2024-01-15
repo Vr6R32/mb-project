@@ -8,6 +8,7 @@ import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,15 +22,12 @@ public class FavouritesController {
         AppUser user = (AppUser) authentication.getPrincipal();
         return favouritesService.manageUserFavourite(userRequest, user);
     }
-
-    @GetMapping
-    public ResponseEntity<Boolean> checkIsFavourite(@RequestParam String advertisementId, Authentication authentication) {
-        boolean response = favouritesService.checkIsFavourite(advertisementId, authentication.getName());
-        return ResponseEntity.ok(response);
+    @GetMapping("ids")
+    public List<UUID> getUserFavouriteAdvertisementIds(Authentication authentication) {
+        return favouritesService.getUserFavouriteAdvertisementIds(authentication.getName());
     }
-
-    @GetMapping("all")
-    public List<AdvertisementDTO> getFavouritesIds(Authentication authentication) {
-        return favouritesService.getAllFavouritesAdvertisements(authentication.getName());
+    @GetMapping("advertisements")
+    public List<AdvertisementDTO> getUserFavouriteAdvertisements(Authentication authentication) {
+        return favouritesService.getUserFavouriteAdvertisements(authentication.getName());
     }
 }

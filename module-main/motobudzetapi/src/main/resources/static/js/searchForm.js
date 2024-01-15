@@ -728,7 +728,7 @@ function applyLabelColor(element, label) {
     }
 }
 function getUserFavourites() {
-    fetch("/api/users/favourites/all")
+    fetch("/api/users/favourites/ids")
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -736,8 +736,8 @@ function getUserFavourites() {
             return response.json();
         })
         .then(data => {
-            data.forEach(advertisement => {
-                favouritesArray.push(advertisement.id);
+            data.forEach(advertisementId => {
+                favouritesArray.push(advertisementId);
             });
         })
         .catch(error => console.error("Error fetching data:", error));

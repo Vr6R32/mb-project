@@ -58,7 +58,7 @@ function loadUserAdvertisements(){
 
 function loadUserFavourites() {
 
-    fetchWithAuth('/api/users/favourites/all', {
+    fetchWithAuth('/api/users/favourites/advertisements', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
