@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  main-monolith:
+    build: .
+    container_name: mb-api
+    image: motobudzet/mb-api:0.0.1-SNAPSHOT
+    ports:
+      - "20134:20134"
+    volumes:
+      - ./logs:/var/log/spring
+      - ./files/public:/app/files/public
+      - ./files/private:/app/files/private
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - postgres
+    networks:
+      - motobudzet
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    ports:
+      - "3309:5432"
+    volumes:
+      - postgres-data:/data/postgres
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dontgotosql
+      PGDATA: /data/postgres
+    networks:
+      - postgres
+      - motobudzet
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1m
+      timeout: 10s
+      retries: 2
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  logs:
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  motobudzet:
+    driver: bridge
+  postgres:
+    driver: bridge
