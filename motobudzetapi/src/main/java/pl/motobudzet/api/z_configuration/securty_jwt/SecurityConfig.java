@@ -83,7 +83,7 @@ public class SecurityConfig {
             "/api/resources/logo",
             "/api/cities/states",
             "/api/brands",
-            "/actuator/**",
+//            "/actuator/**",
             "/api/user/forgot",
             "/api/static/**",
             "/api/v1/clone/**",

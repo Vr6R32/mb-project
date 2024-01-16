@@ -33,6 +33,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
             "WHERE a.id IN ?1")
+    //            "WHERE a.id IN ?1 ORDER BY FIELD(a.id,?1)")
     List<Advertisement> findByListOfUUIDs(List<UUID> uuidList);
 
     @Query("SELECT a FROM Advertisement a " +

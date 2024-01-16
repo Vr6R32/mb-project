@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import pl.motobudzet.api.advertisement.model.MileageUnit;
+import pl.motobudzet.api.advertisement.model.PriceUnit;
 
 import java.time.LocalDate;
 
@@ -35,11 +37,11 @@ public class AdvertisementRequest {
     @NotNull(message = "Mileage cannot be empty!")
     private Long mileage;
     @NotNull(message = "Mileage cannot be empty!")
-    private String mileageUnit;
+    private MileageUnit mileageUnit;
     @NotNull(message = "Price cannot be empty!")
     private Long price;
     @NotNull(message = "Price cannot be empty!")
-    private String priceUnit;
+    private PriceUnit priceUnit;
     @NotNull(message = "Engine capacity cannot be empty!")
     private Long engineCapacity;
     @NotNull(message = "Engine horse power cannot be empty!")

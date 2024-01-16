@@ -21,7 +21,6 @@ import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 import java.util.*;
 
 import static pl.motobudzet.api.advertisement.service.FilteringHelper.*;
-import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -41,10 +40,10 @@ public class AdvertisementFilteringService {
 
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
         List<UUID> uuidList = advertisementSpecificationIds.getContent();
-        List<AdvertisementDTO> advertisementList = advertisementRepository.findByListOfUUIDs(uuidList)
-                        .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
+        List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
+        List<AdvertisementDTO> sortedAdvertisementList = sortAndMapAdvertisementsToDTO(uuidList, fetchedAdvertisementDetails);
 
-        return new PageImpl<>(advertisementList, pageable, advertisementSpecificationIds.getTotalElements());
+        return new PageImpl<>(sortedAdvertisementList, pageable, sortedAdvertisementList.size());
     }
 
     public long getFilterResultCount(AdvertisementFilterRequest request) {
@@ -99,7 +98,7 @@ public class AdvertisementFilteringService {
                 Join<Advertisement, City> cityJoin = root.join("city", JoinType.LEFT);
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
-        } else if (city != null && !city.isEmpty() && distanceFrom != null) {
+        } else if (city != null && !city.isEmpty() && distanceFrom != 0) {
             List<City> cityList = locationService.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
@@ -111,20 +110,5 @@ public class AdvertisementFilteringService {
         }
         return specification;
     }
-
-    private Predicate handleTitleQueryPredicate(String titleQueryParam, Root<Advertisement> root, CriteriaBuilder criteriaBuilder, Predicate combinedPredicate) {
-        if (titleQueryParam != null && !titleQueryParam.isEmpty()) {
-            String[] words = titleQueryParam.toLowerCase().split("\\s+");
-            Predicate titlePredicate = criteriaBuilder.disjunction();
-            for (String word : words) {
-                String searchWord = "%" + word + "%";
-                titlePredicate = criteriaBuilder.or(titlePredicate,
-                        criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), searchWord));
-            }
-            combinedPredicate = criteriaBuilder.and(combinedPredicate, titlePredicate);
-        }
-        return combinedPredicate;
-    }
-
 }
 

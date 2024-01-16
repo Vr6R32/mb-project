@@ -9,11 +9,13 @@ services:
     ports:
       - "20134:20134"
     volumes:
-      - logs:/var/log/spring
+      - ./logs:/var/log/spring
       - ./files/public:/app/files/public
       - ./files/private:/app/files/private
     environment:
+      SERVER_PORT: 20134
       SPRING_PROFILES_ACTIVE: docker
+      TZ: Europe/Warsaw
     depends_on:
       - postgres
     networks:
@@ -33,6 +35,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: dontgotosql
       PGDATA: /data/postgres
+      TZ: Europe/Warsaw
     networks:
       - postgres
     healthcheck:
@@ -40,11 +43,14 @@ services:
       interval: 1m
       timeout: 10s
       retries: 2
+    restart: unless-stopped
+
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
     environment:
+      TZ: Europe/Warsaw
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
@@ -57,6 +63,7 @@ services:
     restart: unless-stopped
 
 
+
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v2.48.0
@@ -64,10 +71,14 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-#    networks:
-#      - logging
+    networks:
+      - logging
     ports:
       - "9090:9090"
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Warsaw
+
 
   grafana:
     container_name: grafana
@@ -83,6 +94,8 @@ services:
       - "3000:3000"
     networks:
       - logging
+    restart: unless-stopped
+
 
   loki:
     container_name: loki
@@ -92,18 +105,24 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - logging
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Warsaw
 
   promtail:
     container_name: promtail
     image: grafana/promtail:latest
     volumes:
-      - logs:/var/log/spring
+      - ./logs:/var/log/spring
       - ./promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     depends_on:
       - loki
     networks:
       - logging
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Warsaw
 
   zipkin:
     image: openzipkin/zipkin

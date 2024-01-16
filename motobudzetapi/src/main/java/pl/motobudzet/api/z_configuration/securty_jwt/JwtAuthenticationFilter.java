@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (areTokensMissing(request)) {
+            handleServicesThroughBearerToken(request,response,filterChain);
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,6 +54,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
             log.warn(e.getMessage());
             filterChain.doFilter(request, response);
+        }
+    }
+
+    private void handleServicesThroughBearerToken(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws ServletException, IOException {
+        String authorization = request.getHeader("Authorization");
+        if(authorization!=null && authorization.contains("Bearer")){
+            String encryptedAccessToken = authorization.substring(7);
+            String decryptedAccessToken = jwtService.decryptToken(encryptedAccessToken);
+            authenticateAccessToken(request, response, filterChain, decryptedAccessToken);
+            log.info(authorization);
         }
     }
 

@@ -8,6 +8,9 @@ import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDT
 
 public class ConversationMapper {
 
+    private ConversationMapper() {
+    }
+
     public static ConversationDTO mapConversationToDTO(Conversation conversation, String ownerName) {
 
         String secondUserName;

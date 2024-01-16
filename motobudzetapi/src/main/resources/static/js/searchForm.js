@@ -1,6 +1,6 @@
 let formData = new FormData();
-let sortOrder = "asc"; // Set the default sort order to "asc" (ascending) or "desc" (descending) as you prefer
-let sortingBy = "price"; // Set the default sort by parameter to "price" (or any other default value you prefer)
+let sortOrder = "asc";
+let sortingBy = "price";
 let urlSearchParams = null;
 let favouritesArray = [];
 let clickedButton = "";
@@ -73,7 +73,8 @@ function setFormValuesFromUrlParams(urlSearchParams) {
         productionDateFrom: "productionDateFrom",
         productionDateTo: "productionDateTo",
         city: "city",
-        distanceFrom: "distanceFrom"
+        distanceFrom: "distanceFrom",
+        title: "title"
     };
 
     for (let param in paramsMapping) {
@@ -1486,8 +1487,10 @@ function executeSearch(formData) {
         }
         sortingBy = formData.get("sortBy");
         sortOrder = formData.get("sortOrder");
-        const newUrl = window.location.pathname + "?" + searchParams.toString();
-        history.pushState(null, null, newUrl);
+        // const newUrl = window.location.pathname + "?" + searchParams.toString();
+        // history.pushState(null, null, newUrl);
+        // history.replaceState(null, null, newUrl);
+        history.replaceState(null, null,  "?" + searchParams.toString());
     });
 
     fetch("/api/advertisements/filter/search?" + searchParams.toString())

@@ -30,4 +30,9 @@ public class FavouritesController {
     public List<AdvertisementDTO> getUserFavouriteAdvertisements(Authentication authentication) {
         return favouritesService.getUserFavouriteAdvertisements(authentication.getName());
     }
+
+    @GetMapping
+    public boolean checkIsFavourite(@RequestParam String advertisementId,Authentication authentication) {
+        return favouritesService.checkIsFavourite(advertisementId,authentication.getName());
+    }
 }

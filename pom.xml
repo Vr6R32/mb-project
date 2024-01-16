@@ -103,15 +103,14 @@
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
                         <configuration>
+                            <from>
+                                <image>eclipse-temurin:17.0.4.1_1-jre</image>
+                            </from>
                             <to>
                                 <image>michaelkey/motobudzet:${project.version}</image>
                                 <auth>
-<!--                                    <fromConfig>-->
-<!--                                        <serverId>docker-hub</serverId>-->
-<!--                                    </fromConfig>-->
-                                    <fromConfig>
-                                        <credHelper>credential-helper-name</credHelper>
-                                    </fromConfig>
+                                    <username>xxx</username>
+                                    <password>xxx</password>
                                 </auth>
                             </to>
                         </configuration>
