@@ -6,7 +6,7 @@ let currentPhotoIndex = 0;
 document.addEventListener("DOMContentLoaded", async function () {
     // await checkIsTokenValid();
     extractAdvertisementId();
-    fetchAdvertisement();
+    await fetchAdvertisement();
 });
 
 
@@ -155,8 +155,6 @@ function createHeaderTitle(advertisement, container, owner) {
     toolTipMessageSend.className = 'tooltip';
     document.body.appendChild(toolTipMessageSend);  // Dodanie podpowiedzi do dokumentu
 
-    updateHeartIconSrc(loggedUser, heartIcon);
-
 
     const toolTipFavourite = document.createElement('span');
     toolTipFavourite.className = 'tooltip';
@@ -208,6 +206,7 @@ function createHeaderTitle(advertisement, container, owner) {
         titleRightColumn.appendChild(editIcon);
     }
 
+
     titleDiv.appendChild(titleMidColumn);
     titleDiv.appendChild(titleRightColumn);
     let advertisementDiv = document.getElementById('advertisementResultDiv');
@@ -220,12 +219,14 @@ function setTooltipText(heartIcon, toolTipFavourite) {
         toolTipFavourite.textContent = 'Dodaj do ulubionych';
     }
 }
-function updateHeartIconSrc(loggedUser, heartIcon) {
+function updateHeartIconSrc() {
     const queryParams = new URLSearchParams({
         advertisementId: advertisementId,
     });
 
-    if(loggedUser!== null) {
+    let heartIcon = document.getElementById('hearticon');
+
+    if(getUserName() !== null) {
         fetchWithAuth('/api/users/favourites?' + queryParams.toString(), {
             method: 'GET',
             headers: {
@@ -462,7 +463,7 @@ function fetchAdvertisement() {
             setTitleInUrl(data);
             createAdvertisementIndexDiv(containerMain, data);
             createHeaderTitle(data, containerMain, data.user);
-
+            updateHeartIconSrc();
             return data;
         })
         .catch(error => {
