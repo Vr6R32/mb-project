@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.0</version>
     </parent>
 
     <groupId>pl.motobudzet</groupId>
@@ -26,7 +26,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.maven.plugin.version>3.2.0</spring.boot.maven.plugin.version>
-        <spring.boot.dependencies.version>3.1.4</spring.boot.dependencies.version>
+        <spring.boot.dependencies.version>3.2.0</spring.boot.dependencies.version>
         <image>michaelkey/${project.artifactId}:${project.version}</image>
     </properties>
 
