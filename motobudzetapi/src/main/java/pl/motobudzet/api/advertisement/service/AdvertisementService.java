@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.model.MileageUnit;
-import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.fileManager.FileService;

@@ -21,6 +21,8 @@ import static pl.motobudzet.api.mappers.AdvertisementMapper.mapToAdvertisementDT
 
 public class FilteringHelper {
 
+    private FilteringHelper() {
+    }
 
     public static PageRequest setPageRequest(Integer pageNumber, String sortBy, String sortOrder) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);

@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenRepository;
 
 import java.io.IOException;
 import java.util.Arrays;
