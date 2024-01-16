@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'mb-api'
+    scheme: https  # Ensure Prometheus uses HTTPS to scrape metrics
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['motobudzet.pl']  # Ensure this is the HTTPS port
+        labels:
+          application: 'mb-api'
+#    tls_config:
+#      cert_file: /etc/prometheus/motobudzet.pl.intermediate.pem
+#      key_file: /etc/prometheus/motobudzet.pl.key
+#      insecure_skip_verify: false

@@ -2,7 +2,7 @@ spring:
   application:
     name: mb-api
   zipkin:
-    baseUrl: http://localhost:9411
+    baseUrl: http://zipkin:9411
   sleuth:
     sampler:
       probability: 1.0
@@ -45,13 +45,21 @@ spring:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: true
+    drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
+
 management:
+  metrics:
+    tags:
+      application: mb-api
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
   endpoints:
     web:
       exposure:
         include: "*"
+      base-path: /actuator
   endpoint:
     metrics:
       enabled: true
@@ -64,6 +72,7 @@ management:
 
 server:
   port: 20134
+#  port: 443
   ssl:
     key-store-type: PKCS12
     key-store: classpath:keystore.p12
@@ -78,6 +87,7 @@ application:
       expiration: 660000 # an hour
       refresh-token:
         expiration: 604800000 # 7 days
+
 token:
   key:
     value: Udh5YQlFnpMuEwltT7m4q8Dcsvz+G28Iqru3kk3vJx8=
@@ -87,7 +97,6 @@ token:
 paths:
   public: "app/files/public/"
   private: "app/files/private/"
-
 
 mailing:
   module:

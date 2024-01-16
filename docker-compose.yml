@@ -1,14 +1,15 @@
 version: '3'
 
 services:
-  main-monolith:
+  mb-api:
     build: .
     container_name: mb-api
-    image: motobudzet/mb-api:0.0.1-SNAPSHOT
+#    image: motobudzet/mb-api:0.0.1-SNAPSHOT
+    image: michaelkey/mb-api:0.0.1-SNAPSHOT
     ports:
       - "20134:20134"
     volumes:
-      - ./logs:/var/log/spring
+      - logs:/var/log/spring
       - ./files/public:/app/files/public
       - ./files/private:/app/files/private
     environment:
@@ -16,7 +17,8 @@ services:
     depends_on:
       - postgres
     networks:
-      - motobudzet
+      - logging
+      - postgres
     restart: unless-stopped
 
   postgres:
@@ -33,7 +35,6 @@ services:
       PGDATA: /data/postgres
     networks:
       - postgres
-      - motobudzet
     healthcheck:
       test: pg_isready -U postgres
       interval: 1m
@@ -55,13 +56,72 @@ services:
       - postgres
     restart: unless-stopped
 
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.48.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+#    networks:
+#      - logging
+    ports:
+      - "9090:9090"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+    ports:
+      - "3000:3000"
+    networks:
+      - logging
+
+  loki:
+    container_name: loki
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - logging
+
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:latest
+    volumes:
+      - logs:/var/log/spring
+      - ./promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - logging
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - logging
+    restart: unless-stopped
+
 volumes:
   logs:
   postgres-data:
   pgadmin-data:
+  grafana-data:
 
 networks:
-  motobudzet:
-    driver: bridge
   postgres:
+    driver: bridge
+  logging:
     driver: bridge

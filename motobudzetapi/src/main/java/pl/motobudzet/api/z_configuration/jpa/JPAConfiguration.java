@@ -4,8 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import pl.motobudzet.api.user_account.service.AppUserCustomService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,5 +21,30 @@ public class JPAConfiguration {
     public DateTimeProvider dateTimeProvider() {
         return () -> Optional.of(LocalDateTime.now(ZoneId.of("Europe/Warsaw")));
     }
+//    @Bean
+//    public ServletWebServerFactory servletContainer() {
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
+//            @Override
+//            protected void postProcessContext(Context context) {
+//                SecurityConstraint securityConstraint = new SecurityConstraint();
+//                securityConstraint.setUserConstraint("CONFIDENTIAL");
+//                SecurityCollection collection = new SecurityCollection();
+//                collection.addPattern("/*");
+//                securityConstraint.addCollection(collection);
+//                context.addConstraint(securityConstraint);
+//            }
+//        };
+//        tomcat.addAdditionalTomcatConnectors(redirectConnector());
+//        return tomcat;
+//    }
+//
+//    private Connector redirectConnector() {
+//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//        connector.setScheme("http");
+//        connector.setPort(20134); // Or any other port that you want for HTTP
+//        connector.setSecure(false);
+//        connector.setRedirectPort(80); // Update this to your https port
+//        return connector;
+//    }
 
 }

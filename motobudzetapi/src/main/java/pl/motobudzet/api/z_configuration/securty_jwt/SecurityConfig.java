@@ -70,7 +70,6 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-//            "/actuator/**",
             "/api/session/**",
             "/reset",
             "/apple-touch-icon-precomposed.png",
@@ -84,6 +83,7 @@ public class SecurityConfig {
             "/api/resources/logo",
             "/api/cities/states",
             "/api/brands",
+            "/actuator/**",
             "/api/user/forgot",
             "/api/static/**",
             "/api/v1/clone/**",
@@ -143,7 +143,7 @@ public class SecurityConfig {
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler(successLogoutHandler())
                 )
-                .exceptionHandling((exception) ->
+                .exceptionHandling(exception ->
                         exception
                                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                                 .accessDeniedPage("/"));
