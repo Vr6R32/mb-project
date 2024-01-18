@@ -29,7 +29,7 @@ public class ConversationMapper {
                 .secondUser(secondUserName);
 
         if (conversationLastMessage != null) {
-            builder.lastMessage(MessageMapper.mapToConversationMessageDTO(conversationLastMessage));
+            builder.lastMessage(MessageMapper.mapToMessageDTO(conversationLastMessage));
         }
 
         return builder.build();

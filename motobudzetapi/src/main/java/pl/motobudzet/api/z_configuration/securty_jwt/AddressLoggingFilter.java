@@ -31,9 +31,15 @@ public class AddressLoggingFilter extends OncePerRequestFilter {
     }
 
     private void logRequestDetails(HttpServletRequest request) {
+
+        String realIp = request.getHeader("X-Forwarded-For");
+        if (realIp == null) {
+            realIp = request.getRemoteAddr();
+        }
+
         StringBuilder logMessage = new StringBuilder("Method -> " + request.getMethod() +
                 " : " + "URL -> " + "[" + request.getRequestURI() + "]" +
-                " : " + " IP -> " + request.getRemoteAddr());
+                " : " + " IP -> " + realIp);
 
         // Logowanie parametrów
         Map<String, String[]> parameterMap = request.getParameterMap();

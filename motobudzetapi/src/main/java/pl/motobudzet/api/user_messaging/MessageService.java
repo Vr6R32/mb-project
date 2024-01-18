@@ -85,7 +85,7 @@ public class MessageService {
         if (authorizeMessageGetAccess(messagesList, loggedUser)) {
             updateMessagesRead(loggedUser, messagesList);
             return messagesList
-                    .stream().map(MessageMapper::mapToConversationMessageDTO).collect(Collectors.toList());
+                    .stream().map(MessageMapper::mapToMessageDTO).collect(Collectors.toList());
         }
         return null;
     }

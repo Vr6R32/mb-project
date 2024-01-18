@@ -10,7 +10,7 @@ public class MessageMapper {
     private MessageMapper() {
     }
 
-    public static MessageDTO mapToConversationMessageDTO(Message message) {
+    public static MessageDTO mapToMessageDTO(Message message) {
 
         LocalDateTime messageSendDateTime = message.getMessageSendDateTime();
 
