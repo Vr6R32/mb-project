@@ -3,6 +3,7 @@ package pl.motobudzet.api.user_messaging;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    Conversation findByAdvertisementIdAndUserOwnerId(UUID uuid, Long userOwnerId);
-
-    Optional<Conversation> findConversationByAdvertisement_IdAndUserOwner_IdAndUserClient_Id(UUID advertisementId, Long userOwnerId, Long userClientId);
-
-    @Query("select c from Conversation c left join fetch c.advertisement left join fetch c.userClient left join fetch c.userOwner where c.userOwner.id = ?1 ")
-    List<Conversation> findAllByUserOwnerId(Long id);
-
-    @Query("select c from Conversation c left join fetch c.advertisement left join fetch c.userClient left join fetch c.userOwner where c.userClient.id = ?1")
-    List<Conversation> findAllByUserClientId(Long id);
 
     @Query("SELECT c FROM Conversation c " +
             "LEFT JOIN FETCH c.advertisement adv " +
@@ -39,4 +31,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
 
     @Query("select c.id from Conversation c where c.advertisement.id = ?1 and c.userClient.userName = ?2")
     Optional<Long> findByUserClientIdAndAdvertisementId(UUID advertisementId, String name);
+
+    @Query("SELECT c FROM Conversation c WHERE (c.userClient = ?1 OR c.userOwner = ?1) AND c.advertisement.id = ?2")
+    Optional<Conversation> findByAdvertisementIdAndUserClientId(AppUser userSender, UUID advertisementId);
 }

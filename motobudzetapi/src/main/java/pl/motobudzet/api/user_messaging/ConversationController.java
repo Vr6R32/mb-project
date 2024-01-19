@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,19 +14,14 @@ public class ConversationController {
 
     private final ConversationService conversationService;
 
-    @PostMapping("create")
-    public Long createConversation(@RequestParam UUID advertisementId, Authentication authentication) {
-        return conversationService.createConversation(advertisementId, authentication.getName());
-    }
-
     @GetMapping("id")
-    public Long getConversationIdByAdvertisementIdAndSender(@RequestParam UUID advertisementId, Principal principal) {
-        return conversationService.findConversationIdByAdvIdAndSender(advertisementId, principal.getName());
+    public Long getConversationIdByAdvertisementIdAndSender(@RequestParam UUID advertisementId, Authentication authentication) {
+        return conversationService.findConversationIdByAdvIdAndSender(advertisementId, authentication.getName());
     }
 
     @GetMapping
-    public List<ConversationDTO> getAllConversations(Principal userName) {
-        return conversationService.getAllConversations(userName.getName());
+    public List<ConversationDTO> getAllConversations(Authentication authentication) {
+        return conversationService.getAllConversations(authentication.getName());
     }
 }
 

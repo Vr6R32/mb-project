@@ -320,11 +320,10 @@ function createMessageInputContainer(resultContainerRight, conversation) {
 function sendMessage(messageInput, conversation, resultContainerRight) {
 
     const messageText = messageInput.value;
-    const conversationId = conversation.conversationId;
 
     const messageObject = {
         message: messageText,
-        userSender: document.getElementById('username').textContent,
+        userSender: getUserName()
     };
 
     if(messageText.length > 1000){
@@ -335,9 +334,8 @@ function sendMessage(messageInput, conversation, resultContainerRight) {
     if (messageText.trim() !== "") {
         const formData = new FormData();
         formData.append("message", messageText);
-        formData.append("conversationId", conversationId);
+        formData.append("advertisementId", conversation.advertisement.id);
 
-        // Wysłanie danych jako żądanie POST z danymi formularza
         fetchWithAuth("/api/messages", {
             method: "POST",
             body: formData,

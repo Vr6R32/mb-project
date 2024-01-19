@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.fileManager.FilePathsConfig;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.io.File;
@@ -21,16 +22,8 @@ import java.util.UUID;
 public class SpringMailSenderService {
 
     private final JavaMailSender mailSender;
-
-    //    @Value("${email.info-address}")
+    private final FilePathsConfig pathsConfig;
     private String infoEmail = "info@motobudzet.pl";
-
-    //    @Value("${email.logo-path}")
-    private final String logoPath = "app/files/private/logo.png";
-
-
-    //    @Value("${email.background-path}")
-    private String backgroundPath = "app/files/private/emailBackground.jpg";
 
     private static final String NEW_CONVERSATION_MESSAGE_TITLE = "Dostałeś nową wiadomość ";
     private static final String REGISTRATION_ACTIVATION_TITLE = "Link aktywacyjny";
@@ -40,9 +33,9 @@ public class SpringMailSenderService {
     private static final String RESET_PASSWORD_TITLE = "Resetowanie hasła";
     private static final String SITE_URL = "https://motobudzet.pl";
 
+
     @Async
     public void sendMessageNotificationHtml(EmailMessageRequest request) {
-        System.out.println(request);
         sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.getReceiverEmail());
     }
 
@@ -64,7 +57,6 @@ public class SpringMailSenderService {
     @Async
     public void sendEmailNotificationToManagement(List<String> emailList, UUID id) {
         String[] to = emailList.toArray(new String[1]);
-        System.out.println(Arrays.toString(to));
         sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), to);
     }
 
@@ -80,9 +72,8 @@ public class SpringMailSenderService {
             helper.setText(htmlContent, true);
 
             addStaticResources(helper);
-
             mailSender.send(message);
-            System.out.println("send message");
+
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email.", e);
         }
@@ -90,6 +81,8 @@ public class SpringMailSenderService {
 
 
     private void addStaticResources(MimeMessageHelper helper) throws MessagingException {
+        String logoPath = pathsConfig.getPrivateFilePath() + "logo.png";
+        String backgroundPath = pathsConfig.getPrivateFilePath() + "emailBackground.jpg";
         FileSystemResource logo = new FileSystemResource(new File(logoPath));
         helper.addInline("image001", logo);
         FileSystemResource background = new FileSystemResource(new File(backgroundPath));

@@ -96,13 +96,11 @@ function loadUserConversations() {
             return response.json();
         })
         .then((data) => {
-            // let resultCount = 0;
             if (data.length === 0) {
                 resultContainerRight.textContent = "Nie posiadasz jeszcze żadnych konwersacji";
             } else {
                 data.forEach(conversation => {
                     const resultDiv = createResultDiv(conversation,resultContainerRight);
-                    // resultCount++;
                     conversationRow++
                     resultContainerRight.appendChild(resultDiv);
                 });

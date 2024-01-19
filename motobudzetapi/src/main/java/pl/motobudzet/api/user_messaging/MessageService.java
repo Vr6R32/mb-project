@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,35 +24,51 @@ public class MessageService {
 //    private final KafkaServiceInterface kafkaService;
     private final SpringMailSenderService springMailSenderService;
 
-    public String sendMessage(String message, Long conversationId, String messageSenderName) {
+    public String sendMessage(String message, UUID advertisementId, AppUser user) {
 
-        Conversation conversation = conversationService.findConversationById(conversationId);
+        Conversation conversation = findConversationOrCreateNew(advertisementId, user);
+
+        String messageSenderName = user.getUsername();
         AppUser conversationUserClient = conversation.getUserClient();
         AppUser conversationUserOwner = conversation.getUserOwner();
-
-        AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
-        AppUser messageSender = userCustomService.getUserByName(messageSenderName);
-
-        String lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
+        String lastMessageUserName = getLastMessageUserName(conversation);
 
         if (authorizeMessagePostAccess(messageSenderName, conversationUserOwner.getUsername(), conversationUserClient.getUsername())) {
             Message newMessage = Message.builder()
                     .conversation(conversation)
                     .message(message)
                     .messageSendDateTime(LocalDateTime.now())
-                    .messageSender(messageSender)
+                    .messageSender(user)
                     .build();
 
             updateConversation(conversation, newMessage);
             messagesRepository.save(newMessage);
+
+            AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
+            if (lastMessageUserName == null || !Objects.equals(lastMessageUserName, messageSenderName)) {
+                sendEmailMessageNotificationAsync(message, emailNotificationReceiver, user, conversation);
+            }
+            return "Message Sent!";
+        } else {
+            return "Error while sending a message!";
         }
+    }
 
-
-        if (!Objects.equals(lastMessageUserName, messageSenderName)) {
-            sendEmailMessageNotificationAsync(message, emailNotificationReceiver, messageSender, conversation);
+    private String getLastMessageUserName(Conversation conversation) {
+        String lastMessageUserName = null;
+        if (conversation.getLastMessage() != null) {
+            lastMessageUserName = conversation.getLastMessage().getMessageSender().getUsername();
         }
+        return lastMessageUserName;
+    }
 
-        return "Message Sent!";
+    private Conversation findConversationOrCreateNew(UUID advertisementId, AppUser user) {
+        Conversation conversation = conversationService.findConversationByAdvertisementIdAndUserSender(advertisementId, user);
+
+        if(conversation==null){
+            conversation = conversationService.createConversation(advertisementId, user);
+        }
+        return conversation;
     }
 
     private void updateConversation(Conversation conversation, Message newMessage) {
@@ -85,19 +101,18 @@ public class MessageService {
         if (authorizeMessageGetAccess(messagesList, loggedUser)) {
             updateMessagesRead(loggedUser, messagesList);
             return messagesList
-                    .stream().map(MessageMapper::mapToMessageDTO).collect(Collectors.toList());
+                    .stream().map(MessageMapper::mapToMessageDTO).toList();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private void updateMessagesRead(String loggedUser, List<Message> messagesList) {
 
         for (Message message : messagesList) {
             String messageSenderUsername = message.getMessageSender().getUsername();
-            if (!loggedUser.equals(messageSenderUsername)) {
-                if (message.getMessageReadDateTime() == null) {
+            if (!loggedUser.equals(messageSenderUsername) && (message.getMessageReadDateTime() == null)) {
                     message.setMessageReadDateTime(LocalDateTime.now());
-                }
+
             }
         }
         messagesRepository.saveAll(messagesList);

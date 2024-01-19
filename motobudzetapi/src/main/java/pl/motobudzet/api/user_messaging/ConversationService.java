@@ -20,27 +20,19 @@ public class ConversationService {
     private final AppUserCustomService userCustomService;
     private final ConversationRepository conversationRepository;
 
-    public Long createConversation(UUID advertisementId, String loggedUser) {
+    public Conversation createConversation(UUID advertisementId, AppUser loggedUser) {
 
-        AppUser userClient = userCustomService.getUserByName(loggedUser);
         Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
 
-        if (advertisement.getUser().getUsername().equals(loggedUser)) {
-            return null;
-        } else {
-            Conversation conversation = Conversation.builder()
-                    .advertisement(advertisement)
-                    .userOwner(advertisement.getUser())
-                    .userClient(userClient)
-                    .build();
-            return conversationRepository.saveAndFlush(conversation).getId();
-        }
-    }
+        Conversation conversation = Conversation.builder()
+                .advertisement(advertisement)
+                .userOwner(advertisement.getUser())
+                .userClient(loggedUser)
+                .build();
 
+        conversationRepository.saveAndFlush(conversation);
 
-    public Conversation findConversationById(Long conversationId) {
-        return conversationRepository
-                .findById(conversationId).orElse(null);
+        return conversation;
     }
 
     public List<ConversationDTO> getAllConversations(String loggedUser) {
@@ -51,5 +43,10 @@ public class ConversationService {
 
     public Long findConversationIdByAdvIdAndSender(UUID advertisementId, String name) {
         return conversationRepository.findByUserClientIdAndAdvertisementId(advertisementId, name).orElse(-1L);
+    }
+
+    public Conversation findConversationByAdvertisementIdAndUserSender(UUID advertisementId, AppUser messageSender) {
+        return conversationRepository
+                .findByAdvertisementIdAndUserClientId(messageSender,advertisementId).orElse(null);
     }
 }

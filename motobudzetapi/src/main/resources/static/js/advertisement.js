@@ -153,12 +153,12 @@ function createHeaderTitle(advertisement, container, owner) {
     const toolTipMessageSend = document.createElement('span');
     toolTipMessageSend.textContent = 'Wyślij wiadomość';
     toolTipMessageSend.className = 'tooltip';
-    document.body.appendChild(toolTipMessageSend);  // Dodanie podpowiedzi do dokumentu
+    document.body.appendChild(toolTipMessageSend);
 
 
     const toolTipFavourite = document.createElement('span');
     toolTipFavourite.className = 'tooltip';
-    document.body.appendChild(toolTipFavourite);  // Dodanie podpowiedzi do dokumentu
+    document.body.appendChild(toolTipFavourite);
 
 
     editIcon.addEventListener('mouseenter', (event) => {
@@ -325,12 +325,12 @@ function createMessageBox(messageIcon, loggedUser) {
         sendButton.style.color = "black";
     });
     sendButton.addEventListener("click", function () {
-        checkConversationId(textArea.value);
+        sendNewMessage(textArea.value, advertisementId);
     });
     textArea.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
-            checkConversationId(textArea.value);
+            sendNewMessage(textArea.value, advertisementId);
         }
     });
 
@@ -358,11 +358,10 @@ function createMessageBox(messageIcon, loggedUser) {
         }
     });
 }
-function sendNewMessage(messageValue, advertisementId, conversationId) {
+function sendNewMessage(messageValue, advertisementId) {
 
     const formData = new FormData();
     formData.append("message", messageValue);
-    formData.append("conversationId", conversationId);
     formData.append("advertisementId", advertisementId);
 
     fetchWithAuth("/api/messages", {
@@ -385,56 +384,6 @@ function sendNewMessage(messageValue, advertisementId, conversationId) {
                 dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + error.message;
                 dialogBox.appendChild(dialogBoxTitle);
                 console.error();
-        });
-}
-function createNewConversation() {
-    const formData = new FormData();
-    formData.append("advertisementId", advertisementId);
-
-    return fetchWithAuth("/api/conversations/create", {
-        method: "POST",
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            return response;
-        })
-        .catch(error => {
-            console.error("Błąd podczas wysyłania wiadomości:", error);
-        });
-}
-function checkConversationId(messageValue) {
-    let conversationId = null;
-
-    fetchWithAuth("/api/conversations/id?advertisementId=" + advertisementId)
-        .then(response => {
-            if (response.status === 200) {
-                return response.text();
-            } else {
-                throw new Error('Błąd na serwerze: ' + response.statusText);
-            }
-        })
-        .then(data => {
-            conversationId = parseInt(data);
-            if (conversationId < 0) {
-                createNewConversation()
-                    .then(result => {
-                        if (result) {
-                            sendNewMessage(messageValue, advertisementId, result);
-                        } else {
-                            console.error('NIE MOZESZ WYSYLAC WIADOMOSCI SAM DO SIEBIE !');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Błąd createNewConversation:', error);
-                    });
-            } else {
-                sendNewMessage(messageValue, advertisementId, conversationId);
-            }
-        })
-        .catch(error => {
-            console.error('Błąd:', error);
         });
 }
 
