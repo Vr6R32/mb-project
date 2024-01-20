@@ -1,13 +1,7 @@
 
-function createUserAdvertisementsResultDiv(ad,container) {
-    const resultDiv = document.createElement("messageResultDiv");
-    resultDiv.id = "messageResultDiv";
+function createSingleAdvertisementResultPanelDiv(ad, container) {
 
-    let isEventListenerActive = true;  // Zmienna stanu
-    let iconWrapper;
-
-
-    container.style.maxHeight = "900px";
+    container.style.maxHeight = "1000px";
     container.style.display = 'grid';
     container.style.gridTemplateColumns = '100%';
     container.style.overflowY = 'scroll';
@@ -19,20 +13,31 @@ function createUserAdvertisementsResultDiv(ad,container) {
     container.style.scrollbarWidth = 'thin';
     container.style.scrollbarColor = 'darkgoldenrod transparent';
 
-    // Tworzenie dwóch elementów grid
-    const grid1 = document.createElement('div');
-    grid1.style.maxWidth = '100%';
+    const resultDiv = document.createElement("messageResultDiv");
+    resultDiv.id = "messageResultDiv";
+    resultDiv.style.height = '90%';
+    resultDiv.style.marginBottom = '30px';
+
+    // if (/Mobi|Android/i.test(navigator.userAgent)) {
+    //     let resultContainerRight = document.getElementById('resultContainerRight');
+    //     let rightContainer = document.getElementById('rightContainer');
+    //     resultContainerRight.style.height = '1400px';
+    //     resultContainerRight.style.maxHeight = '1400px';
+    //     rightContainer.style.maxHeight = '1400px';
+    //     rightContainer.style.height = '1400px';
+    //     resultDiv.style.height = '70%';
+    //     resultDiv.style.marginBottom = '1%';
+    // }
 
 
 
-    // Dodawanie tych gridów jako dzieci do resultContainerRight
-    container.appendChild(grid1);
+    let isEventListenerActive = true;
+    let iconWrapper;
+
 
     resultDiv.addEventListener("click", () => {
         if(!isEventListenerActive) return;
         const advertisementId = ad.id;
-
-        // Przenieś na stronę /id/advertisement.id
         window.location.href = `/advertisement?id=${advertisementId}`;
     });
 
@@ -41,15 +46,15 @@ function createUserAdvertisementsResultDiv(ad,container) {
     const photoElement = document.createElement("img");
     photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
     photoElement.style.height = "200px";
-    photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
-    let maxPhotoWidth = 300;
+    photoElement.style.minWidth = '250px';
+    photoElement.style.maxWidth = '250px';
+    photoElement.style.objectFit = "cover";
+    // photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
 
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-miniature-search');
     fadeEffect.appendChild(photoElement);
-    fadeEffect.style.width = maxPhotoWidth + 'px';
-    fadeEffect.style.minWidth = maxPhotoWidth-100 + 'px';
 
     resultDiv.appendChild(fadeEffect);
 
@@ -172,24 +177,35 @@ function createUserAdvertisementsResultDiv(ad,container) {
     locationDetailsDiv.style.display = 'column';
     locationDetailsDiv.style.width = '100%';
     locationDetailsDiv.style.position = 'relative';
-    locationDetailsDiv.style.bottom = '20px';
+    locationDetailsDiv.style.top = '10px';
+    // locationDetailsDiv.style.bottom = '20px';
 
     const locationDetails = document.createElement("div");
-    locationDetails.textContent = ad.city + ', ' + ad.cityState;
     locationDetails.style.color = "white"; // Dostosuj kolor tekstu
     locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
     locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    locationDetails.style.bottom = '-40px'; // Dostosuj rozmiar tekstu
     locationDetails.style.textAlign = 'left';
     locationDetails.style.marginRight = '15px';
     locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
     locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
     locationDetails.style.display = 'flex'; // Ustawienie flexbox
-    locationDetails.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
     locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
     locationDetails.style.boxSizing = "border-box";
     locationDetails.style.flexBasis = "auto";
     locationDetails.style.textAlign = 'left';
+
+    const citySpan = document.createElement("span");
+    citySpan.textContent = ad.city + ',';
+    citySpan.style.fontSize = "22px";
+
+    const stateSpan = document.createElement("span");
+    stateSpan.textContent = ' \t' + ad.cityState;
+    stateSpan.style.color = 'darkgoldenrod';
+    stateSpan.style.fontSize = "14px";
+    stateSpan.style.marginTop = "6px";
+
+    locationDetails.appendChild(citySpan);
+    locationDetails.appendChild(stateSpan);
 
 
     locationDetailsDiv.appendChild(locationDetails);
@@ -355,8 +371,6 @@ function createUserAdvertisementsResultDiv(ad,container) {
         event.stopPropagation();
 
                 isEventListenerActive = false;
-
-                // editIconDiv.removeEventListener('click', handleEditIconClick);
 
                 let opacity = 1;
                 const step = 0.01;

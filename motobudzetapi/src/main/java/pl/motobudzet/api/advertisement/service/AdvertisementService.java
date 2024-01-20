@@ -1,5 +1,6 @@
 package pl.motobudzet.api.advertisement.service;
 
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.fileManager.FileService;
@@ -59,11 +61,7 @@ public class AdvertisementService {
     public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
 
         Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
-                criteriaBuilder.and(
-                        criteriaBuilder.isTrue(root.get("isVerified")),
-                        criteriaBuilder.isTrue(root.get("isActive")),
-                        criteriaBuilder.isFalse(root.get("isDeleted"))
-                );
+                criteriaBuilder.and(criteriaBuilder.equal(root.get("status"), Status.ACTIVE));
 
         PageRequest pageable = PageRequest.of(getPage(pageNumber), pageSize, LAST_UPLOADED_SORT_PARAMS);
         Page<UUID> advertisementSpecificationIds = advertisementRepository.findAll(specification, pageable).map(Advertisement::getId);
@@ -112,9 +110,7 @@ public class AdvertisementService {
                 .city(locationService.getCityByNameAndState(request.getCity(), request.getCityState()))
                 .user(currentUser)
                 .imageUrls(new ArrayList<>())
-                .isVerified(false)
-                .isActive(false)
-                .isDeleted(false)
+                .status(Status.PENDING_VERIFICATION)
                 .mainPhotoUrl(request.getMainPhotoUrl())
                 .build();
     }
@@ -166,7 +162,7 @@ public class AdvertisementService {
         advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
         advertisement.setProductionDate(request.getProductionDate());
         advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
-        advertisement.setVerified(false);
+        advertisement.setStatus(Status.PENDING_VERIFICATION);
     }
 
     private void sendEmailNotificationToManagement(UUID id) {
@@ -177,7 +173,7 @@ public class AdvertisementService {
 
     public List<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber) {
         PageRequest pageable = PageRequest.of(getPage(pageNumber), PAGE_SIZE);
-        List<UUID> uuidList = advertisementRepository.getListOfUUIDsToEnable(pageable);
+        List<UUID> uuidList = advertisementRepository.getListOfUUIDsToEnable(Status.PENDING_VERIFICATION, pageable);
         List<Advertisement> advertisementsList = advertisementRepository.findByListOfUUIDs(uuidList);
 
         return advertisementsList.stream().map(advertisement -> mapToAdvertisementDTO(advertisement, false)).toList();
@@ -188,8 +184,7 @@ public class AdvertisementService {
         Advertisement advertisement = getAdvertisement(id);
         AppUser advertisementOwner = advertisement.getUser();
 
-        advertisement.setVerified(true);
-        advertisement.setActive(true);
+        advertisement.setStatus(Status.ACTIVE);
         advertisementRepository.save(advertisement);
 
         mailSenderService.sendAdvertisementActivationConfirmNotification(advertisementOwner, advertisement);

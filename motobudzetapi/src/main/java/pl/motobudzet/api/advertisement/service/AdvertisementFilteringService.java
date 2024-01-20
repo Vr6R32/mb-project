@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.location_city.LocationService;
@@ -43,7 +44,7 @@ public class AdvertisementFilteringService {
         List<Advertisement> fetchedAdvertisementDetails = advertisementRepository.findByListOfUUIDs(uuidList);
         List<AdvertisementDTO> sortedAdvertisementList = sortAndMapAdvertisementsToDTO(uuidList, fetchedAdvertisementDetails);
 
-        return new PageImpl<>(sortedAdvertisementList, pageable, sortedAdvertisementList.size());
+        return new PageImpl<>(sortedAdvertisementList, pageable, advertisementSpecificationIds.getTotalElements());
     }
 
     public long getFilterResultCount(AdvertisementFilterRequest request) {
@@ -57,10 +58,8 @@ public class AdvertisementFilteringService {
         String titleQueryParam = request.getTitle();
 
         Specification<Advertisement> specification = (root, query, criteriaBuilder) -> {
-            Predicate isVerifiedPredicate = criteriaBuilder.isTrue(root.get("isVerified"));
-            Predicate isActivePredicate = criteriaBuilder.isTrue(root.get("isActive"));
-            Predicate isDeletedPredicate = criteriaBuilder.isFalse(root.get("isDeleted"));
-            Predicate combinedPredicate = criteriaBuilder.and(isVerifiedPredicate, isActivePredicate, isDeletedPredicate);
+            Predicate statusActivePredicate = criteriaBuilder.equal(root.get("status"), Status.ACTIVE);
+            Predicate combinedPredicate = criteriaBuilder.and(statusActivePredicate);
             combinedPredicate = handleTitleQueryPredicate(titleQueryParam, root, criteriaBuilder, combinedPredicate);
             return combinedPredicate;
         };

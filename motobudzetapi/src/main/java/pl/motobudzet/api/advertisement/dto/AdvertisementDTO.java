@@ -3,6 +3,7 @@ package pl.motobudzet.api.advertisement.dto;
 import lombok.*;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
+import pl.motobudzet.api.advertisement.model.Status;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,9 +39,7 @@ public class AdvertisementDTO {
     private LocalTime createTime;
     private LocalDate createDate;
     private LocalDate firstRegistrationDate;
-    private boolean isVerified;
-    private boolean isDeleted;
-    private boolean isActive;
+    private Status status;
     private List<String> urlList;
 
 }

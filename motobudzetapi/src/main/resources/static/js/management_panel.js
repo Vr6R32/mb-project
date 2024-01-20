@@ -1,5 +1,4 @@
 let row = 1;
-let resultCount = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
     createHeader("Ogłoszenia do weryfikacji");
@@ -16,13 +15,10 @@ function loadToVerifyAdvertisements(){
                 container.textContent = "Nie ma żadnych ogłoszen do zweryfikowania";
             } else {
                 data.forEach(advertisementData => {
-                    createUserAdvertisementsResultDiv(advertisementData,container);
-
+                    createSingleAdvertisementResultPanelDiv(advertisementData,container);
                     let iconWrapper = document.getElementById('iconWrapper');
                     iconWrapper.style.display = 'none';
-
                     row++;
-                    resultCount++
                 });
             }
         })

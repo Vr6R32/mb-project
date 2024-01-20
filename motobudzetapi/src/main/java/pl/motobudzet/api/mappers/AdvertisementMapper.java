@@ -2,6 +2,7 @@ package pl.motobudzet.api.mappers;
 
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.Status;
 
 public class AdvertisementMapper {
 
@@ -34,9 +35,7 @@ public class AdvertisementMapper {
                 .createDate(adv.getCreateDate().toLocalDate())
                 .createTime(adv.getCreateDate().toLocalTime())
                 .mainPhotoUrl(adv.getMainPhotoUrl())
-                .isDeleted(adv.isDeleted())
-                .isVerified(adv.isVerified())
-                .isActive(adv.isActive())
+                .status(adv.getStatus())
                 .build();
 
         if (includeImageUrls) {

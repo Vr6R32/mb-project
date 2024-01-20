@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
+import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.entity.Role;
@@ -156,7 +157,7 @@ public class InsertBrandsnModels {
                 .productionDate(2016L)
                 .imageUrls(List.of("rs3.png", "rs3-2.jpg"))
                 .user(admin)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
         Advertisement ad2 = Advertisement.builder()
                 .name("Audi RS6 500HP SUPERCHARGED")
@@ -176,7 +177,7 @@ public class InsertBrandsnModels {
                 .productionDate(2015L)
                 .imageUrls(List.of("rs6.jpg", "rs6-2.jpg"))
                 .user(admin)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
         Advertisement ad3 = Advertisement.builder()
                 .name("RSQ8 MANHART ")
@@ -198,7 +199,7 @@ public class InsertBrandsnModels {
                 .productionDate(2022L)
                 .imageUrls(List.of("rsq8.jpg", "rsq8-2.jpg"))
                 .user(admin)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
         Advertisement ad4 = Advertisement.builder()
                 .name("MERCEDES C63 AMG OKAZJA KOZAK IGLA")
@@ -218,7 +219,7 @@ public class InsertBrandsnModels {
                 .productionDate(2012L)
                 .imageUrls(List.of("c63.jpg", "c63-2.jpg"))
                 .user(user)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
         Advertisement ad5 = Advertisement.builder()
                 .name("MERCEDES GKLASA")
@@ -238,7 +239,7 @@ public class InsertBrandsnModels {
                 .productionDate(2007L)
                 .imageUrls(List.of("gklasa.jpg", "gklasa-2.jpg"))
                 .user(user)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
 
         Advertisement ad6 = Advertisement.builder()
@@ -259,7 +260,7 @@ public class InsertBrandsnModels {
                 .productionDate(2005L)
                 .imageUrls(List.of("rx8.jpg", "rx8-2.jpg"))
                 .user(user)
-                .isVerified(true)
+                .status(Status.ACTIVE)
                 .build();
 
 

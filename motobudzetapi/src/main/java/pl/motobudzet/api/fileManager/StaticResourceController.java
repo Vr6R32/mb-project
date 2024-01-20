@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class StaticResourceController {
 
     private final FileService fileService;
-
     private final FilePathsConfig pathsConfig;
 
     public StaticResourceController(FileService fileService, FilePathsConfig pathsConfig) {
@@ -41,6 +40,11 @@ public class StaticResourceController {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "favicon.ico");
     }
 
+
+    @GetMapping(value = "/background_email", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Resource getEmailBackgroundImage() {
+        return new FileSystemResource(pathsConfig.getPrivateFilePath() + "emailBackground.jpg");
+    }
     @GetMapping(value = "/validationFail", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getValidationFailGif() {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "validationFail.webp");

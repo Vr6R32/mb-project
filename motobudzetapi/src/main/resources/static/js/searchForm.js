@@ -4,6 +4,7 @@ let sortingBy = "price";
 let urlSearchParams = null;
 let favouritesArray = [];
 let clickedButton = "";
+let lastSortTime = 0;
 
 document.addEventListener("DOMContentLoaded", async function () {
     createSearchFormContainer();
@@ -778,7 +779,7 @@ function createSortParamContainer(sortDiv) {
     actualSortParam.style.justifyContent = 'center';
     actualSortParam.style.marginBottom = '15px';
 
-    const sortableParams = ["price", "mileage", "engineCapacity", "engineHorsePower", "productionDate"];
+    const sortableParams = ["price", "mileage", "engineHorsePower", "productionDate", "engineCapacity"];
     sortableParams.forEach(sortBy => {
         const sortButton = createSortButton(sortBy);
         sortDiv.appendChild(sortButton);
@@ -818,10 +819,10 @@ function displayResults(data) {
         resultDiv.className = 'searchResult';
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
-        resultDiv.style.height = "240px";
+        resultDiv.style.height = "210px";
         resultDiv.style.backgroundColor =   'rgba(0, 0, 0, 1)';
         resultDiv.style.color = 'darkgoldenrod';
-        resultDiv.style.marginBottom = "20px";
+        resultDiv.style.marginBottom = "30px";
         resultDiv.style.padding = "10px";
         resultDiv.style.display = "flex";
         resultDiv.style.alignItems = "center";
@@ -848,16 +849,7 @@ function displayResults(data) {
         const photoElement = document.createElement("img");
         photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
-        photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
-        let maxPhotoWidth = 300;
-
-
-
-        const fadeEffect = document.createElement('div');
-        fadeEffect.className = 'search-result-image';
-        fadeEffect.classList.add('fade-effect-miniature-search');
-        fadeEffect.appendChild(photoElement);
-        fadeEffect.style.width = maxPhotoWidth + 'px'
+        photoElement.style.minWidth = '250px';
 
         createParalaxMiniature(photoElement, resultDiv);
 
@@ -1004,11 +996,9 @@ function displayResults(data) {
         citySpan.style.fontSize = "22px";
 
         const stateSpan = document.createElement("span");
-        // stateSpan.textContent = ad.cityState;
         stateSpan.textContent = ' \t' + ad.cityState;
         stateSpan.style.color = 'darkgoldenrod';
         stateSpan.style.fontSize = "14px";
-        // stateSpan.style.verticalAlign = "bottom";
         stateSpan.style.marginTop = "6px";
 
         locationDetails.appendChild(citySpan);
@@ -1456,7 +1446,16 @@ function createSortButton(sortBy) {
     }
 
     button.style.marginBottom = '20px';
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const now = Date.now();
+        if (now - lastSortTime < 650) {
+            return;
+        }
+        lastSortTime = now;
+
         sortOrder = sortOrder === "desc" ? "asc" : "desc";
         formData.set("sortOrder", sortOrder);
         formData.set("sortBy", sortBy);

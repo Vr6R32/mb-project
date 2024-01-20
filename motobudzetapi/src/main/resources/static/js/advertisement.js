@@ -226,7 +226,7 @@ function updateHeartIconSrc() {
 
     let heartIcon = document.getElementById('hearticon');
 
-    if(getUserName() !== null) {
+    if(getUserName() !== null && advertisement.user !== getUserName()) {
         fetchWithAuth('/api/users/favourites?' + queryParams.toString(), {
             method: 'GET',
             headers: {
@@ -396,10 +396,11 @@ function fetchAdvertisement() {
             return response.json();
         })
         .then(data => {
-            if (data.deleted === true) {
+            if (data.status === "DELETED") {
                 window.location = '/';
                 return null;
-            } else if ((!data.verified || !data.active) && !(getUserName() === data.user || getUserRole() === 'ROLE_ADMIN')){
+            }
+            if (data.status !== "ACTIVE" && !(getUserName() === data.user || getUserRole() === 'ROLE_ADMIN')) {
                 window.location = '/';
                 return null;
             }

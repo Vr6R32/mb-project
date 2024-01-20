@@ -13,7 +13,6 @@ import pl.motobudzet.api.fileManager.FilePathsConfig;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,13 +84,11 @@ public class SpringMailSenderService {
         String backgroundPath = pathsConfig.getPrivateFilePath() + "emailBackground.jpg";
         FileSystemResource logo = new FileSystemResource(new File(logoPath));
         helper.addInline("image001", logo);
-        FileSystemResource background = new FileSystemResource(new File(backgroundPath));
-        helper.addInline("image002", background);
     }
 
     private String createHtmlStringMessageNotification(EmailMessageRequest request) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<font color='darkgoldenrod'>Wiadomość od użytkownika</font><br>" +
@@ -106,7 +103,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringRegisterActivation(AppUser user) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -120,7 +117,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringResetPassword(AppUser user) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -135,7 +132,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringActivationConfirmation(AppUser user, Advertisement advertisement) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -150,7 +147,7 @@ public class SpringMailSenderService {
 
     private String createHtmlNewAdvertisementToActivate(UUID id) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(cid:image002); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj, pojawilo sie nowe ogłoszenie do aktywacji. " + "</font></b><br>" +

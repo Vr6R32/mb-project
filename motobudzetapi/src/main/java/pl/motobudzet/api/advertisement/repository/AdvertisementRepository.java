@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
+import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.thymeleaf.MetaDataDTO;
 
 import java.util.List;
@@ -50,8 +51,8 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
     Optional<Advertisement> findOneByIdWithFetch(UUID uuid);
 
     @Query("SELECT a.id FROM Advertisement a " +
-            "WHERE a.isVerified = false OR a.isActive = false ")
-    List<UUID> getListOfUUIDsToEnable(Pageable pageable);
+            "WHERE a.status IN ?1")
+    List<UUID> getListOfUUIDsToEnable(Status pendingVerification,Pageable pageable);
 
     @Query("SELECT a FROM Advertisement a " +
             "LEFT JOIN FETCH a.imageUrls " +
@@ -64,12 +65,12 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
             "LEFT JOIN FETCH a.transmissionType t " +
-            "WHERE a.user.id = ?1 and a.isDeleted = false ORDER BY a.createDate DESC")
+            "WHERE a.user.id = :userId AND a.status != 'DELETED' ORDER BY a.createDate DESC")
     List<Advertisement> getAllUserAdvertisementsByUserId(Long userId);
 
 
     @Modifying
-    @Query("UPDATE Advertisement a SET a.isDeleted = true WHERE a.id = ?1")
+    @Query("UPDATE Advertisement a SET a.status = 'DELETED' WHERE a.id = ?1")
     int updateAdvertisementIsDeleted(UUID id);
 
 

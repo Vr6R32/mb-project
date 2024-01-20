@@ -114,46 +114,50 @@ function showCookieBarNotification() {
         return;
     }
 
-    // Utwórz elementy paska zgody na cookies
-    const consentBar = document.createElement('div');
-    consentBar.id = 'cookieConsentBar';
-    consentBar.style.position = 'fixed';
-    consentBar.style.bottom = '0';
-    consentBar.style.left = '0';
-    consentBar.style.width = '100%';
-    consentBar.style.backgroundColor = 'black';
-    consentBar.style.borderTop = '1px solid white';
-    consentBar.style.color = 'white';
-    consentBar.style.textAlign = 'center';
-    consentBar.style.padding = '10px';
-    consentBar.style.zIndex = '1000';
-    consentBar.style.transition = 'bottom 1s'; // Dodanie animacji
+    const cookiesBar = document.createElement('div');
+    cookiesBar.id = 'cookieConsentBar';
+    cookiesBar.style.position = 'fixed';
+    cookiesBar.style.bottom = '0';
+    cookiesBar.style.left = '0';
+    cookiesBar.style.width = '100%';
+    cookiesBar.style.backgroundColor = 'black';
+    cookiesBar.style.borderTop = '1px solid white';
+    cookiesBar.style.color = 'white';
+    cookiesBar.style.textAlign = 'center';
+    cookiesBar.style.padding = '10px';
+    cookiesBar.style.zIndex = '1000';
+    cookiesBar.style.transition = 'bottom 1s'; // Dodanie animacji
 
-    const consentText = document.createElement('span');
-    consentText.textContent = 'Ta strona używa cookies. ';
+    const cookiesInfoText = document.createElement('span');
+    cookiesInfoText.textContent = 'Ta strona używa cookies. ';
 
-    const consentButton = document.createElement('button');
-    consentButton.textContent = 'OK';
-    consentButton.style.marginLeft = '15px';
-    consentButton.style.color = 'black';
-    consentButton.style.backgroundColor = 'white';
-    consentButton.style.border = 'none';
-    consentButton.style.padding = '5px 10px';
-    consentButton.style.cursor = 'pointer';
+    const cookiesAcceptButton = document.createElement('button');
+    cookiesAcceptButton.textContent = 'OK';
+    cookiesAcceptButton.style.marginLeft = '15px';
+    cookiesAcceptButton.style.color = 'black';
+    cookiesAcceptButton.style.backgroundColor = 'white';
+    cookiesAcceptButton.style.border = 'none';
+    cookiesAcceptButton.style.padding = '5px 10px';
+    cookiesAcceptButton.style.cursor = 'pointer';
 
-    // Dodaj funkcjonalność przycisku
-    consentButton.onclick = function() {
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        cookiesInfoText.style.fontSize = '50px';
+        cookiesAcceptButton.style.height = '50px'
+        cookiesAcceptButton.style.width = '100px';
+    }
+
+    cookiesAcceptButton.onclick = function() {
         localStorage.setItem('cookieConsent', 'true');
-        consentBar.style.bottom = '-100px'; // Zmiana pozycji paska do "zjechania" w dół
+        cookiesBar.style.bottom = '-100px';
 
         setTimeout(function() {
-            consentBar.style.display = 'none'; // Ukrycie paska po zakończeniu animacji
-        }, 1000); // Czas trwania animacji (w milisekundach)
+            cookiesBar.style.display = 'none';
+        }, 1000);
     };
 
-    consentBar.appendChild(consentText);
-    consentBar.appendChild(consentButton);
-    document.body.appendChild(consentBar);
+    cookiesBar.appendChild(cookiesInfoText);
+    cookiesBar.appendChild(cookiesAcceptButton);
+    document.body.appendChild(cookiesBar);
 }
 
 function hideNavBar () {
@@ -172,12 +176,8 @@ function changeZoom(value) {
         console.log('Przed skalowaniem:', rectBefore);
 
         content.style.transform = 'scale(' + value + ')';
-        // Set the transform origin to the center of the content relative to the viewport
         content.style.transformOrigin = '50% 0';
-
-        // Adjust position based on the change in height after scaling
         var heightChange = rectBefore.height * (1 - value);
-        // content.style.top = (heightChange / 2) + 'px';
 
         setTimeout(function() {
             var rectAfter = content.getBoundingClientRect();
@@ -259,7 +259,6 @@ function paralaxHover() {
 
         function handleMouseLeave(e) {
             this.style.transform = '';
-
             // imageLighting.style.background = '';
             // imageLighting.style.transform = '';
         }
@@ -320,27 +319,18 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
     }
 
 
-    if (darkModeCheckbox) {
-        darkModeCheckbox.addEventListener('change', function () {
-            if (darkModeCheckbox.checked) {
-                resultDiv.style.boxShadow = "0 0 20px moccasin";
-            } else {
-                resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
-            }
-        })
-    }
 
     // Add hover effect on mouseover
     resultDiv.onmouseover = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px cyan";
             if(iconWrapper) {
-                iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+                iconWrapper.style.opacity = '1';
             }
         } else
-            resultDiv.style.boxShadow = "0 0 20px moccasin";
+            resultDiv.style.boxShadow = "0 0 20px cyan";
         if(iconWrapper){
-            iconWrapper.style.opacity = '1'; // Pokaż iconWrapper
+            iconWrapper.style.opacity = '1';
         }
     };
 
@@ -349,12 +339,12 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px moccasin";
             if(iconWrapper) {
-                iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
+                iconWrapper.style.opacity = '0';
             }
         } else
             resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
             if(iconWrapper) {
-                iconWrapper.style.opacity = '0'; // Pokaż iconWrapper
+                iconWrapper.style.opacity = '0';
             }
     }
 }
@@ -364,7 +354,7 @@ function showSuccessNotification(message) {
     setTimeout(function() {
         let navbar = document.createElement('div');
         navbar.setAttribute('id', 'popupNavbar');
-        navbar.style.top = '-120px';  // Set the initial position
+        navbar.style.top = '-120px';
 
         let text = document.createElement('p');
         text.style.color = 'white';
@@ -464,8 +454,9 @@ function createParalaxMiniature(image,parrentDiv) {
         const figure = document.createElement('figure');
         figure.className = 'ph-image';
         figure.style.width = '350px';
+        figure.style.minWidth = '250px';
         figure.style.height = '200px';
-        figure.style.marginLeft = '20px';
+        figure.style.marginLeft = '10px';
         figure.appendChild(image);
         parrentDiv.appendChild(figure);
 
@@ -479,16 +470,15 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     resultDiv.style.width = "100%";
     resultDiv.style.maxWidth = "100%";
     resultDiv.style.boxSizing = "border-box";
-    // resultDiv.style.flexShrink = '1';
 
 
 
     const imageDiv = document.createElement('div');
 
-    imageDiv.style.position = 'relative'; // This makes it a positioned ancestor
-    imageDiv.style.display = 'flex'; // Use flex for centering the image
-    imageDiv.style.alignItems = 'center'; // Vertically align items in the center
-    imageDiv.style.justifyContent = 'center'; // Horizontally
+    imageDiv.style.position = 'relative';
+    imageDiv.style.display = 'flex';
+    imageDiv.style.alignItems = 'center';
+    imageDiv.style.justifyContent = 'center';
 
     imageDiv.style.width = '100%';
     imageDiv.style.maxWidth = '100%';
@@ -512,9 +502,6 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     mainPhoto.id = 'mainUrlPhoto';
     mainPhoto.style.backgroundColor = 'transparent';
     mainPhoto.style.borderRadius = '20px';
-    // mainPhoto.style.flex = '1 1 auto'; // This allows the image to be flexible within the container
-
-
 
     const previousArrow = document.createElement('span');
     previousArrow.setAttribute('id', 'previousArrow');
@@ -522,50 +509,33 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     previousArrow.style.cursor = 'pointer';
     previousArrow.style.color = 'darkgoldenrod';
     previousArrow.style.boxSizing = "border-box";
-    // previousArrow.style.flexShrink = '1';
     previousArrow.style.marginRight = '1%';
-    previousArrow.style.fontSize = '6vw'; // or use '4em'
-    // previousArrow.style.flex = '0 1 auto'; // Flex settings for responsiveness
+    previousArrow.style.fontSize = '6vw';
     previousArrow.addEventListener('click', () => previousPhoto(mainPhoto));
-    previousArrow.style.userSelect = 'none'; // Zapobieganie zaznaczaniu tekstu
+    previousArrow.style.userSelect = 'none';
+    previousArrow.style.zIndex = '10';
 
-
-
-    previousArrow.style.position = 'absolute'; // Position it absolutely
-    previousArrow.style.left = '0'; // Align it to the left edge
-    previousArrow.style.top = '50%'; // Center it vertically
-    previousArrow.style.transform = 'translateY(-50%)'; // Offset by half its height to truly center
-
+    previousArrow.style.position = 'absolute';
+    previousArrow.style.left = '0';
+    previousArrow.style.top = '50%';
+    previousArrow.style.transform = 'translateY(-50%)';
 
     const nextArrow = document.createElement('span');
     nextArrow.setAttribute('id', 'nextArrow');
     nextArrow.textContent = '→';
     nextArrow.style.cursor = 'pointer';
     nextArrow.style.color = 'darkgoldenrod';
-    nextArrow.style.marginLeft = '1%';
     nextArrow.style.boxSizing = "border-box";
-    // nextArrow.style.flexShrink = '1';
-    nextArrow.style.fontSize = '6vw'; // or use '4em'
-    // nextArrow.style.flex = '0 1 auto'; // Flex settings for responsiveness
-
+    nextArrow.style.marginLeft = '1%';
+    nextArrow.style.fontSize = '6vw';
     nextArrow.addEventListener('click', () => nextPhoto(mainPhoto));
-    nextArrow.style.userSelect = 'none'; // Zapobieganie zaznaczaniu tekstu
+    nextArrow.style.userSelect = 'none';
 
+    nextArrow.style.position = 'absolute';
+    nextArrow.style.right = '0';
+    nextArrow.style.top = '50%';
+    nextArrow.style.transform = 'translateY(-50%)';
 
-
-    nextArrow.style.position = 'absolute'; // Position it absolutely
-    nextArrow.style.right = '0'; // Align it to the right edge
-    nextArrow.style.top = '50%'; // Center it vertically
-    nextArrow.style.transform = 'translateY(-50%)'; // Offset by hal
-
-    const fadeEffect = document.createElement('div');
-    fadeEffect.classList.add('fade-effect-big');
-    fadeEffect.style.backgroundColor = 'transparent';
-
-    fadeEffect.style.maxWidth = '100%';
-
-
-    // fadeEffect.appendChild(mainPhoto);
     imageDiv.appendChild(previousArrow)
     imageDiv.appendChild(mainPhoto)
     imageDiv.appendChild(nextArrow)
@@ -611,28 +581,28 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
 
     const advertisementDetailsDiv = document.createElement("advertisementDetailsDiv");
-    advertisementDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetailsDiv.style.width = '100%';
     advertisementDetailsDiv.style.flexBasis = 'auto';
     advertisementDetailsDiv.style.display = 'flex-start';
-    advertisementDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+    advertisementDetailsDiv.style.flexDirection = 'column';
 
 
     const advertisementDetailsMain = document.createElement("advertisementDetailsMain");
-    advertisementDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetailsMain.style.width = '100%';
     advertisementDetailsMain.style.flexBasis = 'auto';
     advertisementDetailsMain.style.display = 'grid';
-    advertisementDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+    advertisementDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
 
 
     const advertisementDetailsOwner = document.createElement("advertisementDetailsCenter");
-    advertisementDetailsOwner.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetailsOwner.style.width = '100%';
     advertisementDetailsOwner.style.flexBasis = 'auto';
     advertisementDetailsOwner.style.color = 'darkgoldenrod';
     advertisementDetailsOwner.innerHTML = "Wystawione przez → <strong style='font-size: 1.4em;'>" + advertisement.user + "</strong>";
 
 
     const advertisementDetails = document.createElement("advertisementDetailsBottom");
-    advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetails.style.width = '75%';
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
@@ -672,9 +642,9 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
     let paralaxMinatureDiv = document.createElement('div');
     paralaxMinatureDiv.style.display = 'flex';
-    paralaxMinatureDiv.style.justifyContent = 'center'; // Wyśrodkowanie w poziomie
-    paralaxMinatureDiv.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-    paralaxMinatureDiv.style.flexWrap = 'wrap'; // Pozwala elementom przechodzić do nowego wiersza
+    paralaxMinatureDiv.style.justifyContent = 'center';
+    paralaxMinatureDiv.style.alignItems = 'center';
+    paralaxMinatureDiv.style.flexWrap = 'wrap';
     paralaxMinatureDiv.style.marginTop = '40px';
     paralaxMinatureDiv.style.marginBottom = '40px';
     paralaxMinatureDiv.style.maxWidth = '100%';
@@ -745,7 +715,7 @@ function getUserName() {
     if (userNameElement) {
         return userNameElement.textContent;
     } else {
-        return null; // or any default value you want to return when not logged in
+        return null;
     }
 }
 function createDialogBox(message){
@@ -757,12 +727,12 @@ function createDialogBox(message){
         overlay.style.left = '0';
         overlay.style.width = '100%';
         overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 
 
         overlay.addEventListener('click', (event) => {
             if (event.target === overlay) {
-                document.body.removeChild(overlay); // Usuń overlay po kliknięciu na tło
+                document.body.removeChild(overlay);
             }
         });
 
@@ -775,14 +745,14 @@ function createDialogBox(message){
         dialogBox.style.height = '250px';
         dialogBox.style.width = '600px';
         dialogBox.style.transform = 'translate(-50%, -50%)';
-        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
         dialogBox.style.borderRadius = '15px';
-        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
-        dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
-        dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-        dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
+        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
+        dialogBox.style.flexDirection = 'column';
+        dialogBox.style.alignItems = 'center';
+        dialogBox.style.textAlign = 'center';
         dialogBox.style.display = 'flex';
-        dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
+        dialogBox.style.justifyContent = 'center';
 
         const headerTitle = document.createElement('dialogBox');
         headerTitle.style.width = "100%";
@@ -790,7 +760,7 @@ function createDialogBox(message){
         headerTitle.textContent = message;
         headerTitle.style.color = 'darkgoldenrod';
         headerTitle.style.fontSize = '32px';
-        headerTitle.style.fontWeight = 'bold'; // Ustawienie pogrubienia
+        headerTitle.style.fontWeight = 'bold';
         headerTitle.style.marginTop = '15px'
 
         dialogBox.appendChild(headerTitle);
@@ -804,17 +774,14 @@ function updateCitySuggestions(suggestions) {
     const cityStateLabel = document.getElementById('cityStatelabel');
     const suggestionsList = document.getElementById('suggestionsList');
 
-    // Usuń wszystkie istniejące propozycje z listy
     while (suggestionsList.firstChild) {
         suggestionsList.removeChild(suggestionsList.firstChild);
     }
 
-    // Wyświetl nowe propozycje
     suggestions.forEach(suggestion => {
         const suggestionItem = document.createElement('li');
         suggestionItem.textContent = suggestion.cityName;
         suggestionItem.addEventListener('click', function () {
-            // Po kliknięciu propozycji, wypełnij pole tekstowe i wyczyść listę propozycji
             cityInput.value = suggestion.name;
             cityStateInput.value = suggestion.cityStateName;
             cityStateInput.style.color = 'white';
@@ -824,7 +791,6 @@ function updateCitySuggestions(suggestions) {
         suggestionsList.appendChild(suggestionItem);
     });
 
-    // Jeśli nie ma propozycji, ukryj listę
     if (suggestions.length === 0) {
         suggestionsList.style.display = 'none';
     } else {
@@ -893,7 +859,7 @@ function fetchSpecifications() {
 }
 function handleResponse(response) {
     const errorMessagesElement = document.getElementById('errorMessages');
-    errorMessagesElement.innerHTML = ''; // Wyczyść komunikaty błędów
+    errorMessagesElement.innerHTML = '';
         if (response.status === 400) {
             return response.text().then(errorMessage => {
                 alert(errorMessage);
@@ -970,7 +936,7 @@ function handleDragOver(e) {
 }
 function handleDrop(e) {
     if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
+        e.stopPropagation();
     }
 
     if (dragSrcElement !== this) {
@@ -981,11 +947,9 @@ function handleDrop(e) {
         const sourceIndex = Array.from(thumbnails).indexOf(dragSrcElement);
 
         if(targetIndex<sourceIndex){
-            // Swap the positions of the two dragged thumbnails only
             thumbnailsContainer.insertBefore(this, thumbnails[sourceIndex]);
             thumbnailsContainer.insertBefore(dragSrcElement, thumbnails[targetIndex]);
 
-            // Update the selectedFiles array to reflect the new order of files
             const filesCopy = selectedFiles.slice();
             const movedFileSource = filesCopy[sourceIndex];
             filesCopy[sourceIndex] = filesCopy[targetIndex];
@@ -996,16 +960,13 @@ function handleDrop(e) {
         }
 
         if(targetIndex > sourceIndex){
-            // Swap the positions of the two dragged thumbnails only
             thumbnailsContainer.insertBefore(dragSrcElement, thumbnails[targetIndex].nextSibling);
             thumbnailsContainer.insertBefore(this, dragSrcElement);
 
-            // Update the selectedFiles array to reflect the new order of files
             const filesCopy = selectedFiles.slice();
             const movedFileSource = filesCopy[sourceIndex];
             filesCopy[sourceIndex] = filesCopy[targetIndex];
             filesCopy[targetIndex] = movedFileSource;
-
             selectedFiles = filesCopy;
         }
 
@@ -1020,10 +981,6 @@ function resetFileDropArea() {
 function advertisementFormDataExtract() {
     const formData = new FormData();
 
-    // Założenie, że 'getValue' to funkcja pobierająca wartości z pól formularza
-    // np. document.getElementById(id).value
-
-    // Dodawanie wartości tekstowych do obiektu FormData
     formData.append('name', getValue('name'));
     formData.append('brand', getValue('brand'));
     formData.append('model', getValue('model'));
@@ -1068,25 +1025,17 @@ function createDropDeleteZone(){
         const trashIcon = document.createElement('img');
         trashIcon.src = `/api/static/trashClosed`;
         trashIcon.alt = 'trashIcon';
-
-
         trashIcon.style.pointerEvents = 'none';
         trashIcon.ondragstart = function() { return false; };
 
-        // Event listener to prevent right-click
         trashIcon.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
         const deleteZone = document.createElement('div');
-
         deleteZone.id = 'deleteZone';
-
         deleteZone.style.position = 'absolute';
         deleteZone.style.top = '60px';
-
-
-
         deleteZone.appendChild(trashIcon);
 
         deleteZone.addEventListener('mouseover', function() {
@@ -1107,7 +1056,6 @@ function createDropDeleteZone(){
         });
 
         let thumbnailzone = document.getElementById('half-container-big2');
-
         thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
     }
 }
@@ -1244,20 +1192,15 @@ function createDescriptionEditor() {
     editor.style.WebkitScrollbarThumb = 'darkgoldenrod';
     editor.style.WebkitScrollbarThumbHover = 'goldenrod';
 
-
-    // Stylizacja dla textarea
     editor.style.width = '1200px';
     editor.style.maxWidth = '100%';
     editor.style.padding = '40px';
     editor.style.height = '700px';
-
-
     editor.style.backgroundColor = 'black';
     editor.style.borderRadius = '10px';
-    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodano bezpośrednio z Twojego wcześniejszego kodu
+    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)";
     editor.style.overflowY = 'auto'; // Dodane
 
-    // Dodanie elementów do kontenera
     horizontalContainer.appendChild(label);
     horizontalContainer.appendChild(editor);
     horizontalContainer.appendChild(document.createElement('br'));
@@ -1286,7 +1229,7 @@ function createDescriptionEditor() {
     });
 
     quill.root.style.color = '#fff';
-    quill.format('color', '#fff'); // Ustawienie domyślnego koloru tekstu na biały
+    quill.format('color', '#fff');
     quill.format(0, quill.getLength(), 'color', '#fff');
 }
 
@@ -1414,7 +1357,7 @@ function validateForm(formElements) {
             const input = document.getElementById(element.id);
             if (!input.value.trim()) {
                 alert(`Pole ${element.label} jest wymagane.`);
-                return false; // Formularz jest niepoprawny
+                return false;
             }
         }
 
@@ -1422,10 +1365,10 @@ function validateForm(formElements) {
             const select = document.getElementById(element.id);
             if (select.selectedIndex === 0) {
                 alert(`Pole ${element.label} jest wymagane.`);
-                return false; // Formularz jest niepoprawny
+                return false;
             }
         }
     }
-    return true; // Formularz jest poprawny
+    return true;
 }
 

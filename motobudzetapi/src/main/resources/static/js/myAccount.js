@@ -1,5 +1,4 @@
 let row = 1;
-let resultCount = 0;
 let conversationRow = 1;
 let currentRow = 1;
 document.addEventListener("DOMContentLoaded", function () {
@@ -45,9 +44,8 @@ function loadUserAdvertisements(){
                 container.textContent = "Nie masz jeszcze żadnych ogłoszeń";
             } else {
                 data.forEach(advertisementData => {
-                    createUserAdvertisementsResultDiv(advertisementData,container);
+                    createSingleAdvertisementResultPanelDiv(advertisementData,container);
                     row++;
-                    resultCount++
                 });
             }
         })
@@ -74,9 +72,8 @@ function loadUserFavourites() {
             } else {
                 let resultContainerRight = document.getElementById('resultContainerRight');
                 data.forEach(advertisement => {
-                    createUserAdvertisementsResultDiv(advertisement,resultContainerRight);
+                    createSingleAdvertisementResultPanelDiv(advertisement,resultContainerRight);
                     row++;
-                    // resultCount++
                 });
             }
         })
@@ -100,18 +97,44 @@ function loadUserConversations() {
                 resultContainerRight.textContent = "Nie posiadasz jeszcze żadnych konwersacji";
             } else {
                 data.forEach(conversation => {
-                    const resultDiv = createResultDiv(conversation,resultContainerRight);
+                    const resultDiv = createConversationResults(conversation,resultContainerRight);
                     conversationRow++
                     resultContainerRight.appendChild(resultDiv);
                 });
             }
-                resultContainerRight.style.maxHeight = "900px";
         })
         .catch((error) => {
             console.error("Fetch error:", error);
         });
 }
-function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv) {
+
+function setStylesForMessagingPanel(resultContainerRight) {
+    resultContainerRight.style.display = 'grid';
+    resultContainerRight.style.gridTemplateColumns = '49% 1fr 1fr 49%';
+    resultContainerRight.style.overflowY = 'scroll';
+    resultContainerRight.style.overflowX = 'hidden';
+    resultContainerRight.style.paddingBottom = '30px';
+    resultContainerRight.style.paddingLeft = '20px';
+    resultContainerRight.style.paddingRight = '20px';
+    resultContainerRight.style.scrollbarWidth = 'thin';
+    resultContainerRight.style.scrollbarColor = 'darkgoldenrod transparent';
+    const grid1 = document.createElement('div');
+    const grid2 = document.createElement('div');
+    const grid3 = document.createElement('div');
+    const grid4 = document.createElement('div')
+    grid1.style.maxWidth = '100%';
+    grid1.style.textAlign = 'left';
+    grid1.style.justifyContent = 'flex-start';
+    grid4.style.maxWidth = '100%';
+    grid4.style.textAlign = 'right';
+    grid4.style.justifyContent = 'flex-end';
+    resultContainerRight.appendChild(grid1);
+    resultContainerRight.appendChild(grid2);
+    resultContainerRight.appendChild(grid3);
+    resultContainerRight.appendChild(grid4);
+}
+
+function fetchConversationMessages(conversation, resultContainerRight, resultDiv) {
 
     let rightContainer = document.getElementById("rightContainer");
     rightContainer.style.color = 'darkgoldenrod';
@@ -119,51 +142,30 @@ function fetchAdvertisementMessages(conversation,resultContainerRight,resultDiv)
     resultDiv.style.marginTop = '20px';
     resultDiv.style.paddingleft = '20px';
     resultDiv.style.paddingRight = '20px';
+    let conversationResultDiv = document.getElementById('messageResultDiv');
+    conversationResultDiv.style.marginTop = '60px';
+    resultDiv.onmouseover = () => {
+        resultDiv.style.boxShadow = "0 0 20px cyan";
+        resultDiv.style.cursor = 'pointer';
+    };
+    resultDiv.onclick = () => {
+        window.location.href = `/advertisement?id=${conversation.advertisement.id}`;
+    };
+    resultContainerRight.style.marginTop = '0px';
     resultContainerRight.style.paddingTop = '0px';
     resultContainerRight.style.maxHeight = "535px";
-
-
     const conversationId = conversation.conversationId;
     const url = `/api/messages?conversationId=${conversationId}`;
-    let resultCount = 0;
 
     fetchWithAuth(url)
         .then(response => response.json())
         .then(messages => {
                 messages.forEach(message => {
-
-                    createMessageContainer(message,resultContainerRight,conversation,currentRow);
+                    createSingleMessageContainer(message,resultContainerRight,conversation,currentRow);
                     currentRow++;
-                    resultCount++;
                 });
-
-                if (resultCount > 0) {
-                    resultContainerRight.style.display = 'grid';
-                    resultContainerRight.style.gridTemplateColumns = '49% 1fr 1fr 49%';
-                    resultContainerRight.style.overflowY = 'scroll';
-                    resultContainerRight.style.overflowX = 'hidden';
-                    resultContainerRight.style.paddingBottom = '30px';
-                    resultContainerRight.style.paddingLeft = '20px';
-                    resultContainerRight.style.paddingRight = '20px';
-                    resultContainerRight.style.scrollbarWidth = 'thin';
-                    resultContainerRight.style.scrollbarColor = 'darkgoldenrod transparent';
-
-                    const grid1 = document.createElement('div');
-                    grid1.style.maxWidth = '100%';
-                    const grid2 = document.createElement('div');
-                    const grid3 = document.createElement('div');
-                    const grid4 = document.createElement('div');
-                    grid4.style.maxWidth = '100%';
-                    grid4.style.textAlign = 'right';
-                    grid4.style.justifyContent = 'flex-end';
-
-                    resultContainerRight.appendChild(grid1);
-                    resultContainerRight.appendChild(grid2);
-                    resultContainerRight.appendChild(grid3);
-                    resultContainerRight.appendChild(grid4);
-
-                }
-                createMessageInputContainer(resultContainerRight,conversation);
+            setStylesForMessagingPanel(resultContainerRight);
+            createMessageInputContainer(resultContainerRight,conversation);
                 resultContainerRight.scrollTop = resultContainerRight.scrollHeight;
             }
         )
@@ -190,7 +192,7 @@ function createButtons() {
             settingsButton.style.color = "black";
         });
         settingsButton.addEventListener("click", function () {
-            window[buttonName.replace("_", "")].call(this, buttonName.replace("_", "")); // Zamień podkreślenie na spację i wywołaj funkcję
+            window[buttonName.replace("_", "")].call(this, buttonName.replace("_", ""));
         });
         leftContainer.appendChild(settingsButton);
     });

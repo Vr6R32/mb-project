@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
+import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.Brand;
@@ -61,6 +62,8 @@ public class Advertisement {
     @Column(insertable = false)
     private Long lastModifiedBy;
     @Enumerated(EnumType.STRING)
+    private Status status;
+    @Enumerated(EnumType.STRING)
     private MileageUnit mileageUnit;
     @Enumerated(EnumType.STRING)
     private PriceUnit priceUnit;
@@ -87,7 +90,4 @@ public class Advertisement {
             joinColumns = @JoinColumn(name = "advertisement_id")
     )
     private List<String> imageUrls;
-    private boolean isVerified;
-    private boolean isActive;
-    private boolean isDeleted;
 }

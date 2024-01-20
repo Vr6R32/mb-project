@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     setTimeout(function() {
-        if(advertisement.active === false || advertisement.deleted === true || advertisement.verified === false){
+        if(advertisement.status === 'PENDING_VERIFICATION'){
             createManagementDiv();
         }
     }, 150);
