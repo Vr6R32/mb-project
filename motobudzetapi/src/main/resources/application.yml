@@ -76,8 +76,18 @@ management:
       export:
         enabled: true
 
+#server:
+#  port: 20134
+#  forward-headers-strategy: native
+#  tomcat:
+#    remote-ip-header: x-forwarded-for
+#    protocol-header: x-forwarded-proto
 server:
   port: 20134
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      host-header: X-Real-IP
 #  port: 443
   ssl:
     key-store-type: PKCS12

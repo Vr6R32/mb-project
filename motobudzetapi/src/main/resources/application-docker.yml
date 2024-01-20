@@ -45,7 +45,7 @@ spring:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: false
+    drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 
 management:
@@ -72,7 +72,12 @@ management:
 
 server:
   port: 20134
-#  port: 443
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      host-header: X-Real-IP
+
+  #  port: 443
   ssl:
     key-store-type: PKCS12
     key-store: classpath:keystore.p12

@@ -37,6 +37,11 @@ public class AddressLoggingFilter extends OncePerRequestFilter {
             realIp = request.getRemoteAddr();
         }
 
+        String headerRealIp = request.getHeader("X-Real-IP");
+        String headerForwaderdFor = request.getHeader("X-Forwarded-For");
+        String headerForwarderProto = request.getHeader("X-Forwarded-Proto");
+
+
         StringBuilder logMessage = new StringBuilder("Method -> " + request.getMethod() +
                 " : " + "URL -> " + "[" + request.getRequestURI() + "]" +
                 " : " + " IP -> " + realIp);
