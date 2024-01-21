@@ -38,7 +38,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     resultDiv.addEventListener("click", () => {
         if(!isEventListenerActive) return;
         const advertisementId = ad.id;
-        window.location.href = `/advertisement?id=${advertisementId}`;
+        window.location.href = `/advertisement?id=${advertisementId}` + '&title=' + ad.name;
     });
 
 

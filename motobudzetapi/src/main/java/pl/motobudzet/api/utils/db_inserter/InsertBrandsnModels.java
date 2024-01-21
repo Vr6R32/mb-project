@@ -10,21 +10,16 @@ import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.entity.Role;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
-import pl.motobudzet.api.user_account.repository.RoleRepository;
+import pl.motobudzet.api.user_account.model.Role;
+import pl.motobudzet.api.user_account.AppUserRepository;
 import pl.motobudzet.api.vehicleBrand.Brand;
 import pl.motobudzet.api.vehicleBrand.BrandRepository;
 import pl.motobudzet.api.vehicleModel.Model;
 import pl.motobudzet.api.vehicleModel.ModelRepository;
-import pl.motobudzet.api.vehicleSpec.entity.DriveType;
-import pl.motobudzet.api.vehicleSpec.entity.EngineType;
-import pl.motobudzet.api.vehicleSpec.entity.FuelType;
-import pl.motobudzet.api.vehicleSpec.entity.TransmissionType;
-import pl.motobudzet.api.vehicleSpec.repository.DriveTypeRepository;
-import pl.motobudzet.api.vehicleSpec.repository.EngineTypeRepository;
-import pl.motobudzet.api.vehicleSpec.repository.FuelTypeRepository;
-import pl.motobudzet.api.vehicleSpec.repository.TransmissionTypeRepository;
+import pl.motobudzet.api.vehicleSpec.model.DriveType;
+import pl.motobudzet.api.vehicleSpec.model.EngineType;
+import pl.motobudzet.api.vehicleSpec.model.FuelType;
+import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,22 +32,17 @@ public class InsertBrandsnModels {
 
     BrandRepository brandRepository;
     AppUserRepository userRepository;
-    RoleRepository roleRepository;
     ModelRepository modelRepository;
     AdvertisementRepository advertisementRepository;
-    FuelTypeRepository fuelTypeRepository;
-    TransmissionTypeRepository transmissionTypeRepository;
-    DriveTypeRepository driveTypeRepository;
-    EngineTypeRepository engineTypeRepository;
     PasswordEncoder passwordEncoder;
 
 
     //    @EventListener(ApplicationReadyEvent.class)
     public void fillUser() {
 
-        Role roleUser = Role.builder().name("ROLE_USER").build();
-        Role roleAdmin = Role.builder().name("ROLE_ADMIN").build();
-        Role roleAwaitingDetails = Role.builder().name("ROLE_AWAITING_DETAILS").build();
+        Role roleUser = Role.ROLE_USER;
+        Role roleAdmin = Role.ROLE_ADMIN;
+        Role roleAwaitingDetails = Role.ROLE_AWAITING_DETAILS;
         AppUser admin = AppUser.builder()
                 .userName("admin")
                 .password(passwordEncoder.encode("admin"))
@@ -61,7 +51,7 @@ public class InsertBrandsnModels {
                 .accountNotExpired(true)
                 .accountNotLocked(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(roleAdmin))
+                .role(roleAdmin)
                 .build();
 
         AppUser user = AppUser.builder()
@@ -72,12 +62,11 @@ public class InsertBrandsnModels {
                 .accountNotExpired(true)
                 .accountNotLocked(true)
                 .credentialsNotExpired(true)
-                .roles(List.of(roleUser))
+                .role(roleUser)
                 .build();
 
         userRepository.save(admin);
         userRepository.save(user);
-        roleRepository.save(roleAwaitingDetails);
 
         fillBrandDB(admin, user);
     }
@@ -85,26 +74,21 @@ public class InsertBrandsnModels {
 
     public void fillBrandDB(AppUser admin, AppUser user) {
 
-        EngineType silnikRzedowy = EngineType.builder().name("Rzedowy").build();
-        EngineType silnikWidlasty = EngineType.builder().name("Widlasty").build();
-        EngineType silnikWankla = EngineType.builder().name("Wankel").build();
+        EngineType silnikRzedowy = EngineType.RZĘDOWY;
+        EngineType silnikWidlasty = EngineType.WIDLASTY;
+        EngineType silnikWankla = EngineType.WANKEL;
 
-        FuelType benzyna = FuelType.builder().name("BENZYNA").build();
-        FuelType lpg = FuelType.builder().name("LPG").build();
-        FuelType diesel = FuelType.builder().name("DIESEL").build();
-        FuelType elektryczny = FuelType.builder().name("ELEKTRYCZNY").build();
+        FuelType benzyna = FuelType.BENZYNA;
+        FuelType lpg = FuelType.LPG;
+        FuelType diesel = FuelType.DIESEL;
+        FuelType elektryczny = FuelType.ELEKTRYCZNY;
 
-        DriveType awd = DriveType.builder().name("AWD").build();
-        DriveType fwd = DriveType.builder().name("RWD").build();
-        DriveType rwd = DriveType.builder().name("FWD").build();
+        DriveType awd = DriveType.AWD;
+        DriveType fwd = DriveType.FWD;
+        DriveType rwd = DriveType.RWD;
 
-        TransmissionType manual = TransmissionType.builder().name("Manual").build();
-        TransmissionType automat = TransmissionType.builder().name("Automat").build();
-
-        transmissionTypeRepository.saveAll(List.of(manual, automat));
-        engineTypeRepository.saveAll(List.of(silnikRzedowy, silnikWidlasty, silnikWankla));
-        fuelTypeRepository.saveAll(List.of(benzyna, lpg, diesel, elektryczny));
-        driveTypeRepository.saveAll(List.of(awd, fwd, rwd));
+        TransmissionType manual = TransmissionType.MANUAL;
+        TransmissionType automat = TransmissionType.AUTOMAT;
 
         Brand bmw = Brand.builder().name("BMW").modelList(new ArrayList<>()).build();
         Brand audi = Brand.builder().name("AUDI").modelList(new ArrayList<>()).build();

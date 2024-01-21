@@ -4,34 +4,29 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
-import pl.motobudzet.api.user_account.RegistrationRequestValidation;
+import pl.motobudzet.api.user_account.utils.RegistrationRequestValidation;
 import pl.motobudzet.api.user_account.dto.NewPasswordRequest;
 import pl.motobudzet.api.user_account.dto.RegistrationRequest;
 import pl.motobudzet.api.user_account.dto.ResetPasswordRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
-import pl.motobudzet.api.user_account.repository.RoleRepository;
+import pl.motobudzet.api.user_account.model.Role;
+import pl.motobudzet.api.user_account.AppUserRepository;
 import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
 
     private final AppUserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final SpringMailSenderService springMailSenderService;
     private final JwtService jwtService;
@@ -57,7 +52,7 @@ public class RegistrationService {
                     .accountNotLocked(true)
                     .accountNotExpired(true)
                     .credentialsNotExpired(true)
-                    .roles(List.of(roleRepository.findByName("ROLE_AWAITING_DETAILS").orElseThrow(() -> new RuntimeException("ROLE_NOT_FOUND"))))
+                    .role(Role.ROLE_AWAITING_DETAILS)
                     .build();
             userRepository.saveAndFlush(newUser);
 

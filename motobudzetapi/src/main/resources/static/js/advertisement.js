@@ -16,9 +16,9 @@ function extractAdvertisementId() {
 }
 
 function setTitleInUrl(data) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('name', data.name);
-    window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
+    // const currentUrl = new URL(window.location.href);
+    // currentUrl.searchParams.set('name', data.name);
+    // window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
     initializeParameters(data);
 }
 

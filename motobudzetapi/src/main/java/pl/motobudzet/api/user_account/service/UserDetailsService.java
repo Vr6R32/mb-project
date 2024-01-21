@@ -10,11 +10,10 @@ import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.dto.AppUserDTO;
 import pl.motobudzet.api.user_account.dto.UserDetailsRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.entity.Role;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
-import pl.motobudzet.api.user_account.repository.RoleRepository;
+import pl.motobudzet.api.user_account.model.Role;
+import pl.motobudzet.api.user_account.AppUserRepository;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,13 +21,11 @@ import java.util.List;
 public class UserDetailsService {
 
     private final AppUserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final LocationService locationService;
 
 
     public List<String> findManagementEmails() {
-        Role admin = roleRepository.findByName("ROLE_ADMIN").orElse(null);
-        return userRepository.findAllManagementEmails(admin);
+        return userRepository.findAllManagementEmails(Role.ROLE_ADMIN);
     }
 
     public AppUserDTO getUserDetails(String userName) {
@@ -43,24 +40,21 @@ public class UserDetailsService {
     public String updateFirstUserDetails(UserDetailsRequest request, String loggedUser) {
 
         AppUser user = userRepository.findByUserNameForDto(loggedUser).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new IllegalArgumentException("ROLE_DOESNT_EXIST")));
-
         user.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setRoles(roles);
+        user.setRole(Role.ROLE_USER);
 
         userRepository.saveAndFlush(user);
 
-        setAuthentication(user, roles);
+        setAuthentication(user);
 
         return "/?activation=true";
     }
 
-    private void setAuthentication(AppUser user, List<Role> roles) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList());
+    private void setAuthentication(AppUser user) {
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(String.valueOf(Role.ROLE_USER))));
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 }

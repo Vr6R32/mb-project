@@ -8,6 +8,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
+import pl.motobudzet.api.vehicleSpec.model.DriveType;
+import pl.motobudzet.api.vehicleSpec.model.EngineType;
+import pl.motobudzet.api.vehicleSpec.model.FuelType;
+import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
 
 import java.time.LocalDate;
 
@@ -26,14 +30,14 @@ public class AdvertisementRequest {
     private String model;
     @NotEmpty(message = "Brand cannot be empty!")
     private String brand;
-    @NotEmpty(message = "Fuel type cannot be empty!")
-    private String fuelType;
-    @NotEmpty(message = "Drive type cannot be empty!")
-    private String driveType;
-    @NotEmpty(message = "Engine type cannot be empty!")
-    private String engineType;
-    @NotEmpty(message = "Transmission type cannot be empty!")
-    private String transmissionType;
+    @NotNull(message = "Fuel type cannot be empty!")
+    private FuelType fuelType;
+    @NotNull(message = "Drive type cannot be empty!")
+    private DriveType driveType;
+    @NotNull(message = "Engine type cannot be empty!")
+    private EngineType engineType;
+    @NotNull(message = "Transmission type cannot be empty!")
+    private TransmissionType transmissionType;
     @NotNull(message = "Mileage cannot be empty!")
     private Long mileage;
     @NotNull(message = "Mileage cannot be empty!")

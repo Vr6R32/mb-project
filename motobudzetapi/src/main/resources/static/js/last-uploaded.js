@@ -133,7 +133,7 @@ function displayLastUploaded(min,max,direction){
         });
 
         mainPhoto.addEventListener('click', () => {
-            window.location.href = '/advertisement?id=' + advertisement.id;
+            window.location.href = '/advertisement?id=' + advertisement.id + '&title=' + advertisement.name;
         });
 
         const infoContainerFirst = document.createElement('div');
@@ -260,10 +260,7 @@ function displayLastUploaded(min,max,direction){
         subContainer.appendChild(infoContainerSecond);
 
         handleDarkModeInverse(subContainer);
-        paralaxHover();
-
         container.appendChild(subContainer);
-
     });
 }
 

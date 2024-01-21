@@ -4,10 +4,12 @@ import lombok.*;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.model.Status;
+import pl.motobudzet.api.vehicleSpec.model.FuelType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
@@ -16,12 +18,12 @@ import java.util.List;
 @Builder
 public class AdvertisementDTO {
 
-    private String id;
+    private UUID id;
     private String name;
     private String description;
     private String model;
     private String brand;
-    private String fuelType;
+    private FuelType fuelType;
     private String driveType;
     private String engineType;
     private String transmissionType;

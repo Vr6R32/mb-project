@@ -3,13 +3,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Dodanie danych do tabeli conversation_messages -->
-
-    <!-- Dodanie danych do tabeli conversations -->
     <changeSet id="insertDataIntoConversations1" author="michal-k">
         <insert tableName="conversations">
-<!--            <column name="id" valueNumeric="1"/>-->
-<!--            <column name="last_message_id" valueNumeric="1"/>-->
             <column name="user_client_id" valueNumeric="1"/>
             <column name="user_owner_id" valueNumeric="2"/>
             <column name="advertisement_id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>
@@ -18,8 +13,6 @@
 
     <changeSet id="insertDataIntoConversations2" author="michal-k">
         <insert tableName="conversations">
-<!--            <column name="id" valueNumeric="2"/>-->
-<!--            <column name="last_message_id" valueNumeric="2"/>-->
             <column name="user_client_id" valueNumeric="1"/>
             <column name="user_owner_id" valueNumeric="2"/>
             <column name="advertisement_id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>
@@ -28,8 +21,6 @@
 
     <changeSet id="insertDataIntoConversations3" author="michal-k">
         <insert tableName="conversations">
-<!--            <column name="id" valueNumeric="3"/>-->
-<!--            <column name="last_message_id" valueNumeric="3"/>-->
             <column name="user_client_id" valueNumeric="1"/>
             <column name="user_owner_id" valueNumeric="2"/>
             <column name="advertisement_id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>
@@ -38,8 +29,7 @@
 
     <changeSet id="insertDataIntoConversationMessages1" author="michal-k">
         <insert tableName="conversation_messages">
-                        <column name="conversation_id" valueNumeric="1"/>
-<!--            <column name="id" valueNumeric="1"/>-->
+            <column name="conversation_id" valueNumeric="1"/>
             <column name="message_read_date_time" value="2023-09-06 11:46:15.738883"/>
             <column name="message_send_date_time" value="2023-09-06 11:45:45.145693"/>
             <column name="message_sender_id" valueNumeric="1"/>
@@ -49,8 +39,7 @@
 
     <changeSet id="insertDataIntoConversationMessages2" author="michal-k">
         <insert tableName="conversation_messages">
-                        <column name="conversation_id" valueNumeric="2"/>
-<!--            <column name="id" valueNumeric="2"/>-->
+            <column name="conversation_id" valueNumeric="2"/>
             <column name="message_read_date_time" valueDate="NULL"/>
             <column name="message_send_date_time" value="2023-09-06 11:45:55.061582"/>
             <column name="message_sender_id" valueNumeric="1"/>
@@ -60,8 +49,7 @@
 
     <changeSet id="insertDataIntoConversationMessages3" author="michal-k">
         <insert tableName="conversation_messages">
-                        <column name="conversation_id" valueNumeric="3"/>
-<!--            <column name="id" valueNumeric="3"/>-->
+            <column name="conversation_id" valueNumeric="3"/>
             <column name="message_read_date_time" valueDate="NULL"/>
             <column name="message_send_date_time" value="2023-09-06 11:46:00.490531"/>
             <column name="message_sender_id" valueNumeric="1"/>

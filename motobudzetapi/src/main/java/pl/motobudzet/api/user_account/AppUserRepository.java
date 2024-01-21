@@ -1,11 +1,11 @@
-package pl.motobudzet.api.user_account.repository;
+package pl.motobudzet.api.user_account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.entity.Role;
+import pl.motobudzet.api.user_account.model.Role;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.UUID;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-    @Query("select a from AppUser a left join fetch a.roles where a.userName = ?1")
+    @Query("select a from AppUser a where a.userName = ?1")
     Optional<AppUser> findByUserName(String userName);
 
 
     @Query("select a from AppUser a " +
-            "left join fetch a.roles " +
+//            "left join fetch a.roles " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
             "where a.userName = ?1")
@@ -54,7 +54,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> getAppUserByRegisterCode(String activationCode);
 
     @Query("select a from AppUser a " +
-            "left join fetch a.roles " +
+//            "left join fetch a.roles " +
             "left join fetch a.advertisements " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
@@ -64,10 +64,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("select a from AppUser a " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
-            "left join fetch a.roles " +
+//            "left join fetch a.roles " +
             "where a.resetPasswordCode = ?1")
     Optional<AppUser> findByResetCode(String resetCode);
 
-    @Query("select a.email from AppUser a where ?1 member of a.roles")
+    @Query("select a.email from AppUser a where a.role = ?1")
     List<String> findAllManagementEmails(Role admin);
 }

@@ -17,7 +17,6 @@ import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.vehicleBrand.BrandService;
 import pl.motobudzet.api.vehicleModel.ModelService;
-import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.util.*;
 
@@ -28,7 +27,6 @@ import static pl.motobudzet.api.advertisement.service.FilteringHelper.*;
 public class AdvertisementFilteringService {
 
     private final AdvertisementRepository advertisementRepository;
-    private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
     private final LocationService locationService;
@@ -68,12 +66,13 @@ public class AdvertisementFilteringService {
 
         serviceFunctionMap.put("brand", brandService::getBrand);
         serviceFunctionMap.put("model", modelName -> modelService.getModelByBrand(request.getModel(), request.getBrand()));
-        serviceFunctionMap.put("fuelType", specificationService::getFuelType);
-        serviceFunctionMap.put("driveType", specificationService::getDriveType);
-        serviceFunctionMap.put("engineType", specificationService::getEngineType);
-        serviceFunctionMap.put("transmissionType", specificationService::getTransmissionType);
 
-        specification = handleSelectValues(request, specification, serviceFunctionMap);
+        specification = handleEntities(request, specification, serviceFunctionMap);
+
+        specification = handleEnumValue(specification, request.getFuelType(), "fuelType");
+        specification = handleEnumValue(specification, request.getDriveType(), "driveType");
+        specification = handleEnumValue(specification, request.getEngineType(), "engineType");
+        specification = handleEnumValue(specification, request.getTransmissionType(), "transmissionType");
         specification = handleValueInRangeBetween(specification, "price", request.getPriceMin(), request.getPriceMax());
         specification = handleValueInRangeBetween(specification, "mileage", request.getMileageFrom(), request.getMileageTo());
         specification = handleValueInRangeBetween(specification, "engineCapacity", request.getEngineCapacityFrom(), request.getEngineCapacityTo());
@@ -83,6 +82,17 @@ public class AdvertisementFilteringService {
 
         specification = handleCityAndStateValue(request, specification);
 
+        return specification;
+    }
+
+    private <E extends Enum<E>> Specification<Advertisement> handleEnumValue(Specification<Advertisement> specification,
+                                                                             E enumValue,
+                                                                             String attributeName) {
+        if (enumValue != null) {
+            return specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get(attributeName), enumValue)
+            );
+        }
         return specification;
     }
 

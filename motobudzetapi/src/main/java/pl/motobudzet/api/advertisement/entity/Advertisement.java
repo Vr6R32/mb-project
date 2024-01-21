@@ -18,10 +18,10 @@ import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.vehicleBrand.Brand;
 import pl.motobudzet.api.vehicleModel.Model;
-import pl.motobudzet.api.vehicleSpec.entity.DriveType;
-import pl.motobudzet.api.vehicleSpec.entity.EngineType;
-import pl.motobudzet.api.vehicleSpec.entity.FuelType;
-import pl.motobudzet.api.vehicleSpec.entity.TransmissionType;
+import pl.motobudzet.api.vehicleSpec.model.DriveType;
+import pl.motobudzet.api.vehicleSpec.model.EngineType;
+import pl.motobudzet.api.vehicleSpec.model.FuelType;
+import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -69,13 +69,13 @@ public class Advertisement {
     private PriceUnit priceUnit;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private City city;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @Enumerated(EnumType.STRING)
     private EngineType engineType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @Enumerated(EnumType.STRING)
     private DriveType driveType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @Enumerated(EnumType.STRING)
     private TransmissionType transmissionType;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @Enumerated(EnumType.STRING)
     private FuelType fuelType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Brand brand;

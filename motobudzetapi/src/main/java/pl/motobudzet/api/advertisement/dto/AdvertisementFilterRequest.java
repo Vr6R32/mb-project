@@ -1,6 +1,10 @@
 package pl.motobudzet.api.advertisement.dto;
 
 import lombok.*;
+import pl.motobudzet.api.vehicleSpec.model.DriveType;
+import pl.motobudzet.api.vehicleSpec.model.EngineType;
+import pl.motobudzet.api.vehicleSpec.model.FuelType;
+import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
 
 
 @Data
@@ -15,10 +19,10 @@ public class AdvertisementFilterRequest {
     private String title;
     private String brand;
     private String model;
-    private String fuelType;
-    private String driveType;
-    private String engineType;
-    private String transmissionType;
+    private FuelType fuelType;
+    private DriveType driveType;
+    private EngineType engineType;
+    private TransmissionType transmissionType;
     private String city;
     private String cityState;
     private Long priceMin;

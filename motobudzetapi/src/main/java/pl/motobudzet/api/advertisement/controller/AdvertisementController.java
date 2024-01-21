@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.advertisement.service.AdvertisementService;
+import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,12 +27,14 @@ public class AdvertisementController {
     public ResponseEntity<String> createNewAdvertisement(@ModelAttribute @Valid AdvertisementRequest request,
                                                          @RequestParam List<MultipartFile> files,
                                                          Authentication authentication) {
-        return advertisementService.createNewAdvertisement(request, authentication.getName(), files);
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementService.createNewAdvertisement(request, loggedUser, files);
     }
 
     @GetMapping(value = "all")
     public List<AdvertisementDTO> getAllUserAdvertisements(Authentication authentication) {
-        return advertisementService.getAllUserAdvertisements(authentication.getName());
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementService.getAllUserAdvertisements(loggedUser);
     }
 
     @GetMapping("/{id}")
@@ -68,8 +71,9 @@ public class AdvertisementController {
     public String verifyAndEnableAdvertisement(@PathVariable UUID id) {
         return advertisementService.verifyAndEnableAdvertisement(id);
     }
+
     @PostMapping("reject/{id}")
-    public String rejectAdvertisement(@PathVariable UUID id) {
+    public int rejectAdvertisement(@PathVariable UUID id) {
         return advertisementService.rejectAdvertisement(id);
     }
 

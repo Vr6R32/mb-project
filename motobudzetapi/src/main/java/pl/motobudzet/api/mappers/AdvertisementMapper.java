@@ -2,7 +2,6 @@ package pl.motobudzet.api.mappers;
 
 import pl.motobudzet.api.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.advertisement.model.Status;
 
 public class AdvertisementMapper {
 
@@ -12,12 +11,12 @@ public class AdvertisementMapper {
     public static AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImageUrls) {
 
         AdvertisementDTO builder = AdvertisementDTO.builder()
-                .id(adv.getId().toString())
+                .id(adv.getId())
                 .name(adv.getName())
                 .description(adv.getDescription())
                 .model(adv.getModel().getName())
                 .brand(adv.getBrand().getName())
-                .fuelType(adv.getFuelType().getName())
+                .fuelType(adv.getFuelType())
                 .driveType(adv.getDriveType().getName())
                 .engineType(adv.getEngineType().getName())
                 .transmissionType(adv.getTransmissionType().getName())

@@ -1,6 +1,5 @@
 package pl.motobudzet.api.advertisement.service;
 
-import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ import pl.motobudzet.api.user_account.service.AppUserCustomService;
 import pl.motobudzet.api.user_account.service.UserDetailsService;
 import pl.motobudzet.api.vehicleBrand.BrandService;
 import pl.motobudzet.api.vehicleModel.ModelService;
-import pl.motobudzet.api.vehicleSpec.service.SpecificationService;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -42,7 +40,6 @@ public class AdvertisementService {
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
 
     private final AdvertisementRepository advertisementRepository;
-    private final SpecificationService specificationService;
     private final BrandService brandService;
     private final ModelService modelService;
     private final AppUserCustomService userCustomService;
@@ -72,57 +69,16 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public ResponseEntity<String> createNewAdvertisement(AdvertisementRequest request, String user, List<MultipartFile> files) {
+    public ResponseEntity<String> createNewAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
 
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}", user);
 
-        AppUser currentUser = userCustomService.getUserByName(user);
-        Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, currentUser);
-
-        assignAdvertisementToUser(advertisement, currentUser);
-
-
+        Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileService.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
         sendEmailNotificationToManagement(advertisementId);
         return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").header("edited", "true").body("inserted !");
-    }
-
-    private Advertisement mapCreateAdvertisementRequestToEntity(AdvertisementRequest request, AppUser currentUser) {
-        return Advertisement.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .model(modelService.getModelByBrand(request.getModel(), request.getBrand()))
-                .brand(brandService.getBrand(request.getBrand()))
-                .fuelType(specificationService.getFuelType(request.getFuelType()))
-                .driveType(specificationService.getDriveType(request.getDriveType()))
-                .engineType(specificationService.getEngineType(request.getEngineType()))
-                .transmissionType(specificationService.getTransmissionType(request.getTransmissionType()))
-                .mileage(request.getMileage())
-                .mileageUnit(request.getMileageUnit())
-                .price(request.getPrice())
-                .priceUnit(request.getPriceUnit())
-                .engineCapacity(request.getEngineCapacity())
-                .engineHorsePower(request.getEngineHorsePower())
-                .firstRegistrationDate(request.getFirstRegistrationDate())
-                .productionDate(request.getProductionDate())
-                .city(locationService.getCityByNameAndState(request.getCity(), request.getCityState()))
-                .user(currentUser)
-                .imageUrls(new ArrayList<>())
-                .status(Status.PENDING_VERIFICATION)
-                .mainPhotoUrl(request.getMainPhotoUrl())
-                .build();
-    }
-
-    private void assignAdvertisementToUser(Advertisement advertisement, AppUser user) {
-        if (user.getAdvertisements() == null) {
-            user.setAdvertisements(Set.of(advertisement));
-        } else {
-            Set<Advertisement> advertisements = user.getAdvertisements();
-            advertisements.add(advertisement);
-            advertisement.setUser(user);
-        }
     }
 
     public ResponseEntity<String> editExistingAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
@@ -149,10 +105,10 @@ public class AdvertisementService {
         advertisement.setDescription(request.getDescription());
         advertisement.setModel(modelService.getModelByBrand(request.getModel(), request.getBrand()));
         advertisement.setBrand(brandService.getBrand(request.getBrand()));
-        advertisement.setFuelType(specificationService.getFuelType(request.getFuelType()));
-        advertisement.setDriveType(specificationService.getDriveType(request.getDriveType()));
-        advertisement.setEngineType(specificationService.getEngineType(request.getEngineType()));
-        advertisement.setTransmissionType(specificationService.getTransmissionType(request.getTransmissionType()));
+        advertisement.setFuelType(request.getFuelType());
+        advertisement.setDriveType(request.getDriveType());
+        advertisement.setEngineType(request.getEngineType());
+        advertisement.setTransmissionType(request.getTransmissionType());
         advertisement.setMileage(request.getMileage());
         advertisement.setMileageUnit(request.getMileageUnit());
         advertisement.setPrice(request.getPrice());
@@ -180,13 +136,10 @@ public class AdvertisementService {
     }
 
     public String verifyAndEnableAdvertisement(UUID id) {
-
         Advertisement advertisement = getAdvertisement(id);
         AppUser advertisementOwner = advertisement.getUser();
-
         advertisement.setStatus(Status.ACTIVE);
         advertisementRepository.save(advertisement);
-
         mailSenderService.sendAdvertisementActivationConfirmNotification(advertisementOwner, advertisement);
         return "verified !";
     }
@@ -197,23 +150,47 @@ public class AdvertisementService {
     }
 
 
-    public List<AdvertisementDTO> getAllUserAdvertisements(String loggedUser) {
-        Long userNameId = userCustomService.getUserIdByUserName(loggedUser);
-        return advertisementRepository.getAllUserAdvertisementsByUserId(userNameId)
+    public List<AdvertisementDTO> getAllUserAdvertisements(AppUser loggedUser) {
+        return advertisementRepository.getAllUserAdvertisementsByUserId(loggedUser.getId())
                 .stream().map(advertisement -> mapToAdvertisementDTO(advertisement, true)).toList();
-
     }
 
     @Transactional
-    public int deleteUserAdvertisement(UUID id, String username) {
-        AppUser user = userCustomService.getUserByName(username);
-        if (username.equals(user.getUsername())) {
+    public int deleteUserAdvertisement(UUID id, String loggedUser) {
+        boolean isOwner = advertisementRepository.checkAdvertisementOwnerByUserName(id, loggedUser);
+        if(isOwner){
             return advertisementRepository.updateAdvertisementIsDeleted(id);
         }
         return 0;
     }
 
-    public String rejectAdvertisement(UUID id) {
-        return "Odrzucono ogłoszenie";
+    public int rejectAdvertisement(UUID id) {
+        return advertisementRepository.updateAdvertisementIsRejected(id);
+    }
+
+    private Advertisement mapCreateAdvertisementRequestToEntity(AdvertisementRequest request, AppUser currentUser) {
+        return Advertisement.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .model(modelService.getModelByBrand(request.getModel(), request.getBrand()))
+                .brand(brandService.getBrand(request.getBrand()))
+                .fuelType(request.getFuelType())
+                .driveType(request.getDriveType())
+                .engineType(request.getEngineType())
+                .transmissionType(request.getTransmissionType())
+                .mileage(request.getMileage())
+                .mileageUnit(request.getMileageUnit())
+                .price(request.getPrice())
+                .priceUnit(request.getPriceUnit())
+                .engineCapacity(request.getEngineCapacity())
+                .engineHorsePower(request.getEngineHorsePower())
+                .firstRegistrationDate(request.getFirstRegistrationDate())
+                .productionDate(request.getProductionDate())
+                .city(locationService.getCityByNameAndState(request.getCity(), request.getCityState()))
+                .user(currentUser)
+                .imageUrls(new ArrayList<>())
+                .status(Status.PENDING_VERIFICATION)
+                .mainPhotoUrl(request.getMainPhotoUrl())
+                .build();
     }
 }

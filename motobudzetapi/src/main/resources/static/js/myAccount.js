@@ -149,7 +149,7 @@ function fetchConversationMessages(conversation, resultContainerRight, resultDiv
         resultDiv.style.cursor = 'pointer';
     };
     resultDiv.onclick = () => {
-        window.location.href = `/advertisement?id=${conversation.advertisement.id}`;
+        window.location.href = `/advertisement?id=${conversation.advertisement.id}` + '&title=' + conversation.advertisement.name;
     };
     resultContainerRight.style.marginTop = '0px';
     resultContainerRight.style.paddingTop = '0px';

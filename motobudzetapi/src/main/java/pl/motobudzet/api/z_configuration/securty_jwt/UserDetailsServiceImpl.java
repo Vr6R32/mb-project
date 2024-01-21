@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.user_account.entity.Role;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
+import pl.motobudzet.api.user_account.model.Role;
+import pl.motobudzet.api.user_account.AppUserRepository;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public static Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+                .map(role -> new SimpleGrantedAuthority(String.valueOf(role)))
+                .toList();
     }
 }

@@ -1,7 +1,7 @@
-package pl.motobudzet.api.user_account;
+package pl.motobudzet.api.user_account.utils;
 
+import pl.motobudzet.api.user_account.AppUserRepository;
 import pl.motobudzet.api.user_account.dto.RegistrationRequest;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
 
 
 public class RegistrationRequestValidation {

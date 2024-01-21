@@ -3,7 +3,7 @@ package pl.motobudzet.api.user_account.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
+import pl.motobudzet.api.user_account.AppUserRepository;
 
 @Service
 @RequiredArgsConstructor

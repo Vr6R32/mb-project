@@ -14,7 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.repository.AppUserRepository;
+import pl.motobudzet.api.user_account.AppUserRepository;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.Token;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenRepository;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenType;
@@ -61,7 +61,7 @@ public class JwtService {
                         }
                         throw new IllegalArgumentException("Invalid role format in token");
                     })
-                    .collect(Collectors.toList());
+                    .toList();
         });
     }
 

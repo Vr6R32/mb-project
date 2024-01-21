@@ -816,7 +816,7 @@ function displayResults(data) {
     data.content.forEach(ad => {
 
         const resultDiv = document.createElement("messageResultDiv");
-        resultDiv.className = 'searchResult';
+        // resultDiv.className = 'searchResult';
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "210px";
@@ -834,13 +834,13 @@ function displayResults(data) {
         resultDiv.style.animation = "fade-in 1s ease-in-out forwards";
 
         resultDiv.onclick = (event) => {
-            event.preventDefault(); // To zatrzyma domyślne przewijanie strony
-            window.location.href = `/advertisement?id=${ad.id}`;
+            event.preventDefault();
+            window.location.href = `/advertisement?id=${ad.id}&title=${ad.name}`;
         };
         resultDiv.addEventListener('mouseup', (event) => {
             if (event.button === 1) {
                 event.preventDefault();
-                window.open(`/advertisement?id=${ad.id}`, '_blank');
+                window.open(`/advertisement?id=${ad.id}&title=${ad.name}`, '_blank');
             }
         });
 
@@ -854,10 +854,10 @@ function displayResults(data) {
         createParalaxMiniature(photoElement, resultDiv);
 
         const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
-        conversationDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-        conversationDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-        conversationDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-        conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        conversationDetailsHeader.style.width = '100%';
+        conversationDetailsHeader.style.display = 'flex';
+        conversationDetailsHeader.style.justifyContent = 'space-between';
+        conversationDetailsHeader.style.alignItems = 'center';
         conversationDetailsHeader.style.boxSizing = "border-box";
         conversationDetailsHeader.style.flexBasis = "auto";
 
@@ -869,14 +869,17 @@ function displayResults(data) {
 
         const titleElement = document.createElement("div");
         titleElement.textContent = ad.name;
-        titleElement.style.color = "white"; // Dostosuj kolor tekstu
-        titleElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+        titleElement.style.color = "white";
+        titleElement.style.fontSize = "24px";
         titleElement.style.textAlign = 'left';
+        // titleElement.style.overflow = 'hidden';
+        // titleElement.style.textOverflow = 'ellipsis';
+        // titleElement.style.whiteSpace = 'nowrap';
 
         const modelBrandElement = document.createElement("div");
         modelBrandElement.textContent = ad.brand + ' ' + ad.model;
-        modelBrandElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+        modelBrandElement.style.color = "darkgoldenrod";
+        modelBrandElement.style.fontSize = "16px";
         modelBrandElement.style.textAlign = 'left';
 
         headerTitleNameDiv.appendChild(titleElement);
@@ -885,26 +888,26 @@ function displayResults(data) {
         conversationDetailsHeader.appendChild(headerTitleNameDiv);
 
         const priceHeader = document.createElement("div");
-        priceHeader.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        priceHeader.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        priceHeader.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        priceHeader.style.bottom = '-5px'; // Dostosuj rozmiar tekstu
+        priceHeader.style.color = "darkgoldenrod";
+        priceHeader.style.fontSize = "18px";
+        priceHeader.style.position = 'relative';
+        priceHeader.style.bottom = '-5px';
         priceHeader.style.textAlign = 'right';
         priceHeader.style.marginRight = '25px';
-        priceHeader.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        priceHeader.style.whiteSpace = 'nowrap';
 
         const priceElement = document.createElement('div');
         priceElement.style.color = 'white';
-        priceElement.style.fontSize = "26px"; // Dostosuj rozmiar tekstu
+        priceElement.style.fontSize = "26px";
 
-        const priceValueSpan = document.createElement('span'); // Używamy span zamiast div
+        const priceValueSpan = document.createElement('span');
         priceValueSpan.textContent = ad.priceUnit;
         priceValueSpan.style.color = 'darkgoldenrod';
-        priceValueSpan.style.verticalAlign = "top"; // Wyrówn
-        priceValueSpan.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+        priceValueSpan.style.verticalAlign = "top";
+        priceValueSpan.style.fontSize = "16px";
 
-        priceElement.textContent = formatInteger(ad.price) + ' '; // Dodajemy spację po wartości ceny
-        priceElement.appendChild(priceValueSpan); // Dodajemy ad.priceUnit bezpośrednio po ad.price
+        priceElement.textContent = formatInteger(ad.price) + ' ';
+        priceElement.appendChild(priceValueSpan);
 
         priceHeader.appendChild(priceElement);
 
@@ -912,26 +915,38 @@ function displayResults(data) {
 
 
         const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
-        conversationDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        conversationDetailsDiv.style.width = '100%';
         conversationDetailsDiv.style.flexBasis = 'auto';
         conversationDetailsDiv.style.display = 'flex-start';
-        conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+        conversationDetailsDiv.style.flexDirection = 'column';
         conversationDetailsDiv.style.marginBottom = '30px';
         conversationDetailsDiv.style.marginLeft = '25px';
 
         const conversationDetailsMain = document.createElement("conversationDetailsMain");
-        conversationDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+        conversationDetailsMain.style.width = '90%';
+        conversationDetailsMain.style.maxWidth = '90%';
         conversationDetailsMain.style.flexBasis = 'auto';
         conversationDetailsMain.style.display = 'grid';
-        conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
-        conversationDetailsMain.style.marginTop = '20px';
+        conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
+        // conversationDetailsMain.style.marginTop = '20px';
+        // conversationDetailsMain.style.overflow = 'auto'; // Allows scrolling within the element if content overflows
+        // conversationDetailsMain.style.msOverflowStyle = 'none';  // IE and Edge
+        // conversationDetailsMain.style.scrollbarWidth = 'none';  // Firefox
+
 
         const advertisementDetails = document.createElement("conversationDetailsBottom");
-        advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+        advertisementDetails.style.width = '100%';
+        advertisementDetails.style.maxWidth = '100%';
+        advertisementDetails.style.flexGrow = '1';
+        advertisementDetails.style.flexShrink = '1';
         advertisementDetails.style.flexBasis = 'auto';
         advertisementDetails.style.display = 'flex';
-        advertisementDetails.style.marginTop = '15px';
+        advertisementDetails.style.marginTop = '35px';
         advertisementDetails.style.marginLeft = '5%';
+        advertisementDetails.style.overflow = 'auto';
+        advertisementDetails.style.msOverflowStyle = 'none';
+        advertisementDetails.style.scrollbarWidth = 'none';
+
 
         let priceUnitValue = document.createElement('span');
         priceUnitValue.style.color = 'darkgoldenrod';
@@ -955,7 +970,7 @@ function displayResults(data) {
 
         let smallerDigit = document.createElement('span');
         smallerDigit.textContent = '3';
-        smallerDigit.style.fontSize = '10px'; // Zmniejszenie rozmiaru czcionki o 20%
+        smallerDigit.style.fontSize = '10px';
         smallerDigit.style.verticalAlign = 'top';
 
         engineCapacity.appendChild(smallerDigit);
@@ -976,17 +991,16 @@ function displayResults(data) {
         locationDetailsDiv.style.bottom = '10px';
 
         const locationDetails = document.createElement("div");
-        locationDetails.style.color = "white"; // Dostosuj kolor tekstu
-        locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
-        locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        locationDetails.style.bottom = '-40px'; // Dostosuj rozmiar tekstu
+        locationDetails.style.color = "white";
+        locationDetails.style.fontSize = "16px";
+        locationDetails.style.position = 'relative';
+        locationDetails.style.bottom = '-40px';
         locationDetails.style.textAlign = 'left';
         locationDetails.style.marginRight = '15px';
-        locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-        locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
-        locationDetails.style.display = 'flex'; // Ustawienie flexbox
-        // locationDetails.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-        locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+        locationDetails.style.whiteSpace = 'nowrap';
+        locationDetails.style.width = '100%';
+        locationDetails.style.display = 'flex';
+        locationDetails.style.alignItems = 'center';
         locationDetails.style.boxSizing = "border-box";
         locationDetails.style.flexBasis = "auto";
         locationDetails.style.textAlign = 'left';
@@ -1010,13 +1024,13 @@ function displayResults(data) {
 
 
         const favouriteBottomHeaderDiv = document.createElement("div");
-        favouriteBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        favouriteBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        favouriteBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        favouriteBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+        favouriteBottomHeaderDiv.style.color = "darkgoldenrod";
+        favouriteBottomHeaderDiv.style.fontSize = "18px";
+        favouriteBottomHeaderDiv.style.position = 'relative';
+        favouriteBottomHeaderDiv.style.bottom = '-25px';
         favouriteBottomHeaderDiv.style.textAlign = 'right';
         favouriteBottomHeaderDiv.style.marginRight = '25px';
-        favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap';
 
         const favouriteWrapper = document.createElement('div');
         favouriteWrapper.id = 'favouriteWrapper';
@@ -1030,13 +1044,13 @@ function displayResults(data) {
 
         favouriteIconDiv.addEventListener('mouseover', function() {
             favouriteIconDiv.style.cursor = "pointer";
-            favouriteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
-            favouriteText.style.opacity = '1';  // Ustaw opacity na 1
+            favouriteText.style.left = '-15px';
+            favouriteText.style.opacity = '1';
         });
         favouriteIconDiv.addEventListener('mouseout', function() {
             favouriteIconDiv.style.cursor = "auto";
-            favouriteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
-            favouriteText.style.opacity = '0';  // Ustaw opacity na 0
+            favouriteText.style.left = '-150px';
+            favouriteText.style.opacity = '0';
         });
 
 
@@ -1187,7 +1201,7 @@ function displayResults(data) {
 
         // Ustaw taką samą szerokość dla wszystkich kontenerów
         containers.forEach(container => {
-            container.style.width = maxTextWidth + '65px';
+            container.style.width = maxTextWidth + '55px';
         });
 
 
@@ -1195,9 +1209,6 @@ function displayResults(data) {
         conversationDetailsDiv.appendChild(conversationDetailsHeader);
         conversationDetailsDiv.appendChild(conversationDetailsMain);
         conversationDetailsDiv.appendChild(bottomDetailsHeader);
-
-
-
 
         resultDiv.appendChild(conversationDetailsDiv);
 
@@ -1496,8 +1507,10 @@ function executeSearch(formData) {
         .then(response => response.json())
         .then(data => {
             displayResults(data, sortingBy, sortOrder);
-            paralaxHover();
             updatePaginationButtons(data, sortingBy, sortOrder);
+            if(!isMobileDevice()){
+                paralaxHover();
+            }
         })
         .catch(error => console.error("Error fetching data:", error));
 }
@@ -1506,7 +1519,7 @@ function createInfoContainer(iconPath, altText, value) {
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.alignItems = 'center';
-    container.style.flexGrow = '1'; // Równomiernie rozłożenie elementów
+    container.style.flexGrow = '1';
     container.style.textAlign = 'center';
     container.style.marginRight = '30px';
     container.style.color = 'white';

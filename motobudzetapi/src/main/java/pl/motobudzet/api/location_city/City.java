@@ -17,14 +17,12 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "name", nullable = false, length = 150)
     private String name;
     @Column(name = "n_latitude", nullable = false, length = 20)
     private Double nLatitude;
     @Column(name = "e_longitude", nullable = false, length = 20)
     private Double eLongitude;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "state_id", referencedColumnName = "id", insertable = false, updatable = false)
     private CityState cityState;

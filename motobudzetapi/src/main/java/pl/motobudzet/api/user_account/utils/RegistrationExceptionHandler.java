@@ -1,4 +1,4 @@
-package pl.motobudzet.api.user_account.exception;
+package pl.motobudzet.api.user_account.utils;
 
 
 import org.springframework.http.HttpStatus;

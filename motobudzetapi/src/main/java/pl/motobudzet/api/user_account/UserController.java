@@ -1,4 +1,4 @@
-package pl.motobudzet.api.user_account.controller;
+package pl.motobudzet.api.user_account;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

@@ -14,12 +14,8 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
 
     @Query("SELECT c FROM Conversation c " +
             "LEFT JOIN FETCH c.advertisement adv " +
-            "LEFT JOIN FETCH adv.fuelType " +
             "LEFT JOIN FETCH adv.brand " +
             "LEFT JOIN FETCH adv.model " +
-            "LEFT JOIN FETCH adv.engineType " +
-            "LEFT JOIN FETCH adv.driveType " +
-            "LEFT JOIN FETCH adv.transmissionType " +
             "LEFT JOIN FETCH adv.city " +
             "LEFT JOIN FETCH adv.city.cityState " +
             "LEFT JOIN FETCH c.userClient " +

@@ -7,7 +7,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     handleZoomSlider();
 });
 
-
+function isMobileDevice() {
+    const userAgent = navigator.userAgent;
+    const maxMobileWidth = 300; // Typical breakpoint for mobile devices
+    const isMobileWidth = window.innerWidth <= maxMobileWidth;
+    return /Mobi|Android/i.test(userAgent) || isMobileWidth;
+}
 
 
 async function fetchWithAuth(url, options = {}) {
@@ -53,7 +58,9 @@ function getLastUploaded(pageNumber){
         .then(data => {
             advertisements = data;
             displayLastUploaded(currentMinIndex,currentMaxIndex,'left');
-            paralaxHover();
+            if(!isMobileDevice()){
+                paralaxHover();
+            }
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
@@ -276,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Call this on page load to apply the dark mode setting
     if(localStorage.getItem('darkMode') === 'true') {
         let container = document.getElementById('container-main');
         container.style.backgroundColor = 'black';
@@ -318,9 +324,6 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
         resultDiv.style.boxShadow = "0 0 20px darkgoldenrod";
     }
 
-
-
-    // Add hover effect on mouseover
     resultDiv.onmouseover = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px cyan";
@@ -334,7 +337,6 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
         }
     };
 
-    // Remove hover effect on mouseout
     resultDiv.onmouseout = () => {
         if (localStorage.getItem('darkMode') === 'true') {
             resultDiv.style.boxShadow = "0 0 20px moccasin";

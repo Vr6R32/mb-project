@@ -7,10 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.location_city.City;
+import pl.motobudzet.api.user_account.model.Role;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.Set;
 
 import static pl.motobudzet.api.z_configuration.securty_jwt.UserDetailsServiceImpl.mapRolesToAuthorities;
@@ -47,24 +48,13 @@ public class AppUser implements UserDetails {
     private City city;
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JsonManagedReference
-    @JoinTable(
-            name = "app_user_advertisements",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "advertisement_id", referencedColumnName = "id")
-    )
     private Set<Advertisement> advertisements;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "user_role_mapping",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            uniqueConstraints = @UniqueConstraint(name = "unique_user_role", columnNames = {"user_id", "role_id"})
-    )
-    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return mapRolesToAuthorities(getRoles());
+        return mapRolesToAuthorities(Collections.singleton(getRole()));
     }
 
     @Override
