@@ -4,11 +4,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <include file="/db/changelog/changelog-001-create_database.xml"/>
-    <include file="/db/changelog/changelog-002-insertCitiesAndStates.xml"/>
-    <include file="/db/changelog/changelog-006-fill_db.xml"/>
-    <include file="/db/changelog/changelog-011-insertAdvertisementsImages.xml"/>
-    <include file="/db/changelog/changelog-013-createUserMessagesTables.xml"/>
-    <include file="/db/changelog/changelog-014-insertExampleConversationsAndMessages.xml"/>
+    <include file="/db/changelog/changelog-001-create_db.xml"/>
+    <include file="/db/changelog/changelog-002-fill_db.xml"/>
+    <include file="/db/changelog/changelog-003-insert_example_values.xml"/>
 
 </databaseChangeLog>

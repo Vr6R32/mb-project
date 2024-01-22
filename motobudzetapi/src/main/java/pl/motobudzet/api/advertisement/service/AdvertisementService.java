@@ -16,13 +16,13 @@ import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
-import pl.motobudzet.api.fileManager.FileService;
+import pl.motobudzet.api.file_manager.FileService;
 import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.service.AppUserCustomService;
 import pl.motobudzet.api.user_account.service.UserDetailsService;
-import pl.motobudzet.api.vehicleBrand.BrandService;
-import pl.motobudzet.api.vehicleModel.ModelService;
+import pl.motobudzet.api.vehicle_brand.BrandService;
+import pl.motobudzet.api.vehicle_model.ModelService;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -94,7 +94,7 @@ public class AdvertisementService {
 
             String redirectUrl = "/advertisement?id=" + advertisement.getId();
 
-//            sendEmailNotificationToManagement(advertisement.getId());
+            sendEmailNotificationToManagement(advertisement.getId());
             return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
@@ -103,7 +103,7 @@ public class AdvertisementService {
     private void mapEditAdvertisementRequestToEntity(AdvertisementRequest request, Advertisement advertisement) {
         advertisement.setName(request.getName());
         advertisement.setDescription(request.getDescription());
-        advertisement.setModel(modelService.getModelByBrand(request.getModel(), request.getBrand()));
+        advertisement.setModel(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
         advertisement.setBrand(brandService.getBrand(request.getBrand()));
         advertisement.setFuelType(request.getFuelType());
         advertisement.setDriveType(request.getDriveType());
@@ -172,7 +172,7 @@ public class AdvertisementService {
         return Advertisement.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .model(modelService.getModelByBrand(request.getModel(), request.getBrand()))
+                .model(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()))
                 .brand(brandService.getBrand(request.getBrand()))
                 .fuelType(request.getFuelType())
                 .driveType(request.getDriveType())

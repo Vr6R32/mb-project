@@ -8,10 +8,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
-import pl.motobudzet.api.vehicleSpec.model.DriveType;
-import pl.motobudzet.api.vehicleSpec.model.EngineType;
-import pl.motobudzet.api.vehicleSpec.model.FuelType;
-import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
+import pl.motobudzet.api.advertisement.model.DriveType;
+import pl.motobudzet.api.advertisement.model.EngineType;
+import pl.motobudzet.api.advertisement.model.FuelType;
+import pl.motobudzet.api.advertisement.model.TransmissionType;
 
 import java.time.LocalDate;
 

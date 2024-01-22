@@ -26,11 +26,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.imageUrls " +
             "LEFT JOIN FETCH a.brand b " +
             "LEFT JOIN FETCH a.model m " +
-//            "LEFT JOIN FETCH a.driveType d " +
-//            "LEFT JOIN FETCH a.engineType e " +
-//            "LEFT JOIN FETCH a.fuelType f " +
             "LEFT JOIN FETCH a.user u " +
-//            "LEFT JOIN FETCH a.transmissionType t " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
             "WHERE a.id IN ?1")
@@ -41,13 +37,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.imageUrls " +
             "LEFT JOIN FETCH a.brand b " +
             "LEFT JOIN FETCH a.model m " +
-//            "LEFT JOIN FETCH a.driveType d " +
-//            "LEFT JOIN FETCH a.engineType e " +
-//            "LEFT JOIN FETCH a.fuelType f " +
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-//            "LEFT JOIN FETCH a.transmissionType t " +
             "WHERE a.id = :uuid")
     Optional<Advertisement> findOneByIdWithFetch(UUID uuid);
 
@@ -59,13 +51,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.imageUrls " +
             "LEFT JOIN FETCH a.brand b " +
             "LEFT JOIN FETCH a.model m " +
-//            "LEFT JOIN FETCH a.driveType d " +
-//            "LEFT JOIN FETCH a.engineType e " +
-//            "LEFT JOIN FETCH a.fuelType f " +
             "LEFT JOIN FETCH a.user u " +
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
-//            "LEFT JOIN FETCH a.transmissionType t " +
             "WHERE a.user.id = :userId AND a.status != 'DELETED' ORDER BY a.createDate DESC")
     List<Advertisement> getAllUserAdvertisementsByUserId(Long userId);
 

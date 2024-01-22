@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet id="create_city_states_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS city_states (
+                id BIGINT PRIMARY KEY NOT NULL,
+                name VARCHAR(50) NOT NULL
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_cities_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS cities (
+                id BIGSERIAL PRIMARY KEY,
+                e_longitude DOUBLE PRECISION NOT NULL,
+                n_latitude DOUBLE PRECISION NOT NULL,
+                state_id BIGINT REFERENCES city_states(id),
+                name VARCHAR(150) NOT NULL
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_brands_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS brands (
+                id BIGSERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL UNIQUE
+                );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="create_models_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS models (
+                id BIGSERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                brand_id BIGINT NOT NULL,
+                FOREIGN KEY (brand_id) REFERENCES brands(id)
+                );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="8" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS app_users (
+                id BIGSERIAL PRIMARY KEY,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                user_name VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                role VARCHAR(255) NOT NULL,
+                city_id BIGINT,
+                account_enabled BOOLEAN,
+                account_not_expired BOOLEAN,
+                account_not_locked BOOLEAN,
+                credentials_not_expired BOOLEAN,
+                register_code VARCHAR(255),
+                name VARCHAR(255),
+                surname VARCHAR(255),
+                phone_number VARCHAR(255),
+                reset_password_code VARCHAR(255),
+                reset_password_code_expiration TIMESTAMP,
+                FOREIGN KEY (city_id) REFERENCES cities (id)
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_advertisements_table_sql" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS advertisements (
+                id UUID PRIMARY KEY NOT NULL,
+                status VARCHAR(255) NOT NULL,
+                brand_id BIGINT NOT NULL,
+                city_id BIGINT,
+                model_id BIGINT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                main_photo_url VARCHAR(255),
+                create_date TIMESTAMP NOT NULL,
+                last_modified TIMESTAMP,
+                last_modified_by BIGINT,
+                engine_capacity BIGINT,
+                engine_horse_power BIGINT,
+                first_registration_date DATE,
+                mileage BIGINT,
+                mileage_unit VARCHAR(255),
+                price BIGINT,
+                price_unit VARCHAR(255),
+                production_date BIGINT,
+                description VARCHAR(60000),
+                drive_type VARCHAR(255) NOT NULL,
+                engine_type VARCHAR(255) NOT NULL,
+                fuel_type VARCHAR(255) NOT NULL,
+                transmission_type VARCHAR(255) NOT NULL,
+                user_id BIGINT NOT NULL,
+                FOREIGN KEY (brand_id) REFERENCES brands (id),
+                FOREIGN KEY (city_id) REFERENCES cities (id),
+                FOREIGN KEY (model_id) REFERENCES models (id),
+                FOREIGN KEY (user_id) REFERENCES app_users (id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_advertisement_images_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS advertisement_images (
+                 advertisement_id UUID NOT NULL,
+                 image_urls VARCHAR(255),
+                FOREIGN KEY (advertisement_id) REFERENCES advertisements (id)
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_user_token_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS tokens (
+                id BIGSERIAL PRIMARY KEY,
+                token VARCHAR(400) NOT NULL UNIQUE,
+                token_type VARCHAR(255) NOT NULL DEFAULT 'BEARER',
+                revoked BOOLEAN NOT NULL DEFAULT FALSE,
+                expired BOOLEAN NOT NULL DEFAULT FALSE,
+                user_id BIGINT NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_user_favourites_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS user_favourites (
+                id BIGSERIAL PRIMARY KEY,
+                app_user_id BIGINT NOT NULL,
+                advertisement_id VARCHAR(255),
+                user_name VARCHAR(255),
+                FOREIGN KEY (app_user_id) REFERENCES app_users (id)
+            );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="create_user_conversations_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS conversations (
+                id BIGSERIAL PRIMARY KEY,
+                user_client_id BIGINT,
+                user_owner_id BIGINT,
+                advertisement_id UUID,
+                FOREIGN KEY (user_client_id) REFERENCES app_users(id),
+                FOREIGN KEY (user_owner_id) REFERENCES app_users(id),
+                FOREIGN KEY (advertisement_id) REFERENCES advertisements(id) ON DELETE CASCADE
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_user_conversation_messages_table" author="michal-k">
+        <sql>
+            CREATE TABLE IF NOT EXISTS conversation_messages (
+                id BIGSERIAL PRIMARY KEY,
+                conversation_id BIGINT,
+                message_sender_id BIGINT,
+                message VARCHAR(1000),
+                message_send_date_time TIMESTAMP(6),
+                message_read_date_time TIMESTAMP(6),
+                FOREIGN KEY (message_sender_id) REFERENCES app_users(id),
+                FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+                );
+        </sql>
+    </changeSet>
+
+    <changeSet id="alter_user_conversation_last_message" author="michal-k">
+        <sql>
+                ALTER TABLE conversations
+                ADD COLUMN last_message_id BIGINT UNIQUE,
+                ADD CONSTRAINT conversations_last_message_fk FOREIGN KEY (last_message_id) REFERENCES conversation_messages(id);
+        </sql>
+    </changeSet>
+
+
+
+
+</databaseChangeLog>

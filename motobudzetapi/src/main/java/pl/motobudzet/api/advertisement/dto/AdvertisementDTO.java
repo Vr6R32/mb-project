@@ -4,7 +4,7 @@ import lombok.*;
 import pl.motobudzet.api.advertisement.model.MileageUnit;
 import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.model.Status;
-import pl.motobudzet.api.vehicleSpec.model.FuelType;
+import pl.motobudzet.api.advertisement.model.FuelType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

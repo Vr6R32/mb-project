@@ -15,8 +15,8 @@ import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.advertisement.repository.AdvertisementRepository;
 import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.location_city.LocationService;
-import pl.motobudzet.api.vehicleBrand.BrandService;
-import pl.motobudzet.api.vehicleModel.ModelService;
+import pl.motobudzet.api.vehicle_brand.BrandService;
+import pl.motobudzet.api.vehicle_model.ModelService;
 
 import java.util.*;
 
@@ -65,7 +65,7 @@ public class AdvertisementFilteringService {
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
 
         serviceFunctionMap.put("brand", brandService::getBrand);
-        serviceFunctionMap.put("model", modelName -> modelService.getModelByBrand(request.getModel(), request.getBrand()));
+        serviceFunctionMap.put("model", modelName -> modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
 
         specification = handleEntities(request, specification, serviceFunctionMap);
 

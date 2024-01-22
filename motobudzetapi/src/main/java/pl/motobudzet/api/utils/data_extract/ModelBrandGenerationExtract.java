@@ -2,9 +2,7 @@ package pl.motobudzet.api.utils.data_extract;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.motobudzet.api.vehicleBrand.Brand;
-import pl.motobudzet.api.vehicleBrand.BrandRepository;
-import pl.motobudzet.api.vehicleModel.Model;
+import pl.motobudzet.api.vehicle_brand.BrandRepository;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -88,21 +86,21 @@ public class ModelBrandGenerationExtract {
                     models.remove("Wybierz");
                     models.remove("Inny");
                     models.add("Inny");
-                    buildAndSaveEntities(brandNamesList, fileNameWithoutExtension, models);
+//                    buildAndSaveEntities(brandNamesList, fileNameWithoutExtension, models);
                 }
             }
         }
     }
 
-    private void buildAndSaveEntities(List<String> brandNamesList, String fileNameWithoutExtension, List<String> models) {
-        String brand = brandNamesList.stream().filter(s -> s.contains(fileNameWithoutExtension)).findFirst().orElse(null);
-        Brand brandEntity = Brand.builder().name(brand.toUpperCase()).modelList(new ArrayList<>()).build();
-        models.forEach(modelName -> {
-            Model modelEntity = Model.builder().brand(brandEntity).name(modelName.toUpperCase()).build();
-            brandEntity.addElement(modelEntity);
-        });
-        brandRepository.save(brandEntity);
-    }
+//    private void buildAndSaveEntities(List<String> brandNamesList, String fileNameWithoutExtension, List<String> models) {
+//        String brand = brandNamesList.stream().filter(s -> s.contains(fileNameWithoutExtension)).findFirst().orElse(null);
+//        Brand brandEntity = Brand.builder().name(brand.toUpperCase()).modelList(new ArrayList<>()).build();
+//        models.forEach(modelName -> {
+//            Model modelEntity = Model.builder().brand(brandEntity).name(modelName.toUpperCase()).build();
+//            brandEntity.addElement(modelEntity);
+//        });
+//        brandRepository.save(brandEntity);
+//    }
 
     public List<String> extractModelsFromFile(String filePath) throws IOException {
         List<String> modelList = new ArrayList<>();

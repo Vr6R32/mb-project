@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.fileManager.FilePathsConfig;
+import pl.motobudzet.api.file_manager.FilePathsConfig;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.io.File;

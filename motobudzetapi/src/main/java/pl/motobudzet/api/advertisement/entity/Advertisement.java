@@ -16,12 +16,12 @@ import pl.motobudzet.api.advertisement.model.PriceUnit;
 import pl.motobudzet.api.advertisement.model.Status;
 import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.vehicleBrand.Brand;
-import pl.motobudzet.api.vehicleModel.Model;
-import pl.motobudzet.api.vehicleSpec.model.DriveType;
-import pl.motobudzet.api.vehicleSpec.model.EngineType;
-import pl.motobudzet.api.vehicleSpec.model.FuelType;
-import pl.motobudzet.api.vehicleSpec.model.TransmissionType;
+import pl.motobudzet.api.vehicle_brand.Brand;
+import pl.motobudzet.api.vehicle_model.Model;
+import pl.motobudzet.api.advertisement.model.DriveType;
+import pl.motobudzet.api.advertisement.model.EngineType;
+import pl.motobudzet.api.advertisement.model.FuelType;
+import pl.motobudzet.api.advertisement.model.TransmissionType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,8 +49,8 @@ public class Advertisement {
     private Long mileage;
     private Long price;
     private Long engineCapacity;
-    private Long engineHorsePower;
     private Long productionDate;
+    private Long engineHorsePower;
     private LocalDate firstRegistrationDate;
     @CreatedDate
     @Column(updatable = false)
@@ -67,8 +67,6 @@ public class Advertisement {
     private MileageUnit mileageUnit;
     @Enumerated(EnumType.STRING)
     private PriceUnit priceUnit;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private City city;
     @Enumerated(EnumType.STRING)
     private EngineType engineType;
     @Enumerated(EnumType.STRING)
@@ -77,6 +75,8 @@ public class Advertisement {
     private TransmissionType transmissionType;
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private City city;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Brand brand;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

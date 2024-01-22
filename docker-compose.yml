@@ -46,8 +46,8 @@ services:
     ports:
       - "3309:5432"
     volumes:
-      - postgres-data:/data/postgres
-      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: dontgotosql
@@ -56,10 +56,10 @@ services:
     networks:
       - postgres
     healthcheck:
-      test: pg_isready -U postgres
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m
       timeout: 10s
-      retries: 2
+      retries: 5
     restart: unless-stopped
 
 
