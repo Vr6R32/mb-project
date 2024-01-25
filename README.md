@@ -6,8 +6,8 @@
 MotoBudzet is a comprehensive web portal designed for creating and managing automotive advertisements with ease. 
 Engineered with a robust backend built on Java 17 and Spring Boot, the platform ensures reliable and efficient performance. 
 
-Data persistence is elegantly handled by PostgreSQL, coupled with Hibernate for object-relational mapping the application
-has been meticulously designed with special attention to reducing SQL queries to the database, particularly addressing
+Data persistence is elegantly handled by PostgreSQL, coupled with Hibernate for object-relational mapping, application
+has been carefully designed with special attention to reducing SQL queries to the database, particularly addressing
 the N+1 query issue. This optimization ensures efficient data retrieval and significantly improves the performance of the
 application by minimizing unnecessary database load making interactions with the database seamless and swift.
 
@@ -19,7 +19,12 @@ This combination of a reverse proxy and Cloudflare DNS significantly strengthens
 offering robust protection against external threats. This ensures a secure and dependable environment for users and their data,
 safeguarding both against unauthorized access and potential internet vulnerabilities.
 
-The application's backend is complemented with a user-friendly frontend, utilizing HTML5, CSS3, and JavaScript
+
+Additionally, the application is secured with a JWT token, which is further encrypted using the AES256 algorithm to ensure greater security. 
+Token is typically transmitted and stored in an HttpOnly cookie, to which foreign JavaScript should not have access.
+
+
+Application backend is complemented with a user-friendly frontend, utilizing HTML5, CSS3, and JavaScript
 to deliver a responsive and engaging user experience. Every aspect of MotoBudzet is crafted to streamline the 
 process of posting and browsing automotive listings.
 
