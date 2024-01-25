@@ -3,13 +3,13 @@ global:
 
 scrape_configs:
   - job_name: 'mb-api'
-    scheme: https
+    scheme: http
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['motobudzet.pl']
+      - targets: ['mb-api:20134']
         labels:
           application: 'mb-api'
-#          bearer_token_file: '/ścieżka/do/pliku/z/tokenem'
+#          bearer_token_file: '/path/to/token/file'
 #        headers:
 #          prometheus-service: 'prometheus9090auth'
     authorization:

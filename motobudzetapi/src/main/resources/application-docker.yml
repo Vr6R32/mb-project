@@ -76,13 +76,15 @@ server:
   tomcat:
     remoteip:
       host-header: X-Real-IP
+      remote-ip-header: X-Forwarded-For
+      protocol-header: X-Forwarded-Proto
 
-  #  port: 443
-  ssl:
-    key-store-type: PKCS12
-    key-store: classpath:keystore.p12
-    key-store-password: odi123
-    key-alias: spring-boot
+#    port: 443
+#    ssl:
+#    key-store-type: PKCS12
+#    key-store: classpath:keystore.p12
+#    key-store-password: odi123
+#    key-alias: spring-boot
 
 
 application:

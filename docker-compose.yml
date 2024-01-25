@@ -5,26 +5,26 @@ services:
 
 # openssl pkcs12 -in keystore.p12 -nokeys -out certificate.crt -nodes
 # openssl pkcs12 -in keystore.p12 -nocerts -out private.key -nodes
-#  nginx:
-#    image: nginx:latest
-#    ports:
-#      - "20130:20130"
-#    volumes:
-#      - ./nginx/config.conf:/etc/nginx/nginx.conf:ro
-#      - ./nginx/certificate.crt:/etc/nginx/certificate.crt:ro
-#      - ./nginx/new_private.key:/etc/nginx/private.key:ro
-#      - ./nginx/logs:/var/log/nginx
-#    networks:
-#      - logging
-#    depends_on:
-#      - mb-api
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/config.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certificate.crt:/etc/nginx/certificate.crt:ro
+      - ./nginx/private.key:/etc/nginx/private.key:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - logging
+    depends_on:
+      - mb-api
 
   mb-api:
     build: .
     container_name: mb-api
     image: michaelkey/mb-api:0.0.1-SNAPSHOT
-    ports:
-      - "20134:20134"
+#    ports:
+#      - "20134:20134"
     volumes:
       - ./logging_infrastructure/api-logs:/var/log/spring
       - ./files/public:/app/files/public
@@ -120,8 +120,8 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:latest
-    ports:
-      - "3100:3100"
+#    ports:
+#      - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - logging

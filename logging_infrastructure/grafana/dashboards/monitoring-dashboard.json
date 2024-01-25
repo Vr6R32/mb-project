@@ -15,12 +15,12 @@
       }
     ]
   },
-  "description": "Dashboard for Spring Boot2.1 Statistics(based on Spring Boot2 Statistic by micrometer-prometheus).",
-  "editable": false,
+  "description": "",
+  "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 11378,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1830,8 +1830,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2020,8 +2019,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2383,8 +2381,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2585,8 +2582,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3540,8 +3536,8 @@
       {
         "current": {
           "selected": false,
-          "text": "motobudzet.pl:443",
-          "value": "motobudzet.pl:443"
+          "text": "mb-api:20134",
+          "value": "mb-api:20134"
         },
         "datasource": {
           "type": "prometheus",
@@ -3677,8 +3673,8 @@
     ]
   },
   "timezone": "",
-  "title": "Spring Boot 2.1 System Monitor",
-  "uid": "spring_boot_21",
-  "version": 1,
+  "title": "mb-api monitoring system",
+  "uid": "d3b82911-12ce-44d6-a768-9b3ad92143d0",
+  "version": 2,
   "weekStart": ""
 }

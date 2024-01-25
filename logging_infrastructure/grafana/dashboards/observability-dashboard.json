@@ -25,7 +25,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 17175,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1064,8 +1064,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Spring Boot Observability",
-  "uid": "dLsDQIUnzb",
-  "version": 4,
+  "title": "mb-api tracing&logging",
+  "uid": "fda58a42-ee31-4551-9c47-6e79ec8520e5",
+  "version": 1,
   "weekStart": ""
 }
