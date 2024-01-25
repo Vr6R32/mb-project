@@ -23,6 +23,7 @@ process of posting and browsing automotive listings.
 
 ## Backend stack : <br>
 
+
 [//]: # (![JAVA17]&#40;https://img.shields.io/badge/17-Java-orange?style=for-the-badge&#41; &nbsp;)
 ![JAVA](https://img.shields.io/badge/Java-orange?style=for-the-badge)![17](https://img.shields.io/badge/17-gray?style=for-the-badge) &nbsp;
 ![SPRING](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring) &nbsp;
@@ -35,7 +36,7 @@ process of posting and browsing automotive listings.
 
 ![YAML](https://img.shields.io/badge/yaml-%23ffffff.svg?style=for-the-badge&logo=yaml&logoColor=151515)  &nbsp;
 ![JSON](https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white)  &nbsp;
-
+<br><br>
 ## Deployed on :<br>
 ![DOCKER](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white) &nbsp;
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) &nbsp;
@@ -43,26 +44,25 @@ process of posting and browsing automotive listings.
 ![Apache Tomcat](https://img.shields.io/badge/apache%20tomcat-%23F8DC75.svg?style=for-the-badge&logo=apache-tomcat&logoColor=black) &nbsp;
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white) &nbsp;
 ![HomeCloud](https://img.shields.io/badge/HomeCLOUD.pl-white?style=for-the-badge&logo=Cloudflare&logoColor=red) &nbsp;
-
+<br><br>
 ## Monitoring & Tracing : <br>
 ![PROMETHEUS](https://img.shields.io/badge/Prometheus-000000?style=for-the-badge&logo=prometheus&labelColor=00000)  &nbsp;
 ![GRAFANA](https://img.shields.io/badge/Grafana-black?style=for-the-badge&logo=grafana&logoColor=orange) &nbsp;
 ![LOKI](https://img.shields.io/badge/loki-black?style=for-the-badge&logo=grafana&logoColor=orange) &nbsp;
 ![PROMTAIL](https://img.shields.io/badge/promtail-black?style=for-the-badge&logo=grafana&logoColor=orange) &nbsp;
 ![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) &nbsp;
-
+<br><br>
 ## Frontend stack :<br>
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
 ![JS](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-
+<br><br>
 ## Testing libraries :<br>
-
 ![JUNIT](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white) &nbsp;
 ![ASSERTJ](https://img.shields.io/badge/AssertJ-25A162?style=for-the-badge) &nbsp;
 ![MOCKITO](https://img.shields.io/badge/Mockito-78A641?style=for-the-badge) &nbsp;
 ![TESTCONTAINERS](https://img.shields.io/badge/Testcontainers-9B489A?style=for-the-badge) &nbsp;
-
+<br><br>
 ## Technical REST API Documentation :<br>
 ![SWAGGER](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 
