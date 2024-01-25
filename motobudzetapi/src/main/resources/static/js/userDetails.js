@@ -41,9 +41,9 @@ function createLoginForm()   {
     form.style.alignItems = "center";
 
     form.addEventListener('submit', function (event) {
-        event.preventDefault();  // Zapobiegaj domyślnemu zachowaniu submit
+        event.preventDefault();
 
-        const formData = new FormData(form);  // Pobieraj dane z formularza
+        const formData = new FormData(form);
         const data = {};
 
         formData.forEach((value, key) => {
@@ -53,11 +53,11 @@ function createLoginForm()   {
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)  // Przekształć dane formularza na JSON
+            body: JSON.stringify(data)
         };
 
         fetch(form.action, requestOptions)
-            .then(response => response.text())  // Get the response as text
+            .then(response => response.text())
             .then(text => {
                 console.log('Success:', text);
                 if (text === "/?activation=true") {
@@ -152,7 +152,6 @@ function createLoginForm()   {
         submitButton.style.color = "white";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     submitButton.addEventListener("mouseout", function () {
         submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
         submitButton.style.color = "black";

@@ -3,18 +3,18 @@ global:
 
 scrape_configs:
   - job_name: 'mb-api'
-    scheme: https  # Ensure Prometheus uses HTTPS to scrape metrics
+    scheme: https
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['motobudzet.pl']  # Ensure this is the HTTPS port
+      - targets: ['motobudzet.pl']
         labels:
           application: 'mb-api'
 #          bearer_token_file: '/ścieżka/do/pliku/z/tokenem'
+#        headers:
+#          prometheus-service: 'prometheus9090auth'
     authorization:
       type: Bearer
-      credentials: 'nRQ73XbQAXj1ZROUXG2gcS2bsWB/q5T64+QVAjMY/w3hNKHzjOlU+doSMjiqDnsSop24eGjjdiVPbFGFgnQXv/gXdm9CNuj61fu/PVHezUc1zi75YdL5bIN1+MqERiEpJ8RN9xzLaNWnmdxCHXgYzoRHpqoAQTEium+sSp5jMDlCAYcJgCPRbaor4SDOXHLDYdvdhDi/c0LEKTq/gp9z8jFyxnMy6Nx8okQE9f49WUPCd8QLxcF1IYHgnk10/txjceTrPwfR9BAxpvZ/nkhQYQ=='
-
-
+      credentials: 'Bearer prometheus9090auth'
 #    tls_config:
 #      cert_file: /etc/prometheus/motobudzet.pl.intermediate.pem
 #      key_file: /etc/prometheus/motobudzet.pl.key

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
-    @Cacheable(value = "vehicle_brand_cache_search_form")
+    @Cacheable(value = "vehicle_all_brands_cache")
     @Query(value = "select b from Brand b ORDER BY b.name asc")
     List<Brand> findAllBrands();
 

@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 public class AddressLoggingFilter extends OncePerRequestFilter {
 
-    public static final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "js/", "api/spec", "api/brands", "api/cities",  "api/models", "api/advertisements");
+    public static final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "actuator/prometheus", "js/", "api/spec", "api/brands", "api/cities",  "api/models", "api/advertisements");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -41,7 +41,6 @@ public class AddressLoggingFilter extends OncePerRequestFilter {
         String headerForwaderdFor = request.getHeader("X-Forwarded-For");
         String headerForwarderProto = request.getHeader("X-Forwarded-Proto");
 
-
         StringBuilder logMessage = new StringBuilder("Method -> " + request.getMethod() +
                 " : " + "URL -> " + "[" + request.getRequestURI() + "]" +
                 " : " + " IP -> " + realIp);
@@ -55,7 +54,7 @@ public class AddressLoggingFilter extends OncePerRequestFilter {
                 String paramValue = Arrays.toString(entry.getValue());
                 logMessage.append(paramName).append("=").append(paramValue).append(", ");
             }
-            logMessage.delete(logMessage.length() - 2, logMessage.length());  // Usunięcie ostatniego przecinka i spacji
+            logMessage.delete(logMessage.length() - 2, logMessage.length());
         }
 
         log.info(logMessage.toString());

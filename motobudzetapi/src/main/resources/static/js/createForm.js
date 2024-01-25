@@ -42,11 +42,10 @@ function fetchUserDetails() {
             return response.json();
         })
         .then(data => {
-            setTimeout(() => { // Dodanie opóźnienia tutaj
+            setTimeout(() => {
                 let cityTextarea = document.getElementById('city');
                 let cityStateSelect = document.getElementById('cityState');
 
-                // Tworzymy nowy element option
                 cityTextarea.value = data.cityName;
 
                 let optionState = document.createElement('option');
@@ -142,17 +141,15 @@ function createForm() {
         label.style.fontWeight = 'bold';
 
         const input = document.createElement(element.type === 'textarea' ? 'textarea' : (element.type === 'select' ? 'select' : 'input'));
-        input.style.border = "1px solid rgba(255, 255, 255, 0.5)"; // Dodanie ramki o szerokości 2px, stylu 'solid' i kolorze białym
+        input.style.border = "1px solid rgba(255, 255, 255, 0.5)";
         input.type = element.type;
         input.id = element.id;
         input.name = element.name;
 
         if (element.type === 'number') {
-            // Dodajemy naszą walidację dla pól number przy użyciu zdarzenia 'change'
             input.addEventListener('change', function () {
-                // Sprawdzamy czy wartość jest ujemna
                 if (parseFloat(this.value) < 0) {
-                    this.value = 0; // Ustawiamy wartość na 0
+                    this.value = 0;
                     alert('Wartość ' + element.label + ' nie może być ujemna. Zmieniono na 0.');
                 }
             });
@@ -224,7 +221,6 @@ function createForm() {
 
                 const partialCityName = input.value;
 
-                // Ustawia nowe opóźnienie
                 timeoutId = setTimeout(function () {
                     fetch(`/api/cities?partialName=${partialCityName}`)
                         .then(response => response.json())
@@ -274,7 +270,6 @@ function createForm() {
 
 
             form.appendChild(label);
-            // wrapper.appendChild(label);
             wrapper.appendChild(input);
             wrapper.appendChild(additionalSelectInput);
             form.appendChild(wrapper);
@@ -336,7 +331,7 @@ function createForm() {
 
     const fileInput = document.createElement('input');
     fileInput.setAttribute('type', 'file');
-    fileInput.setAttribute('multiple', 'multiple'); // Allow multiple file selection
+    fileInput.setAttribute('multiple', 'multiple');
     fileInput.style.display = 'none';
     fileInput.addEventListener('change', handleFileSelect);
     fileDropArea.appendChild(fileInput);

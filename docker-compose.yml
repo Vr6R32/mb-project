@@ -85,7 +85,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:v2.48.0
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./logging_infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
@@ -104,6 +104,9 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=secret
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./logging_infrastructure/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./logging_infrastructure/grafana/datasources-config.yml:/etc/grafana/provisioning/datasources/main.yml
+      - ./logging_infrastructure/grafana/dashboard-config.yml:/etc/grafana/provisioning/dashboards/main.yml
     depends_on:
       - prometheus
       - loki
@@ -131,7 +134,7 @@ services:
     image: grafana/promtail:latest
     volumes:
       - ./logs:/var/log/spring
-      - ./promtail-config.yml:/etc/promtail/config.yml
+      - ./logging_infrastructure/promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     depends_on:
       - loki

@@ -5,6 +5,7 @@ let urlSearchParams = null;
 let favouritesArray = [];
 let clickedButton = "";
 let lastSortTime = 0;
+let isMobile = false;
 
 document.addEventListener("DOMContentLoaded", async function () {
     createSearchFormContainer();
@@ -275,7 +276,6 @@ function createTabbedMenu() {
     mainContainer.insertBefore(tabbedMenu, mainContainer.firstChild);
 }
 async function createSearchFormContainer() {
-
     let mainContainer = document.getElementById('container-main');
     const formContainer = document.createElement("div");
     formContainer.setAttribute('id', 'searchFormContainer');
@@ -364,12 +364,24 @@ function createSearchForm(formContainer) {
     form.style.boxSizing = "border-box";
     form.style.maxWidth = "100%";
 
-
     const driveTypesOptions = [];
     const engineTypesOptions = [];
     const fuelTypesOptions = [];
     const transmissionTypesOptions = [];
     const brandsOptions = [];
+
+
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        isMobile = true;
+        handleTabletChange({ matches: true });
+    }
+    function handleTabletChange(e) {
+        if (e.matches) {
+            form.style.flexDirection = "column";
+            form.style.alignItems = "center";
+        }
+    }
+
 
     form.appendChild(createRowWithInputElement("np. -> Nissan","Marka:", "select", "brand", "brand", brandsOptions));
     form.appendChild(createRowWithInputElement("np. -> 350Z","Model:", "select", "model", "model"));
@@ -391,6 +403,7 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("np. -> Pomorskie", "Województwo:", "select", "cityState", "cityState"));
     form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
     form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
+
 
     let queryWithButtonDiv = document.createElement('div');
     queryWithButtonDiv.style.display = 'flex';
@@ -427,6 +440,7 @@ function createSearchForm(formContainer) {
     });
 
 }
+
 function executeAdvertisementFilterResultCount() {
     // Define the endpoint URL
     let url = 'api/advertisements/filter/count';
@@ -527,8 +541,20 @@ function handleProposalOptions(inputId,proposeElements) {
     return proposeElements;
 }
 function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions) {
+    let rowFlexBasis = '25%';
+    let labelFlexBasis = '40%';
+    let inputFlexBasis = '60%'
+
     const rowDiv = document.createElement("div");
-    rowDiv.style.flexBasis = "25%"; // Cztery kolumny - 25% szerokości wiersza
+    if(isMobile === true){
+        rowFlexBasis = '100%';
+        labelFlexBasis = '100%';
+        inputFlexBasis = '100%';
+        rowDiv.style.minWidth = '100%';
+    }
+
+    rowDiv.classList.add('searchDivElement');
+    rowDiv.style.flexBasis = rowFlexBasis;
     rowDiv.style.display = "flex";
     rowDiv.style.alignItems = "center";
     rowDiv.style.marginBottom = "10px";
@@ -536,7 +562,8 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
 
 
     const labelColumn = document.createElement("div");
-    labelColumn.style.flexBasis = "40%"; // Trzy kolumny - 30% szerokości wiersza
+    labelColumn.classList.add('searchDivLabel');
+    labelColumn.style.flexBasis = labelFlexBasis;
     labelColumn.style.display = "flex";
     labelColumn.style.alignItems = "center";
     labelColumn.style.marginRight = "5px";
@@ -557,7 +584,8 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     rowDiv.appendChild(labelColumn);
 
     const inputColumn = document.createElement("div");
-    inputColumn.style.flexBasis = "60%"; // Siedem kolumn - 70% szerokości wiersza
+    inputColumn.classList.add('searchDivInput');
+    inputColumn.style.flexBasis = inputFlexBasis;
     inputColumn.style.display = "flex";
     inputColumn.style.alignItems = "center";
     inputColumn.style.maxWidth = "100%";
@@ -584,8 +612,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         let dataListId;
         dataListId = `list-${inputId}`;
         inputElement.setAttribute("list", dataListId);
-        inputElement.setAttribute("type", "text"); // Zmień na text, aby umożliwić wybór z datalist
-        // inputElement.setAttribute("pattern", "\\d*");
+        inputElement.setAttribute("type", "text");
         const dataList = document.createElement("datalist");
         dataList.className = "custom-datalist";
         dataList.id = dataListId;

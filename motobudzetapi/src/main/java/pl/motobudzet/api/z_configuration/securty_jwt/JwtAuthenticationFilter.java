@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import pl.motobudzet.api.user_account.entity.AppUser;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static pl.motobudzet.api.z_configuration.securty_jwt.SecurityConfig.WHITE_LIST_URL;
 
@@ -43,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (areTokensMissing(request)) {
-            handleServicesThroughBearerToken(request,response,filterChain);
+            checkIsAnyInternalService(request);
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,13 +58,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void handleServicesThroughBearerToken(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws ServletException, IOException {
+    private void checkIsAnyInternalService(HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
-        if(authorization!=null && authorization.contains("Bearer")){
-            String encryptedAccessToken = authorization.substring(7);
-            String decryptedAccessToken = jwtService.decryptToken(encryptedAccessToken);
-            authenticateAccessToken(request, response, filterChain, decryptedAccessToken);
-            log.info(authorization);
+        String clientAddress = request.getRemoteAddr();
+        if(authorization!=null && authorization.contains("Bearer prometheus9090auth")){
+            AppUser principal = AppUser.builder().userName("admin").id(1L).build();
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_MONITORING"));
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    principal, null, authorities);
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
     }
 

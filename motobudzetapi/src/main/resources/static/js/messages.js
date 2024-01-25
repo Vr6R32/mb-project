@@ -102,10 +102,10 @@ function createConversationResults(conversation, container) {
 
 
     const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
-    conversationDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    conversationDetailsDiv.style.width = '100%';
     conversationDetailsDiv.style.flexBasis = 'auto';
     conversationDetailsDiv.style.display = 'flex-start';
-    conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+    conversationDetailsDiv.style.flexDirection = 'column';
 
 
     const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
@@ -116,14 +116,14 @@ function createConversationResults(conversation, container) {
 
 
     const conversationDetailsMain = document.createElement("conversationDetailsMain");
-    conversationDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    conversationDetailsMain.style.width = '100%';
     conversationDetailsMain.style.flexBasis = 'auto';
     conversationDetailsMain.style.display = 'grid';
-    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
     // conversationDetailsMain.style.marginTop = '20px';
 
     const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetails.style.width = '75%';
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
@@ -150,7 +150,7 @@ function createConversationResults(conversation, container) {
     engineCapacity.textContent = 'CM';
     let smallerDigit = document.createElement('span');
     smallerDigit.textContent = '3';
-    smallerDigit.style.fontSize = '10px'; // Zmniejszenie rozmiaru czcionki o 20%
+    smallerDigit.style.fontSize = '10px';
     smallerDigit.style.verticalAlign = 'top';
 
     engineCapacity.appendChild(smallerDigit);
@@ -241,10 +241,10 @@ function createConversationResults(conversation, container) {
     }
 
     const bottomDetailsHeader = document.createElement("div");
-    bottomDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-    bottomDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-    bottomDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-    bottomDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    bottomDetailsHeader.style.width = '100%';
+    bottomDetailsHeader.style.display = 'flex';
+    bottomDetailsHeader.style.justifyContent = 'space-between';
+    bottomDetailsHeader.style.alignItems = 'center';
     bottomDetailsHeader.style.boxSizing = "border-box";
     bottomDetailsHeader.style.flexBasis = "auto";
     bottomDetailsHeader.style.marginTop = '20px';
@@ -255,15 +255,15 @@ function createConversationResults(conversation, container) {
     locationDetailsDiv.style.position = 'relative';
 
     const locationDetails = document.createElement("div");
-    locationDetails.style.color = "white"; // Dostosuj kolor tekstu
-    locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
-    locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
+    locationDetails.style.color = "white";
+    locationDetails.style.fontSize = "16px";
+    locationDetails.style.position = 'relative';
     locationDetails.style.textAlign = 'left';
     locationDetails.style.marginRight = '15px';
-    locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-    locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
-    locationDetails.style.display = 'flex'; // Ustawienie flexbox
-    locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    locationDetails.style.whiteSpace = 'nowrap';
+    locationDetails.style.width = '100%';
+    locationDetails.style.display = 'flex';
+    locationDetails.style.alignItems = 'center';
     locationDetails.style.boxSizing = "border-box";
     locationDetails.style.flexBasis = "auto";
     locationDetails.style.textAlign = 'left';

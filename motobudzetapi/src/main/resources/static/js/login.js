@@ -64,7 +64,6 @@ const createRegisterForm = () => {
     const form = document.createElement("form");
     form.className = "form-signin";
     form.style.backgroundColor = 'black';
-    // form.style.animation = "fade-in 1s ease-in-out forwards";
 
     const heading = document.createElement("h2");
     heading.className = "form-signin-heading";
@@ -123,7 +122,7 @@ const createRegisterForm = () => {
 
 
     const submitButton = document.createElement("button");
-    submitButton.type = "button"; // Zmiana typu na "button"
+    submitButton.type = "button";
     submitButton.textContent = "Zarejerstruj";
     submitButton.style.backgroundColor = "darkgoldenrod";
     submitButton.style.border = "none";
@@ -139,15 +138,14 @@ const createRegisterForm = () => {
         submitButton.style.color = "white";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     submitButton.addEventListener("mouseout", function () {
         submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
         submitButton.style.color = "black";
     });
 
-    submitButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    submitButton.style.flexBasis = "15%";
 
-    submitButton.addEventListener("click", submitForm); // Wywołaj funkcję submitForm po kliknięciu
+    submitButton.addEventListener("click", submitForm);
 
     const loginLink = document.createElement("p");
     loginLink.textContent = "Masz już konto ? Zaloguj się!";
@@ -161,7 +159,6 @@ const createRegisterForm = () => {
         loginLink.style.color = "moccasin";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     loginLink.addEventListener("mouseout", function () {
         loginLink.style.color = "darkgoldenrod";
     });
@@ -399,8 +396,8 @@ function createForgotPasswordForm()  {
     const addEnterKeyListener = (element)=> {
         element.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !document.getElementById('overlayId')) {
-                event.preventDefault(); // Zapobiegaj domyślnemu zachowaniu Enter (np. przeładowanie strony)
-                submitForm(); // Wywołaj funkcję submitForm
+                event.preventDefault();
+                submitForm();
             }
         });
     }
@@ -472,7 +469,7 @@ function createForgotPasswordForm()  {
 
 
     const submitButton = document.createElement("button");
-    submitButton.type = "button"; // Zmiana typu na "button"
+    submitButton.type = "button";
     submitButton.textContent = "Wyślij";
     submitButton.style.backgroundColor = "darkgoldenrod";
     submitButton.style.border = "none";
@@ -488,7 +485,6 @@ function createForgotPasswordForm()  {
         submitButton.style.color = "white";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     submitButton.addEventListener("mouseout", function () {
         submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
         submitButton.style.color = "black";

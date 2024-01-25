@@ -59,10 +59,10 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     resultDiv.appendChild(fadeEffect);
 
     const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
-    conversationDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-    conversationDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-    conversationDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-    conversationDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    conversationDetailsHeader.style.width = '100%';
+    conversationDetailsHeader.style.display = 'flex';
+    conversationDetailsHeader.style.justifyContent = 'space-between';
+    conversationDetailsHeader.style.alignItems = 'center';
     conversationDetailsHeader.style.boxSizing = "border-box";
     conversationDetailsHeader.style.flexBasis = "auto";
 
@@ -74,14 +74,14 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     const titleElement = document.createElement("div");
     titleElement.textContent = ad.name;
-    titleElement.style.color = "white"; // Dostosuj kolor tekstu
-    titleElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+    titleElement.style.color = "white";
+    titleElement.style.fontSize = "24px";
     titleElement.style.textAlign = 'left';
 
     const modelBrandElement = document.createElement("div");
     modelBrandElement.textContent = ad.brand + ' ' + ad.model;
-    modelBrandElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    modelBrandElement.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+    modelBrandElement.style.color = "darkgoldenrod";
+    modelBrandElement.style.fontSize = "16px";
     modelBrandElement.style.textAlign = 'left';
 
     headerTitleNameDiv.appendChild(titleElement);
@@ -90,26 +90,26 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     conversationDetailsHeader.appendChild(headerTitleNameDiv);
 
     const priceHeader = document.createElement("div");
-    priceHeader.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    priceHeader.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-    priceHeader.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    priceHeader.style.bottom = '-5px'; // Dostosuj rozmiar tekstu
+    priceHeader.style.color = "darkgoldenrod";
+    priceHeader.style.fontSize = "18px";
+    priceHeader.style.position = 'relative';
+    priceHeader.style.bottom = '-5px';
     priceHeader.style.textAlign = 'right';
     priceHeader.style.marginRight = '25px';
-    priceHeader.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    priceHeader.style.whiteSpace = 'nowrap';
 
     const priceElement = document.createElement('div');
     priceElement.style.color = 'white';
     priceElement.style.fontSize = "26px"; // Dostosuj rozmiar tekstu
 
-    const priceValueSpan = document.createElement('span'); // Używamy span zamiast div
+    const priceValueSpan = document.createElement('span');
     priceValueSpan.textContent = ad.priceUnit;
     priceValueSpan.style.color = 'darkgoldenrod';
-    priceValueSpan.style.verticalAlign = "top"; // Wyrówn
-    priceValueSpan.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
+    priceValueSpan.style.verticalAlign = "top";
+    priceValueSpan.style.fontSize = "16px";
 
-    priceElement.textContent = formatInteger(ad.price) + ' '; // Dodajemy spację po wartości ceny
-    priceElement.appendChild(priceValueSpan); // Dodajemy ad.priceUnit bezpośrednio po ad.price
+    priceElement.textContent = formatInteger(ad.price) + ' ';
+    priceElement.appendChild(priceValueSpan);
 
     priceHeader.appendChild(priceElement);
 
@@ -117,22 +117,22 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
 
     const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
-    conversationDetailsDiv.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    conversationDetailsDiv.style.width = '100%';
     conversationDetailsDiv.style.flexBasis = 'auto';
     conversationDetailsDiv.style.display = 'flex-start';
-    conversationDetailsDiv.style.flexDirection = 'column'; // Ustawienia pionowego układu
+    conversationDetailsDiv.style.flexDirection = 'column';
     // conversationDetailsDiv.style.marginBottom = '30px';
 
 
     const conversationDetailsMain = document.createElement("conversationDetailsMain");
-    conversationDetailsMain.style.width = '100%'; // Dopasowanie do szerokości resultDiv
+    conversationDetailsMain.style.width = '100%';
     conversationDetailsMain.style.flexBasis = 'auto';
     conversationDetailsMain.style.display = 'grid';
-    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto'; // Rozkład na trzy sekcje: górną, środkową i dolną
+    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
     conversationDetailsMain.style.marginTop = '20px';
 
     const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '75%'; // Dopasowanie do szerokości resultDiv
+    advertisementDetails.style.width = '75%';
     advertisementDetails.style.flexBasis = 'auto';
     advertisementDetails.style.display = 'flex';
     advertisementDetails.style.marginTop = '15px';
@@ -159,17 +159,17 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     engineCapacity.textContent = 'CM';
     let smallerDigit = document.createElement('span');
     smallerDigit.textContent = '3';
-    smallerDigit.style.fontSize = '10px'; // Zmniejszenie rozmiaru czcionki o 20%
+    smallerDigit.style.fontSize = '10px';
     smallerDigit.style.verticalAlign = 'top';
 
     engineCapacity.appendChild(smallerDigit);
 
 
     const bottomDetailsHeader = document.createElement("bottomDetailsHeader");
-    bottomDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-    bottomDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-    bottomDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-    bottomDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    bottomDetailsHeader.style.width = '100%';
+    bottomDetailsHeader.style.display = 'flex';
+    bottomDetailsHeader.style.justifyContent = 'space-between';
+    bottomDetailsHeader.style.alignItems = 'center';
     bottomDetailsHeader.style.boxSizing = "border-box";
     bottomDetailsHeader.style.flexBasis = "auto";
 
@@ -181,15 +181,15 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     // locationDetailsDiv.style.bottom = '20px';
 
     const locationDetails = document.createElement("div");
-    locationDetails.style.color = "white"; // Dostosuj kolor tekstu
-    locationDetails.style.fontSize = "16px"; // Dostosuj rozmiar tekstu
-    locationDetails.style.position = 'relative'; // Dostosuj rozmiar tekstu
+    locationDetails.style.color = "white";
+    locationDetails.style.fontSize = "16px";
+    locationDetails.style.position = 'relative';
     locationDetails.style.textAlign = 'left';
     locationDetails.style.marginRight = '15px';
-    locationDetails.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
-    locationDetails.style.width = '100%'; // Dopasowanie do szeokości resultDiv
-    locationDetails.style.display = 'flex'; // Ustawienie flexbox
-    locationDetails.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    locationDetails.style.whiteSpace = 'nowrap';
+    locationDetails.style.width = '100%';
+    locationDetails.style.display = 'flex';
+    locationDetails.style.alignItems = 'center';
     locationDetails.style.boxSizing = "border-box";
     locationDetails.style.flexBasis = "auto";
     locationDetails.style.textAlign = 'left';
@@ -213,18 +213,18 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
 
     const favouriteBottomHeaderDiv = document.createElement("div");
-    favouriteBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    favouriteBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-    favouriteBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    favouriteBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+    favouriteBottomHeaderDiv.style.color = "darkgoldenrod";
+    favouriteBottomHeaderDiv.style.fontSize = "18px";
+    favouriteBottomHeaderDiv.style.position = 'relative';
+    favouriteBottomHeaderDiv.style.bottom = '-25px';
     favouriteBottomHeaderDiv.style.textAlign = 'right';
     favouriteBottomHeaderDiv.style.marginRight = '25px';
-    favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap';
 
     const favouriteWrapper = document.createElement('div');
     favouriteWrapper.id = 'favouriteWrapper';
     favouriteWrapper.style.display = 'flex';
-    favouriteWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+    favouriteWrapper.style.alignItems = 'center';
 
     const favouriteIconDiv = document.createElement('div');
     favouriteIconDiv.style.color = 'white';
@@ -237,7 +237,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     favouriteText.style.border = '5px';
     favouriteText.style.color = 'white';
     favouriteText.style.position = 'relative';
-    favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+    favouriteText.style.left = '-150px';
     favouriteText.style.opacity = '0';
     favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
 
@@ -249,7 +249,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
 
     favouriteIconDiv.addEventListener('mouseover', function() {
-        if (!isEventListenerActive) return;  // Jeśli zmienna stanu jest false, zignoruj akcje
+        if (!isEventListenerActive) return;
 
         favouriteIconDiv.style.cursor = "pointer";
         favouriteText.style.left = '-15px';
@@ -257,7 +257,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     });
 
     favouriteIconDiv.addEventListener('mouseout', function() {
-        if (!isEventListenerActive) return;  // Jeśli zmienna stanu jest false, zignoruj akcje
+        if (!isEventListenerActive) return;
 
         favouriteIconDiv.style.cursor = "auto";
         favouriteText.style.left = '-150px';
@@ -267,25 +267,25 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
 
     const editBottomHeaderDiv = document.createElement("div");
-    editBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    editBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-    editBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    editBottomHeaderDiv.style.bottom = '0px'; // Dostosuj rozmiar tekstu
+    editBottomHeaderDiv.style.color = "darkgoldenrod";
+    editBottomHeaderDiv.style.fontSize = "18px";
+    editBottomHeaderDiv.style.position = 'relative';
+    editBottomHeaderDiv.style.bottom = '0px';
     editBottomHeaderDiv.style.textAlign = 'right';
     editBottomHeaderDiv.style.marginRight = '25px';
-    editBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    editBottomHeaderDiv.style.whiteSpace = 'nowrap';
 
     const editWrapper = document.createElement('div');
     editWrapper.id = 'editWrapper';
     editWrapper.style.display = 'flex';
-    editWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+    editWrapper.style.alignItems = 'center';
 
     const editText = document.createElement('span');
     editText.id = 'editText';
     editText.style.border = '5px';
     editText.style.color = 'white';
     editText.style.position = 'relative';
-    editText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+    editText.style.left = '-150px';
     editText.style.opacity = '0';
     editText.style.transition = 'left 0.5s, opacity 0.5s';
 
@@ -300,13 +300,13 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     editIconDiv.addEventListener('mouseover', function() {
         editIconDiv.style.cursor = "pointer";
-        editText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
-        editText.style.opacity = '1';  // Ustaw opacity na 1
+        editText.style.left = '-15px';
+        editText.style.opacity = '1';
     });
     editIconDiv.addEventListener('mouseout', function() {
         editIconDiv.style.cursor = "auto";
-        editText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
-        editText.style.opacity = '0';  // Ustaw opacity na 0
+        editText.style.left = '-150px';
+        editText.style.opacity = '0';
     });
     editIconDiv.addEventListener('click', function() {
         event.stopPropagation();
@@ -320,26 +320,26 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
 
     const deleteBottomHeaderDiv = document.createElement("div");
-    deleteBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    deleteBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-    deleteBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-    deleteBottomHeaderDiv.style.bottom = '0px'; // Dostosuj rozmiar tekstu
+    deleteBottomHeaderDiv.style.color = "darkgoldenrod";
+    deleteBottomHeaderDiv.style.fontSize = "18px";
+    deleteBottomHeaderDiv.style.position = 'relative';
+    deleteBottomHeaderDiv.style.bottom = '0px';
     deleteBottomHeaderDiv.style.textAlign = 'right';
     deleteBottomHeaderDiv.style.marginRight = '25px';
     deleteBottomHeaderDiv.style.left = '10px';
-    deleteBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+    deleteBottomHeaderDiv.style.whiteSpace = 'nowrap';
 
     const deleteWrapper = document.createElement('div');
     deleteWrapper.id = 'deleteWrapper';
     deleteWrapper.style.display = 'flex';
-    deleteWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+    deleteWrapper.style.alignItems = 'center';
 
     const deleteText = document.createElement('span');
     deleteText.id = 'deleteText';
     deleteText.style.border = '5px';
     deleteText.style.color = 'white';
     deleteText.style.position = 'relative';
-    deleteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+    deleteText.style.left = '-150px';
     deleteText.style.opacity = '0';
     deleteText.style.transition = 'left 0.5s, opacity 0.5s';
 
@@ -357,13 +357,13 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     deleteIconDiv.addEventListener('mouseover', function() {
         deleteIconDiv.style.cursor = "pointer";
-        deleteText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
-        deleteText.style.opacity = '1';  // Ustaw opacity na 1
+        deleteText.style.left = '-15px';
+        deleteText.style.opacity = '1';
     });
     deleteIconDiv.addEventListener('mouseout', function() {
         deleteIconDiv.style.cursor = "auto";
-        deleteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
-        deleteText.style.opacity = '0';  // Ustaw opacity na 0
+        deleteText.style.left = '-150px';
+        deleteText.style.opacity = '0';
     });
 
 
@@ -403,7 +403,6 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
                 }
             })
             .catch(error => {
-                // Obsłuż błędy sieci lub inne błędy, które mogą wystąpić
                 console.error('Wystąpił błąd:', error);
             });
     });
@@ -432,8 +431,8 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
                 isEventListenerActive = false;
                 resultDiv.style.opacity = String(opacity);
-                favouriteText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
-                favouriteText.style.opacity = '0';  // Ustaw opacity na 0
+                favouriteText.style.left = '-150px';
+                favouriteText.style.opacity = '0';
                 favouriteText.innerHTML = "Usuń z ulubionych";
 
                 const fadeOutInterval = setInterval(() => {
@@ -523,8 +522,8 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     resultDiv.style.gridColumn = 1;
 
-    resultDiv.style.gridRowStart = row; // Ustaw numer rzędu
-    resultDiv.style.gridRowEnd = row + 1; // Ustaw numer rzędu
+    resultDiv.style.gridRowStart = row;
+    resultDiv.style.gridRowEnd = row + 1;
 
 
 

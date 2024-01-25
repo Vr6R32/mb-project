@@ -18,9 +18,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          AuthenticationException authException) throws IOException {
 
         String requestedUrl = request.getRequestURI();
-
         String loginUrl = "/login?redirect=" + requestedUrl;
-
         redirectStrategy.sendRedirect(request, response, loginUrl);
     }
 

@@ -520,7 +520,7 @@ function handleDeleteZoneDrop(e) {
         //     thumbnailzone.parentNode.removeChild(thumbnailzone);
         // }
 
-        dragSrcElement = null; // Resetuj źródłowy element przeciągania
+        dragSrcElement = null;
     }
 
     return false;

@@ -20,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SpringMailSenderService {
 
+    public static final String BACKGROUND_IMAGE_URL = "https://motobudzet.pl/api/static/background_email";
     private final JavaMailSender mailSender;
     private final FilePathsConfig pathsConfig;
     private String infoEmail = "info@motobudzet.pl";
@@ -81,14 +82,15 @@ public class SpringMailSenderService {
 
     private void addStaticResources(MimeMessageHelper helper) throws MessagingException {
         String logoPath = pathsConfig.getPrivateFilePath() + "logo.png";
-        String backgroundPath = pathsConfig.getPrivateFilePath() + "emailBackground.jpg";
+//        String backgroundPath = pathsConfig.getPrivateFilePath() + "emailBackground.jpg";
         FileSystemResource logo = new FileSystemResource(new File(logoPath));
         helper.addInline("image001", logo);
     }
 
     private String createHtmlStringMessageNotification(EmailMessageRequest request) {
+
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<font color='darkgoldenrod'>Wiadomość od użytkownika</font><br>" +
@@ -103,7 +105,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringRegisterActivation(AppUser user) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -117,7 +119,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringResetPassword(AppUser user) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -132,7 +134,7 @@ public class SpringMailSenderService {
 
     private String createHtmlStringActivationConfirmation(AppUser user, Advertisement advertisement) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
@@ -147,7 +149,7 @@ public class SpringMailSenderService {
 
     private String createHtmlNewAdvertisementToActivate(UUID id) {
         return "<center>" +
-                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(https://motobudzet.pl/api/static/background_email); background-size: cover;'>" +
+                "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj, pojawilo sie nowe ogłoszenie do aktywacji. " + "</font></b><br>" +

@@ -148,7 +148,7 @@ function createHeaderTitle(advertisement, container, owner) {
     const toolTipEdit = document.createElement('span');
     toolTipEdit.textContent = 'Edytuj Ogłoszenie';
     toolTipEdit.className = 'tooltip';
-    document.body.appendChild(toolTipEdit);  // Dodanie podpowiedzi do dokumentu
+    document.body.appendChild(toolTipEdit);
 
     const toolTipMessageSend = document.createElement('span');
     toolTipMessageSend.textContent = 'Wyślij wiadomość';
@@ -262,7 +262,7 @@ function createMessageBox(messageIcon, loggedUser) {
     overlay.style.left = '0';
     overlay.style.width = '100%';
     overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 
     const dialogBox = document.createElement('div');
     dialogBox.setAttribute('id', 'dialogBox')
@@ -272,15 +272,15 @@ function createMessageBox(messageIcon, loggedUser) {
     dialogBox.style.height = '250px';
     dialogBox.style.width = '600px';
     dialogBox.style.transform = 'translate(-50%, -50%)';
-    dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; // Czarny kolor z przeźroczystością
+    dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 
     dialogBox.style.borderRadius = '15px';
-    dialogBox.style.boxShadow = '0 0 20px darkgoldenrod'; // Dodaj efekt cienia
-    dialogBox.style.flexDirection = 'column'; // Kierunek kolumny
-    dialogBox.style.alignItems = 'center'; // Wyśrodkowanie w pionie
-    dialogBox.style.textAlign = 'center'; // Wyśrodkowanie zawartości w poziomie
+    dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
+    dialogBox.style.flexDirection = 'column';
+    dialogBox.style.alignItems = 'center';
+    dialogBox.style.textAlign = 'center';
     dialogBox.style.display = 'flex';
-    dialogBox.style.justifyContent = 'center'; // Wyśrodkowanie zawartości w pionie
+    dialogBox.style.justifyContent = 'center';
 
     const headerTitle = document.createElement('dialogBox');
     headerTitle.setAttribute('id', 'dialogBoxTitle');
@@ -407,7 +407,6 @@ function fetchAdvertisement() {
             advertisement = data;
 
             const containerMain = document.getElementById('container-main');
-            // container.style.maxWidth = "100%";
             containerMain.style.marginBottom = '150px';
 
             setTitleInUrl(data);

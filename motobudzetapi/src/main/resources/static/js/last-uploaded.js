@@ -4,10 +4,7 @@ let currentMinIndex = 0;
 let currentMaxIndex = 4;
 const resultsPerPage = 4;
 
-document.addEventListener("DOMContentLoaded", function () {
-    const {container, prevPageButton, nextPageButton} = createLastUploadedContainer();
-    getLastUploaded(0);
-
+function handlePaginationArrows(prevPageButton, nextPageButton, container) {
     prevPageButton.style.userSelect = 'none';
     nextPageButton.style.userSelect = 'none';
 
@@ -18,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             clearAdvertisements(container, 'left');
             setTimeout(() => {
                 displayLastUploaded(currentMinIndex, currentMaxIndex, 'right');
-            }, 500); // Opóźnienie dopasowane do czasu animacji
+            }, 500);
         }
     });
 
@@ -29,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
             clearAdvertisements(container, 'right');
             setTimeout(() => {
                 displayLastUploaded(currentMinIndex, currentMaxIndex, 'left');
-            }, 500); // Opóźnienie dopasowane do czasu animacji
+            }, 500);
         }
     });
 
@@ -49,6 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addHoverEffect(prevPageButton);
     addHoverEffect(nextPageButton);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const {container, prevPageButton, nextPageButton} = createLastUploadedContainer();
+    getLastUploaded(0);
+    handlePaginationArrows(prevPageButton, nextPageButton, container);
 });
 
 

@@ -138,7 +138,7 @@ function createForgotPasswordForm() {
 
 
     const submitButton = document.createElement("button");
-    submitButton.type = "button"; // Zmiana typu na "button"
+    submitButton.type = "button";
     submitButton.textContent = "Wyślij";
     submitButton.style.backgroundColor = "darkgoldenrod";
     submitButton.style.border = "none";
@@ -154,7 +154,6 @@ function createForgotPasswordForm() {
         submitButton.style.color = "white";
     });
 
-    // Przywrócenie efektu fade po opuszczeniu przycisku
     submitButton.addEventListener("mouseout", function () {
         submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
         submitButton.style.color = "black";

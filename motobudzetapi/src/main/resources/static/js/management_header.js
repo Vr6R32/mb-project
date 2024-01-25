@@ -23,12 +23,12 @@ function createManagementDiv() {
         managementDiv.style.justifyContent = 'center';
         managementDiv.style.alignItems = 'center';
         managementDiv.style.marginTop = '200px';
-        managementDiv.style.width = '100%'; // Ensure the parent element takes the full width
+        managementDiv.style.width = '100%';
         managementDiv.style.maxWidth = advertisementContainerStyle.width
         managementDiv.style.marginLeft = 'auto';
         managementDiv.style.marginRight = 'auto';
         managementDiv.style.backgroundColor = 'black';
-        managementDiv.style.border = '1px solid #ccc'; // Set the border
+        managementDiv.style.border = '1px solid #ccc';
         managementDiv.style.borderRadius = '200px';
 
         managementDiv.style.marginBottom = '20px';
@@ -47,27 +47,22 @@ function createManagementDiv() {
         managementHeader.style.fontWeight = 'bold';
         managementHeader.style.boxShadow = '0 2px 4px rgba(0,0,0,0.5)';
 
-        // Append the management header to the management div
         managementDiv.appendChild(managementHeader);
 
-        // Create the buttons container div
         const buttonsDiv = document.createElement('div');
         buttonsDiv.style.display = 'flex';
         buttonsDiv.style.justifyContent = 'center';
         buttonsDiv.style.alignItems = 'center';
         buttonsDiv.style.marginTop = '20px';
         buttonsDiv.style.marginBottom = '20px';
-        buttonsDiv.style.width = '100%'; // Make sure it takes full width
+        buttonsDiv.style.width = '100%';
 
-        // Create the verify and reject buttons
         const verifyButton = createButton('Zatwierdź', 'verifyButton', '/api/static/successIcon');
         const rejectButton = createButton('Nie zatwierdzaj', 'rejectButton', '/api/static/rejectIcon');
 
-        // Append buttons to the buttons container
         buttonsDiv.appendChild(verifyButton);
         buttonsDiv.appendChild(rejectButton);
 
-        // Append the buttons container to the management div
         managementDiv.appendChild(buttonsDiv);
 
 
@@ -78,7 +73,7 @@ function createManagementDiv() {
             event.preventDefault();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id'); // Pobranie wartości parametru 'id'
+            const id = urlParams.get('id');
 
             fetch(`/api/advertisements/reject/${id}`, {
                 method: 'POST',
@@ -105,7 +100,7 @@ function createManagementDiv() {
             event.preventDefault();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id'); // Pobranie wartości parametru 'id'
+            const id = urlParams.get('id');
 
             fetch(`/api/advertisements/verify/${id}`, {
                 method: 'POST',
@@ -149,21 +144,21 @@ function createButton(text, id, iconSrc) {
     button.style.display = 'flex';
     button.style.alignItems = 'center';
     button.style.justifyContent = 'center';
-    button.style.position = 'relative'; // Set position for absolute positioning of the icon
-    button.style.border = '1px solid #ccc'; // Set the border
-    button.style.borderRadius = '10px'; // Set the border radius
-    button.style.backgroundColor = 'transparent'; // Set the background to be transparent
+    button.style.position = 'relative';
+    button.style.border = '1px solid #ccc';
+    button.style.borderRadius = '10px';
+    button.style.backgroundColor = 'transparent';
     button.style.color = 'white';
     button.style.fontSize = 'bold';
 
     const icon = document.createElement('img');
     icon.src = iconSrc;
     icon.alt = 'icon';
-    icon.style.height = '50px'; // Set the icon size
+    icon.style.height = '50px';
     if(id==='rejectButton'){
-        icon.style.height = '35px'; // Set the icon size
+        icon.style.height = '35px';
     }
-    icon.style.marginRight = '10px'; // Add some space between the icon and text
+    icon.style.marginRight = '10px';
 
     const buttonText = document.createTextNode(text)
     button.appendChild(icon);

@@ -34,9 +34,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SecurityConfig {
 
+    private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler logoutHandler;
-    private final UserDetailsServiceImpl userDetailsService;
 
 
     @Bean
@@ -84,7 +84,6 @@ public class SecurityConfig {
             "/api/resources/logo",
             "/api/cities/states",
             "/api/brands",
-//            "/actuator/**",
             "/api/user/forgot",
             "/api/static/**",
             "/api/v1/clone/**",
@@ -115,21 +114,22 @@ public class SecurityConfig {
                             .requestMatchers("/api/user/updateDetails/**").hasRole("AWAITING_DETAILS")
 
                             .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
                             .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
                             .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").authenticated()
 
                             .requestMatchers("/logout").authenticated()
                             .requestMatchers("/account").authenticated()
                             .requestMatchers("/messages").authenticated()
                             .requestMatchers("/favourites").authenticated()
-                            .requestMatchers("/advertisement/new").authenticated()
                             .requestMatchers("/advertisements").authenticated()
                             .requestMatchers("/api/messages/**").authenticated()
                             .requestMatchers("/api/user/details").authenticated()
+                            .requestMatchers("/advertisement/new").authenticated()
                             .requestMatchers("/advertisement/edit").authenticated()
                             .requestMatchers("/api/conversations/**").authenticated()
                             .requestMatchers("/api/users/favourites/**").authenticated()
+                            .requestMatchers("/actuator/prometheus").hasAnyRole("ADMIN","MONITORING")
 
                             .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
                             .requestMatchers("/management").hasRole("ADMIN")
@@ -154,9 +154,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Odblokuj dostęp ze wszystkich domen (uwaga na bezpieczeństwo w środowisku produkcyjnym)
-        configuration.addAllowedMethod("*"); // Odblokuj wszystkie metody HTTP
-        configuration.addAllowedHeader("*"); // Odblokuj wszystkie nagłówki
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -175,25 +175,4 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
-//    @Bean
-//    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-//        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-//
-//        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-//        grantedAuthoritiesConverter.setAuthorityPrefix("");
-//        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-//        converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-//
-//
-////        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-////            List<String> roles = (List<String>) jwt.getClaims().get("roles");
-////            return roles.stream()
-////                    .map(SimpleGrantedAuthority::new)
-////                    .collect(Collectors.toList());
-////        });
-//
-//
-//        return converter;
-//    }
 }

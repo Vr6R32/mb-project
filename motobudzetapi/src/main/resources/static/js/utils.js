@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function isMobileDevice() {
     const userAgent = navigator.userAgent;
-    const maxMobileWidth = 300; // Typical breakpoint for mobile devices
+    const maxMobileWidth = 300;
     const isMobileWidth = window.innerWidth <= maxMobileWidth;
     return /Mobi|Android/i.test(userAgent) || isMobileWidth;
 }
@@ -26,16 +26,16 @@ async function fetchWithAuth(url, options = {}) {
 
 function handleZoomSlider() {
     const slider = document.getElementById('zoom-slider');
-    const defaultVal = 1; // ustaw wartość domyślną bezpośrednio
+    const defaultVal = 1;
 
     slider.oninput = (e) => {
         const val = e.target.valueAsNumber;
 
-        if (Math.abs(val - defaultVal) < 0.02) { // 0.02 to zakres 'snap', dostosuj wg potrzeb
+        if (Math.abs(val - defaultVal) < 0.02) {
             slider.value = defaultVal;
-            changeZoom(defaultVal); // Wywołaj funkcję zmiany skali
+            changeZoom(defaultVal);
         } else {
-            changeZoom(val); // Kontynuuj normalną zmianę skali
+            changeZoom(val);
         }
     };
     showCookieBarNotification();
@@ -382,7 +382,6 @@ function showSuccessNotification(message) {
 
 
 function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
-    // Znajdź najbardziej równomierny podział zdjęć na wiersze
     let rows = Math.ceil(images.length / 6);
     let imagesPerRow = Math.ceil(images.length / rows);
 
@@ -391,18 +390,17 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
     for (let i = 0; i < rows; i++) {
         let row = document.createElement('div');
         row.style.display = 'flex';
-        row.style.flexWrap = 'wrap'; // Pozwala elementom przechodzić do nowego wiersza
+        row.style.flexWrap = 'wrap';
         row.style.justifyContent = 'center';
         row.style.alignItems = 'center';
         parentDiv.appendChild(row);
         rowContainers.push(row);
     }
 
-    // Dodaj obrazy do wierszy
     images.forEach((imageUrl, index) => {
         const figure = document.createElement('figure');
         figure.className = 'ph-image';
-        figure.style.width = '220px'; // Stała szerokość
+        figure.style.width = '220px';
         figure.style.height = '170px';
         figure.style.margin = '10px';
         figure.style.cursor = 'pointer';
@@ -420,7 +418,6 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
             }
         });
 
-        // Dodaj figure do odpowiedniego wiersza
         let rowIndex = Math.floor(index / imagesPerRow);
         rowContainers[rowIndex].appendChild(figure);
     });
@@ -554,26 +551,26 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
     resultDiv.appendChild(imageDiv);
 
     const advertisementDetailsHeader = document.createElement("advertisementDetailsHeader");
-    advertisementDetailsHeader.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-    advertisementDetailsHeader.style.display = 'flex'; // Ustawienie flexbox
-    advertisementDetailsHeader.style.justifyContent = 'space-between'; // Umieszczenie elementów na końcach kontenera
-    advertisementDetailsHeader.style.alignItems = 'center'; // Wyśrodkowanie elementów w pionie
+    advertisementDetailsHeader.style.width = '100%';
+    advertisementDetailsHeader.style.display = 'flex';
+    advertisementDetailsHeader.style.justifyContent = 'space-between';
+    advertisementDetailsHeader.style.alignItems = 'center';
     advertisementDetailsHeader.style.boxSizing = "border-box";
     advertisementDetailsHeader.style.flexBasis = "auto";
 
     const nameElement = document.createElement("div");
     nameElement.textContent = advertisement.name;
-    nameElement.style.color = "white"; // Dostosuj kolor tekstu
-    nameElement.style.fontSize = "24px"; // Dostosuj rozmiar tekstu
+    nameElement.style.color = "white";
+    nameElement.style.fontSize = "24px";
     nameElement.style.textAlign = 'left';
 
     const dateElement = document.createElement("dateDiv");
     dateElement.textContent = 'Dodane ' + advertisement.creationDate;
-    dateElement.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-    dateElement.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
+    dateElement.style.color = "darkgoldenrod";
+    dateElement.style.fontSize = "18px";
     dateElement.style.textAlign = 'right';
-    dateElement.style.marginLeft = 'auto'; // Wyrównaj od prawej krawędzi
-    dateElement.style.whiteSpace = 'nowrap'; // T
+    dateElement.style.marginLeft = 'auto';
+    dateElement.style.whiteSpace = 'nowrap';
 
     // mainContainer.appendChild(dateElement);
     // mainContainer.insertBefore(dateElement, titleDiv);
@@ -1041,20 +1038,20 @@ function createDropDeleteZone(){
         deleteZone.appendChild(trashIcon);
 
         deleteZone.addEventListener('mouseover', function() {
-            trashIcon.src = '/api/static/trashOpen'; // Switch to open trash icon
+            trashIcon.src = '/api/static/trashOpen';
         });
         deleteZone.addEventListener('mouseout', function() {
-            trashIcon.src = '/api/static/trashClosed'; // Switch back to closed trash icon
+            trashIcon.src = '/api/static/trashClosed';
         });
 
         deleteZone.addEventListener('dragover', handleDeleteZoneDragOver);
         deleteZone.addEventListener('drop', handleDeleteZoneDrop);
 
         deleteZone.addEventListener('dragenter', function() {
-            trashIcon.src = '/api/static/trashOpen'; // Switch to open trash icon
+            trashIcon.src = '/api/static/trashOpen';
         });
         deleteZone.addEventListener('dragleave', function() {
-            trashIcon.src = '/api/static/trashClosed'; // Switch back to closed trash icon
+            trashIcon.src = '/api/static/trashClosed';
         });
 
         let thumbnailzone = document.getElementById('half-container-big2');
@@ -1106,13 +1103,11 @@ function handleEvType() {
         const engineCapacity = document.getElementById('engineCapacity');
 
         if (fuelType === 'EV') {
-            // Sprawdzanie, czy opcja 'AUTOMAT' istnieje w 'transmissionType'
             if (Array.from(transmissionType.options).some(option => option.value === 'Automat')) {
                 transmissionType.value = 'Automat';
             }
             transmissionType.disabled = true;
 
-            // Analogicznie dla 'engineType'
             if (Array.from(engineType.options).some(option => option.value === 'Cewka')) {
                 engineType.value = 'Cewka';
             }
@@ -1155,16 +1150,16 @@ function createSnowflake() {
     const snowflake = document.createElement('div');
     snowflake.classList.add('snowflake');
     snowflake.style.left = Math.random() * window.innerWidth + 'px';
-    snowflake.style.animationDuration = Math.random() * 3 + 5 + 's'; // between 5 - 8 seconds
+    snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
     snowflake.style.opacity = Math.random();
-    snowflake.style.fontSize = Math.random() * 20 + 10 + 'px'; // większe rozmiary
+    snowflake.style.fontSize = Math.random() * 20 + 10 + 'px';
     snowflake.style.zIndex = '-100';
 
     document.getElementById('snowflakeContainer').appendChild(snowflake);
 
     setTimeout(() => {
         snowflake.remove();
-    }, 8000); // Zwiększony czas do 8 sekund
+    }, 8000);
 }
 
 setInterval(createSnowflake, 300);
@@ -1173,9 +1168,9 @@ setInterval(createSnowflake, 300);
 function createDescriptionEditor() {
     let horizontalContainer = document.getElementById('half-container-horizontal');
     horizontalContainer.style.marginBottom = '200px';
-    horizontalContainer.style.padding = '20px'; // na przykład 20 pikseli
+    horizontalContainer.style.padding = '20px';
 
-    let editor = document.createElement('div'); // zamiast 'textarea'
+    let editor = document.createElement('div');
     editor.id = "editor";
 
     let label = document.createElement('div');
@@ -1201,7 +1196,7 @@ function createDescriptionEditor() {
     editor.style.backgroundColor = 'black';
     editor.style.borderRadius = '10px';
     editor.style.border = "1px solid rgba(255, 255, 255, 0.5)";
-    editor.style.overflowY = 'auto'; // Dodane
+    editor.style.overflowY = 'auto';
 
     horizontalContainer.appendChild(label);
     horizontalContainer.appendChild(editor);
@@ -1314,13 +1309,12 @@ function getRedirectLink() {
 function setFailGif(submitButton) {
     submitButton.style.display = 'none';
     const failGif = document.createElement('img');
-    failGif.src = '/api/static/validationFail'; // Ścieżka do gif niepowodzenia walidacji
+    failGif.src = '/api/static/validationFail';
     failGif.id = 'failGif';
     failGif.style.height = '200px';
     failGif.style.width = '200px';
     submitButton.parentNode.insertBefore(failGif, submitButton);
 
-    // Po 3 sekundach ukryj gif i pokaż ponownie przycisk
     setTimeout(function () {
         failGif.parentNode.removeChild(failGif);
         submitButton.style.display = 'block';
