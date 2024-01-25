@@ -22,13 +22,16 @@ process of posting and browsing automotive listings.
 
 
 ## Backend stack : <br>
-![JAVA17](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
+
+[//]: # (![JAVA17]&#40;https://img.shields.io/badge/17-Java-orange?style=for-the-badge&#41; &nbsp;)
+![JAVA](https://img.shields.io/badge/Java-orange?style=for-the-badge)![17](https://img.shields.io/badge/17-gray?style=for-the-badge) &nbsp;
 ![MAVEN](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
 ![SPRING](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring) &nbsp;
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)  &nbsp;
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)  &nbsp;
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)  &nbsp;
 ![THYMELEAF](https://img.shields.io/badge/Thymeleaf-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)  &nbsp;
+
 
 ![YAML](https://img.shields.io/badge/yaml-%23ffffff.svg?style=for-the-badge&logo=yaml&logoColor=151515)  &nbsp;
 ![JSON](https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white)  &nbsp;
@@ -52,7 +55,6 @@ process of posting and browsing automotive listings.
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
 ![JS](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-
 
 ## Testing libraries :<br>
 
