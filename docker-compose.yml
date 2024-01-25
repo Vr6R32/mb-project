@@ -26,7 +26,7 @@ services:
     ports:
       - "20134:20134"
     volumes:
-      - ./logs:/var/log/spring
+      - ./logging_infrastructure/api-logs:/var/log/spring
       - ./files/public:/app/files/public
       - ./files/private:/app/files/private
     environment:
@@ -47,7 +47,7 @@ services:
       - "3309:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./sql/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
+      - ./db-init/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: dontgotosql
@@ -133,7 +133,7 @@ services:
     container_name: promtail
     image: grafana/promtail:latest
     volumes:
-      - ./logs:/var/log/spring
+      - ./logging_infrastructure/api-logs:/var/log/spring
       - ./logging_infrastructure/promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     depends_on:
