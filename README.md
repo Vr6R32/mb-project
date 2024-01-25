@@ -25,8 +25,8 @@ process of posting and browsing automotive listings.
 
 [//]: # (![JAVA17]&#40;https://img.shields.io/badge/17-Java-orange?style=for-the-badge&#41; &nbsp;)
 ![JAVA](https://img.shields.io/badge/Java-orange?style=for-the-badge)![17](https://img.shields.io/badge/17-gray?style=for-the-badge) &nbsp;
-![MAVEN](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
 ![SPRING](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring) &nbsp;
+![MAVEN](https://img.shields.io/badge/maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)  &nbsp;
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)  &nbsp;
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)  &nbsp;
