@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.advertisement.service.AdvertisementService;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.service.AppUserCustomService;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import static pl.motobudzet.api.mappers.ConversationMapper.mapConversationToDTO;
 public class ConversationService {
 
     private final AdvertisementService advertisementService;
-    private final AppUserCustomService userCustomService;
     private final ConversationRepository conversationRepository;
 
     public Conversation createConversation(UUID advertisementId, AppUser loggedUser) {
@@ -35,10 +33,9 @@ public class ConversationService {
         return conversation;
     }
 
-    public List<ConversationDTO> getAllConversations(String loggedUser) {
-        AppUser user = userCustomService.getUserByName(loggedUser);
-        List<Conversation> conversationList = conversationRepository.findAllConversationsByUserId(user.getId());
-        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, loggedUser)).toList();
+    public List<ConversationDTO> getAllConversations(AppUser loggedUser) {
+        List<Conversation> conversationList = conversationRepository.findAllConversationsByUserId(loggedUser.getId());
+        return conversationList.stream().map(conversation -> mapConversationToDTO(conversation, loggedUser.getUsername())).toList();
     }
 
     public Long findConversationIdByAdvIdAndSender(UUID advertisementId, String name) {

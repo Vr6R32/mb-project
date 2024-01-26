@@ -6,7 +6,6 @@ import pl.motobudzet.api.emailSender.EmailMessageRequest;
 import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.mappers.MessageMapper;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.service.AppUserCustomService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageService {
 
-    private final AppUserCustomService userCustomService;
     private final ConversationService conversationService;
     private final MessagesRepository messagesRepository;
 //    private final KafkaServiceInterface kafkaService;

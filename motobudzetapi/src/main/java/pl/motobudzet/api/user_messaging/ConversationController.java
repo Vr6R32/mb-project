@@ -3,6 +3,7 @@ package pl.motobudzet.api.user_messaging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,8 @@ public class ConversationController {
 
     @GetMapping
     public List<ConversationDTO> getAllConversations(Authentication authentication) {
-        return conversationService.getAllConversations(authentication.getName());
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return conversationService.getAllConversations(loggedUser);
     }
 }
 

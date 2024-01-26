@@ -19,7 +19,6 @@ import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.file_manager.FileService;
 import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.service.AppUserCustomService;
 import pl.motobudzet.api.user_account.service.UserDetailsService;
 import pl.motobudzet.api.vehicle_brand.BrandService;
 import pl.motobudzet.api.vehicle_model.ModelService;
@@ -42,7 +41,6 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     private final BrandService brandService;
     private final ModelService modelService;
-    private final AppUserCustomService userCustomService;
     private final UserDetailsService userDetailsService;
     private final SpringMailSenderService mailSenderService;
     private final LocationService locationService;
@@ -78,7 +76,7 @@ public class AdvertisementService {
         fileService.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
         sendEmailNotificationToManagement(advertisementId);
-        return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").header("edited", "true").body("inserted !");
+        return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").body("inserted !");
     }
 
     public ResponseEntity<String> editExistingAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
@@ -95,7 +93,7 @@ public class AdvertisementService {
             String redirectUrl = "/advertisement?id=" + advertisement.getId();
 
             sendEmailNotificationToManagement(advertisement.getId());
-            return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").header("edited", "true").body("inserted !");
+            return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
     }

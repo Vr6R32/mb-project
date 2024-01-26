@@ -50,7 +50,7 @@ public class TokenEncryption {
     }
 
     private static IvParameterSpec generateIv() {
-        byte[] iv = new byte[16]; // 128-bit IV for AES
+        byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
         return new IvParameterSpec(iv);
     }

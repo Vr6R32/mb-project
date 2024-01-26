@@ -67,26 +67,12 @@ public class RegistrationService {
         }
     }
 
-//    public ResponseEntity<String> activateAccount(String activationLink,HttpServletResponse response,HttpServletRequest request) {
-//        AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
-//
-////        if(user!=null){
-//        if(user!=null && !user.getAccountEnabled()){
-//            user.setAccountEnabled(true);
-//            AppUser enabledUser = userRepository.saveAndFlush(user);
-//            setAuthentication(response, request, enabledUser);
-//            return ResponseEntity.ok("Konto aktywowane!");
-//        }
-//        return ResponseEntity.ok("Link nieaktwny!");
-//    }
-
     public void confirmEmail(String activationLink, HttpServletResponse response) {
         AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
         if (user != null && !user.getAccountEnabled()) {
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
-
             jwtService.authenticate(enabledUser,response);
 
             try {
