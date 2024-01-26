@@ -3,19 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-
 function createLoginForm()   {
-
-    let containerMain = document.getElementById('container-main');
-    containerMain.style.minHeight = '1000px';
-    containerMain.style.justifyContent = 'center';
-    containerMain.style.alignItems = 'center';
-    containerMain.style.backgroundColor = 'transparent';
-    containerMain.style.border = '0px';
-    containerMain.style.boxShadow = 'none'; // lub containerMain.style.boxShadow = '';
+    setContainerMainStyles();
 
     let formContainer = document.getElementById("userDetailsForm");
-
     formContainer.innerHTML = '';
 
     formContainer.style.boxShadow = "0px 0px 30px darkgoldenrod";
@@ -87,85 +78,18 @@ function createLoginForm()   {
     heading.className = "form-signin-heading";
     heading.textContent = "Uzupełnij swoje dane kontaktowe";
 
-    // City
     const cityLabel = createLabel("city", "Miasto");
     const cityInput = createInput("text", "city", "Miasto",form);
-
-    // Phone Number
     const phoneLabel = createLabel("phoneNumber", "Telefon");
     const phoneInput = createInput("text", "phoneNumber", "Telefon");
-
-    // City State
     const cityStateLabel = createLabel("cityState", "Województwo");
     const cityStateInput = createInput("text", "cityState", "Województwo");
-
-
-
-
-    // Name
     const nameLabel = createLabel("name", "Imię");
     const nameInput = createInput("text", "name", "Imię");
-
-    // Surname
     const surnameLabel = createLabel("surname", "Nazwisko");
     const surnameInput = createInput("text", "surname", "Nazwisko");
 
-
-    const usernameLabel = document.createElement("label");
-    usernameLabel.htmlFor = "username";
-    usernameLabel.className = "sr-only";
-    usernameLabel.textContent = "Nazwa użytkownika";
-
-    const usernameInput = document.createElement("input");
-    usernameInput.type = "text";
-    usernameInput.id = "username";
-    usernameInput.name = "username";
-    usernameInput.className = "form-control";
-    usernameInput.placeholder = "Username";
-    usernameInput.required = true;
-    usernameInput.autofocus = true;
-
-    const passwordLabel = document.createElement("label");
-    passwordLabel.htmlFor = "password";
-    passwordLabel.className = "sr-only";
-    passwordLabel.textContent = "Hasło";
-
-    const passwordInput = document.createElement("input");
-    passwordInput.type = "password";
-    passwordInput.id = "password";
-    passwordInput.name = "password";
-    passwordInput.className = "form-control";
-    passwordInput.placeholder = "Password";
-    passwordInput.required = true;
-
-
-    const submitButton = document.createElement("button");
-    submitButton.type = "submit";
-    submitButton.textContent = "Zaloguj";
-    submitButton.style.backgroundColor = "darkgoldenrod";
-    submitButton.style.border = "none";
-    submitButton.style.width = "150px";
-    submitButton.style.margin = "auto";
-    submitButton.style.display = "block";
-    submitButton.style.color = "black";
-    submitButton.style.padding = "10px 20px";
-    submitButton.style.borderRadius = "5px";
-    submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    submitButton.style.transition = "background-position 0.3s ease-in-out";
-    submitButton.style.marginRight = "auto";
-
-
-    submitButton.addEventListener("mouseover", function () {
-        submitButton.style.boxShadow = '0 0 20px moccasin';
-        submitButton.style.color = "white";
-    });
-
-    submitButton.addEventListener("mouseout", function () {
-        submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
-        submitButton.style.color = "black";
-    });
-
-    submitButton.style.flexBasis = "15%";
+    const submitButton = createSubmitButton("Wyślij");
 
     form.appendChild(heading);
     form.appendChild(cityLabel);

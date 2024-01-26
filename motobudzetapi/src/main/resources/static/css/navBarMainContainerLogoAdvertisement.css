@@ -5,13 +5,10 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('background.jpg');
-    /*background-image: url('kozak.png');*/
-    /*background-size: cover; !* Skaluje obraz do rozmiarów elementu nadrzędnego *!*/
-    /*background-size: 80% 80%;*/
     background-size: 1920px auto;
-    background-position: center center; /* Ustala położenie obrazu tła na środek */
-    background-repeat: no-repeat; /* Zapobiega powtarzaniu się obrazu */
-    background-attachment: fixed; /* Obraz tła będzie nieruchomy podczas przewijania */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
 }
 /*OPACITY IDAC DO BOTTOM STRONY*/
@@ -22,16 +19,16 @@ header.header-hidden {
 
 #popupNavbar {
     position: fixed;
-    top: -120px; /* starting position outside of the viewport */
+    top: -120px;
     width: 98%;
-    background-color: black; /* light color */
+    background-color: black;
     border: dashed white 2px;
     border-radius: 20px;
     text-align: center;
     padding: 10px;
-    transition: top 0.5s; /* smooth slide animation */
-    z-index: 9999; /* ensure the navbar appears on top of other content */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* shadow for depth effect */
+    transition: top 0.5s;
+    z-index: 9999;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #popupNavbar p {
@@ -43,53 +40,44 @@ header.header-hidden {
 header {
     position: fixed;
     top: 0;
-    /*left: -35px;*/
     right: 0;
     height: 5vw;
     z-index: 999;
     display: flex;
     align-items: center;
-    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
-    width: 100%; /* Ustaw szerokość na 100% */
-    /* OPACITY TYLKO TŁA ! */
+    justify-content: center;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    /*border-radius: 0 0 100px 100px;*/
     padding: 10px 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 5);
-    /*OPACITY POWROT DO TOP STRONY*/
     transition: opacity 1s ease;
-    /*max-width: 100%;*/
 }
 
 
 .nav-buttons {
     display: flex;
-    /*align-items: flex-start;*/
-    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
-    width: 100%; /* Ustaw szerokość na 100% */
-    /*margin-left: 4%;*/
+    justify-content: center;
+    width: 100%;
     margin-left: 8%;
     margin-right: 8%;
 }
 
 .nav-buttons a {
-    /*padding: 10px 45px;*/
-    /*margin-left: 20px;*/
     background-image: linear-gradient(to right, #BA8B02 0%, #181818 51%, #BA8B02 100%);
-    padding: 0.5vw 5%; /* Użyj większej wartości paddingu dla szerszych przycisków */
+    padding: 0.5vw 5%;
     margin-left: 2%;
     color: black;
     text-transform: uppercase;
-    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
+    justify-content: center;
     border-radius: 50px 0px 50px 0px;
     text-decoration: none;
-    box-shadow: 0 0 10px moccasin; /* Zmniejsz cień */
+    box-shadow: 0 0 10px moccasin;
     transition: 0.5s;
     background-size: 300% auto;
-    font-size: 1.3vw; /* Użyj mniejszej wielkości czcionki */
-    display: flex; /* Dodaj display:flex */
-    align-items: center; /* Wyśrodkuj tekst w pionie */
-    text-align: center; /* Wyśrodkuj tekst w poziomie */
+    font-size: 1.3vw;
+    display: flex;
+    align-items: center;
+    text-align: center;
 
 }
 
@@ -100,20 +88,16 @@ header {
 }
 
 .looogo img {
-    /*margin-left: 2%;*/
     margin-left: 15%;
     align-items: center;
-    justify-content: center; /* Wyśrodkuj elementy w poziomie i w pionie */
-    height: 6vw; /* Użyj procentowej wysokości względem szerokości okna */
+    justify-content: center;
+    height: 6vw;
 }
 
 .container-main {
     width: 1550px;
     margin: 200px auto 0;
-
-    /*background-color: black;*/
     background-color: transparent;
-    /*border: 2px solid darkgoldenrod;*/
     border: 0 solid darkgoldenrod;
     padding: 0 20px 20px;
     display: flex;
@@ -121,14 +105,11 @@ header {
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-
-    /*opacity: 0.9;*/
+    box-sizing: border-box;
     border-radius: 30px;
     box-shadow: 0 0 0 moccasin;
     flex-wrap: wrap;
     transition: filter 0.5s ease;
-    /*animation: fade-in-main 1s ease-out;*/
     animation: fade-in 1s ease-in-out forwards;
     max-width: 100%
 }
@@ -142,8 +123,6 @@ header {
     height: 1000px;
     margin: 40px;
     background-color: #181818;
-    /*border: 1px solid darkgoldenrod;*/
-    /*animation: fade-in-main 1s ease-out;*/
     max-width: 100%;
 }
 
@@ -158,9 +137,6 @@ header {
     margin: 20px;
     position: relative;
     background-color: #000000;
-    /*border: 1px solid darkgoldenrod;*/
-    /*animation: fade-in-miniature 1s ease-out;*/
-    /*animation: scroll-from-left 1s ease-out;*/
     white-space: nowrap;
     max-width: 100%;
 }
@@ -168,11 +144,11 @@ header {
 @keyframes scroll-from-left {
     from {
         opacity: 0;
-        transform: translateX(-60%); /* Przesuwa element w lewo poza widok */
+        transform: translateX(-60%);
     }
     to {
         opacity: 1;
-        transform: translateX(0); /* Przesuwa element z powrotem na widok */
+        transform: translateX(0);
     }
 }
 
@@ -194,17 +170,6 @@ header {
     }
 }
 
-/*@keyframes fade-in-main {*/
-/*    from {*/
-/*        opacity: 0;*/
-/*        transform: translateY(200px);*/
-/*    }*/
-/*    to {*/
-/*        !*opacity: 0.9;*!*/
-/*        opacity: 1;*/
-/*        transform: translateY(0);*/
-/*    }*/
-/*}*/
 
 @keyframes fade-in-main {
 
@@ -234,21 +199,17 @@ header {
 
 
 .container-main .title-container {
-    /*box-shadow: 0 0 40px darkgoldenrod;*/
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     border-radius: 30px;
     width: 1400px;
     height: 70px;
-    /*margin: 40px;*/
-    /*background-color: #181818;*/
     background-color: transparent;
-    /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
 
 .container-main .title-container-hidden {
     box-shadow: 0 0 0 darkgoldenrod;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     border-radius: 30px;
     width: 1400px;
     color: darkgoldenrod;
@@ -256,27 +217,23 @@ header {
     margin: 40px;
     background-color: black;
     background-color: rgba(0, 0, 0, 0.9);
-    /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
 
 .container-main .title-container-miniature {
     box-shadow: 0 0 0 darkgoldenrod;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     border-radius: 30px;
     width: 400px;
     height: 60px;
     background-color: #000000;
-    /*background-color: #181818;*/
-    /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
 
 
 .container-main .half-container-big {
     box-shadow: 0 0 40px darkgoldenrod;
-
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     position: relative;
     border-radius: 30px;
     width: 650px;
@@ -287,10 +244,7 @@ header {
     align-items: center;
     justify-self: center;
     justify-items: center;
-    /*background-color: black;*/
     background-color: rgba(0, 0, 0, 0.9);
-    /*background-color: #181818;*/
-    /*border: 1px solid darkgoldenrod;*/
     max-width: 100%;
 }
 
@@ -310,32 +264,16 @@ header {
     background-color: rgba(0, 0, 0, 0.9);
 }
 
-
-
-
-/*.fade-effect-big {*/
-/*    margin: 15px auto 0;*/
-/*    margin-left: 15px;*/
-/*    margin-right: 15px;*/
-/*    position: relative;*/
-/*    !*background-color: rgba(0,0,0, 0.9);*!*/
-/*    !*background-color: transparent;*!*/
-/*    overflow: hidden; !* Ukrycie zawartości poza zaokrąglonymi krawędziami *!*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
-
 .fade-effect-big {
     margin: 15px auto 0;
     margin-left: 15px;
     margin-right: 15px;
     position: relative;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    clip-path: ellipse(50% 50% at 50% 50%); /* Wycinanie obszaru w kształcie elipsy */
+    clip-path: ellipse(50% 50% at 50% 50%);
         /*background: radial-gradient(*/
         /*        ellipse at center,*/
         /*        transparent 0%,      !* Przezroczyste rogi *!*/
@@ -345,30 +283,13 @@ header {
         /*);*/
 }
 
-/*.fade-effect-big::before {*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    background: radial-gradient(*/
-/*            ellipse at center,*/
-/*            transparent 0%,      !* Przezroczyste rogi *!*/
-/*            transparent 69%,     !* Przezroczyste rogi *!*/
-/*            rgba(0, 0, 0, 0) 70%, !* Przezroczystość na 70% *!*/
-/*            rgba(0, 0, 0, 1) 72.1% !* Przyciemnienie od 72.1% promienia *!*/
-/*    );*/
-/*    background-size: 100% 100%;*/
-/*    pointer-events: none;*/
-/*}*/
 .fade-effect-miniature {
     margin: 15px auto 0;
     margin-left: 15px;
     margin-right: 15px;
     margin-bottom: 15px;
     position: relative;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -381,7 +302,7 @@ header {
     margin-right: 15px;
     margin-bottom: 15px;
     position: relative;
-    overflow: hidden; /* Ukrycie zawartości poza zaokrąglonymi krawędziami */
+    overflow: hidden;
     display: flex;
     background-color: transparent;
     justify-content: center;
@@ -404,7 +325,6 @@ header {
             rgba(0, 0, 0, 1) 90%
     );
     background-size: 100% 100%;
-    /*background-color: rgba(24, 24, 24, 1);*/
     pointer-events: none;
 }
 
@@ -415,16 +335,8 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    /*background: radial-gradient(*/
-    /*        ellipse at center,*/
-    /*        rgba(0, 0, 0, 0.0) 0%,*/
-    /*        rgba(0, 0, 0, 1) 75%,*/
-    /*        rgba(0, 0, 0, 1) 90%*/
-    /*);*/
     background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,1) 87%);
-
     background-size: 100% 100%;
-    /*background-color: rgba(24, 24, 24, 1);*/
     pointer-events: none;
 }
 
@@ -436,9 +348,6 @@ header {
         opacity: 1;
     }
 }
-
-
-/* Additional styles for the construction site image */
 #constructionSite {
     display: block;
     margin: 200px auto;
@@ -447,20 +356,18 @@ header {
 }
 #userLogoutButton {
     display: inline-block;
-    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    min-width: 10%;
     text-align: center;
 }
-
-
 #userLogoutButton .logout-text {
     display: none;
 }
 #userLogoutButton:hover .logout-text {
-    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    min-width: 10%;
     display: block;
 }
 #userLogoutButton .username-text {
-    min-width: 10%; /* Dostosuj szerokość do potrzeb */
+    min-width: 10%;
     display: block;
 }
 #userLogoutButton:hover .username-text {

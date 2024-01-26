@@ -10,21 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location = '/';
     }
 
-    let containerMain = document.getElementById('container-main');
-    containerMain.style.minHeight = '1000px';
-    containerMain.style.justifyContent = 'center';
-    containerMain.style.alignItems = 'center';
-    containerMain.style.backgroundColor = 'transparent';
-    containerMain.style.border = '0px';
-    containerMain.style.boxShadow = 'none';
-
-
+    setContainerMainStyles();
 });
 
 function createForgotPasswordForm() {
-    let formContainer = document.getElementById("registerFormContainer");
-
-    formContainer.innerHTML = '';
 
     const addEnterKeyListener = (element) => {
         element.addEventListener('keydown', function (event) {
@@ -66,7 +55,7 @@ function createForgotPasswordForm() {
                     resetForm();
                     setTimeout(function () {
                         window.location = '/';
-                    }, 1000); // 1000 milisekund = 1 sekunda
+                    }, 1000);
                 } else {
                     message = "Coś poszło nie tak :(";
                 }
@@ -74,13 +63,8 @@ function createForgotPasswordForm() {
             })
     }
 
-    formContainer.style.boxShadow = "0px 0px 30px darkgoldenrod";
-    formContainer.style.width = "400px";
-    formContainer.style.height = "500px";
-    formContainer.style.borderRadius = "30px";
-    formContainer.style.border = "0px dashed moccasin";
-    formContainer.style.position = 'relative';
-    formContainer.style.bottom = '150px';
+    let formContainer = document.getElementById("registerFormContainer");
+    formContainer.innerHTML = '';
 
 
     const form = document.createElement("form");
@@ -97,15 +81,7 @@ function createForgotPasswordForm() {
     password.className = "sr-only";
     password.textContent = "Password";
 
-    const passwordInput = document.createElement("input");
-    passwordInput.type = "password";
-    passwordInput.id = "password";
-    passwordInput.name = "password";
-    passwordInput.style.width = "283px";
-    passwordInput.className = "form-control";
-    passwordInput.placeholder = "Password";
-    passwordInput.required = true;
-    addEnterKeyListener(passwordInput);
+    const passwordInput = createPasswordInput(addEnterKeyListener);
 
     const passwordLabel = document.createElement("label");
     passwordLabel.htmlFor = "Password";
@@ -137,31 +113,10 @@ function createForgotPasswordForm() {
     submitButtonDiv.style.justifyContent = 'center';
 
 
-    const submitButton = document.createElement("button");
-    submitButton.type = "button";
-    submitButton.textContent = "Wyślij";
-    submitButton.style.backgroundColor = "darkgoldenrod";
-    submitButton.style.border = "none";
-    submitButton.style.width = "150px";
-    submitButton.style.color = "black";
-    submitButton.style.padding = "10px 20px";
-    submitButton.style.borderRadius = "5px";
-    submitButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    submitButton.style.transition = "background-position 0.3s ease-in-out";
-
-    submitButton.addEventListener("mouseover", function () {
-        submitButton.style.boxShadow = '0 0 20px moccasin';
-        submitButton.style.color = "white";
-    });
-
-    submitButton.addEventListener("mouseout", function () {
-        submitButton.style.boxShadow = '0 0 20px darkgoldenrod';
-        submitButton.style.color = "black";
-    });
-
-    submitButton.style.flexBasis = "15%";
-
+    const submitButton = createSubmitButton("Wyślij");
     submitButton.addEventListener("click", submitForm);
+
+
 
     submitButtonDiv.appendChild(submitButton);
 

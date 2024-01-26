@@ -33,24 +33,36 @@
 }
 
 #registerFormContainer {
-    /*background-color: #181818;*/
     background-color: #000000;
     border-radius: 30px;
-    box-shadow: 0 0 40px darkgoldenrod;
-    border: 0 dashed darkgoldenrod;
-    width: 500px;
+    box-shadow: 0 0 30px darkgoldenrod;
+    border: 0px dashed moccasin;
+    width: 400px;
+    height: 500px;
+    position: relative;
+    bottom: 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Dodaj padding, aby uzyskać odstęp od krawędzi */
+    padding: 20px;
     box-sizing: border-box;
     max-width: 100%;
-    height: 100vh; /* Ustaw wysokość na 100% widoku (viewport height) */
-    margin: 0 auto; /* Wycentruj w poziomie */
-    /*transition: box-shadow 0s ease-in-out;*/
+    margin: 0 auto;
 }
 
 #registerFormContainer:hover {
     box-shadow: 0 0 20px moccasin;
+}
+
+.submitButtonStyle {
+    background-color: darkgoldenrod;
+    border: none;
+    width: 150px;
+    margin: auto;
+    display: block;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px darkgoldenrod;
 }
