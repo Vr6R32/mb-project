@@ -1,20 +1,25 @@
 package pl.motobudzet.api.user_account.service;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.location_city.City;
 import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.dto.AppUserDTO;
 import pl.motobudzet.api.user_account.dto.UserDetailsRequest;
 import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.model.Role;
 import pl.motobudzet.api.user_account.AppUserRepository;
+import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 
 import java.util.Collections;
 import java.util.List;
+
+import static pl.motobudzet.api.z_configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ public class UserDetailsService {
 
     private final AppUserRepository userRepository;
     private final LocationService locationService;
+    private final JwtService jwtService;
 
 
     public List<String> findManagementEmails() {
@@ -29,7 +35,7 @@ public class UserDetailsService {
     }
 
     public AppUserDTO getUserDetails(String userName) {
-        AppUser user = userRepository.findByUserNameForDto(userName).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+        AppUser user = userRepository.findByUserNameWithRelationEntities(userName).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
         return mapUserToDTO(user);
     }
 
@@ -37,24 +43,21 @@ public class UserDetailsService {
         return AppUserDTO.builder().name(user.getUsername()).cityName(user.getCity().getName()).cityStateName(user.getCity().getCityState().getName()).build();
     }
 
-    public String updateFirstUserDetails(UserDetailsRequest request, String loggedUser) {
 
-        AppUser user = userRepository.findByUserNameForDto(loggedUser).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
-        user.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
-        user.setName(request.getName());
-        user.setSurname(request.getSurname());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(Role.ROLE_USER);
+    @Transactional
+    public ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest) {
 
-        userRepository.saveAndFlush(user);
+        City city = locationService.getCityByNameAndState(request.getCity(), request.getCityState());
+        String name = request.getName();
+        String surname = request.getSurname();
+        String phoneNumber = request.getPhoneNumber();
+        Role role = Role.ROLE_USER;
+        String userEmail = loggedUser.getEmail();
 
-        setAuthentication(user);
-
-        return "/?activation=true";
-    }
-
-    private void setAuthentication(AppUser user) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(String.valueOf(Role.ROLE_USER))));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+            userRepository.insertUserFirstDetails(city.getId(), name, surname, phoneNumber, role, userEmail);
+            String redirectUrl = buildRedirectUrl(httpServletRequest, "/?activation=true");
+            loggedUser.setRole(role);
+            jwtService.authenticate(loggedUser,response);
+            return ResponseEntity.ok().body(Collections.singletonMap("redirectUrl", redirectUrl));
     }
 }

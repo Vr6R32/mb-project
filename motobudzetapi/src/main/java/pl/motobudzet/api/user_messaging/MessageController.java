@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
@@ -21,10 +20,9 @@ public class MessageController {
 
     @PostMapping
     public ResponseEntity<String> sendMessage(@RequestParam String message, @RequestParam UUID advertisementId, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        AppUser user = ((AppUser) userDetails);
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
 
-        String response = messageService.sendMessage(message,advertisementId,user);
+        String response = messageService.sendMessage(message,advertisementId,loggedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

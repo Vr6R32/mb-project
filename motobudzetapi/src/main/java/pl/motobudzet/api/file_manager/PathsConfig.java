@@ -6,11 +6,16 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class FilePathsConfig {
+public class PathsConfig {
 
     @Value("${paths.public}")
     private String publicFilePath;
     @Value("${paths.private}")
     private String privateFilePath;
+
+    @Value("${email-service.email-address}")
+    private String infoEmailAddressPath;
+    @Value("${email-service.url}")
+    private String siteUrlPath;
 
 }

@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
-import pl.motobudzet.api.file_manager.FilePathsConfig;
+import pl.motobudzet.api.file_manager.PathsConfig;
 import pl.motobudzet.api.user_account.entity.AppUser;
 
 import java.io.File;
@@ -21,18 +21,17 @@ import java.util.UUID;
 public class SpringMailSenderService {
 
     public static final String BACKGROUND_IMAGE_URL = "https://motobudzet.pl/api/static/background_email";
+
     private final JavaMailSender mailSender;
-    private final FilePathsConfig pathsConfig;
-    private String infoEmail = "info@motobudzet.pl";
+    private final PathsConfig pathsConfig;
+
 
     private static final String NEW_CONVERSATION_MESSAGE_TITLE = "Dostałeś nową wiadomość ";
     private static final String REGISTRATION_ACTIVATION_TITLE = "Link aktywacyjny";
     private static final String ADVERTISEMENT_ACTIVATION_TITLE = "Aktywacja ogłoszenia";
     private static final String ADVERTISEMENT_TO_ACTIVATE = "Nowe ogłoszenie do zweryfikowania";
-    private static final String ADVERTISEMENT_URL_LINK = "https://motobudzet.pl/advertisement?id=";
+    private static final String ADVERTISEMENT_URL_LINK = "/advertisement?id=";
     private static final String RESET_PASSWORD_TITLE = "Resetowanie hasła";
-    private static final String SITE_URL = "https://motobudzet.pl";
-
 
     @Async
     public void sendMessageNotificationHtml(EmailMessageRequest request) {
@@ -66,7 +65,7 @@ public class SpringMailSenderService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            helper.setFrom(infoEmail);
+            helper.setFrom(pathsConfig.getInfoEmailAddressPath());
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
@@ -82,7 +81,6 @@ public class SpringMailSenderService {
 
     private void addStaticResources(MimeMessageHelper helper) throws MessagingException {
         String logoPath = pathsConfig.getPrivateFilePath() + "logo.png";
-//        String backgroundPath = pathsConfig.getPrivateFilePath() + "emailBackground.jpg";
         FileSystemResource logo = new FileSystemResource(new File(logoPath));
         helper.addInline("image001", logo);
     }
@@ -110,7 +108,7 @@ public class SpringMailSenderService {
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Twój link aktywacyjny :</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + SITE_URL + "/api/user/confirm?activationCode=" + user.getRegisterCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/api/user/confirm?activationCode=" + user.getRegisterCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby aktywowac swoje konto oraz dokończyć rejerstracje" + "</font>" +
                 "</td></tr></table>" +
@@ -124,7 +122,7 @@ public class SpringMailSenderService {
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Twój link resetujący hasło :</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + SITE_URL + "/reset?code=" + user.getResetPasswordCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/reset?code=" + user.getResetPasswordCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby zresetować swoje hasło." + "</font><br>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Jeśli nie prosiłeś o zmianę hasła, zignoruj tą wiadomość." + "</font>" +
@@ -140,7 +138,7 @@ public class SpringMailSenderService {
                 "<b><font color='moccasin' size='+3'>" + "Witaj " + user.getUsername() + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Twoje ogłoszenie <br>" + advertisement.getBrand().getName() + advertisement.getModel().getName() + "<br>"
                 + advertisement.getName() + "<br> jest już widoczne !</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + ADVERTISEMENT_URL_LINK + advertisement.getId() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + advertisement.getId() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby przejść do swojego ogłoszenia." + "</font>" +
                 "</td></tr></table>" +
@@ -154,7 +152,7 @@ public class SpringMailSenderService {
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj, pojawilo sie nowe ogłoszenie do aktywacji. " + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Wykonaj proszę weryfikacje ogłoszenia. <br>" + "<br></font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + ADVERTISEMENT_URL_LINK + id + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + id + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby przejść do ogłoszenia." + "</font>" +
                 "</td></tr></table>" +

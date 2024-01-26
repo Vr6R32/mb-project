@@ -21,6 +21,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public void authenticate(AuthenticationRequest credentials, HttpServletResponse response) {
+
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

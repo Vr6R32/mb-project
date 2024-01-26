@@ -22,18 +22,12 @@ spring:
             connection-timeout: 5000
             timeout: 3000
             write timeout: 5000
-  kafka:
-    bootstrap-servers: localhost:9092
   datasource:
-#    url: jdbc:postgresql://serwer2379308.home.pl/37515270_motobudzet69
-#    username: 37515270_motobudzet69
-#    password: dontgotosql
     hikari:
       max-lifetime: 600000
-    url: jdbc:postgresql://localhost:5432/motobudzet
+    url: jdbc:postgresql://postgres-db:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     username: postgres
     password: dontgotosql
-
   servlet:
     multipart:
       max-file-size: 15MB
@@ -46,13 +40,14 @@ spring:
         show_sql: true
         hbm2ddl:
           auto: none
-#          auto: create-drop
+  #          auto: create-drop
   banner:
     location: classpath:banner.txt
   liquibase:
     enabled: true
-    drop-first: true
+    drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
+
 management:
   metrics:
     tags:
@@ -63,15 +58,14 @@ management:
   endpoints:
     web:
       exposure:
-#        include: health,info,prometheus
         include: "*"
+      base-path: /actuator
   endpoint:
     metrics:
       enabled: true
     shutdown:
       enabled: true
   prometheus:
-
     metrics:
       export:
         enabled: true
@@ -82,25 +76,18 @@ server:
   tomcat:
     remoteip:
       host-header: X-Real-IP
-      remote-ip-header: x-forwarded-for
-      protocol-header: x-forwarded-proto
-
-#    port: 443
-#    ssl:
-#    key-store-type: PKCS12
-#    key-store: classpath:keystore.p12
-#    key-store-password: odi123
-#    key-alias: spring-boot
+      remote-ip-header: X-Forwarded-For
+      protocol-header: X-Forwarded-Proto
 
 
 application:
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B59701231BZCZWQWRXCVXQWEQWREYGCX34234VXCVERW
-      expiration: 660000
-#      expiration: 15000
+      expiration: 660000 # an hour
       refresh-token:
         expiration: 604800000 # 7 days
+
 token:
   key:
     value: Udh5YQlFnpMuEwltT7m4q8Dcsvz+G28Iqru3kk3vJx8=
@@ -108,14 +95,14 @@ token:
     value: anjbBT/W+R6ycBK2Akx1Ug==
 
 paths:
-  public: "files/public/"
-  private: "files/private/"
+  public: "app/files/public/"
+  private: "app/files/private/"
 
 email-service:
-  url: http://localhost:20134
+  url: https://motobudzet.pl
   email-address: info@motobudzet.pl
 
 mailing:
-    module:
-      enabled: false
+  module:
+    enabled: false
 

@@ -30,14 +30,14 @@ spring:
     password: dontgotosql
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 15MB
       max-request-size: 25MB
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         generate_statistics: false
-        show_sql: false
+        show_sql: true
         hbm2ddl:
           auto: none
   #          auto: create-drop
@@ -104,6 +104,10 @@ token:
 paths:
   public: "app/files/public/"
   private: "app/files/private/"
+
+email-service:
+  url: https://localhost
+  email-address: info@motobudzet.pl
 
 mailing:
   module:

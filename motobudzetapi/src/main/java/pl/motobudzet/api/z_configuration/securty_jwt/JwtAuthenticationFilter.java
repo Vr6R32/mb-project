@@ -60,7 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void checkIsAnyInternalService(HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
-        String clientAddress = request.getRemoteAddr();
         if(authorization!=null && authorization.contains("Bearer prometheus9090auth")){
             AppUser principal = AppUser.builder().userName("admin").id(1L).build();
             List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_MONITORING"));
@@ -139,18 +138,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
             Long userId = jwtService.extractUserId(accessToken);
-            AppUser principal = AppUser.builder().userName(username).id(userId).build();
+            String userEmail = jwtService.extractUserEmail(accessToken);
+
+            AppUser principal = AppUser.builder()
+                    .userName(username)
+                    .id(userId)
+                    .email(userEmail)
+                    .build();
+
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     principal, null, authorities);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
             filterChain.doFilter(request, response);
     }
-
-//    private boolean isTokenValid(String accessToken) {
-//        return tokenRepository.findByToken(accessToken)
-////                .map(t -> !t.isExpired() && !t.isRevoked() && jwtService.isTokenValid(accessToken, userDetails))
-//                .map(t -> !t.isExpired() && !t.isRevoked())
-//                .orElse(false);
-//    }
 }

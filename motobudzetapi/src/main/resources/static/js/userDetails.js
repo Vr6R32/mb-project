@@ -57,18 +57,26 @@ function createLoginForm()   {
         };
 
         fetch(form.action, requestOptions)
-            .then(response => response.text())
-            .then(text => {
-                console.log('Success:', text);
-                if (text === "/?activation=true") {
-                    window.location.href = text;
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                if (data.redirectUrl) {
+
+                    setTimeout(function() {
+                            window.location.href = data.redirectUrl;
+                    }, 500);
+
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     });
-
     const inputs = form.querySelectorAll('.form-control');
     inputs.forEach(input => {
         input.style.marginTop = "10px";

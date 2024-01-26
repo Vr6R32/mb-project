@@ -1,5 +1,6 @@
 package pl.motobudzet.api.user_account;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.user_account.dto.*;
+import pl.motobudzet.api.user_account.entity.AppUser;
 import pl.motobudzet.api.user_account.service.RegistrationService;
 import pl.motobudzet.api.user_account.service.UserDetailsService;
 
@@ -24,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("confirm")
-    public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response) {
-        registrationService.confirmEmail(activationCode, response);
+    public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request) {
+        registrationService.confirmEmail(activationCode, response,request);
     }
 
     @GetMapping("details")
@@ -34,8 +36,9 @@ public class UserController {
     }
 
     @PutMapping("updateDetails")
-    public String updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication) {
-        return userDetailsService.updateFirstUserDetails(userDetailsRequest, authentication.getName());
+    public ResponseEntity<?> updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication, HttpServletResponse response, HttpServletRequest request) {
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return userDetailsService.updateFirstUserDetails(userDetailsRequest,loggedUser,response,request);
     }
 
     @PostMapping("resetCode")

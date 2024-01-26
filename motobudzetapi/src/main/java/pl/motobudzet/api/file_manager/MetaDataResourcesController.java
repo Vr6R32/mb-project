@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MetaDataResourcesController {
 
-    private final FilePathsConfig pathsConfig;
+    private final PathsConfig pathsConfig;
 
-    public MetaDataResourcesController(FilePathsConfig pathsConfig) {
+    public MetaDataResourcesController(PathsConfig pathsConfig) {
         this.pathsConfig = pathsConfig;
     }
 

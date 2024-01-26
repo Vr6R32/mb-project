@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StaticResourceController {
 
     private final FileService fileService;
-    private final FilePathsConfig pathsConfig;
+    private final PathsConfig pathsConfig;
 
-    public StaticResourceController(FileService fileService, FilePathsConfig pathsConfig) {
+    public StaticResourceController(FileService fileService, PathsConfig pathsConfig) {
         this.fileService = fileService;
         this.pathsConfig = pathsConfig;
     }

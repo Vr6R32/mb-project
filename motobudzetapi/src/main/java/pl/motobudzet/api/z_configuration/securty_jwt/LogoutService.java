@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.z_configuration.securty_jwt.token.TokenRepository;
 
-import java.io.IOException;
+
 
 @Service
 @RequiredArgsConstructor

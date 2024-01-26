@@ -16,17 +16,19 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("select a from AppUser a where a.userName = ?1")
     Optional<AppUser> findByUserName(String userName);
 
-
     @Query("select a from AppUser a " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
             "where a.userName = ?1")
-    Optional<AppUser> findByUserNameForDto(String userName);
+    Optional<AppUser> findByUserNameWithRelationEntities(String userName);
 
     @Modifying
     @Query("UPDATE AppUser a SET a.resetPasswordCode = ?1, a.resetPasswordCodeExpiration = ?2 WHERE a.email = ?3")
     int insertResetPasswordCode(String code, LocalDateTime resetCodeExpirationTime, String email);
 
+    @Modifying
+    @Query("UPDATE AppUser a SET a.city.id = ?1, a.name = ?2, a.surname = ?3, a.phoneNumber = ?4, a.role = ?5 WHERE a.email = ?6")
+    void insertUserFirstDetails(Long cityId, String name, String surname, String phoneNumber, Role role ,String userEmail);
 
     @Modifying
     @Query("UPDATE AppUser a SET a.password = ?1, a.resetPasswordCode = null WHERE a.resetPasswordCode = ?2")
@@ -39,17 +41,14 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "END FROM AppUser a")
     String checkUsernameAndEmailAvailability(String userName, String email);
 
-    @Query("select a.id from AppUser a where a.userName = ?1")
-    Optional<Long> getAppUserIdByUserName(String username);
-
     @Query("select a from AppUser a where a.registerCode = ?1")
-    Optional<AppUser> getAppUserByRegisterCode(String activationCode);
+    Optional<AppUser> findUserByRegistrationCode(String activationCode);
 
     @Query("select a from AppUser a " +
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
             "where a.resetPasswordCode = ?1")
-    Optional<AppUser> findByResetCode(String resetCode);
+    Optional<AppUser> findUserByResetPasswordCode(String resetCode);
 
     @Query("select a.email from AppUser a where a.role = ?1")
     List<String> findAllManagementEmails(Role admin);

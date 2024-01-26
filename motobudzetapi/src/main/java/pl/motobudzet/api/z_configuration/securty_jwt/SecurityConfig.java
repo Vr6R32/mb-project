@@ -3,7 +3,6 @@ package pl.motobudzet.api.z_configuration.securty_jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -18,8 +17,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -33,6 +30,7 @@ import pl.motobudzet.api.z_playground.session.SessionListener;
 import java.io.IOException;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static pl.motobudzet.api.z_configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
 
 
 @Configuration
@@ -45,17 +43,10 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler logoutHandler;
 
-
     @Bean
     public SessionListener httpSessionListener() {
         return new SessionListener();
     }
-
-    @Bean
-    public RedirectStrategy redirectStrategy() {
-        return new DefaultRedirectStrategy();
-    }
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -66,11 +57,8 @@ public class SecurityConfig {
         return new SimpleUrlLogoutSuccessHandler() {
             @Override
             public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)throws IOException {
-                String scheme = request.getHeader("X-Forwarded-Proto") != null ? request.getHeader("X-Forwarded-Proto") : request.getScheme();
-                String serverName = request.getHeader("X-Forwarded-Host") != null ? request.getHeader("X-Forwarded-Host") : request.getServerName();
-                String contextPath = request.getContextPath();
-                String redirectUrl = scheme + "://" + serverName + contextPath + "/login?logout=true";
-                getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+                String redirectUrl = buildRedirectUrl(request, "/login?logout=true");
+                response.sendRedirect(redirectUrl);
             }
         };
     }
@@ -165,7 +153,7 @@ public class SecurityConfig {
             )
             .exceptionHandling(exception ->
                     exception
-                            .authenticationEntryPoint(new CustomAuthenticationEntryPoint(redirectStrategy()))
+                            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                             .accessDeniedPage("/"));
         return http.build();
     }

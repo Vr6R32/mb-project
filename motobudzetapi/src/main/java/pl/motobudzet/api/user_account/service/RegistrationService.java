@@ -1,5 +1,6 @@
 package pl.motobudzet.api.user_account.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
+import static pl.motobudzet.api.z_configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -67,8 +70,8 @@ public class RegistrationService {
         }
     }
 
-    public void confirmEmail(String activationLink, HttpServletResponse response) {
-        AppUser user = userRepository.getAppUserByRegisterCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
+    public void confirmEmail(String activationLink, HttpServletResponse response, HttpServletRequest request) {
+        AppUser user = userRepository.findUserByRegistrationCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
         if (user != null && !user.getAccountEnabled()) {
             user.setAccountEnabled(true);
@@ -76,7 +79,8 @@ public class RegistrationService {
             jwtService.authenticate(enabledUser,response);
 
             try {
-                response.sendRedirect("/user/details?activation=true");
+                String redirectUrl = buildRedirectUrl(request, "/user/details?activation=true");
+                response.sendRedirect(redirectUrl);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -96,7 +100,7 @@ public class RegistrationService {
 
         int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.getEmail());
 
-        AppUser user = userRepository.findByResetCode(resetCode)
+        AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
 
         springMailSenderService.sendResetPasswordNotificationCodeLink(user);
@@ -110,7 +114,7 @@ public class RegistrationService {
         if (!request.getPassword().equals(request.getPasswordRepeat())) {
             return 0;
         }
-        AppUser user = userRepository.findByResetCode(request.getResetCode())
+        AppUser user = userRepository.findUserByResetPasswordCode(request.getResetCode())
                 .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
         if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))) {
             return userRepository.insertNewUserPassword(passwordEncoder.encode(request.getPassword()), request.getResetCode());

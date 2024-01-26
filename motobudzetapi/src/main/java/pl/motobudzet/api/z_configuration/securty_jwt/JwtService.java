@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -72,7 +71,7 @@ public class JwtService {
 
     public String generateAccessToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(),"email",user.getEmail());
         return buildToken(userClaims, userDetails, jwtExpiration);
     }
 
@@ -85,9 +84,18 @@ public class JwtService {
         return claims.get("userId", Long.class);
     }
 
+    public String extractUserEmail(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("email", String.class);
+    }
+
     public String generateRefreshToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(),"email",user.getEmail());
         return buildToken(userClaims, userDetails, refreshExpiration);
     }
 

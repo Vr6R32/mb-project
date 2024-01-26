@@ -31,13 +31,13 @@ import java.util.stream.Collectors;
 public class FileService {
 
     private final AdvertisementService advertisementService;
-    private final FilePathsConfig pathsConfig;
+    private final PathsConfig pathsConfig;
     private final EntityManager entityManager;
 
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png", "image/heif", "image/heic", "image/webp");
 
 
-    public FileService(@Lazy AdvertisementService advertisementService, FilePathsConfig pathsConfig, EntityManager entityManager) {
+    public FileService(@Lazy AdvertisementService advertisementService, PathsConfig pathsConfig, EntityManager entityManager) {
         this.advertisementService = advertisementService;
         this.pathsConfig = pathsConfig;
         this.entityManager = entityManager;
