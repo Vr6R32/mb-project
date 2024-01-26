@@ -13,15 +13,15 @@ application by minimizing unnecessary database load making interactions with the
 
 Application enhances its robust architecture through the integration of a reverse proxy server using Nginx. 
 This setup significantly bolsters security by ensuring that internal services are not directly exposed to the external network. 
-In addition, the server is integrated with Cloudflare's DNS services, which provides an additional layer of protection. 
-By leveraging Cloudflare, the server's IP address is not publicly disclosed, further shielding it from potential external threats.
+In addition, vps server is integrated with Cloudflare's DNS services, which provides an additional layer of protection. 
+By leveraging Cloudflare, server's IP address is not publicly disclosed, further shielding it from potential external threats.
 This combination of a reverse proxy and Cloudflare DNS significantly strengthens the platform's security measures, 
 offering robust protection against external threats. This ensures a secure and dependable environment for users and their data,
 safeguarding both against unauthorized access and potential internet vulnerabilities.
 
 
-Additionally, the application is secured with a JWT token, which is further encrypted using the AES256 algorithm to ensure greater security. 
-Token is typically transmitted and stored in an HttpOnly cookie, to which foreign JavaScript should not have access.
+Additionally, api is secured with a JWT token, which is further encrypted using the AES256 algorithm to ensure greater security. 
+Token is typically transmitted and stored in an HttpOnly cookie, to which foreign JavaScript code should not have access.
 
 
 Application backend is complemented with a user-friendly frontend, utilizing HTML5, CSS3, and JavaScript

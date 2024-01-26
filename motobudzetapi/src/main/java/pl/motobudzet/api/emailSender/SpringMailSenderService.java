@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.advertisement.entity.Advertisement;
 import pl.motobudzet.api.file_manager.PathsConfig;
 import pl.motobudzet.api.user_account.entity.AppUser;
+import pl.motobudzet.api.user_account.service.UserDetailsService;
 
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,7 +24,7 @@ public class SpringMailSenderService {
 
     private final JavaMailSender mailSender;
     private final PathsConfig pathsConfig;
-
+    private final UserDetailsService userDetailsService;
 
     private static final String NEW_CONVERSATION_MESSAGE_TITLE = "Dostałeś nową wiadomość ";
     private static final String REGISTRATION_ACTIVATION_TITLE = "Link aktywacyjny";
@@ -54,9 +54,9 @@ public class SpringMailSenderService {
     }
 
     @Async
-    public void sendEmailNotificationToManagement(List<String> emailList, UUID id) {
-        String[] to = emailList.toArray(new String[1]);
-        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), to);
+    public void sendEmailNotificationToManagement(UUID id) {
+        String[] receiverArray = userDetailsService.findManagementEmails().toArray(new String[0]);
+        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), receiverArray);
     }
 
 

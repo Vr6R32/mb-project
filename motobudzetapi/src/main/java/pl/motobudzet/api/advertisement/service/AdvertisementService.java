@@ -19,7 +19,6 @@ import pl.motobudzet.api.emailSender.SpringMailSenderService;
 import pl.motobudzet.api.file_manager.FileService;
 import pl.motobudzet.api.location_city.LocationService;
 import pl.motobudzet.api.user_account.entity.AppUser;
-import pl.motobudzet.api.user_account.service.UserDetailsService;
 import pl.motobudzet.api.vehicle_brand.BrandService;
 import pl.motobudzet.api.vehicle_model.ModelService;
 
@@ -39,11 +38,10 @@ public class AdvertisementService {
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
 
     private final AdvertisementRepository advertisementRepository;
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final UserDetailsService userDetailsService;
     private final SpringMailSenderService mailSenderService;
     private final LocationService locationService;
+    private final BrandService brandService;
+    private final ModelService modelService;
     private final FileService fileService;
 
 
@@ -75,7 +73,7 @@ public class AdvertisementService {
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileService.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
-        sendEmailNotificationToManagement(advertisementId);
+        mailSenderService.sendEmailNotificationToManagement(advertisementId);
         return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").body("inserted !");
     }
 
@@ -90,9 +88,9 @@ public class AdvertisementService {
             advertisement.setMainPhotoUrl(mainPhotoUrl);
             advertisementRepository.save(advertisement);
 
-            String redirectUrl = "/advertisement?id=" + advertisement.getId();
+            String redirectUrl = "/advertisement?id=" + advertisementId;
 
-            sendEmailNotificationToManagement(advertisement.getId());
+            mailSenderService.sendEmailNotificationToManagement(advertisementId);
             return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
@@ -117,11 +115,6 @@ public class AdvertisementService {
         advertisement.setProductionDate(request.getProductionDate());
         advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
         advertisement.setStatus(Status.PENDING_VERIFICATION);
-    }
-
-    private void sendEmailNotificationToManagement(UUID id) {
-        List<String> emailList = userDetailsService.findManagementEmails();
-        mailSenderService.sendEmailNotificationToManagement(emailList, id);
     }
 
 
