@@ -4,7 +4,6 @@ let advertisement = null;
 let currentPhotoIndex = 0;
 
 document.addEventListener("DOMContentLoaded", async function () {
-    // await checkIsTokenValid();
     extractAdvertisementId();
     await fetchAdvertisement();
 });
@@ -15,14 +14,7 @@ function extractAdvertisementId() {
     advertisementId = urlParams.get('id');
 }
 
-function setTitleInUrl(data) {
-    // const currentUrl = new URL(window.location.href);
-    // currentUrl.searchParams.set('name', data.name);
-    // window.history.pushState({path: currentUrl.toString()}, '', currentUrl.toString());
-    initializeParameters(data);
-}
-
-function initializeParameters(data) {
+function initializeUrlParameters(data) {
     let urlParams = new URLSearchParams(window.location.search);
     let editedParam = "edited";
     let createdParam = "created";
@@ -409,7 +401,7 @@ function fetchAdvertisement() {
             const containerMain = document.getElementById('container-main');
             containerMain.style.marginBottom = '150px';
 
-            setTitleInUrl(data);
+            initializeUrlParameters(data);
             createAdvertisementIndexDiv(containerMain, data);
             createHeaderTitle(data, containerMain, data.user);
             updateHeartIconSrc();
