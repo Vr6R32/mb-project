@@ -1095,55 +1095,33 @@ function getDeviceScreenInfo(){
 
 }
 
-function handleEvType() {
-    document.getElementById('fuelType').addEventListener('change', function () {
-        const fuelType = this.value;
-        const transmissionType = document.getElementById('transmissionType');
-        const engineType = document.getElementById('engineType');
-        const engineCapacity = document.getElementById('engineCapacity');
 
-        if (fuelType === 'EV') {
-            if (Array.from(transmissionType.options).some(option => option.value === 'Automat')) {
-                transmissionType.value = 'Automat';
-            }
-            transmissionType.disabled = true;
-
-            if (Array.from(engineType.options).some(option => option.value === 'Cewka')) {
-                engineType.value = 'Cewka';
-            }
-            engineType.disabled = true;
-
-            engineCapacity.value = '0';
-            engineCapacity.disabled = true;
-        } else {
-            transmissionType.disabled = false;
-            engineType.disabled = false;
-            engineCapacity.disabled = false;
-            transmissionType.value = '------';
-            engineType.value = '------';
-            engineCapacity.value = '';
-        }
-    });
-}
 
 function fetchModels(brand) {
-    const modelSelect = document.getElementById('model');
-    if (brand) {
-        fetch(`/api/models/${brand}`)
-            .then(response => response.json())
-            .then(data => {
-                modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-                data.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.name;
-                    option.text = model.name;
-                    modelSelect.appendChild(option);
+    return new Promise((resolve, reject) => {
+        const modelSelect = document.getElementById('model');
+        if (brand) {
+            fetch(`/api/models/${brand}`)
+                .then(response => response.json())
+                .then(data => {
+                    modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+                    data.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model.name;
+                        option.text = model.name;
+                        modelSelect.appendChild(option);
+                    });
+                    resolve();
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania modeli:', error);
+                    reject(error);
                 });
-            })
-            .catch(error => console.error('Błąd pobierania modeli:', error));
-    } else {
-        modelSelect.innerHTML = '<option value="">Wybierz model</option>';
-    }
+        } else {
+            modelSelect.innerHTML = '<option value="">Wybierz model</option>';
+            resolve();
+        }
+    });
 }
 
 function createSnowflake() {
