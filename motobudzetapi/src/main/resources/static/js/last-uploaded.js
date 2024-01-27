@@ -266,8 +266,6 @@ function displayLastUploaded(min,max,direction){
         container.appendChild(subContainer);
     });
 }
-
-
 function clearAdvertisements(container, direction) {
     const advertisementElements = [...container.getElementsByClassName('sub-container-miniature')];
     advertisementElements.forEach(elem => {

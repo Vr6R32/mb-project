@@ -480,7 +480,7 @@ function handleDeleteZoneDrop(e) {
     return false;
 }
 
-function loadAdvertisementFormListeners() {
+function applyAdvertisementFormListeners() {
     loadFileDrop();
     createDropDeleteZone();
 

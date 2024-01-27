@@ -5,6 +5,8 @@ window.addEventListener('scroll', hideNavBar);
 document.addEventListener('DOMContentLoaded', async () => {
     applySavedZoom();
     handleZoomSlider();
+    applyDarkMode();
+
 });
 
 function isMobileDevice() {
@@ -273,23 +275,24 @@ function paralaxHover() {
     })();
 
 }
-document.addEventListener('DOMContentLoaded', function() {
 
-
+function applyDarkMode() {
     var darkModeCheckbox = document.getElementById('darkModeCheckbox');
     if (darkModeCheckbox) {
-        darkModeCheckbox.addEventListener('change', function() {
+        darkModeCheckbox.addEventListener('change', function () {
             toggleDarkMode();
         });
     }
 
-    if(localStorage.getItem('darkMode') === 'true') {
+    if (localStorage.getItem('darkMode') === 'true') {
         let container = document.getElementById('container-main');
         container.style.backgroundColor = 'black';
         document.body.classList.add('dark-mode');
         darkModeCheckbox.checked = true;
     }
-});
+}
+
+
 
 function toggleDarkMode() {
     let container = document.getElementById('container-main');
@@ -300,7 +303,6 @@ function toggleDarkMode() {
         container.style.backgroundColor = 'transparent';
     }
 }
-
 function applySavedZoom() {
     var savedZoom = localStorage.getItem('userZoom');
     if (savedZoom) {
@@ -315,8 +317,6 @@ function applySavedZoom() {
         }
     }
 }
-
-
 function handleDarkModeInverse(resultDiv,iconWrapper) {
     if (localStorage.getItem('darkMode') === 'true') {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
@@ -350,8 +350,6 @@ function handleDarkModeInverse(resultDiv,iconWrapper) {
             }
     }
 }
-
-
 function showSuccessNotification(message) {
     setTimeout(function() {
         let navbar = document.createElement('div');
@@ -379,8 +377,6 @@ function showSuccessNotification(message) {
         }, 7000);
     });
 }
-
-
 function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
     let rows = Math.ceil(images.length / 6);
     let imagesPerRow = Math.ceil(images.length / rows);
@@ -422,9 +418,6 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
         rowContainers[rowIndex].appendChild(figure);
     });
 }
-
-
-
 function createParalaxMiniatureLastUploaded(image,parrentDiv,height,width) {
 
     const figure = document.createElement('figure');
@@ -433,17 +426,6 @@ function createParalaxMiniatureLastUploaded(image,parrentDiv,height,width) {
     figure.style.height = width;
     figure.style.marginLeft = '20px';
     figure.style.marginRight = '20px';
-    figure.appendChild(image);
-    parrentDiv.appendChild(figure);
-
-}
-
-function createParalaxMiniatureThumbnail(image,parrentDiv,height,width) {
-
-    const figure = document.createElement('figure');
-    figure.className = 'ph-image';
-    figure.style.width = height;
-    figure.style.height = width;
     figure.appendChild(image);
     parrentDiv.appendChild(figure);
 
@@ -460,7 +442,6 @@ function createParalaxMiniature(image,parrentDiv) {
         parrentDiv.appendChild(figure);
 
 }
-
 function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
 
@@ -608,16 +589,16 @@ function createAdvertisementIndexDiv(mainContainer, advertisement) {
 
 
     const containers = [
-        createAdvertisementIndexDetailsContainer('mileage', 'MileageIcon', advertisement.mileage),
-        createAdvertisementIndexDetailsContainer('productionDate', 'ProductionDateIcon', advertisement.productionDate),
-        createAdvertisementIndexDetailsContainer('fuelType', 'FuelTypeIcon', advertisement.fuelType),
-        createAdvertisementIndexDetailsContainer('engineHorsePower', 'EngineIcon', advertisement.engineHorsePower + ' HP'),
-        createAdvertisementIndexDetailsContainer('engineType/' + advertisement.engineType, 'transmissionIcon', advertisement.engineType),
-        createAdvertisementIndexDetailsContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
+        createInfoContainer('mileage', 'MileageIcon', advertisement.mileage),
+        createInfoContainer('productionDate', 'ProductionDateIcon', advertisement.productionDate),
+        createInfoContainer('fuelType', 'FuelTypeIcon', advertisement.fuelType),
+        createInfoContainer('engineHorsePower', 'EngineIcon', advertisement.engineHorsePower + ' HP'),
+        createInfoContainer('engineType/' + advertisement.engineType, 'transmissionIcon', advertisement.engineType),
+        createInfoContainer('transmissionType/' + advertisement.transmissionType, 'transmissionIcon', advertisement.transmissionType)
     ];
 
 
-    containers.push(createAdvertisementIndexDetailsContainer('price', 'PriceIcon', advertisement.price + ',-'));
+    containers.push(createInfoContainer('price', 'PriceIcon', advertisement.price + ',-'));
 
     const maxTextWidth = Math.max(
         ...containers.map(container => container.querySelector('span').offsetWidth)
@@ -691,24 +672,7 @@ function updateTooltipPosition(event) {
         tooltip.style.top = (event.pageY + 20) + 'px';
     });
 }
-function createAdvertisementIndexDetailsContainer(iconPath, altText, value) {
-    const container = document.createElement('advertisementInfoContainer');
-    container.setAttribute('id', 'advertisementInfoContainer');
-    container.style.color = 'darkgoldenrod';
 
-    const icon = document.createElement('img');
-    icon.src = `/api/static/${iconPath}`;
-    icon.alt = altText;
-    icon.style.marginBottom = '2px';
-
-    const valueElement = document.createElement('span');
-    valueElement.textContent = value;
-
-    container.appendChild(icon);
-    container.appendChild(valueElement);
-
-    return container;
-}
 function getUserName() {
     let userNameElement = document.getElementById('username');
     if (userNameElement) {
@@ -719,6 +683,7 @@ function getUserName() {
 }
 function createDialogBox(message){
     if(!document.getElementById('overlayId')){
+
         const overlay = document.createElement('div');
         overlay.setAttribute('id', 'overlayId');
         overlay.style.position = 'fixed';
@@ -735,7 +700,6 @@ function createDialogBox(message){
             }
         });
 
-        // Stwórz okno dialogowe
         const dialogBox = document.createElement('div');
         dialogBox.setAttribute('id','dialogBox')
         dialogBox.style.position = 'fixed';
@@ -1058,45 +1022,6 @@ function createDropDeleteZone(){
         thumbnailzone.insertBefore(deleteZone, document.getElementById('thumbnails'));
     }
 }
-
-function getDeviceScreenInfo(){
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-
-    console.log(`Szerokość ekranu: ${screenWidth}px`);
-    console.log(`Wysokość ekranu: ${screenHeight}px`);
-
-    const availableScreenWidth = window.screen.availWidth;
-    const availableScreenHeight = window.screen.availHeight;
-
-    console.log(`Dostępna szerokość ekranu: ${availableScreenWidth}px`);
-    console.log(`Dostępna wysokość ekranu: ${availableScreenHeight}px`);
-
-    const pixelsPerInch = window.screen.pixelDensity;
-
-    console.log(`Piksele na cal (PPI): ${pixelsPerInch}`);
-
-    const colorDepth = window.screen.colorDepth;
-
-    console.log(`Głębia kolorów: ${colorDepth} bitów`);
-
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-
-    console.log(`Szerokość okna przeglądarki: ${windowWidth}px`);
-    console.log(`Wysokość okna przeglądarki: ${windowHeight}px`);
-
-    window.addEventListener('resize', () => {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        console.log(`Nowa szerokość okna przeglądarki: ${windowWidth}px`);
-        console.log(`Nowa wysokość okna przeglądarki: ${windowHeight}px`);
-    });
-
-}
-
-
-
 function fetchModels(brand) {
     return new Promise((resolve, reject) => {
         const modelSelect = document.getElementById('model');
@@ -1142,42 +1067,54 @@ function createSnowflake() {
 
 setInterval(createSnowflake, 300);
 
+function createInfoContainer(iconPath, altText, value) {
+    const advertisementInfoIconContainer = document.createElement('div');
+    advertisementInfoIconContainer.className = 'advertisementInfoIconContainer';
 
+    const icon = document.createElement('img');
+    icon.src = `/api/static/${iconPath}`;
+    icon.alt = altText;
+    icon.style.marginBottom = '2px';
+
+    const valueElement = document.createElement('span');
+    valueElement.textContent = value;
+
+    advertisementInfoIconContainer.appendChild(icon);
+    advertisementInfoIconContainer.appendChild(valueElement);
+
+    return advertisementInfoIconContainer;
+}
 function createDescriptionEditor() {
     let horizontalContainer = document.getElementById('half-container-horizontal');
     horizontalContainer.style.marginBottom = '200px';
     horizontalContainer.style.padding = '20px';
 
-    let editor = document.createElement('div');
-    editor.id = "editor";
+    let descriptionDivLabel = document.createElement('div');
+    descriptionDivLabel.textContent = 'Opis Ogłoszenia:';
+    descriptionDivLabel.className = 'descriptionDivLabel';
 
-    let label = document.createElement('div');
-    label.textContent = 'Opis Ogłoszenia:'
-    label.style.marginTop = '15px';
-    label.style.marginBottom = '15px';
-    label.style.color = 'darkgoldenrod';
-    label.style.width = '1300px';
-    label.style.textAlign = 'center';
-    label.style.fontSize = '18px';
 
-    editor.style.scrollbarWidth = 'thin';
-    editor.style.scrollbarColor = 'darkgoldenrod transparent';
-    editor.style.WebkitScrollbar = 'thin';
-    editor.style.WebkitScrollbarTrack = 'transparent';
-    editor.style.WebkitScrollbarThumb = 'darkgoldenrod';
-    editor.style.WebkitScrollbarThumbHover = 'goldenrod';
+    let quillEditorContainer = document.createElement('div');
+    quillEditorContainer.id = "editor";
 
-    editor.style.width = '1200px';
-    editor.style.maxWidth = '100%';
-    editor.style.padding = '40px';
-    editor.style.height = '700px';
-    editor.style.backgroundColor = 'black';
-    editor.style.borderRadius = '10px';
-    editor.style.border = "1px solid rgba(255, 255, 255, 0.5)";
-    editor.style.overflowY = 'auto';
+    quillEditorContainer.style.scrollbarWidth = 'thin';
+    quillEditorContainer.style.scrollbarColor = 'darkgoldenrod transparent';
+    quillEditorContainer.style.WebkitScrollbar = 'thin';
+    quillEditorContainer.style.WebkitScrollbarTrack = 'transparent';
+    quillEditorContainer.style.WebkitScrollbarThumb = 'darkgoldenrod';
+    quillEditorContainer.style.WebkitScrollbarThumbHover = 'goldenrod';
 
-    horizontalContainer.appendChild(label);
-    horizontalContainer.appendChild(editor);
+    quillEditorContainer.style.width = '1200px';
+    quillEditorContainer.style.maxWidth = '100%';
+    quillEditorContainer.style.padding = '40px';
+    quillEditorContainer.style.height = '700px';
+    quillEditorContainer.style.backgroundColor = 'black';
+    quillEditorContainer.style.borderRadius = '10px';
+    quillEditorContainer.style.border = "1px solid rgba(255, 255, 255, 0.5)";
+    quillEditorContainer.style.overflowY = 'auto';
+
+    horizontalContainer.appendChild(descriptionDivLabel);
+    horizontalContainer.appendChild(quillEditorContainer);
     horizontalContainer.appendChild(document.createElement('br'));
 
     const toolbarOptions = [
@@ -1207,35 +1144,6 @@ function createDescriptionEditor() {
     quill.format('color', '#fff');
     quill.format(0, quill.getLength(), 'color', '#fff');
 }
-
-
-
-async function checkIsTokenValid(isFetch) {
-    let accessTokenExpirationTime = localStorage.getItem("accessTokenExpirationTime");
-    let refreshTokenExpirationTime = localStorage.getItem("refreshTokenExpirationTime");
-    let currentDate = Date.now();
-
-    let accessTokenValid = accessTokenExpirationTime && !isNaN(accessTokenExpirationTime);
-    let refreshTokenValid = refreshTokenExpirationTime && !isNaN(refreshTokenExpirationTime) && parseInt(refreshTokenExpirationTime, 10) > currentDate;
-
-    if (accessTokenValid) {
-        let accessTokenExpirationDate = new Date(parseInt(accessTokenExpirationTime, 10));
-        let tenMinutesBeforeExpiration = new Date(accessTokenExpirationDate.getTime() - 10 * 600);
-
-        if (currentDate >= tenMinutesBeforeExpiration.getTime()) {
-            console.log("Token za chwilę wygaśnie. Odświeżanie tokenu.");
-            await refreshToken(isFetch);
-        } else {
-            console.log("Token jest jeszcze ważny.");
-        }
-    } else if (refreshTokenValid) {
-        console.log("AccessToken jest nieważny, ale refreshToken jest ważny. Odświeżanie tokenu.");
-        await refreshToken(isFetch);
-    } else {
-        console.log("Oba tokeny są nieważne lub nie istnieją. Użytkownik może być zmuszony do ponownego logowania.");
-    }
-}
-
 function handleLoginResponse(errorOccurred) {
     if (errorOccurred) {
         clearForm();
@@ -1244,45 +1152,11 @@ function handleLoginResponse(errorOccurred) {
         window.location = getRedirectLink();
     }
 }
-
-async function refreshToken() {
-    let url = '/api/v1/auth/refresh-token';
-
-    try {
-        let response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error('Problem z odświeżeniem tokenu.');
-        }
-
-        handleLoginResponse();
-
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-function getCookie(name) {
-    let cookieArray = document.cookie.split(';');
-    for (let cookie of cookieArray) {
-        let [cookieName, cookieValue] = cookie.split('=');
-        if (cookieName.trim() === name) {
-            return cookieValue;
-        }
-    }
-    return null;
-}
-
 function getRedirectLink() {
     const urlParams = new URLSearchParams(window.location.search);
     const redirect = urlParams.get('redirect');
     return redirect ? redirect : '/';
 }
-
-
 
 function setFailGif(submitButton) {
     submitButton.style.display = 'none';
@@ -1314,8 +1188,6 @@ function setSuccessGif(submitButton) {
         submitButton.style.display = 'block';
     }, 6000);
 }
-
-
 
 function validatePhotos() {
     if (selectedFiles.length === 0) {

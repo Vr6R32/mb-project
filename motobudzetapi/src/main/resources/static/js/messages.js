@@ -21,7 +21,7 @@ function createConversationResults(conversation, container) {
 
 
 
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    // if (/Mobi|Android/i.test(navigator.userAgent)) {
         // let resultContainerRight = document.getElementById('resultContainerRight');
         // let rightContainer = document.getElementById('rightContainer');
         // resultContainerRight.style.height = '1400px';
@@ -29,7 +29,8 @@ function createConversationResults(conversation, container) {
         // rightContainer.style.maxHeight = '1800px';
         // rightContainer.style.height = '1000px';
         // resultDiv.style.height = '70%';
-    }
+    // }
+
     resultDiv.onmouseover = () => {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
     };
@@ -47,7 +48,7 @@ function createConversationResults(conversation, container) {
             resultDiv.style.boxShadow = 'none';
         };
         container.innerHTML = "";
-        conversationDetailsMain.removeChild(conversationLastMessage);
+        advertisementDetailsMain.removeChild(conversationLastMessage);
         bottomDetailsHeader.removeChild(conversationDeliveryDateTime);
         fetchConversationMessages(conversation, container, resultDiv);
     };
@@ -63,16 +64,10 @@ function createConversationResults(conversation, container) {
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-miniature-search');
     fadeEffect.appendChild(photoElement);
-
     resultDiv.appendChild(fadeEffect);
 
-    const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
-    conversationDetailsHeader.style.width = '100%';
-    conversationDetailsHeader.style.display = 'flex';
-    conversationDetailsHeader.style.justifyContent = 'space-between';
-    conversationDetailsHeader.style.alignItems = 'center';
-    conversationDetailsHeader.style.boxSizing = "border-box";
-    conversationDetailsHeader.style.flexBasis = "auto";
+    const advertisementDetailsHeader = document.createElement("div");
+    advertisementDetailsHeader.className = "advertisementDetailsHeader";
 
     const titleElement = document.createElement("div");
     titleElement.textContent = conversation.advertisement.name;
@@ -83,7 +78,7 @@ function createConversationResults(conversation, container) {
     titleElement.style.overflow = 'hidden';
     titleElement.style.textOverflow = 'ellipsis';
 
-    conversationDetailsHeader.appendChild(titleElement);
+    advertisementDetailsHeader.appendChild(titleElement);
 
     if (conversation.lastMessage !== null) {
         const dateElement = document.createElement("div");
@@ -93,7 +88,7 @@ function createConversationResults(conversation, container) {
         dateElement.style.textAlign = 'right';
         dateElement.style.marginRight = '15px';
         dateElement.style.whiteSpace = 'nowrap';
-        conversationDetailsHeader.appendChild(dateElement);
+        advertisementDetailsHeader.appendChild(dateElement);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -101,33 +96,14 @@ function createConversationResults(conversation, container) {
     ///////////////////////////////////////////////////////////////////////
 
 
-    const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
-    conversationDetailsDiv.style.width = '100%';
-    conversationDetailsDiv.style.flexBasis = 'auto';
-    conversationDetailsDiv.style.display = 'flex-start';
-    conversationDetailsDiv.style.flexDirection = 'column';
+    const advertisementDetailsDiv = document.createElement("div");
+    advertisementDetailsDiv.className = "advertisementDetailsDiv";
 
+    const advertisementDetailsMain = document.createElement("div");
+    advertisementDetailsMain.className = "advertisementDetailsMain";
 
-    const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
-    conversationDetailsSecondUser.style.width = '100%'; // Dopasowanie do szerokości resultDiv
-    conversationDetailsSecondUser.style.flexBasis = 'auto';
-    conversationDetailsSecondUser.innerHTML = "Konwersacja z → <strong style='font-size: 1.4em;'>" + conversation.secondUser + "</strong>";
-
-
-
-    const conversationDetailsMain = document.createElement("conversationDetailsMain");
-    conversationDetailsMain.style.width = '100%';
-    conversationDetailsMain.style.flexBasis = 'auto';
-    conversationDetailsMain.style.display = 'grid';
-    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
-    // conversationDetailsMain.style.marginTop = '20px';
-
-    const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '75%';
-    advertisementDetails.style.flexBasis = 'auto';
-    advertisementDetails.style.display = 'flex';
-    advertisementDetails.style.marginTop = '15px';
-    advertisementDetails.style.marginLeft = '5%';
+    const advertisementDetails = document.createElement("div");
+    advertisementDetails.className = "advertisementDetails";
 
     let priceUnitValue = document.createElement('span');
     priceUnitValue.style.color = 'darkgoldenrod';
@@ -148,6 +124,7 @@ function createConversationResults(conversation, container) {
     let engineCapacity = document.createElement('span');
     engineCapacity.style.color = 'darkgoldenrod';
     engineCapacity.textContent = 'CM';
+
     let smallerDigit = document.createElement('span');
     smallerDigit.textContent = '3';
     smallerDigit.style.fontSize = '10px';
@@ -155,12 +132,17 @@ function createConversationResults(conversation, container) {
 
     engineCapacity.appendChild(smallerDigit);
 
+
+    const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
+    conversationDetailsSecondUser.style.width = '100%';
+    conversationDetailsSecondUser.style.flexBasis = 'auto';
+    conversationDetailsSecondUser.innerHTML = "Konwersacja z → <strong style='font-size: 1.4em;'>" + conversation.secondUser + "</strong>";
+
     function formatInteger(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
     const containers = [
-        // createInfoContainer('price', 'PriceIcon', formatInteger(ad.price)),
         createInfoContainer('mileage', 'MileageIcon', formatInteger(conversation.advertisement.mileage)),
         createInfoContainer('engineHorsePower', 'EngineIcon', conversation.advertisement.engineHorsePower),
         createInfoContainer('productionDate', 'ProductionDateIcon', conversation.advertisement.productionDate),
@@ -170,7 +152,6 @@ function createConversationResults(conversation, container) {
         createInfoContainer('transmissionType/' + conversation.advertisement.transmissionType, 'transmissionIcon', conversation.advertisement.transmissionType),
     ];
 
-    // containers[0].appendChild(priceUnitValue);
     containers[0].appendChild(mileageUnitValue);
     containers[1].appendChild(horsePower);
     containers[2].appendChild(productionYear);
@@ -223,8 +204,6 @@ function createConversationResults(conversation, container) {
     conversationDeliveryDateTime.style.whiteSpace = "nowrap";
 
 
-
-
     if (conversation.lastMessage === null) {
         conversationDeliveryDateTime.textContent += 'Brak Wiadomości';
     } else {
@@ -241,12 +220,7 @@ function createConversationResults(conversation, container) {
     }
 
     const bottomDetailsHeader = document.createElement("div");
-    bottomDetailsHeader.style.width = '100%';
-    bottomDetailsHeader.style.display = 'flex';
-    bottomDetailsHeader.style.justifyContent = 'space-between';
-    bottomDetailsHeader.style.alignItems = 'center';
-    bottomDetailsHeader.style.boxSizing = "border-box";
-    bottomDetailsHeader.style.flexBasis = "auto";
+    bottomDetailsHeader.className = "bottomDetailsHeader";
     bottomDetailsHeader.style.marginTop = '20px';
 
     const locationDetailsDiv = document.createElement('div');
@@ -255,18 +229,7 @@ function createConversationResults(conversation, container) {
     locationDetailsDiv.style.position = 'relative';
 
     const locationDetails = document.createElement("div");
-    locationDetails.style.color = "white";
-    locationDetails.style.fontSize = "16px";
-    locationDetails.style.position = 'relative';
-    locationDetails.style.textAlign = 'left';
-    locationDetails.style.marginRight = '15px';
-    locationDetails.style.whiteSpace = 'nowrap';
-    locationDetails.style.width = '100%';
-    locationDetails.style.display = 'flex';
-    locationDetails.style.alignItems = 'center';
-    locationDetails.style.boxSizing = "border-box";
-    locationDetails.style.flexBasis = "auto";
-    locationDetails.style.textAlign = 'left';
+    locationDetails.className = "locationDetails";
 
     const citySpan = document.createElement("span");
     citySpan.textContent = conversation.advertisement.city + ',';
@@ -287,44 +250,25 @@ function createConversationResults(conversation, container) {
     bottomDetailsHeader.appendChild(conversationDeliveryDateTime);
 
 
-    conversationDetailsMain.appendChild(conversationDetailsSecondUser);
-    conversationDetailsMain.appendChild(advertisementDetails);
-    conversationDetailsMain.appendChild(conversationLastMessage);
+    advertisementDetailsMain.appendChild(conversationDetailsSecondUser);
+    advertisementDetailsMain.appendChild(advertisementDetails);
+    advertisementDetailsMain.appendChild(conversationLastMessage);
     // conversationDetailsMain.appendChild(conversationDeliveryDateTime);
-    conversationDetailsMain.appendChild(bottomDetailsHeader);
+    advertisementDetailsMain.appendChild(bottomDetailsHeader);
 
-    conversationDetailsDiv.appendChild(conversationDetailsHeader);
-    conversationDetailsDiv.appendChild(conversationDetailsMain);
+    advertisementDetailsDiv.appendChild(advertisementDetailsHeader);
+    advertisementDetailsDiv.appendChild(advertisementDetailsMain);
 
     resultDiv.style.gridColumn = 1;
 
     resultDiv.style.gridRowStart = conversationRow;
     resultDiv.style.gridRowEnd = conversationRow + 1;
 
-    resultDiv.appendChild(conversationDetailsDiv);
+    resultDiv.appendChild(advertisementDetailsDiv);
 
     handleDarkModeInverse(resultDiv);
 
     return resultDiv;
-}
-
-function createInfoContainer(iconPath, altText, value) {
-    const container = document.createElement('messageInfoContainer');
-    container.setAttribute('id', 'messageInfoContainer');
-    container.style.color = 'white';
-
-    const icon = document.createElement('img');
-    icon.src = `/api/static/${iconPath}`;
-    icon.alt = altText;
-    icon.style.marginBottom = '2px';
-
-    const valueElement = document.createElement('span');
-    valueElement.textContent = value;
-
-    container.appendChild(icon);
-    container.appendChild(valueElement);
-
-    return container;
 }
 
 function createSingleMessageContainer(message, resultContainerRight, conversation, currentRow){
@@ -380,17 +324,7 @@ function createMessageInputContainer(resultContainerRight, conversation) {
 
     const sendButton = document.createElement("button");
     sendButton.textContent = "Wyślij";
-    sendButton.style.position = 'absolute';
-    sendButton.style.bottom = '1px';
-    sendButton.style.right = '-75px';
-    sendButton.style.backgroundColor = "black";
-    sendButton.style.color = "white";
-    sendButton.style.border = "1px solid darkgoldenrod";
-    sendButton.style.padding = "10px 20px";
-    sendButton.style.cursor = "pointer";
-    sendButton.style.transition = "0.3s";
-    sendButton.style.borderRadius = '15px';
-    sendButton.style.marginRight = '3px';
+    sendButton.className = "sendMessageButton";
 
     sendButton.addEventListener("click", function () {
         sendMessage(messageInput, conversation, resultContainerRight, messageInputDiv);

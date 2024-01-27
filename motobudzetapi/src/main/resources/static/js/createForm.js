@@ -5,7 +5,7 @@ let dragSrcElement = null;
 document.addEventListener('DOMContentLoaded', async function () {
 
     createAdvertisementForm('Dodaj Nowe Ogłoszenie');
-    loadAdvertisementFormListeners();
+    applyAdvertisementFormListeners();
     fetchUserDetails();
 
     // handleImageUrl("https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhubHJ5ZHpwNDhkbzItT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.wqdGocguDvXytJOqUereVMNG5jyPJ-EWs7IpAIC8EJQ/image.webp");

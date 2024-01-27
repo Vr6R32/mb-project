@@ -7,13 +7,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     extractAdvertisementId();
     await fetchAdvertisement();
 });
-
-
 function extractAdvertisementId() {
     const urlParams = new URLSearchParams(document.location.search);
     advertisementId = urlParams.get('id');
 }
-
 function initializeUrlParameters(data) {
     let urlParams = new URLSearchParams(window.location.search);
     let editedParam = "edited";
@@ -26,9 +23,6 @@ function initializeUrlParameters(data) {
         showSuccessNotification("Twoje ogłoszenie zostało zmodyfikowane pomyślnie, po szybkim procesie weryfikacji , dostaniesz informacje na adres e-mail że ogloszenie jest widoczne publicznie.");
     }
 }
-
-
-
 function createHeaderTitle(advertisement, container, owner) {
 
     let loggedUser = getUserName();
@@ -60,7 +54,6 @@ function createHeaderTitle(advertisement, container, owner) {
     titleMidColumn.style.fontWeight = 'bold';
     titleMidColumn.style.maxWidth = '100%';
     titleMidColumn.style.width = '100%';
-
 
     const titleRightColumn = document.createElement('h2');
     titleRightColumn.style.gridColumn = '3';
@@ -249,6 +242,7 @@ function createMessageBox(messageIcon, loggedUser) {
 
 
     const overlay = document.createElement('div');
+    overlay.setAttribute('id', 'overlayId');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
     overlay.style.left = '0';
@@ -265,7 +259,6 @@ function createMessageBox(messageIcon, loggedUser) {
     dialogBox.style.width = '600px';
     dialogBox.style.transform = 'translate(-50%, -50%)';
     dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-
     dialogBox.style.borderRadius = '15px';
     dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
     dialogBox.style.flexDirection = 'column';
@@ -373,12 +366,10 @@ function sendNewMessage(messageValue, advertisementId) {
                 let dialogBox = document.getElementById('dialogBox');
                 let dialogBoxTitle = document.getElementById('dialogBoxTitle');
                 dialogBox.innerHTML = '';
-                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości. Status:" + error.message;
+                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości." + " Musisz się zalogować !";
                 dialogBox.appendChild(dialogBoxTitle);
-                console.error();
         });
 }
-
 function fetchAdvertisement() {
     return fetch('/api/advertisements/' + advertisementId)
         .then(response => {
@@ -412,7 +403,6 @@ function fetchAdvertisement() {
             return null;
         });
 }
-
 function getUserRole() {
     let roleElement = document.getElementById('ROLE');
     if (roleElement) {

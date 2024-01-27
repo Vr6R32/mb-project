@@ -7,7 +7,7 @@ let advertisementId = null;
 document.addEventListener('DOMContentLoaded', function () {
 
     createAdvertisementForm('Edytuj swoje ogłoszenie');
-    loadAdvertisementFormListeners();
+    applyAdvertisementFormListeners();
 
     fetchAdvertisementDetails()
         .then(userData => {

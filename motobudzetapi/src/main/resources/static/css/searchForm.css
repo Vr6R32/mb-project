@@ -89,3 +89,31 @@ input[type=number] {
 #suggestionsList::-webkit-scrollbar-track {
     background-color: transparent;
 }
+
+.paginationButton {
+    background-color: black;
+    color: white;
+    border: 1px solid darkgoldenrod;
+    padding: 10px 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+    position: relative;
+    width: 100%;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.sortButton {
+    font-weight: bold;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border: 1px solid darkgoldenrod;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+    margin-right: 10px;
+    width: 13%;
+}

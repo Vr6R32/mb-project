@@ -8,7 +8,7 @@ let lastSortTime = 0;
 let isMobile = false;
 
 document.addEventListener("DOMContentLoaded", async function () {
-    createSearchFormContainer();
+    await createSearchFormContainer();
     fetchAllSpecifications();
     getParametersFromCurrentUrl();
     initializeParameters();
@@ -116,7 +116,7 @@ setTimeout(function setInputSelect() {
                     fields[key].style.color = 'white';
                     let label = document.querySelector(`label[for='${fields[key].id}']`);
                     if (label) {
-                        applyLabelColor(fields[key], label); // Zastosuj kolor etykiety
+                        applyLabelColor(fields[key], label);
                     }
                 }
             }
@@ -143,10 +143,9 @@ setTimeout(function setModelSelect() {
                     if (modelValue !== null && modelValue.trim() !== "") {
                         modelSelect.value = modelValue;
                         modelSelect.style.color = 'white';
-                        // Pobierz etykietę powiązaną z elementem modelSelect
                         let label = document.querySelector(`label[for='model']`);
                         if (label) {
-                            applyLabelColor(modelSelect, label); // Zastosuj kolor etykiety
+                            applyLabelColor(modelSelect, label);
                         }
                     }
                 })
@@ -306,20 +305,17 @@ function createSearchFormButton(form) {
         searchButton.style.color = "white";
     });
 
-// Przywrócenie efektu fade po opuszczeniu przycisku
     searchButton.addEventListener("mouseout", function () {
         searchButton.style.boxShadow = '0 0 20px darkgoldenrod';
         searchButton.style.color = "black";
     });
 
-    searchButton.style.flexBasis = "15%"; // Przycisk na 100% szerokości czterech kolumn
+    searchButton.style.flexBasis = "15%";
     form.appendChild(searchButton);
 }
 
 function handleFilterAutoResultCountFetch(form) {
     let inputs = form.querySelectorAll('input, select, textarea');
-
-// Funkcja debounce, która opóźnia wywołanie funkcji do czasu, aż przestaną napływać wywołania
     const debounce = (func, delay) => {
         let inDebounce;
         return function () {
@@ -337,7 +333,7 @@ function handleFilterAutoResultCountFetch(form) {
 
                 formData.set(input.name, input.value);
                 executeAdvertisementFilterResultCount();
-            }, 500)); // Opóźnienie 500ms
+            }, 500));
         } else {
             input.addEventListener('input', debounce(function () {
                 input.value = input.value.trim();
@@ -349,7 +345,7 @@ function handleFilterAutoResultCountFetch(form) {
                     formData.set("model", "");
                 }
                 executeAdvertisementFilterResultCount();
-            }, 500)); // Opóźnienie 500ms
+            }, 500));
         }
     });
 }
@@ -445,7 +441,6 @@ function executeAdvertisementFilterResultCount() {
     // Define the endpoint URL
     let url = 'api/advertisements/filter/count';
 
-    // Append FormData values to the URL if you need query parameters
     let params = new URLSearchParams();
     for (let pair of formData.entries()) {
         params.append(pair[0], pair[1]);
@@ -454,12 +449,10 @@ function executeAdvertisementFilterResultCount() {
         url += '?' + params.toString();
     }
 
-    // Execute the GET request
     fetch(url, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            // Add any other necessary headers here
         }
     })
         .then(response => {
@@ -619,9 +612,6 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         dataList.style.maxHeight = '300px';
         dataList.style.height = "5.1em";
         dataList.style.overflow = "hidden";
-        // inputElement.addEventListener('mouseenter', function() {
-        //     this.click();
-        // });
         inputElement.addEventListener('input', function(event) {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
@@ -640,7 +630,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
 
 
     if(inputId ==='title') {
-        rowDiv.style.flexBasis = "40%"; // Cztery kolumny - 25% szerokości wiersza
+        rowDiv.style.flexBasis = "40%";
         rowDiv.style.marginBottom = "0px";
     }
 
@@ -686,11 +676,8 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         suggestionsList.style.minWidth = '200px';
         suggestionsList.style.overflowY = 'auto';
         suggestionsList.style.display = 'none';
-        suggestionsList.style.zIndex = '1000'; // Ensure it appears above other content
-        // suggestionsList.style.marginTop = '200px';
-        // suggestionsList.style.bottom = "-30px";
+        suggestionsList.style.zIndex = '1000';
         suggestionsList.style.top = "100%";
-
         suggestionsList.style.scrollbarWidth = 'thin';
         suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
         suggestionsList.style.WebkitScrollbar = 'thin';
@@ -698,8 +685,6 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
         suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
 
-
-        // Dodaj obsługę kliknięcia na propozycję miasta
         suggestionsList.addEventListener('click', function (event) {
             if (event.target && event.target.nodeName === 'LI') {
                 inputElement.value = event.target.textContent;
@@ -707,27 +692,21 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
             }
         });
 
-        // Dodaj listę propozycji do pola miasta
         inputContainer.appendChild(inputElement);
         inputColumn.appendChild(suggestionsList);
         rowDiv.appendChild(inputContainer);
 
-        // Obsługa wprowadzania tekstu w polu miasta
         let timeoutId;
-        const debounceDelay = 200; // Opóźnienie dynamiczne (1 sekunda)
+        const debounceDelay = 200;
 
         inputElement.addEventListener("input", function () {
-            // Anuluje poprzednie żądanie, jeśli istnieje
             clearTimeout(timeoutId);
             if (inputElement.value.length > 0) {
                 inputElement.value = inputElement.value.charAt(0).toUpperCase() + inputElement.value.slice(1);
             }
 
             const partialCityName = inputElement.value;
-
-            // Ustawia nowe opóźnienie
             timeoutId = setTimeout(function () {
-                // Wykonuje żądanie do backendu REST API, przesyłając częściową nazwę miasta
                 fetch(`/api/cities?partialName=${partialCityName}`)
                     .then(response => response.json())
                     .then(data => {
@@ -736,7 +715,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
                     .catch(error => {
                         console.error("Błąd podczas pobierania propozycji miast:", error);
                     });
-            }, debounceDelay); // Odczekuje 1 sekundę po zakończeniu wpisywania użytkownika
+            }, debounceDelay);
         });
     }
 
@@ -843,7 +822,6 @@ function displayResults(data) {
     data.content.forEach(ad => {
 
         const resultDiv = document.createElement("messageResultDiv");
-        // resultDiv.className = 'searchResult';
         resultDiv.id = "messageResultDiv";
         resultDiv.style.width = "100%";
         resultDiv.style.height = "210px";
@@ -899,9 +877,6 @@ function displayResults(data) {
         titleElement.style.color = "white";
         titleElement.style.fontSize = "24px";
         titleElement.style.textAlign = 'left';
-        // titleElement.style.overflow = 'hidden';
-        // titleElement.style.textOverflow = 'ellipsis';
-        // titleElement.style.whiteSpace = 'nowrap';
 
         const modelBrandElement = document.createElement("div");
         modelBrandElement.textContent = ad.brand + ' ' + ad.model;
@@ -955,10 +930,6 @@ function displayResults(data) {
         conversationDetailsMain.style.flexBasis = 'auto';
         conversationDetailsMain.style.display = 'grid';
         conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
-        // conversationDetailsMain.style.marginTop = '20px';
-        // conversationDetailsMain.style.overflow = 'auto'; // Allows scrolling within the element if content overflows
-        // conversationDetailsMain.style.msOverflowStyle = 'none';  // IE and Edge
-        // conversationDetailsMain.style.scrollbarWidth = 'none';  // Firefox
 
 
         const advertisementDetails = document.createElement("conversationDetailsBottom");
@@ -1062,7 +1033,7 @@ function displayResults(data) {
         const favouriteWrapper = document.createElement('div');
         favouriteWrapper.id = 'favouriteWrapper';
         favouriteWrapper.style.display = 'flex';
-        favouriteWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+        favouriteWrapper.style.alignItems = 'center';
 
         const favouriteIconDiv = document.createElement('div');
         favouriteIconDiv.style.color = 'white';
@@ -1080,13 +1051,12 @@ function displayResults(data) {
             favouriteText.style.opacity = '0';
         });
 
-
         const favouriteText = document.createElement('span');
         favouriteText.id = 'favouriteText';
         favouriteText.style.border = '5px';
         favouriteText.style.color = 'white';
         favouriteText.style.position = 'relative';
-        favouriteText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+        favouriteText.style.left = '-150px';
         favouriteText.style.opacity = '0';
         favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
 
@@ -1098,25 +1068,25 @@ function displayResults(data) {
 
 
         const editBottomHeaderDiv = document.createElement("div");
-        editBottomHeaderDiv.style.color = "darkgoldenrod"; // Dostosuj kolor tekstu
-        editBottomHeaderDiv.style.fontSize = "18px"; // Dostosuj rozmiar tekstu
-        editBottomHeaderDiv.style.position = 'relative'; // Dostosuj rozmiar tekstu
-        editBottomHeaderDiv.style.bottom = '-25px'; // Dostosuj rozmiar tekstu
+        editBottomHeaderDiv.style.color = "darkgoldenrod";
+        editBottomHeaderDiv.style.fontSize = "18px";
+        editBottomHeaderDiv.style.position = 'relative';
+        editBottomHeaderDiv.style.bottom = '-25px';
         editBottomHeaderDiv.style.textAlign = 'right';
         editBottomHeaderDiv.style.marginRight = '25px';
-        editBottomHeaderDiv.style.whiteSpace = 'nowrap'; // Tekst nie lami się na wiele linii
+        editBottomHeaderDiv.style.whiteSpace = 'nowrap';
 
         const editWrapper = document.createElement('div');
         editWrapper.id = 'editWrapper';
         editWrapper.style.display = 'flex';
-        editWrapper.style.alignItems = 'center';  // Wycentrowanie elementów w pionie
+        editWrapper.style.alignItems = 'center';
 
         const editText = document.createElement('span');
         editText.id = 'editText';
         editText.style.border = '5px';
         editText.style.color = 'white';
         editText.style.position = 'relative';
-        editText.style.left = '-150px';  // -150px jest przykładową wartością, dostosuj do rzeczywistej szerokości tekstu
+        editText.style.left = '-150px';
         editText.style.opacity = '0';
         editText.style.transition = 'left 0.5s, opacity 0.5s';
 
@@ -1127,13 +1097,13 @@ function displayResults(data) {
 
         editIconDiv.addEventListener('mouseover', function() {
             editIconDiv.style.cursor = "pointer";
-            editText.style.left = '-15px';  // Przesuń tekst do pozycji początkowej
-            editText.style.opacity = '1';  // Ustaw opacity na 1
+            editText.style.left = '-15px';
+            editText.style.opacity = '1';
         });
         editIconDiv.addEventListener('mouseout', function() {
             editIconDiv.style.cursor = "auto";
-            editText.style.left = '-150px';  // Chowa tekst z powrotem poza widok
-            editText.style.opacity = '0';  // Ustaw opacity na 0
+            editText.style.left = '-150px';
+            editText.style.opacity = '0';
         });
 
         const editIcon = document.createElement('img');
@@ -1202,7 +1172,6 @@ function displayResults(data) {
         }
 
         const containers = [
-            // createInfoContainer('price', 'PriceIcon', formatInteger(ad.price)),
             createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
             createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
             createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
@@ -1212,7 +1181,6 @@ function displayResults(data) {
             createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
         ];
 
-        // containers[0].appendChild(priceUnitValue);
         containers[0].appendChild(mileageUnitValue);
         containers[1].appendChild(horsePower);
         containers[2].appendChild(productionYear);
@@ -1226,7 +1194,6 @@ function displayResults(data) {
             ...containers.map(container => container.querySelector('span').offsetWidth)
         );
 
-        // Ustaw taką samą szerokość dla wszystkich kontenerów
         containers.forEach(container => {
             container.style.width = maxTextWidth + '55px';
         });
@@ -1241,8 +1208,6 @@ function displayResults(data) {
 
 
         resultsDiv.appendChild(resultDiv);
-
-
 
         if (searchFormContainer) {
             mainContainer.insertBefore(resultsDiv, searchFormContainer.nextSibling);
@@ -1259,7 +1224,7 @@ function displayResults(data) {
         sortDiv.style.width = '100%';
         sortDiv.style.display = 'flex';
         sortDiv.style.justifyContent = 'center';
-        sortDiv.style.alignItems = 'center'; // To wy
+        sortDiv.style.alignItems = 'center';
         sortDiv.style.marginBottom = '15px'
 
         const actualSortParam = createSortParamContainer(sortDiv);
@@ -1268,23 +1233,20 @@ function displayResults(data) {
         resultsDiv.insertBefore(actualSortParam, resultsDiv.firstChild);
     }
 
-    // Display pagination links if there are multiple pages
     if (data.totalPages > 1) {
         const paginationDiv = document.createElement("div");
         paginationDiv.className = "pagination";
         paginationDiv.style.width = '100%';
         paginationDiv.style.display = 'flex';
         paginationDiv.style.justifyContent = 'center';
-        paginationDiv.style.alignItems = 'center'; // To wy
-        paginationDiv.style.marginTop = '30px'; // To wy
+        paginationDiv.style.alignItems = 'center';
+        paginationDiv.style.marginTop = '30px';
 
-        // Add previous page button
         if (!data.first) {
             const prevPageButton = createPaginationButton(data.number - 1, "<", formData);
             paginationDiv.appendChild(prevPageButton);
         }
 
-        // Add page number buttons
         for (let i = 0; i < data.totalPages; i++) {
             const pageButton = createPaginationButton(i, i + 1, formData);
             if (i === data.number) {
@@ -1378,9 +1340,9 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     let currentPageNumber = extractPageNumber();
 
     const container = document.createElement("div");
-    container.style.display = "flex"; // Użycie Flexboxa
-    container.style.justifyContent = 'center'; // Wyśrodkowanie w poziomie
-    container.style.alignItems = 'center'; // Wyśrodkowanie w pionie
+    container.style.display = "flex";
+    container.style.justifyContent = 'center';
+    container.style.alignItems = 'center';
     container.style.position = 'relative';
     container.style.transition = "top 0.3s ease-in-out";
     container.style.width = '7%';
@@ -1393,32 +1355,16 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
     container.onmouseout = function() {
         container.style.top = '0';
     };
-
-
-
-
-    const button = document.createElement("button");
-    button.textContent = label;
-    button.style.backgroundColor = "black";
-    button.style.color = "white";
-    button.style.border = "1px solid darkgoldenrod";
-    button.style.padding = "10px 10px";
-    button.style.cursor = "pointer";
-    button.style.transition = "0.3s";
-    button.style.borderRadius = '15px';
-    button.style.position = 'relative';
-    button.style.width = '100%';
-    button.style.fontStyle = 'bold';
-    button.style.fontSize = '22px';
-
+    const paginationButton = document.createElement("button");
+    paginationButton.textContent = label;
+    paginationButton.className = "paginationButton";
 
     if(currentPageNumber+1 === label){
-        button.style.boxShadow = '0 0 20px darkgoldenrod';
-        button.style.fontSize = '34px';
+        paginationButton.style.boxShadow = '0 0 20px darkgoldenrod';
+        paginationButton.style.fontSize = '34px';
     }
 
-
-    button.addEventListener("click", function () {
+    paginationButton.addEventListener("click", function () {
         formData.set("pageNumber", pageNumber);
         if (sortOrder == null) {
             sortOrder = "asc";
@@ -1435,56 +1381,46 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
             });
         }, 500);
     });
-    container.appendChild(button);
+    container.appendChild(paginationButton);
     return container;
 }
 function createSortButton(sortBy) {
 
     clickedButton = "";
 
-    const button = document.createElement("button");
-    button.style.fontStyle = 'bold';
-    button.style.fontSize = '16px';
-    button.style.backgroundColor = "black";
-    button.style.color = "white";
-    button.style.border = "1px solid darkgoldenrod";
-    button.style.padding = "10px 20px";
-    button.style.cursor = "pointer";
-    button.style.transition = "0.3s";
-    button.style.borderRadius = '15px';
-    button.style.marginRight = '10px';
-    button.style.width = '13%';
+    const sortButton = document.createElement("button");
+    sortButton.className = "sortButton";
 
     if(extractSortParam() === sortBy){
-        button.style.boxShadow = '0 0 20px moccasin';
+        sortButton.style.boxShadow = '0 0 20px moccasin';
     }
 
     switch (sortBy) {
         case 'price':
             if(extractSortParam() === null){
-                button.style.boxShadow = '0 0 20px moccasin';
+                sortButton.style.boxShadow = '0 0 20px moccasin';
             }
-            button.textContent = 'Cena pojazdu';
+            sortButton.textContent = 'Cena pojazdu';
             break;
         case 'mileage':
-            button.textContent = 'Przebieg pojazdu';
+            sortButton.textContent = 'Przebieg pojazdu';
             break;
         case 'engineCapacity':
-            button.textContent = 'Pojemność silnika';
+            sortButton.textContent = 'Pojemność silnika';
             break;
         case 'engineHorsePower':
-            button.textContent = 'Moc silnika';
+            sortButton.textContent = 'Moc silnika';
             break;
         case 'productionDate':
-            button.textContent = 'Data produkcji';
+            sortButton.textContent = 'Data produkcji';
             break;
         default:
-            button.textContent = 'Inny tekst';
+            sortButton.textContent = 'Inny tekst';
             break;
     }
 
-    button.style.marginBottom = '20px';
-    button.addEventListener("click", function (event) {
+    sortButton.style.marginBottom = '20px';
+    sortButton.addEventListener("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -1498,11 +1434,11 @@ function createSortButton(sortBy) {
         formData.set("sortOrder", sortOrder);
         formData.set("sortBy", sortBy);
         formData.set("pageNumber", "0");
-        clickedButton = button.textContent;
+        clickedButton = sortButton.textContent;
         sortingBy = sortBy;
         executeSearch(formData);
     });
-    return button;
+    return sortButton;
 }
 function executeSearch(formData) {
 
@@ -1524,9 +1460,6 @@ function executeSearch(formData) {
         }
         sortingBy = formData.get("sortBy");
         sortOrder = formData.get("sortOrder");
-        // const newUrl = window.location.pathname + "?" + searchParams.toString();
-        // history.pushState(null, null, newUrl);
-        // history.replaceState(null, null, newUrl);
         history.replaceState(null, null,  "?" + searchParams.toString());
     });
 
@@ -1541,28 +1474,7 @@ function executeSearch(formData) {
         })
         .catch(error => console.error("Error fetching data:", error));
 }
-function createInfoContainer(iconPath, altText, value) {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.alignItems = 'center';
-    container.style.flexGrow = '1';
-    container.style.textAlign = 'center';
-    container.style.marginRight = '30px';
-    container.style.color = 'white';
-    const icon = document.createElement('img');
-    icon.src = `/api/static/${iconPath}`;
-    icon.alt = altText;
-    icon.style.marginBottom = '2px';
 
-    const valueElement = document.createElement('span');
-    valueElement.textContent = value;
-
-    container.appendChild(icon);
-    container.appendChild(valueElement);
-
-    return container;
-}
 
 function populateSelectOptions(options, selectId) {
     const selectElement = document.getElementById(selectId);
@@ -1575,8 +1487,6 @@ function populateSelectOptions(options, selectId) {
         defaultOption.style.color = 'gray';
         defaultOption.textContent = "Wybierz...";
         selectElement.appendChild(defaultOption);
-    // defaultOption.selected = true; // Optional: make it selected by default
-
     if(options !== null) {
         options.forEach(option => {
             const optionElement = document.createElement("option");

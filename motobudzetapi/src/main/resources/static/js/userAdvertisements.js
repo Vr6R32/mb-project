@@ -48,29 +48,18 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     photoElement.style.height = "200px";
     photoElement.style.minWidth = '250px';
     photoElement.style.maxWidth = '250px';
-    photoElement.style.objectFit = "cover";
-    // photoElement.style.backgroundColor = 'rgba(0, 0, 0, 1)'
-
+    photoElement.style.objectFit = "cover"
 
     const fadeEffect = document.createElement('div');
     fadeEffect.classList.add('fade-effect-miniature-search');
     fadeEffect.appendChild(photoElement);
-
     resultDiv.appendChild(fadeEffect);
 
-    const conversationDetailsHeader = document.createElement("conversationDetailsHeader");
-    conversationDetailsHeader.style.width = '100%';
-    conversationDetailsHeader.style.display = 'flex';
-    conversationDetailsHeader.style.justifyContent = 'space-between';
-    conversationDetailsHeader.style.alignItems = 'center';
-    conversationDetailsHeader.style.boxSizing = "border-box";
-    conversationDetailsHeader.style.flexBasis = "auto";
+    const advertisementDetailsHeader = document.createElement("div");
+    advertisementDetailsHeader.className = "advertisementDetailsHeader";
 
     const headerTitleNameDiv = document.createElement('div');
-    headerTitleNameDiv.style.display = 'column';
-    headerTitleNameDiv.style.width = '100%';
-    headerTitleNameDiv.style.position = 'relative';
-    headerTitleNameDiv.style.bottom = '-15px';
+    headerTitleNameDiv.className = 'headerTitleNameDiv';
 
     const titleElement = document.createElement("div");
     titleElement.textContent = ad.name;
@@ -87,7 +76,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     headerTitleNameDiv.appendChild(titleElement);
     headerTitleNameDiv.appendChild(modelBrandElement);
 
-    conversationDetailsHeader.appendChild(headerTitleNameDiv);
+    advertisementDetailsHeader.appendChild(headerTitleNameDiv);
 
     const priceHeader = document.createElement("div");
     priceHeader.style.color = "darkgoldenrod";
@@ -113,30 +102,17 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     priceHeader.appendChild(priceElement);
 
-    conversationDetailsHeader.appendChild(priceHeader);
+    advertisementDetailsHeader.appendChild(priceHeader);
 
 
-    const conversationDetailsDiv = document.createElement("conversationDetailsDiv");
-    conversationDetailsDiv.style.width = '100%';
-    conversationDetailsDiv.style.flexBasis = 'auto';
-    conversationDetailsDiv.style.display = 'flex-start';
-    conversationDetailsDiv.style.flexDirection = 'column';
-    // conversationDetailsDiv.style.marginBottom = '30px';
+    const advertisementDetailsDiv = document.createElement("div");
+    advertisementDetailsDiv.className = "advertisementDetailsDiv";
 
+    const advertisementDetailsMain = document.createElement("div");
+    advertisementDetailsMain.className = "advertisementDetailsMain";
 
-    const conversationDetailsMain = document.createElement("conversationDetailsMain");
-    conversationDetailsMain.style.width = '100%';
-    conversationDetailsMain.style.flexBasis = 'auto';
-    conversationDetailsMain.style.display = 'grid';
-    conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
-    conversationDetailsMain.style.marginTop = '20px';
-
-    const advertisementDetails = document.createElement("conversationDetailsBottom");
-    advertisementDetails.style.width = '75%';
-    advertisementDetails.style.flexBasis = 'auto';
-    advertisementDetails.style.display = 'flex';
-    advertisementDetails.style.marginTop = '15px';
-    advertisementDetails.style.marginLeft = '5%';
+    const advertisementDetails = document.createElement("div");
+    advertisementDetails.className = "advertisementDetails";
 
     let priceUnitValue = document.createElement('span');
     priceUnitValue.style.color = 'darkgoldenrod';
@@ -165,34 +141,17 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     engineCapacity.appendChild(smallerDigit);
 
 
-    const bottomDetailsHeader = document.createElement("bottomDetailsHeader");
-    bottomDetailsHeader.style.width = '100%';
-    bottomDetailsHeader.style.display = 'flex';
-    bottomDetailsHeader.style.justifyContent = 'space-between';
-    bottomDetailsHeader.style.alignItems = 'center';
-    bottomDetailsHeader.style.boxSizing = "border-box";
-    bottomDetailsHeader.style.flexBasis = "auto";
+    const bottomDetailsHeader = document.createElement("div");
+    bottomDetailsHeader.className = "bottomDetailsHeader";
 
     const locationDetailsDiv = document.createElement('div');
     locationDetailsDiv.style.display = 'column';
     locationDetailsDiv.style.width = '100%';
     locationDetailsDiv.style.position = 'relative';
     locationDetailsDiv.style.top = '10px';
-    // locationDetailsDiv.style.bottom = '20px';
 
     const locationDetails = document.createElement("div");
-    locationDetails.style.color = "white";
-    locationDetails.style.fontSize = "16px";
-    locationDetails.style.position = 'relative';
-    locationDetails.style.textAlign = 'left';
-    locationDetails.style.marginRight = '15px';
-    locationDetails.style.whiteSpace = 'nowrap';
-    locationDetails.style.width = '100%';
-    locationDetails.style.display = 'flex';
-    locationDetails.style.alignItems = 'center';
-    locationDetails.style.boxSizing = "border-box";
-    locationDetails.style.flexBasis = "auto";
-    locationDetails.style.textAlign = 'left';
+    locationDetails.className = "locationDetails";
 
     const citySpan = document.createElement("span");
     citySpan.textContent = ad.city + ',';
@@ -509,16 +468,16 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
         container.style.width = maxTextWidth + '65px';
     });
 
-    conversationDetailsMain.appendChild(advertisementDetails);
-    conversationDetailsDiv.appendChild(conversationDetailsHeader);
-    conversationDetailsDiv.appendChild(conversationDetailsMain);
-    conversationDetailsDiv.appendChild(bottomDetailsHeader);
+    advertisementDetailsMain.appendChild(advertisementDetails);
+    advertisementDetailsDiv.appendChild(advertisementDetailsHeader);
+    advertisementDetailsDiv.appendChild(advertisementDetailsMain);
+    advertisementDetailsDiv.appendChild(bottomDetailsHeader);
 
 
 
 
 
-    resultDiv.appendChild(conversationDetailsDiv);
+    resultDiv.appendChild(advertisementDetailsDiv);
 
     resultDiv.style.gridColumn = 1;
 
