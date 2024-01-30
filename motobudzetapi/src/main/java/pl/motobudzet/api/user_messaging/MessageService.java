@@ -19,7 +19,6 @@ public class MessageService {
 
     private final ConversationService conversationService;
     private final MessagesRepository messagesRepository;
-//    private final KafkaServiceInterface kafkaService;
     private final SpringMailSenderService springMailSenderService;
 
     public String sendMessage(String message, UUID advertisementId, AppUser user) {
@@ -124,16 +123,4 @@ public class MessageService {
     private boolean authorizeMessagePostAccess(String loggedUser, String userNameOwner, String userNameClient) {
         return loggedUser.equals(userNameClient) || loggedUser.equals(userNameOwner);
     }
-
-
-//    private void sendEmailMessageNotificationToKafka(String message, AppUser emailNotificationReceiver, AppUser messageSender, Conversation conversation) {
-//        EmailMessageRequest emailMessageRequest = EmailMessageRequest.builder()
-//                .message(message)
-//                .senderName(messageSender.getUsername())
-//                .receiverEmail(emailNotificationReceiver.getEmail())
-//                .advertisementTitle(conversation.getAdvertisement().getName())
-//                .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
-//                .build();
-//        kafkaService.sendMessageNotification(emailMessageRequest);
-//    }
 }

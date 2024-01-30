@@ -753,7 +753,7 @@ function getUserFavourites() {
 
 
 function createSortParamContainer(sortDiv) {
-    const actualSortParam = document.createElement('div');
+
     let sortingByView = sortingBy;
 
     switch (sortingBy) {
@@ -777,20 +777,16 @@ function createSortParamContainer(sortDiv) {
             break;
     }
 
-    actualSortParam.textContent = (sortOrder !== 'desc' ? 'Sortowanie według ' + sortingByView + ' rosnąco ⇧' : 'Sortowanie według ' + sortingByView + ' malejąco ⇩');
-    actualSortParam.style.color = 'white';
-    actualSortParam.style.fontStyle = 'bold';
-    actualSortParam.style.fontSize = '24px';
-    actualSortParam.style.display = 'flex';
-    actualSortParam.style.justifyContent = 'center';
-    actualSortParam.style.marginBottom = '15px';
+    const actualSortParamTextDiv = document.createElement('div');
+    actualSortParamTextDiv.textContent = (sortOrder !== 'desc' ? 'Sortowanie według ' + sortingByView + ' rosnąco ⇧' : 'Sortowanie według ' + sortingByView + ' malejąco ⇩');
+    actualSortParamTextDiv.className = 'actualSortParamTextDiv';
 
     const sortableParams = ["price", "mileage", "engineHorsePower", "productionDate", "engineCapacity"];
     sortableParams.forEach(sortBy => {
         const sortButton = createSortButton(sortBy);
         sortDiv.appendChild(sortButton);
     });
-    return actualSortParam;
+    return actualSortParamTextDiv;
 }
 
 function displayResults(data) {
@@ -1339,21 +1335,14 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
 
     let currentPageNumber = extractPageNumber();
 
-    const container = document.createElement("div");
-    container.style.display = "flex";
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.position = 'relative';
-    container.style.transition = "top 0.3s ease-in-out";
-    container.style.width = '7%';
-    container.style.marginLeft = '1%';
-    container.style.marginRight = '1%';
+    const paginationButtonDiv = document.createElement("div");
+    paginationButtonDiv.className = "paginationButtonDiv";
 
-    container.onmouseover = function() {
-        container.style.top = '-5px';
+    paginationButtonDiv.onmouseover = function() {
+        paginationButtonDiv.style.top = '-5px';
     };
-    container.onmouseout = function() {
-        container.style.top = '0';
+    paginationButtonDiv.onmouseout = function() {
+        paginationButtonDiv.style.top = '0';
     };
     const paginationButton = document.createElement("button");
     paginationButton.textContent = label;
@@ -1381,8 +1370,8 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
             });
         }, 500);
     });
-    container.appendChild(paginationButton);
-    return container;
+    paginationButtonDiv.appendChild(paginationButton);
+    return paginationButtonDiv;
 }
 function createSortButton(sortBy) {
 

@@ -32,7 +32,6 @@ public class JsonObjectExtractor {
 
     public static String extractPrice(JsonNode jsonResponse) {
         JsonNode priceNode = jsonResponse.get("price").get("value");
-        JsonNode currencyNode = jsonResponse.get("price").get("currency");
         return priceNode.asText();
     }
 

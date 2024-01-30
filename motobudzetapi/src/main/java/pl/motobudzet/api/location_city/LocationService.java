@@ -17,7 +17,7 @@ public class LocationService {
     private final CityStateRepository stateRepository;
 
     public List<CityDTO> getAllCities() {
-        return cityRepository.getAllCitiesWithCityStates().stream().map(this::mapToCityDTO).collect(Collectors.toList());
+        return cityRepository.getAllCitiesWithCityStates().stream().map(this::mapToCityDTO).toList();
     }
     public double calculateCityDistance(String cityOne, String cityTwo) {
         City firstCity = cityRepository.getCityByNameWithState(cityOne).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
@@ -64,11 +64,11 @@ public class LocationService {
     }
 
     public List<CityDTO> getCityByPartialName(String partialName) {
-        return cityRepository.findByPartialName(partialName).stream().map(this::mapToCityDTO).collect(Collectors.toList());
+        return cityRepository.findByPartialName(partialName).stream().map(this::mapToCityDTO).toList();
     }
 
     public List<CityStateDTO> getAllCitiesStates() {
-        return stateRepository.findAllCitiesStates().stream().map(this::mapToCityStateDTO).collect(Collectors.toList());
+        return stateRepository.findAllCitiesStates().stream().map(this::mapToCityStateDTO).toList();
     }
 
     private CityDTO mapToCityDTO(City city) {

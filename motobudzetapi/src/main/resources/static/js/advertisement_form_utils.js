@@ -326,7 +326,7 @@ function createAdvertisementForm(titleText) {
 
     createDescriptionEditor();
 
-    const submitButton = document.createElement('input');
+    const submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.value = 'Wyślij';
     submitButton.style.marginBottom = '15px';
@@ -367,6 +367,7 @@ function createAdvertisementForm(titleText) {
     fileInput.setAttribute('multiple', 'multiple');
     fileInput.style.display = 'none';
     fileInput.addEventListener('change', handleFileSelect);
+    
     fileDropArea.appendChild(fileInput);
 
     fileDropArea.style.alignItems = 'center';
