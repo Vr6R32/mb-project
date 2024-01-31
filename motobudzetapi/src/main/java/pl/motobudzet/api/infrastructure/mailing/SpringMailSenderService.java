@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SpringMailSenderService {
+class SpringMailSenderService {
 
     public static final String BACKGROUND_IMAGE_URL = "https://motobudzet.pl/api/static/background_email";
 

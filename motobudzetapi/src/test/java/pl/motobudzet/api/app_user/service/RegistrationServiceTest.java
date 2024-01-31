@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
-import pl.motobudzet.api.infrastructure.mailing.SpringMailSenderService;
+import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
@@ -42,7 +42,7 @@ class RegistrationServiceTest {
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
-    SpringMailSenderService mailService;
+    EmailManagerFacade mailService;
     @Mock
     HttpServletRequest request;
     @Mock
@@ -57,7 +57,7 @@ class RegistrationServiceTest {
 
     @BeforeEach
     void setUp() {
-        registrationService = new RegistrationService(userRepository,passwordEncoder, mailService,jwtService);
+        registrationService = new RegistrationService(userRepository,passwordEncoder,mailService,jwtService);
     }
 
     @Test

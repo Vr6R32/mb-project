@@ -7,27 +7,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.advertisement.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.advertisement.model.Status;
 import pl.motobudzet.api.domain.advertisement.repository.AdvertisementRepository;
+import pl.motobudzet.api.domain.brand.BrandFacade;
 import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.domain.location.LocationService;
-import pl.motobudzet.api.domain.brand.BrandService;
-import pl.motobudzet.api.domain.model.ModelService;
+import pl.motobudzet.api.domain.location.LocationFacade;
+import pl.motobudzet.api.domain.model.ModelFacade;
 
 import java.util.*;
 
-@Service
 @RequiredArgsConstructor
-public class AdvertisementFilteringService {
+class AdvertisementFilteringService {
 
     private final AdvertisementRepository advertisementRepository;
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final LocationService locationService;
+    private final BrandFacade brandFacade;
+    private final ModelFacade modelFacade;
+    private final LocationFacade locationFacade;
 
 
     public Page<AdvertisementDTO> getFilteredAdvertisements(AdvertisementFilterRequest request, Integer pageNumber, String sortBy, String sortOrder) {
@@ -62,8 +60,8 @@ public class AdvertisementFilteringService {
 
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
 
-        serviceFunctionMap.put("brand", brandService::getBrand);
-        serviceFunctionMap.put("model", modelName -> modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
+        serviceFunctionMap.put("brand", brandFacade::getBrand);
+        serviceFunctionMap.put("model", modelName -> modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
 
         specification = FilteringHelper.handleEntities(request, specification, serviceFunctionMap);
 
@@ -93,7 +91,6 @@ public class AdvertisementFilteringService {
         }
         return specification;
     }
-
     private Specification<Advertisement> handleCityAndStateValue(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
         String city = request.getCity();
         String cityState = request.getCityState();
@@ -106,13 +103,13 @@ public class AdvertisementFilteringService {
                 return criteriaBuilder.equal(cityJoin.get("cityState").get("name"), cityState);
             });
         } else if (city != null && !city.isEmpty() && distanceFrom != 0) {
-            List<City> cityList = locationService.getCitiesWithinDistance(city, distanceFrom);
+            List<City> cityList = locationFacade.getCitiesWithinDistance(city, distanceFrom);
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("city").in(cityList)
             );
         } else if (city != null && !city.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("city"), locationService.getCityByNameWithout(city))
+                    criteriaBuilder.equal(root.get("city"), locationFacade.getCityByName(city))
             );
         }
         return specification;

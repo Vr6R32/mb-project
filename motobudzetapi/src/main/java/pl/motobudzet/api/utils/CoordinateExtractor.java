@@ -21,12 +21,9 @@ public class CoordinateExtractor {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String linia;
             while ((linia = br.readLine()) != null) {
-                // Podziel linię na słowa, używając spacji jako separatora
                 String[] words = linia.split("\\s+");
 
-                // Sprawdź, czy linia ma co najmniej 3 słowa
                 if (words.length >= 3) {
-                    // Nazwa miasta może zawierać kilka słów, więc połączmy je
                     StringBuilder cityBuilder = new StringBuilder();
                     for (int i = 0; i < words.length - 2; i++) {
                         cityBuilder.append(words[i]).append(" ");

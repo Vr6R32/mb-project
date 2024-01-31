@@ -1,14 +1,13 @@
 package pl.motobudzet.api.domain.brand;
 
-import org.springframework.stereotype.Service;
 import pl.motobudzet.api.infrastructure.mapper.BrandMapper;
 
 import java.security.InvalidParameterException;
 import java.util.List;
 
 
-@Service
-public class BrandService {
+
+class BrandService {
 
     private final BrandRepository brandRepository;
 

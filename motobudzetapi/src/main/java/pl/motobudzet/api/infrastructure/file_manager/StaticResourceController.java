@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StaticResourceController {
 
-    private final FileService fileService;
+    private final FileManagerFacade fileManagerFacade;
     private final PathsConfig pathsConfig;
 
-    public StaticResourceController(FileService fileService, PathsConfig pathsConfig) {
-        this.fileService = fileService;
+    public StaticResourceController(FileManagerFacade fileManagerFacade, PathsConfig pathsConfig) {
+        this.fileManagerFacade = fileManagerFacade;
         this.pathsConfig = pathsConfig;
     }
 
@@ -29,7 +29,7 @@ public class StaticResourceController {
     @GetMapping(value = "/photo/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {
 
-        Resource photoResource = fileService.getAdvertisementPhoto(imageUrl);
+        Resource photoResource = fileManagerFacade.getAdvertisementPhoto(imageUrl);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(photoResource);

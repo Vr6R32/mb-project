@@ -13,7 +13,7 @@ import pl.motobudzet.api.domain.user.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.domain.user.model.Role;
-import pl.motobudzet.api.infrastructure.mailing.SpringMailSenderService;
+import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.utils.RegistrationRequestValidation;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
@@ -30,7 +30,7 @@ public class RegistrationService {
 
     private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SpringMailSenderService springMailSenderService;
+    private final EmailManagerFacade mailService;
     private final JwtService jwtService;
 
 
@@ -55,7 +55,7 @@ public class RegistrationService {
                     .role(Role.ROLE_AWAITING_DETAILS)
                     .build();
             userRepository.saveAndFlush(newUser);
-            springMailSenderService.sendRegisterActivationNotificationHtml(newUser);
+            mailService.sendRegisterActivationNotificationHtml(newUser);
 
             return ResponseEntity.ok()
                     .headers(httpHeaders -> {
@@ -99,7 +99,7 @@ public class RegistrationService {
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
 
-        springMailSenderService.sendResetPasswordNotificationCodeLink(user);
+        mailService.sendResetPasswordNotificationCodeLink(user);
 
         return result;
     }

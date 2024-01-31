@@ -3,7 +3,7 @@ package pl.motobudzet.api.domain.messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.advertisement.service.AdvertisementService;
+import pl.motobudzet.api.domain.advertisement.service.AdvertisementFacade;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 
 import java.util.List;
@@ -15,12 +15,12 @@ import static pl.motobudzet.api.infrastructure.mapper.ConversationMapper.mapConv
 @RequiredArgsConstructor
 public class ConversationService {
 
-    private final AdvertisementService advertisementService;
+    private final AdvertisementFacade advertisementFacade;
     private final ConversationRepository conversationRepository;
 
     public Conversation createConversation(UUID advertisementId, AppUser loggedUser) {
 
-        Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
+        Advertisement advertisement = advertisementFacade.getAdvertisementEntity(advertisementId);
 
         Conversation conversation = Conversation.builder()
                 .advertisement(advertisement)

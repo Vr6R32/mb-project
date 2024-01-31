@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.advertisement.service.AdvertisementService;
+import pl.motobudzet.api.domain.advertisement.service.AdvertisementFacade;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,27 +17,24 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Service
-public class FileService {
+class FileService {
 
-    private final AdvertisementService advertisementService;
+    private final AdvertisementFacade advertisementFacade;
     private final PathsConfig pathsConfig;
     private final EntityManager entityManager;
 
     List<String> fileTypeAllowed = Arrays.asList("image/jpeg", "image/png", "image/heif", "image/heic", "image/webp");
 
 
-    public FileService(@Lazy AdvertisementService advertisementService, PathsConfig pathsConfig, EntityManager entityManager) {
-        this.advertisementService = advertisementService;
+    public FileService(@Lazy AdvertisementFacade advertisementFacade, PathsConfig pathsConfig, EntityManager entityManager) {
+        this.advertisementFacade = advertisementFacade;
         this.pathsConfig = pathsConfig;
         this.entityManager = entityManager;
     }
@@ -52,7 +48,7 @@ public class FileService {
     @Transactional
     public String verifySortAndSaveImages(UUID advertisementId, List<MultipartFile> files) {
 
-        Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
+        Advertisement advertisement = advertisementFacade.getAdvertisementEntity(advertisementId);
 
         List<String> existingImages = advertisement.getImageUrls();
 

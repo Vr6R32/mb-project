@@ -2,8 +2,8 @@ package pl.motobudzet.api.domain.messages;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.infrastructure.mailing.EmailMessageRequest;
-import pl.motobudzet.api.infrastructure.mailing.SpringMailSenderService;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 
@@ -19,7 +19,7 @@ public class MessageService {
 
     private final ConversationService conversationService;
     private final MessagesRepository messagesRepository;
-    private final SpringMailSenderService springMailSenderService;
+    private final EmailManagerFacade mailService;
 
     public String sendMessage(String message, UUID advertisementId, AppUser user) {
 
@@ -87,7 +87,7 @@ public class MessageService {
                 .advertisementTitle(conversation.getAdvertisement().getName())
                 .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
                 .build();
-        springMailSenderService.sendMessageNotificationHtml(emailMessageRequest);
+        mailService.sendMessageNotificationHtml(emailMessageRequest);
     }
 
 

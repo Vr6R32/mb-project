@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @RequiredArgsConstructor
@@ -20,7 +19,5 @@ public class MessageDTO {
     private String messageSendTime;
     private String messageReadDate;
     private String messageReadTime;
-    private LocalDateTime messageSendDateTime;
-    private LocalDateTime messageReadDateTime;
 
 }

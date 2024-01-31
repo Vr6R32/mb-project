@@ -7,14 +7,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.domain.location.LocationFacade;
 import pl.motobudzet.api.domain.user.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.AppUserDTO;
 import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.domain.user.model.Role;
 import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.domain.location.LocationService;
-import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +26,8 @@ import static pl.motobudzet.api.infrastructure.mapper.UserMapper.mapUserToDTO;
 public class UserDetailsService {
 
     private final AppUserRepository userRepository;
-    private final LocationService locationService;
-    private final JwtService jwtService;
+    private final LocationFacade locationFacade;
+//    private final JwtService jwtService;
 
     public List<String> findManagementEmails() {
         return userRepository.findAllManagementEmails(Role.ROLE_ADMIN);
@@ -42,7 +41,7 @@ public class UserDetailsService {
     @Transactional
     public ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest) {
 
-        City city = locationService.getCityByNameAndState(request.getCity(), request.getCityState());
+        City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
         String name = request.getName();
         String surname = request.getSurname();
         String phoneNumber = request.getPhoneNumber();
@@ -52,7 +51,7 @@ public class UserDetailsService {
             userRepository.insertUserFirstDetails(city.getId(), name, surname, phoneNumber, role, userEmail);
             String redirectUrl = buildRedirectUrl(httpServletRequest, "/?activation=true");
             loggedUser.setRole(role);
-            jwtService.authenticate(loggedUser,response);
+//            jwtService.authenticate(loggedUser,response);
             return ResponseEntity.ok().body(Collections.singletonMap("redirectUrl", redirectUrl));
     }
 }

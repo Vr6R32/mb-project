@@ -1,15 +1,11 @@
 package pl.motobudzet.api.domain.model;
 
-import org.springframework.stereotype.Service;
 import pl.motobudzet.api.infrastructure.mapper.ModelMapper;
 
 import java.security.InvalidParameterException;
 import java.util.List;
 
-
-
-@Service
-public class ModelService {
+class ModelService {
 
     private final ModelRepository modelRepository;
 

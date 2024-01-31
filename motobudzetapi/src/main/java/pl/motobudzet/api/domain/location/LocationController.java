@@ -14,35 +14,27 @@ import java.util.List;
 @AllArgsConstructor
 public class LocationController {
 
-    private final LocationService locationService;
+    private final LocationFacade locationFacade;
 
     @GetMapping("all")
     List<CityDTO> getAllCities() {
-        return locationService.getAllCities();
+        return locationFacade.getCities();
     }
-
-    @GetMapping("neighbours")
-    List<City> getCityNeighbourCitiesByDistance(@RequestParam String mainCity, Integer distanceMax) {
-        return locationService.getCitiesWithinDistance(mainCity, distanceMax);
-    }
-
     @GetMapping("states")
     public List<CityStateDTO> getAllCitiesStates() {
-        return locationService.getAllCitiesStates();
+        return locationFacade.getCitiesStates();
     }
     @GetMapping
     List<CityDTO> getCityByPartialName(@RequestParam String partialName) {
-        return locationService.getCityByPartialName(partialName);
+        return locationFacade.getCityByPartialName(partialName);
     }
-
-    @GetMapping("test")
-    public City findById(@RequestParam Long id) {
-        return locationService.getCityById(id);
-    }
-
     @GetMapping("distance")
     double calculateCityDistance(@RequestParam String cityOne, String cityTwo) {
-        return locationService.calculateCityDistance(cityOne, cityTwo);
+        return locationFacade.calculateDistanceBetweenTwoCities(cityOne, cityTwo);
+    }
+    @GetMapping("neighbours")
+    List<City> getCityNeighbourCitiesByDistance(@RequestParam String mainCity, Integer distanceMax) {
+        return locationFacade.getCitiesWithinDistance(mainCity, distanceMax);
     }
 
 }

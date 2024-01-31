@@ -8,19 +8,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.advertisement.model.Status;
 import pl.motobudzet.api.domain.advertisement.repository.AdvertisementRepository;
-import pl.motobudzet.api.infrastructure.mailing.SpringMailSenderService;
-import pl.motobudzet.api.infrastructure.file_manager.FileService;
-import pl.motobudzet.api.domain.location.LocationService;
+import pl.motobudzet.api.domain.brand.BrandFacade;
+import pl.motobudzet.api.domain.location.LocationFacade;
+import pl.motobudzet.api.domain.model.ModelFacade;
+import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
+import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.brand.BrandService;
-import pl.motobudzet.api.domain.model.ModelService;
+
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -28,20 +28,19 @@ import java.util.*;
 import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.mapToAdvertisementDTO;
 
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
-public class AdvertisementService {
+class AdvertisementService {
 
     public static final int PAGE_SIZE = 10;
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
 
     private final AdvertisementRepository advertisementRepository;
-    private final SpringMailSenderService mailSenderService;
-    private final LocationService locationService;
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final FileService fileService;
+    private final EmailManagerFacade emailManagerFacade;
+    private final FileManagerFacade fileManagerFacade;
+    private final LocationFacade locationFacade;
+    private final BrandFacade brandFacade;
+    private final ModelFacade modelFacade;
 
 
     public AdvertisementDTO findOneByIdWithFetch(UUID uuid) {
@@ -50,7 +49,7 @@ public class AdvertisementService {
                 .orElseThrow(() -> new RuntimeException("id doesn't exist!"));
     }
 
-    public List<AdvertisementDTO> findLastUploaded(Integer pageNumber, Integer pageSize) {
+    public List<AdvertisementDTO> getFewLastUploadedAdvertisements(Integer pageNumber, Integer pageSize) {
 
         Specification<Advertisement> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.and(criteriaBuilder.equal(root.get("status"), Status.ACTIVE));
@@ -64,30 +63,30 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public ResponseEntity<String> createNewAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
+    public ResponseEntity<String> createAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}", user);
         Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
-        fileService.verifySortAndSaveImages(advertisementId, files);
+        fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
-        mailSenderService.sendEmailNotificationToManagement(advertisementId);
+        emailManagerFacade.sendEmailNotificationToManagement(advertisementId);
         return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").body("inserted !");
     }
 
-    public ResponseEntity<String> editExistingAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
+    public ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
 
         Advertisement advertisement = getAdvertisement(advertisementId);
 
         if (advertisement.getUser().getUsername().equals(loggedUser)) {
-            mapEditAdvertisementRequestToEntity(request, advertisement);
-            String mainPhotoUrl = fileService.verifySortAndSaveImages(advertisementId, files);
+            setAdvertisementByEditRequest(request, advertisement);
+            String mainPhotoUrl = fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
 
             advertisement.setMainPhotoUrl(mainPhotoUrl);
             advertisementRepository.save(advertisement);
 
             String redirectUrl = "/advertisement?id=" + advertisementId;
 
-            mailSenderService.sendEmailNotificationToManagement(advertisementId);
+            emailManagerFacade.sendEmailNotificationToManagement(advertisementId);
             return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
@@ -107,7 +106,7 @@ public class AdvertisementService {
         AppUser advertisementOwner = advertisement.getUser();
         advertisement.setStatus(Status.ACTIVE);
         advertisementRepository.save(advertisement);
-        mailSenderService.sendAdvertisementActivationConfirmNotification(advertisementOwner, advertisement);
+        emailManagerFacade.sendAdvertisementActivationConfirmNotification(advertisementOwner, advertisement);
         return "verified !";
     }
 
@@ -139,8 +138,8 @@ public class AdvertisementService {
         return Advertisement.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .model(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()))
-                .brand(brandService.getBrand(request.getBrand()))
+                .model(modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()))
+                .brand(brandFacade.getBrand(request.getBrand()))
                 .fuelType(request.getFuelType())
                 .driveType(request.getDriveType())
                 .engineType(request.getEngineType())
@@ -153,7 +152,7 @@ public class AdvertisementService {
                 .engineHorsePower(request.getEngineHorsePower())
                 .firstRegistrationDate(request.getFirstRegistrationDate())
                 .productionDate(request.getProductionDate())
-                .city(locationService.getCityByNameAndState(request.getCity(), request.getCityState()))
+                .city(locationFacade.getCityByNameAndState(request.getCity(), request.getCityState()))
                 .user(currentUser)
                 .imageUrls(new ArrayList<>())
                 .status(Status.PENDING_VERIFICATION)
@@ -161,11 +160,11 @@ public class AdvertisementService {
                 .build();
     }
 
-    private void mapEditAdvertisementRequestToEntity(AdvertisementRequest request, Advertisement advertisement) {
+    private void setAdvertisementByEditRequest(AdvertisementRequest request, Advertisement advertisement) {
         advertisement.setName(request.getName());
         advertisement.setDescription(request.getDescription());
-        advertisement.setModel(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
-        advertisement.setBrand(brandService.getBrand(request.getBrand()));
+        advertisement.setModel(modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
+        advertisement.setBrand(brandFacade.getBrand(request.getBrand()));
         advertisement.setFuelType(request.getFuelType());
         advertisement.setDriveType(request.getDriveType());
         advertisement.setEngineType(request.getEngineType());
@@ -178,7 +177,7 @@ public class AdvertisementService {
         advertisement.setEngineHorsePower(request.getEngineHorsePower());
         advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
         advertisement.setProductionDate(request.getProductionDate());
-        advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
+        advertisement.setCity(locationFacade.getCityByNameAndState(request.getCity(), request.getCityState()));
         advertisement.setStatus(Status.PENDING_VERIFICATION);
     }
 }

@@ -8,19 +8,19 @@ import java.util.List;
 @RequestMapping(value = "api/models")
 public class ModelController {
 
-    private final ModelService modelService;
+    private final ModelFacade modelFacade;
 
-    public ModelController(ModelService modelService) {
-        this.modelService = modelService;
+    public ModelController(ModelFacade modelFacade) {
+        this.modelFacade = modelFacade;
     }
 
     @GetMapping("/all")
     public List<Model> findAllModels() {
-        return modelService.findAllModels();
+        return modelFacade.getModels();
     }
 
     @GetMapping("/{brandName}")
-    public List<ModelDTO> findModelsByBrandName(@PathVariable String brandName) {
-        return modelService.findModelsByBrandName(brandName);
+    public List<ModelDTO> getModelsByBrandName(@PathVariable String brandName) {
+        return modelFacade.getModelsByBrandName(brandName);
     }
 }

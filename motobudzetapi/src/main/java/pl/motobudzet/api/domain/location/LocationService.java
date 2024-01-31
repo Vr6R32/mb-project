@@ -1,7 +1,6 @@
 package pl.motobudzet.api.domain.location;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 import pl.motobudzet.api.infrastructure.mapper.CityMapper;
 import pl.motobudzet.api.infrastructure.mapper.CityStateMapper;
 
@@ -9,9 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-@Service
 @AllArgsConstructor
-public class LocationService {
+class LocationService {
 
     private final CityRepository cityRepository;
     private final CityStateRepository stateRepository;
@@ -50,17 +48,12 @@ public class LocationService {
         return neighborCities;
     }
 
-
     public City getCityByNameAndState(String cityName, String stateName) {
         return cityRepository.getCityByNameAndState(cityName, stateName.toUpperCase()).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 
     public City getCityByNameWithout(String name) {
         return cityRepository.getCityByNameWithoutState(name).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
-    }
-
-    public City getCityById(Long city) {
-        return cityRepository.getCityById(city).orElseThrow(() -> new IllegalArgumentException("WRONG_CITY_NAME"));
     }
 
     public List<CityDTO> getCityByPartialName(String partialName) {
