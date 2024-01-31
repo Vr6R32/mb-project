@@ -66,9 +66,7 @@ public class AdvertisementService {
 
     @Transactional
     public ResponseEntity<String> createNewAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
-
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}", user);
-
         Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileService.verifySortAndSaveImages(advertisementId, files);
@@ -94,27 +92,6 @@ public class AdvertisementService {
             return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
-    }
-
-    private void mapEditAdvertisementRequestToEntity(AdvertisementRequest request, Advertisement advertisement) {
-        advertisement.setName(request.getName());
-        advertisement.setDescription(request.getDescription());
-        advertisement.setModel(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
-        advertisement.setBrand(brandService.getBrand(request.getBrand()));
-        advertisement.setFuelType(request.getFuelType());
-        advertisement.setDriveType(request.getDriveType());
-        advertisement.setEngineType(request.getEngineType());
-        advertisement.setTransmissionType(request.getTransmissionType());
-        advertisement.setMileage(request.getMileage());
-        advertisement.setMileageUnit(request.getMileageUnit());
-        advertisement.setPrice(request.getPrice());
-        advertisement.setPriceUnit(request.getPriceUnit());
-        advertisement.setEngineCapacity(request.getEngineCapacity());
-        advertisement.setEngineHorsePower(request.getEngineHorsePower());
-        advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
-        advertisement.setProductionDate(request.getProductionDate());
-        advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
-        advertisement.setStatus(Status.PENDING_VERIFICATION);
     }
 
 
@@ -183,5 +160,26 @@ public class AdvertisementService {
                 .status(Status.PENDING_VERIFICATION)
                 .mainPhotoUrl(request.getMainPhotoUrl())
                 .build();
+    }
+
+    private void mapEditAdvertisementRequestToEntity(AdvertisementRequest request, Advertisement advertisement) {
+        advertisement.setName(request.getName());
+        advertisement.setDescription(request.getDescription());
+        advertisement.setModel(modelService.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
+        advertisement.setBrand(brandService.getBrand(request.getBrand()));
+        advertisement.setFuelType(request.getFuelType());
+        advertisement.setDriveType(request.getDriveType());
+        advertisement.setEngineType(request.getEngineType());
+        advertisement.setTransmissionType(request.getTransmissionType());
+        advertisement.setMileage(request.getMileage());
+        advertisement.setMileageUnit(request.getMileageUnit());
+        advertisement.setPrice(request.getPrice());
+        advertisement.setPriceUnit(request.getPriceUnit());
+        advertisement.setEngineCapacity(request.getEngineCapacity());
+        advertisement.setEngineHorsePower(request.getEngineHorsePower());
+        advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
+        advertisement.setProductionDate(request.getProductionDate());
+        advertisement.setCity(locationService.getCityByNameAndState(request.getCity(), request.getCityState()));
+        advertisement.setStatus(Status.PENDING_VERIFICATION);
     }
 }

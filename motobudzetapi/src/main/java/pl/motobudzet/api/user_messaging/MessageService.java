@@ -94,7 +94,6 @@ public class MessageService {
     public List<MessageDTO> getAllMessages(Long conversationId, String loggedUser) {
         List<Message> messagesList = messagesRepository.getAllMessages(conversationId);
         if (messagesList.isEmpty()) return Collections.emptyList();
-
         if (authorizeMessageGetAccess(messagesList, loggedUser)) {
             updateMessagesRead(loggedUser, messagesList);
             return messagesList
@@ -109,7 +108,6 @@ public class MessageService {
             String messageSenderUsername = message.getMessageSender().getUsername();
             if (!loggedUser.equals(messageSenderUsername) && (message.getMessageReadDateTime() == null)) {
                     message.setMessageReadDateTime(LocalDateTime.now());
-
             }
         }
         messagesRepository.saveAll(messagesList);

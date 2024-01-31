@@ -21,7 +21,6 @@ import pl.motobudzet.api.z_configuration.securty_jwt.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 import static pl.motobudzet.api.z_configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
 
@@ -36,7 +35,6 @@ public class RegistrationService {
 
 
     public ResponseEntity<String> register(RegistrationRequest request) {
-
         String validateResponse = RegistrationRequestValidation.validate(request, userRepository);
 
         if (!validateResponse.equals("Both username and email are available")) {
@@ -45,7 +43,6 @@ public class RegistrationService {
         } else {
 
             String code = RandomStringUtils.randomAlphanumeric(30, 30);
-
             AppUser newUser = AppUser.builder()
                     .userName(request.getUserName())
                     .password(passwordEncoder.encode(request.getPassword()))
@@ -58,7 +55,6 @@ public class RegistrationService {
                     .role(Role.ROLE_AWAITING_DETAILS)
                     .build();
             userRepository.saveAndFlush(newUser);
-
             springMailSenderService.sendRegisterActivationNotificationHtml(newUser);
 
             return ResponseEntity.ok()
@@ -70,10 +66,10 @@ public class RegistrationService {
         }
     }
 
-    public void confirmEmail(String activationLink, HttpServletResponse response, HttpServletRequest request) {
-        AppUser user = userRepository.findUserByRegistrationCode(activationLink).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
+    public void confirmEmail(String registrationCode, HttpServletResponse response, HttpServletRequest request) {
+        AppUser user = userRepository.findUserByRegistrationCode(registrationCode).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
-        if (user != null && !user.getAccountEnabled()) {
+        if (user != null && !user.isEnabled()) {
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
             jwtService.authenticate(enabledUser,response);
@@ -96,7 +92,7 @@ public class RegistrationService {
     @Transactional
     public int generatePasswordResetCode(ResetPasswordRequest request) {
         String resetCode = RandomStringUtils.randomAlphanumeric(30);
-        LocalDateTime resetCodeExpirationTime = LocalDateTime.now(ZoneId.of("Europe/Warsaw")).plusDays(1);
+        LocalDateTime resetCodeExpirationTime = LocalDateTime.now().plusDays(1);
 
         int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.getEmail());
 
@@ -116,7 +112,7 @@ public class RegistrationService {
         }
         AppUser user = userRepository.findUserByResetPasswordCode(request.getResetCode())
                 .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
-        if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now(ZoneId.of("Europe/Warsaw")))) {
+        if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now())) {
             return userRepository.insertNewUserPassword(passwordEncoder.encode(request.getPassword()), request.getResetCode());
         }
         return 0;

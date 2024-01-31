@@ -37,7 +37,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT CASE " +
             "WHEN SUM(CASE WHEN a.userName = ?1 THEN 1 ELSE 0 END) > 0 THEN 'Username is already taken' " +
             "WHEN SUM(CASE WHEN a.email = ?2 THEN 1 ELSE 0 END) > 0 THEN 'Email is already taken' " +
-            "ELSE 'Both username and email are available' " +
+            "ELSE 'Both username and email are available'" +
             "END FROM AppUser a")
     String checkUsernameAndEmailAvailability(String userName, String email);
 

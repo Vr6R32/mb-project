@@ -37,10 +37,10 @@ public class AppUser implements UserDetails {
     private String name;
     private String surname;
     private String phoneNumber;
-    private Boolean accountEnabled;
-    private Boolean accountNotLocked;
-    private Boolean accountNotExpired;
-    private Boolean credentialsNotExpired;
+    private boolean accountEnabled;
+    private boolean accountNotLocked;
+    private boolean accountNotExpired;
+    private boolean credentialsNotExpired;
     private LocalDateTime resetPasswordCodeExpiration;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private City city;
@@ -81,6 +81,5 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return this.accountEnabled;
     }
-
 
 }

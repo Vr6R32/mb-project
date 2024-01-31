@@ -16,6 +16,7 @@ public class RegistrationRequestValidation {
         switch (result) {
             case "Username is already taken" -> result = "Nazwa użytkownika jest już zajęta!";
             case "Email is already taken" -> result = "Podany adres email jest już zajęty!";
+            default -> result = "Something went wrong";
         }
         return result;
     }
