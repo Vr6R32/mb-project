@@ -68,7 +68,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     titleElement.style.textAlign = 'left';
 
     const modelBrandElement = document.createElement("div");
-    modelBrandElement.textContent = ad.brand + ' ' + ad.model;
+    modelBrandElement.textContent = ad.brand.name + ' ' + ad.model.name;
     modelBrandElement.style.color = "darkgoldenrod";
     modelBrandElement.style.fontSize = "16px";
     modelBrandElement.style.textAlign = 'left';
@@ -154,11 +154,11 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     locationDetails.className = "locationDetails";
 
     const citySpan = document.createElement("span");
-    citySpan.textContent = ad.city + ',';
+    citySpan.textContent = ad.city.name + ',';
     citySpan.style.fontSize = "22px";
 
     const stateSpan = document.createElement("span");
-    stateSpan.textContent = ' \t' + ad.cityState;
+    stateSpan.textContent = ' \t' + ad.cityState.name;
     stateSpan.style.color = 'darkgoldenrod';
     stateSpan.style.fontSize = "14px";
     stateSpan.style.marginTop = "6px";

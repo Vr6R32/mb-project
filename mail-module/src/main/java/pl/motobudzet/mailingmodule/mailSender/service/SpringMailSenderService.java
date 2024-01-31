@@ -8,7 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
+import pl.motobudzet.api.mailing.dto.EmailMessageRequest;
 
 import java.io.File;
 import java.util.ArrayList;

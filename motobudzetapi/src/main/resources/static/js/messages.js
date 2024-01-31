@@ -1,6 +1,5 @@
 function createConversationResults(conversation, container) {
 
-
     container.style.maxHeight = "1000px";
     container.style.display = 'grid';
     container.style.gridTemplateColumns = '100%';
@@ -232,11 +231,11 @@ function createConversationResults(conversation, container) {
     locationDetails.className = "locationDetails";
 
     const citySpan = document.createElement("span");
-    citySpan.textContent = conversation.advertisement.city + ',';
+    citySpan.textContent = conversation.advertisement.city.name + ',';
     citySpan.style.fontSize = "22px";
 
     const stateSpan = document.createElement("span");
-    stateSpan.textContent = ' \t' + conversation.advertisement.cityState;
+    stateSpan.textContent = ' \t' + conversation.advertisement.cityState.name;
     stateSpan.style.color = 'darkgoldenrod';
     stateSpan.style.fontSize = "14px";
     stateSpan.style.marginTop = "6px";

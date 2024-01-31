@@ -1,6 +1,6 @@
 package pl.motobudzet.api.utils;
 
-import pl.motobudzet.api.location_city.City;
+import pl.motobudzet.api.domain.location.City;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoordinateExtractor {
+
+    private CoordinateExtractor() {
+    }
 
     public static List<City> extractCoordinates() {
         String filePath = "C:\\moto-budzet\\module-main\\motobudzetapi\\src\\main\\java\\pl\\motobudzet\\api\\utils\\properCities.txt";

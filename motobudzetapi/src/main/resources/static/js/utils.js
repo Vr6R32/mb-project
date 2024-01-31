@@ -743,10 +743,10 @@ function updateCitySuggestions(suggestions) {
 
     suggestions.forEach(suggestion => {
         const suggestionItem = document.createElement('li');
-        suggestionItem.textContent = suggestion.cityName;
+        suggestionItem.textContent = suggestion.name;
         suggestionItem.addEventListener('click', function () {
             cityInput.value = suggestion.name;
-            cityStateInput.value = suggestion.cityStateName;
+            cityStateInput.value = suggestion.cityState.name;
             cityStateInput.style.color = 'white';
             cityStateLabel.style.color = 'white';
             suggestionsList.innerHTML = '';

@@ -105,7 +105,7 @@ function displayLastUploaded(min,max,direction){
         subContainer.appendChild(titleContainerMiniature)
 
         const title = document.createElement('h2');
-        title.textContent = advertisement.brand + '  ' + advertisement.model;
+        title.textContent = advertisement.brand.name + '  ' + advertisement.model.name;
         titleContainerMiniature.appendChild(title);
 
         const mainPhoto = document.createElement('img');

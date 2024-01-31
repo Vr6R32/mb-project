@@ -13,7 +13,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
+import pl.motobudzet.api.mailing.dto.EmailMessageRequest;
 
 import java.util.HashMap;
 import java.util.Map;

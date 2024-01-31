@@ -3,12 +3,12 @@ package pl.motobudzet.mailingmodule.kafka.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.emailSender.dto.EmailMessageRequest;
+import pl.motobudzet.api.mailing.dto.EmailMessageRequest;
 import pl.motobudzet.mailingmodule.mailSender.service.JavaMailSenderService;
 import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
 //import pl.motobudzet.mailingmodule.mailSender.service.SpringMailSenderService;
 
-import static pl.motobudzet.api.emailSender.configuration.KafkaTopicConfig.MESSAGE_NOTIFY_TOPIC;
+import static pl.motobudzet.api.mailing.configuration.KafkaTopicConfig.MESSAGE_NOTIFY_TOPIC;
 
 
 @Service
