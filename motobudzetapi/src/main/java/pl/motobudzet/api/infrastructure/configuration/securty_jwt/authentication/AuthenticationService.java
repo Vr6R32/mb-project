@@ -34,7 +34,7 @@ public class AuthenticationService {
             jwtService.authenticate(user, response);
 
         } catch (AuthenticationException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 status
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.model.Role;
-import pl.motobudzet.api.domain.user.AppUserRepository;
+import pl.motobudzet.api.persistance.AppUserRepository;
 
 import java.util.Collection;
 

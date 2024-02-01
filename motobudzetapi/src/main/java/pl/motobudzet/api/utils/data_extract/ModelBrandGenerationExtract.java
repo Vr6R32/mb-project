@@ -2,7 +2,7 @@ package pl.motobudzet.api.utils.data_extract;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.motobudzet.api.domain.brand.BrandRepository;
+import pl.motobudzet.api.persistance.BrandRepository;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

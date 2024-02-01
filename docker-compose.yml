@@ -23,8 +23,8 @@ services:
     build: .
     container_name: mb-api
     image: michaelkey/mb-api:0.0.1-SNAPSHOT
-#    ports:
-#      - "20134:20134"
+    ports:
+      - "20134:20134"
     volumes:
       - ./logging_infrastructure/api-logs:/var/log/spring
       - ./files/public:/app/files/public

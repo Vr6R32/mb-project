@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
-import pl.motobudzet.api.domain.user.AppUserRepository;
+import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;

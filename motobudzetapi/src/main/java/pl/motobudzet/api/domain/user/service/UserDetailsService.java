@@ -7,8 +7,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.domain.location.LocationFacade;
-import pl.motobudzet.api.domain.user.AppUserRepository;
+import pl.motobudzet.api.adapter.facade.LocationFacade;
+import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
+import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.AppUserDTO;
 import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
@@ -27,7 +28,7 @@ public class UserDetailsService {
 
     private final AppUserRepository userRepository;
     private final LocationFacade locationFacade;
-//    private final JwtService jwtService;
+    private final JwtService jwtService;
 
     public List<String> findManagementEmails() {
         return userRepository.findAllManagementEmails(Role.ROLE_ADMIN);
@@ -51,7 +52,7 @@ public class UserDetailsService {
             userRepository.insertUserFirstDetails(city.getId(), name, surname, phoneNumber, role, userEmail);
             String redirectUrl = buildRedirectUrl(httpServletRequest, "/?activation=true");
             loggedUser.setRole(role);
-//            jwtService.authenticate(loggedUser,response);
+            jwtService.authenticate(loggedUser,response);
             return ResponseEntity.ok().body(Collections.singletonMap("redirectUrl", redirectUrl));
     }
 }

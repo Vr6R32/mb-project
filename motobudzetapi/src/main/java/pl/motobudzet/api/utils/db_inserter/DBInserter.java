@@ -4,7 +4,7 @@ package pl.motobudzet.api.utils.db_inserter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.domain.location.CityRepository;
+import pl.motobudzet.api.persistance.CityRepository;
 import pl.motobudzet.api.utils.CoordinateExtractor;
 
 import java.util.List;

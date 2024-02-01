@@ -14,7 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.user.AppUserRepository;
+import pl.motobudzet.api.infrastructure.configuration.securty_jwt.token.TokenEncryption;
+import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.infrastructure.configuration.securty_jwt.token.Token;
 import pl.motobudzet.api.infrastructure.configuration.securty_jwt.token.TokenRepository;
 import pl.motobudzet.api.infrastructure.configuration.securty_jwt.token.TokenType;
@@ -123,7 +124,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -159,7 +160,7 @@ public class JwtService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public String refreshToken(String refreshToken, HttpServletResponse response) {
+    String refreshToken(String refreshToken, HttpServletResponse response) {
 
         final String username = extractUsername(refreshToken);
 
@@ -195,7 +196,7 @@ public class JwtService {
         return accessToken;
     }
 
-    public String encryptToken(String token){
+    private String encryptToken(String token){
         return tokenEncryption.encrypt(token);
     }
 

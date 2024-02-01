@@ -131,7 +131,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void authenticate(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken, String username) throws IOException, ServletException {
 
-        // TODO : think is it okay to pass user data without fetching user from db ?
+        // TODO : think is it okay to pass user data without fetching user from db ? it saves db usage and in general we have all needed user data from token
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);

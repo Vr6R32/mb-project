@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch (error) {
                     console.error('There was an error showing the thumbnails:', error);
                 }
-            }, 200);
+            }, 400);
         });
 });
 
@@ -77,7 +77,7 @@ function populateFormData(data) {
     setSelectedOption(document.getElementById('engineType'), data.engineType);
     setSelectedOption(document.getElementById('transmissionType'), data.transmissionType);
     setSelectedOption(document.getElementById('cityState'), data.cityState);
-    document.getElementById('city').value = data.city || '';
+    document.getElementById('city').value = data.city.name || '';
     document.getElementById('name').value = data.name || '';
     document.getElementById('mileage').value = data.mileage || '';
     document.getElementById('price').value = data.price || '';
@@ -88,10 +88,10 @@ function populateFormData(data) {
     quill.clipboard.dangerouslyPasteHTML(0, data.description || '');
 
 
-    fetchModels(data.brand).then(() => {
+    fetchModels(data.brand.name).then(() => {
         const modelSelect = document.getElementById('model');
         Array.from(modelSelect.options).forEach(option => {
-            if (option.value === data.model) {
+            if (option.value === data.model.name) {
                 option.selected = true;
             }
         });
@@ -99,10 +99,12 @@ function populateFormData(data) {
 
     const brandSelect = document.getElementById('brand');
     Array.from(brandSelect.options).forEach(option => {
-        if (option.value === data.brand) {
+        if (option.value === data.brand.name) {
             option.selected = true;
         }
     });
+
+
 }
 function submitFormWithFiles() {
     const formData = advertisementFormDataExtract();

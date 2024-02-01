@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import pl.motobudzet.api.domain.advertisement.service.AdvertisementFacade;
+import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 
 @Configuration
 public class FileManagerFacadeConfiguration {

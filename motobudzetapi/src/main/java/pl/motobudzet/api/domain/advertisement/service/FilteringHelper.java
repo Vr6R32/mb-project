@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static pl.motobudzet.api.domain.advertisement.service.AdvertisementService.PAGE_SIZE;
+import static pl.motobudzet.api.domain.advertisement.service.AdvertisementServiceImpl.PAGE_SIZE;
 import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.mapToAdvertisementDTO;
 
 public class FilteringHelper {

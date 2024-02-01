@@ -445,10 +445,10 @@ function fetchUserDetails() {
             setTimeout(() => {
                 let cityTextarea = document.getElementById('city');
                 let cityStateSelect = document.getElementById('cityState');
-                cityTextarea.value = data.cityName;
+                cityTextarea.value = data.city.name;
                 let optionState = document.createElement('option');
-                optionState.value = data.cityStateName;
-                optionState.textContent = data.cityStateName;
+                optionState.value = data.city.cityState.name;
+                optionState.textContent = data.city.cityState.name;
                 cityStateSelect.appendChild(optionState);
 
             }, 1000);

@@ -11,8 +11,7 @@ public class UserMapper {
     public static AppUserDTO mapUserToDTO(AppUser user) {
         return AppUserDTO.builder()
                 .name(user.getUsername())
-                .cityName(CityMapper.mapToCityDTO(user.getCity()))
-                .cityStateName(CityStateMapper.mapToCityStateDTO(user.getCity().getCityState()))
+                .city(CityMapper.mapToCityDTO(user.getCity()))
                 .build();
     }
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 public class AddressLoggingFilter extends OncePerRequestFilter {
 
-    public static final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "actuator/prometheus", "js/", "api/spec", "api/brands", "api/cities",  "api/models", "api/advertisements");
+    protected final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "actuator/prometheus", "js/", "api/spec", "api/brands", "api/cities",  "api/models", "api/advertisements", "favicon.ico");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
