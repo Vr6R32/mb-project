@@ -1,4 +1,4 @@
-package pl.motobudzet.api.infrastructure.file_manager;
+package pl.motobudzet.api.adapter.rest;
 
 
 import org.springframework.core.io.FileSystemResource;
@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
+import pl.motobudzet.api.infrastructure.file_manager.PathsConfig;
 
 
 @RequestMapping("api/static")

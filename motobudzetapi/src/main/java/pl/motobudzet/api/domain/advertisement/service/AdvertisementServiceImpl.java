@@ -13,10 +13,9 @@ import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.advertisement.model.Status;
+import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
-import pl.motobudzet.api.adapter.facade.BrandFacade;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
-import pl.motobudzet.api.adapter.facade.ModelFacade;
 import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.entity.AppUser;
@@ -25,7 +24,7 @@ import pl.motobudzet.api.domain.user.entity.AppUser;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.mapToAdvertisementDTO;
+import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.*;
 
 
 @Slf4j
@@ -39,8 +38,6 @@ class AdvertisementServiceImpl implements AdvertisementService {
     private final EmailManagerFacade emailManagerFacade;
     private final FileManagerFacade fileManagerFacade;
     private final LocationFacade locationFacade;
-    private final BrandFacade brandFacade;
-    private final ModelFacade modelFacade;
 
 
     @Override
@@ -70,6 +67,8 @@ class AdvertisementServiceImpl implements AdvertisementService {
     public ResponseEntity<String> createAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}", user);
         Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
+        City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
+        advertisement.setCity(city);
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
@@ -78,6 +77,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
 
         Advertisement advertisement = getAdvertisement(advertisementId);
@@ -85,8 +85,10 @@ class AdvertisementServiceImpl implements AdvertisementService {
         if (advertisement.getUser().getUsername().equals(loggedUser)) {
             setAdvertisementByEditRequest(request, advertisement);
             String mainPhotoUrl = fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
+            City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
 
             advertisement.setMainPhotoUrl(mainPhotoUrl);
+            advertisement.setCity(city);
             advertisementRepository.save(advertisement);
 
             String redirectUrl = "/advertisement?id=" + advertisementId;
@@ -143,50 +145,4 @@ class AdvertisementServiceImpl implements AdvertisementService {
         return advertisementRepository.updateAdvertisementIsRejected(id);
     }
 
-    private Advertisement mapCreateAdvertisementRequestToEntity(AdvertisementRequest request, AppUser currentUser) {
-        return Advertisement.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .model(modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()))
-                .brand(brandFacade.getBrand(request.getBrand()))
-                .fuelType(request.getFuelType())
-                .driveType(request.getDriveType())
-                .engineType(request.getEngineType())
-                .transmissionType(request.getTransmissionType())
-                .mileage(request.getMileage())
-                .mileageUnit(request.getMileageUnit())
-                .price(request.getPrice())
-                .priceUnit(request.getPriceUnit())
-                .engineCapacity(request.getEngineCapacity())
-                .engineHorsePower(request.getEngineHorsePower())
-                .firstRegistrationDate(request.getFirstRegistrationDate())
-                .productionDate(request.getProductionDate())
-                .city(locationFacade.getCityByNameAndState(request.getCity(), request.getCityState()))
-                .user(currentUser)
-                .imageUrls(new ArrayList<>())
-                .status(Status.PENDING_VERIFICATION)
-                .mainPhotoUrl(request.getMainPhotoUrl())
-                .build();
-    }
-
-    private void setAdvertisementByEditRequest(AdvertisementRequest request, Advertisement advertisement) {
-        advertisement.setName(request.getName());
-        advertisement.setDescription(request.getDescription());
-        advertisement.setModel(modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
-        advertisement.setBrand(brandFacade.getBrand(request.getBrand()));
-        advertisement.setFuelType(request.getFuelType());
-        advertisement.setDriveType(request.getDriveType());
-        advertisement.setEngineType(request.getEngineType());
-        advertisement.setTransmissionType(request.getTransmissionType());
-        advertisement.setMileage(request.getMileage());
-        advertisement.setMileageUnit(request.getMileageUnit());
-        advertisement.setPrice(request.getPrice());
-        advertisement.setPriceUnit(request.getPriceUnit());
-        advertisement.setEngineCapacity(request.getEngineCapacity());
-        advertisement.setEngineHorsePower(request.getEngineHorsePower());
-        advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
-        advertisement.setProductionDate(request.getProductionDate());
-        advertisement.setCity(locationFacade.getCityByNameAndState(request.getCity(), request.getCityState()));
-        advertisement.setStatus(Status.PENDING_VERIFICATION);
-    }
 }

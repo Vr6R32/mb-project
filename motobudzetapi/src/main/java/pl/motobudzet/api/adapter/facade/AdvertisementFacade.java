@@ -1,5 +1,6 @@
 package pl.motobudzet.api.adapter.facade;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,7 @@ public class AdvertisementFacade {
         return advertisementService.rejectAdvertisement(id);
     }
 
+    @Transactional
     public int deleteAdvertisement(UUID id, String loggedUser) {
         return advertisementService.deleteUserAdvertisement(id, loggedUser);
     }

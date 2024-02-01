@@ -225,6 +225,24 @@ function createFormElements() {
                     'WARMIŃSKO-MAZURSKIE',
                     'WIELKOPOLSKIE',
                     'ZACHODNIOPOMORSKIE'
+
+                    // options: [
+                    // { id: 1, name: 'DOLNOŚLĄSKIE' },
+                    // { id: 2, name: 'KUJAWSKO-POMORSKIE' },
+                    // { id: 3, name: 'LUBELSKIE' },
+                    // { id: 4, name: 'LUBUSKIE' },
+                    // { id: 5, name: 'ŁÓDZKIE' },
+                    // { id: 6, name: 'MAŁOPOLSKIE' },
+                    // { id: 7, name: 'MAZOWIECKIE' },
+                    // { id: 8, name: 'OPOLSKIE' },
+                    // { id: 9, name: 'PODKARPACKIE' },
+                    // { id: 10, name: 'PODLASKIE' },
+                    // { id: 11, name: 'POMORSKIE' },
+                    // { id: 12, name: 'ŚLĄSKIE' },
+                    // { id: 13, name: 'ŚWIĘTOKRZYSKIE' },
+                    // { id: 14, name: 'WARMIŃSKO-MAZURSKIE' },
+                    // { id: 15, name: 'WIELKOPOLSKIE' },
+                    // { id: 16, name: 'ZACHODNIOPOMORSKIE' }
                 ]
             }
         },
@@ -449,6 +467,7 @@ function fetchUserDetails() {
                 let optionState = document.createElement('option');
                 optionState.value = data.city.cityState.name;
                 optionState.textContent = data.city.cityState.name;
+                optionState.dataset.id = data.city.cityState.id;
                 cityStateSelect.appendChild(optionState);
 
             }, 1000);

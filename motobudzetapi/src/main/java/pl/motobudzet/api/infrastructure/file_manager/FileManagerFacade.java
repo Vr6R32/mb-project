@@ -1,5 +1,6 @@
 package pl.motobudzet.api.infrastructure.file_manager;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ public class FileManagerFacade {
         return fileService.getAdvertisementPhoto(imageUrl);
     }
 
+    @Transactional
     public String verifySortAndSaveImages(UUID advertisementId, List<MultipartFile> files) {
         return fileService.verifySortAndSaveImages(advertisementId, files);
     }

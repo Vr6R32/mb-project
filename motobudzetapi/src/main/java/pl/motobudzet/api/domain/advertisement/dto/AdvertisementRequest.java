@@ -28,8 +28,12 @@ public class AdvertisementRequest {
     private String description;
     @NotEmpty(message = "Model cannot be empty!")
     private String model;
+    @NotNull(message = "Model id cannot be empty!")
+    private Long modelId;
     @NotEmpty(message = "Brand cannot be empty!")
     private String brand;
+    @NotNull(message = "Model id cannot be empty!")
+    private Long brandId;
     @NotNull(message = "Fuel type cannot be empty!")
     private FuelType fuelType;
     @NotNull(message = "Drive type cannot be empty!")
@@ -59,7 +63,4 @@ public class AdvertisementRequest {
     private String city;
     @NotNull(message = "City state cannot be empty!")
     private String cityState;
-    @NotNull(message = "Photo cannot be empty!")
-    private String mainPhotoUrl;
-
 }

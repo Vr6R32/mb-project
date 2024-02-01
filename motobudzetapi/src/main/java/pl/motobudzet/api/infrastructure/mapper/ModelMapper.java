@@ -10,7 +10,17 @@ public class ModelMapper {
 
     public static ModelDTO mapToModelDTO(Model model) {
         return ModelDTO.builder()
+                .id(model.getId())
                 .name(model.getName())
                 .build();
     }
+
+    public static Model mapToModelEntity(ModelDTO model) {
+        return Model.builder()
+                .id(model.getId())
+                .name(model.getName())
+                .brand(BrandMapper.mapToBrandEntity(model.getBrand()))
+                .build();
+    }
+
 }

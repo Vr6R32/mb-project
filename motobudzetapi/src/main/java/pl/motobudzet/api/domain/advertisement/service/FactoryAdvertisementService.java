@@ -17,8 +17,8 @@ public class FactoryAdvertisementService {
         return new AdvertisementFilteringServiceImpl(advertisementRepository,brandFacade,modelFacade,locationFacade);
     }
 
-    public static AdvertisementService createService(AdvertisementRepository advertisementRepository, EmailManagerFacade emailManagerFacade, FileManagerFacade fileManagerFacade, BrandFacade brandFacade, ModelFacade modelFacade, LocationFacade locationFacade) {
-        return new AdvertisementServiceImpl(advertisementRepository,emailManagerFacade,fileManagerFacade,locationFacade,brandFacade,modelFacade);
+    public static AdvertisementService createService(AdvertisementRepository advertisementRepository, EmailManagerFacade emailManagerFacade, FileManagerFacade fileManagerFacade, LocationFacade locationFacade) {
+        return new AdvertisementServiceImpl(advertisementRepository,emailManagerFacade,fileManagerFacade,locationFacade);
     }
 
     public static AdvertisementMetaDataService createMetaDataService(AdvertisementRepository advertisementRepository){

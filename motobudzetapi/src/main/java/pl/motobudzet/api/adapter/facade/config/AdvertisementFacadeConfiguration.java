@@ -27,7 +27,7 @@ class AdvertisementFacadeConfiguration {
     public AdvertisementFacade advertisementFacade() {
 
         AdvertisementService advertisementService =
-                FactoryAdvertisementService.createService(advertisementRepository,emailManagerFacade,fileManagerFacade,brandFacade,modelFacade,locationFacade);
+                FactoryAdvertisementService.createService(advertisementRepository,emailManagerFacade,fileManagerFacade,locationFacade);
 
         AdvertisementFilteringService advertisementFilteringService =
                 FactoryAdvertisementService.createFilteringService(advertisementRepository,brandFacade,modelFacade,locationFacade);

@@ -2,7 +2,6 @@ package pl.motobudzet.api.infrastructure.file_manager;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -45,7 +44,6 @@ class FileService {
         return new FileSystemResource(file);
     }
 
-    @Transactional
     public String verifySortAndSaveImages(UUID advertisementId, List<MultipartFile> files) {
 
         Advertisement advertisement = advertisementFacade.getAdvertisementEntity(advertisementId);
@@ -88,7 +86,6 @@ class FileService {
 
 
     @Modifying
-    @Transactional
     public int insertNewPhotos(UUID id, Set<String> names) {
 
         Query deleteQuery = entityManager.createNativeQuery("DELETE FROM advertisement_images WHERE advertisement_id = ?");

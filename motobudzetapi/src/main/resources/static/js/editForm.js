@@ -58,8 +58,6 @@ function fetchImageFromFilename(filename) {
             if (!response.ok) {
                 throw new Error(`Failed to fetch image for filename: ${filename}`);
             }
-            // return response.blob();
-
             return response.blob().then(blob => ({
                 blob,
                 name: filename
@@ -88,20 +86,22 @@ function populateFormData(data) {
     quill.clipboard.dangerouslyPasteHTML(0, data.description || '');
 
 
+    const brandSelect = document.getElementById('brand');
+    Array.from(brandSelect.options).forEach(option => {
+        if (option.value === data.brand.name) {
+            option.dataset.id = data.brand.id;
+            option.selected = true;
+        }
+    });
+
     fetchModels(data.brand.name).then(() => {
         const modelSelect = document.getElementById('model');
         Array.from(modelSelect.options).forEach(option => {
             if (option.value === data.model.name) {
+                option.dataset.id = data.model.id;
                 option.selected = true;
             }
         });
-    });
-
-    const brandSelect = document.getElementById('brand');
-    Array.from(brandSelect.options).forEach(option => {
-        if (option.value === data.brand.name) {
-            option.selected = true;
-        }
     });
 
 

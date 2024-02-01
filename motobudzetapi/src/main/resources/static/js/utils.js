@@ -744,9 +744,13 @@ function updateCitySuggestions(suggestions) {
     suggestions.forEach(suggestion => {
         const suggestionItem = document.createElement('li');
         suggestionItem.textContent = suggestion.name;
+        suggestionItem.setAttribute('data-city-id', suggestion.id);
         suggestionItem.addEventListener('click', function () {
             cityInput.value = suggestion.name;
+            cityInput.setAttribute('data-selected-city-id', suggestion.id);
             cityStateInput.value = suggestion.cityState.name;
+
+            cityStateInput.setAttribute('data-selected-city-state-id', suggestion.cityState.id);
             cityStateInput.style.color = 'white';
             cityStateLabel.style.color = 'white';
             suggestionsList.innerHTML = '';
@@ -770,6 +774,7 @@ function fetchBrands() {
                 const option = document.createElement('option');
                 option.value = brand.name;
                 option.text = brand.name;
+                option.dataset.id = brand.id;
                 brandSelect.appendChild(option);
             });
         })
@@ -944,9 +949,31 @@ function resetFileDropArea() {
 function advertisementFormDataExtract() {
     const formData = new FormData();
 
+    const modelSelect = document.getElementById('model');
+    const selectedModelOption = modelSelect.options[modelSelect.selectedIndex];
+    const modelId = selectedModelOption.dataset.id;
+
+    const brandSelect = document.getElementById('brand');
+    const selectedBrandOption = brandSelect.options[brandSelect.selectedIndex];
+    const brandId = selectedBrandOption.dataset.id;
+
+    // const citySelect = document.getElementById('data-selected-city-id');
+    // const selectedCityOption = citySelect.options[citySelect.selectedIndex];
+    // const cityId = selectedCityOption.dataset.id;
+
+    const cityStateSelect = document.getElementById('cityState');
+    const selectedCityStateOption = cityStateSelect.options[cityStateSelect.selectedIndex];
+    const cityStateId = selectedCityStateOption.dataset.id;
+
+    console.log(cityStateId);
+
+
+
     formData.append('name', getValue('name'));
     formData.append('brand', getValue('brand'));
+    formData.append('brandId', brandId);
     formData.append('model', getValue('model'));
+    formData.append('modelId', modelId);
     formData.append('fuelType', getValue('fuelType'));
     formData.append('driveType', getValue('driveType'));
     formData.append('engineType', getValue('engineType'));
@@ -960,16 +987,12 @@ function advertisementFormDataExtract() {
     formData.append('productionDate', getValue('productionDate'));
     formData.append('firstRegistrationDate', getValue('firstRegistrationDate'));
     formData.append('city', getValue('city'));
+    // formData.append('cityId', cityId);
     formData.append('cityState', getValue('cityState'));
+    // formData.append('cityStateId', cityStateId);
 
     const descriptionContent = quill.container.firstChild.innerHTML;
     formData.append('description', descriptionContent);
-
-    let mainPhotoUrl;
-    if (selectedFiles && selectedFiles.length > 0) {
-        mainPhotoUrl = getValue('name') + '-' + selectedFiles[0].name;
-        formData.append('mainPhotoUrl', mainPhotoUrl);
-    }
 
     selectedFiles.forEach((file) => {
         if (file.blob instanceof Blob) {
@@ -1034,6 +1057,7 @@ function fetchModels(brand) {
                         const option = document.createElement('option');
                         option.value = model.name;
                         option.text = model.name;
+                        option.dataset.id = model.id;
                         modelSelect.appendChild(option);
                     });
                     resolve();
