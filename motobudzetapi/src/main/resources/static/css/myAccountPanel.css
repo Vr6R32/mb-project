@@ -297,8 +297,8 @@
     flex-basis: auto;
 }
 .headerTitleNameDiv {
-    display: flex; /* Corrected 'column' to 'flex' */
-    flex-direction: column; /* Added for column layout */
+    display: flex;
+    flex-direction: column;
     width: 100%;
     position: relative;
     bottom: -15px;

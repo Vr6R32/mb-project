@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import pl.motobudzet.api.domain.user.service.UserDetailsService;
-import pl.motobudzet.api.infrastructure.file_manager.PathsConfig;
+import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
 
 @Configuration
 @AllArgsConstructor

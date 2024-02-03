@@ -114,6 +114,9 @@ function displayLastUploaded(min,max,direction){
         let photoWidth = mainPhoto.style.maxHeight = '200px';
         mainPhoto.alt = 'MainUrlPhoto';
         mainPhoto.id = 'mainUrlPhoto';
+        mainPhoto.style.width = '100%';
+        mainPhoto.style.height = '100%';
+        mainPhoto.style.objectFit = 'cover';
 
         const photoDiv = document.createElement('div');
         photoDiv.style.display = 'flex';
@@ -143,14 +146,12 @@ function displayLastUploaded(min,max,direction){
         infoContainerFirst.style.display = 'flex';
         infoContainerFirst.style.alignItems = 'center';
         infoContainerFirst.style.justifyContent = 'space-evenly';
-        infoContainerFirst.style.justifyContent = 'center';
         infoContainerFirst.style.marginTop = '30px';
 
         const infoContainerSecond = document.createElement('div');
         infoContainerSecond.style.display = 'flex';
         infoContainerSecond.style.alignItems = 'center';
         infoContainerSecond.style.justifyContent = 'space-evenly';
-        infoContainerSecond.style.justifyContent = 'center';
         infoContainerSecond.style.marginTop = '30px';
 
         const mileageInfo = document.createElement('div');
@@ -211,7 +212,7 @@ function displayLastUploaded(min,max,direction){
         transmissionIcon.style.marginBottom = '2px';
 
         const transmissionValue = document.createElement('span');
-        transmissionValue.textContent = advertisement.transmissionType;
+        transmissionValue.textContent = advertisement.transmissionType.charAt(0).toUpperCase() + advertisement.transmissionType.slice(1).toLowerCase();
         transmissionInfo.appendChild(transmissionIcon);
         transmissionInfo.appendChild(transmissionValue);
 
@@ -227,7 +228,7 @@ function displayLastUploaded(min,max,direction){
         engineIcon.style.marginBottom = '2px';
 
         const engineValue = document.createElement('span');
-        engineValue.textContent = advertisement.engineType;
+        engineValue.textContent = advertisement.engineType.charAt(0).toUpperCase() + advertisement.engineType.slice(1).toLowerCase();
         engineInfo.appendChild(engineIcon);
         engineInfo.appendChild(engineValue);
 

@@ -94,8 +94,7 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
     private Specification<Advertisement> handleCityAndStateValue(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
         String city = request.getCity();
         String cityState = request.getCityState();
-        Integer distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
-
+        int distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
 
         if (cityState != null && !cityState.isEmpty() && (city == null || city.isEmpty())) {
             specification = specification.and((root, query, criteriaBuilder) -> {
@@ -108,9 +107,18 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
                     root.get("city").in(cityList)
             );
         } else if (city != null && !city.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("city"), locationFacade.getCityByName(city))
-            );
+            specification = specification.and((root, query, criteriaBuilder) -> {
+                if (cityState != null && !cityState.isEmpty()) {
+                    City cityEntity = locationFacade.getCityByNameAndState(city, cityState);
+                    if (cityEntity != null) {
+                        return criteriaBuilder.equal(root.get("city"), cityEntity);
+                    } else {
+                        return criteriaBuilder.conjunction();
+                    }
+                } else {
+                    return criteriaBuilder.equal(root.get("city").get("name"), city);
+                }
+            });
         }
         return specification;
     }

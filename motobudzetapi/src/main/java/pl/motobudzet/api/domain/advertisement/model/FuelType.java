@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FuelType {
     LPG("LPG"),
-    BENZYNA("BENZYNA"),
-    DIESEL("DIESEL"),
-    ELEKTRYCZNY("ELEKTRYCZNY"),
-    HYBRYDA("HYBRYDA");
+    PB("PB"),
+    ON("ON"),
+    EV("EV"),
+    PHEV("PHEV");
 
     @JsonValue
     private final String name;

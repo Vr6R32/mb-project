@@ -69,6 +69,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
         Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
         City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
         advertisement.setCity(city);
+        advertisement.setMainPhotoUrl(request.getMainPhotoUrl());
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();

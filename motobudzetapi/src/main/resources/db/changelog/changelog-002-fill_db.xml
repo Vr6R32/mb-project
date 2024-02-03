@@ -28,26 +28,14 @@
 
     <changeSet id="insert_brands" author="michal-k">
         <loadData tableName="brands" file="classpath:/db/changelog/csv/brand.csv" separator=",">
-            <column name="id" type="INT"/>
-            <column name="name" type="STRING"/>
         </loadData>
     </changeSet>
 
 
     <changeSet id="insert_models" author="michal-k">
         <loadData tableName="models" file="classpath:/db/changelog/csv/model.csv" separator=",">
-            <column name="id" type="INT"/>
-            <column name="name" type="STRING"/>
-            <column name="brand_id" type="INT"/>
         </loadData>
     </changeSet>
-
-    <!--    <changeSet id="insert_brand_model_relation" author="michal-k">-->
-    <!--        <loadData tableName="brands_model_list" file="classpath:/db/changelog/csv/brand_model_list.csv" separator=",">-->
-    <!--            <column name="brand_id" type="INT"/>-->
-    <!--            <column name="model_list_id" type="INT"/>-->
-    <!--        </loadData>-->
-    <!--    </changeSet>-->
 
 
 <changeSet id="insert_city_states" author="michal-k">

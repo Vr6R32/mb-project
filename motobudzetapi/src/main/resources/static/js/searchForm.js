@@ -55,6 +55,7 @@ function getParametersFromCurrentUrl() {
             urlSearchParams.forEach((value, key) => {
                 formData.set(key, value);
             });
+            executeAdvertisementFilterResultCount();
             executeSearch(formData);
             setFormValuesFromUrlParams(urlSearchParams);
         }
@@ -288,17 +289,7 @@ function createSearchFormButton(form) {
     searchButton.setAttribute('id', 'searchButton');
     searchButton.type = "submit";
     searchButton.textContent = "Szukaj";
-    searchButton.style.fontSize = "16px";
-    searchButton.style.fontStyle = "bold";
-    searchButton.style.backgroundColor = "darkgoldenrod";
-    searchButton.style.border = "none";
-    searchButton.style.color = "black";
-    searchButton.style.padding = "10px 20px";
-    searchButton.style.borderRadius = "5px";
-    // searchButton.style.marginTop = "20px";
-    searchButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    searchButton.style.transition = "background-position 0.3s ease-in-out";
-    searchButton.style.float = "right";
+    searchButton.className = 'search-button';
 
     searchButton.addEventListener("mouseover", function () {
         searchButton.style.boxShadow = '0 0 20px moccasin';
@@ -329,11 +320,15 @@ function handleFilterAutoResultCountFetch(form) {
     inputs.forEach(input => {
         if (input.name === 'city') {
             input.addEventListener('change', debounce(function () {
-                input.value = input.value.trim();
-
+                let cityStateValue = document.getElementById('cityState');
                 formData.set(input.name, input.value);
+                formData.set('cityState', cityStateValue.value);
                 executeAdvertisementFilterResultCount();
             }, 500));
+            //     input.value = input.value.trim();
+            //     formData.set(input.name, input.value);
+            //     executeAdvertisementFilterResultCount();
+            // }, 500));
         } else {
             input.addEventListener('input', debounce(function () {
                 input.value = input.value.trim();
@@ -851,6 +846,7 @@ function displayResults(data) {
         photoElement.src = `/api/static/photo/${ad.mainPhotoUrl}`;
         photoElement.style.height = "200px";
         photoElement.style.minWidth = '250px';
+        photoElement.style.objectFit = 'cover';
 
         createParalaxMiniature(photoElement, resultDiv);
 
@@ -874,41 +870,14 @@ function displayResults(data) {
         titleElement.style.fontSize = "24px";
         titleElement.style.textAlign = 'left';
 
-        const modelBrandElement = document.createElement("div");
-        modelBrandElement.textContent = ad.brand.name + ' ' + ad.model.name;
-        modelBrandElement.style.color = "darkgoldenrod";
-        modelBrandElement.style.fontSize = "16px";
-        modelBrandElement.style.textAlign = 'left';
+        const modelBrandElement = createModelBrandDiv(ad);
 
         headerTitleNameDiv.appendChild(titleElement);
         headerTitleNameDiv.appendChild(modelBrandElement);
 
         conversationDetailsHeader.appendChild(headerTitleNameDiv);
 
-        const priceHeader = document.createElement("div");
-        priceHeader.style.color = "darkgoldenrod";
-        priceHeader.style.fontSize = "18px";
-        priceHeader.style.position = 'relative';
-        priceHeader.style.bottom = '-5px';
-        priceHeader.style.textAlign = 'right';
-        priceHeader.style.marginRight = '25px';
-        priceHeader.style.whiteSpace = 'nowrap';
-
-        const priceElement = document.createElement('div');
-        priceElement.style.color = 'white';
-        priceElement.style.fontSize = "26px";
-
-        const priceValueSpan = document.createElement('span');
-        priceValueSpan.textContent = ad.priceUnit;
-        priceValueSpan.style.color = 'darkgoldenrod';
-        priceValueSpan.style.verticalAlign = "top";
-        priceValueSpan.style.fontSize = "16px";
-
-        priceElement.textContent = formatInteger(ad.price) + ' ';
-        priceElement.appendChild(priceValueSpan);
-
-        priceHeader.appendChild(priceElement);
-
+        const priceHeader = createPriceHeader(ad);
         conversationDetailsHeader.appendChild(priceHeader);
 
 
@@ -1004,7 +973,7 @@ function displayResults(data) {
         citySpan.style.fontSize = "22px";
 
         const stateSpan = document.createElement("span");
-        stateSpan.textContent = ' \t' + ad.cityState.name;
+        stateSpan.textContent = ' \t' + ad.city.cityState.name;
         stateSpan.style.color = 'darkgoldenrod';
         stateSpan.style.fontSize = "14px";
         stateSpan.style.marginTop = "6px";
@@ -1016,15 +985,7 @@ function displayResults(data) {
         locationDetailsDiv.appendChild(locationDetails);
         bottomDetailsHeader.appendChild(locationDetailsDiv);
 
-
-        const favouriteBottomHeaderDiv = document.createElement("div");
-        favouriteBottomHeaderDiv.style.color = "darkgoldenrod";
-        favouriteBottomHeaderDiv.style.fontSize = "18px";
-        favouriteBottomHeaderDiv.style.position = 'relative';
-        favouriteBottomHeaderDiv.style.bottom = '-25px';
-        favouriteBottomHeaderDiv.style.textAlign = 'right';
-        favouriteBottomHeaderDiv.style.marginRight = '25px';
-        favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap';
+        const favouriteBottomHeaderDiv = createFavouriteBottomDiv();
 
         const favouriteWrapper = document.createElement('div');
         favouriteWrapper.id = 'favouriteWrapper';
@@ -1047,49 +1008,21 @@ function displayResults(data) {
             favouriteText.style.opacity = '0';
         });
 
-        const favouriteText = document.createElement('span');
-        favouriteText.id = 'favouriteText';
-        favouriteText.style.border = '5px';
-        favouriteText.style.color = 'white';
-        favouriteText.style.position = 'relative';
-        favouriteText.style.left = '-150px';
-        favouriteText.style.opacity = '0';
-        favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
-
+        const favouriteText = createFavouriteTextSpan();
 
         favouriteWrapper.appendChild(favouriteText);
         favouriteWrapper.appendChild(favouriteIconDiv);
 
         const heartIcon = document.createElement('img');
 
+        const editBottomHeaderDiv = createEditBottomHeaderDiv();
+        const editWrapper = createEditWrapperDiv();
+        const editText = createEditTextSpan();
+        const editIconDiv = createEditIconDiv();
 
-        const editBottomHeaderDiv = document.createElement("div");
-        editBottomHeaderDiv.style.color = "darkgoldenrod";
-        editBottomHeaderDiv.style.fontSize = "18px";
-        editBottomHeaderDiv.style.position = 'relative';
-        editBottomHeaderDiv.style.bottom = '-25px';
-        editBottomHeaderDiv.style.textAlign = 'right';
-        editBottomHeaderDiv.style.marginRight = '25px';
-        editBottomHeaderDiv.style.whiteSpace = 'nowrap';
-
-        const editWrapper = document.createElement('div');
-        editWrapper.id = 'editWrapper';
-        editWrapper.style.display = 'flex';
-        editWrapper.style.alignItems = 'center';
-
-        const editText = document.createElement('span');
-        editText.id = 'editText';
-        editText.style.border = '5px';
-        editText.style.color = 'white';
-        editText.style.position = 'relative';
-        editText.style.left = '-150px';
-        editText.style.opacity = '0';
-        editText.style.transition = 'left 0.5s, opacity 0.5s';
-
-        const editIconDiv = document.createElement('div');
-        editIconDiv.style.color = 'white';
-        editIconDiv.style.fontSize = "26px";
-        editIconDiv.style.zIndex = '999';
+        editWrapper.appendChild(editText);
+        editWrapper.appendChild(editIconDiv);
+        const editIcon = document.createElement('img');
 
         editIconDiv.addEventListener('mouseover', function() {
             editIconDiv.style.cursor = "pointer";
@@ -1101,16 +1034,13 @@ function displayResults(data) {
             editText.style.left = '-150px';
             editText.style.opacity = '0';
         });
-
-        const editIcon = document.createElement('img');
-
         editIconDiv.addEventListener('click', function(event) {
             event.stopPropagation();
             window.location = '/advertisement/edit?id=' + ad.id;
         });
 
-        editWrapper.appendChild(editText);
-        editWrapper.appendChild(editIconDiv);
+
+
 
         if (ad.user !== getUserName()) {
             heartIcon.style.marginBottom = '2px';
@@ -1163,37 +1093,7 @@ function displayResults(data) {
 
 
 
-        function formatInteger(price) {
-            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-
-        const containers = [
-            createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
-            createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
-            createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
-            createInfoContainer('engineCapacity', 'CapacityIcon', formatInteger(ad.engineCapacity)),
-            createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-            createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
-            createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
-        ];
-
-        containers[0].appendChild(mileageUnitValue);
-        containers[1].appendChild(horsePower);
-        containers[2].appendChild(productionYear);
-        containers[3].appendChild(engineCapacity);
-
-        containers.forEach(container => {
-            advertisementDetails.appendChild(container);
-        });
-
-        const maxTextWidth = Math.max(
-            ...containers.map(container => container.querySelector('span').offsetWidth)
-        );
-
-        containers.forEach(container => {
-            container.style.width = maxTextWidth + '55px';
-        });
-
+        addContainerSpans(ad, mileageUnitValue, horsePower, productionYear, engineCapacity, advertisementDetails);
 
         conversationDetailsMain.appendChild(advertisementDetails);
         conversationDetailsDiv.appendChild(conversationDetailsHeader);

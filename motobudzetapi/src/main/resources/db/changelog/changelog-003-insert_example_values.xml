@@ -19,207 +19,13 @@
 
 
     <changeSet id="insert_example_advertisements" author="michal-k">
-        <insert tableName="advertisements">
-            <column name="id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="9"/>
-            <column name="model_id" value="127"/>
-            <column name="name" value="Audi RS3 OKAZJA !"/>
-            <column name="main_photo_url" value="rs3.png"/>
-            <column name="create_date" value="2023-08-17 10:08:45.613802"/>
-            <column name="engine_capacity" value="2497"/>
-            <column name="engine_horse_power" value="350"/>
-            <column name="first_registration_date" value="2014-04-30"/>
-            <column name="mileage" value="42069"/>
-            <column name="price" value="102500"/>
-            <column name="production_date" value="2016"/>
-            <column name="description" value="400hp itp"/>
-            <column name="drive_type" value="FWD"/>
-            <column name="engine_type" value="RZĘDOWY"/>
-            <column name="fuel_type" value="BENZYNA"/>
-            <column name="transmission_type" value="AUTOMAT"/>
-            <column name="user_id" value="1"/>
-            <column name="city_id" value="1"/>
-            <column name="price_unit" value="PLN"/>
-            <column name="mileage_unit" value="KM"/>
-        </insert>
-
-        <insert tableName="advertisements">
-            <column name="id" value="9079429f-854c-4908-b833-915140612b79"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="9"/>
-            <column name="model_id" value="130"/>
-            <column name="name" value="Audi RS6 500HP SUPERCHARGED"/>
-            <column name="main_photo_url" value="rs6.jpg"/>
-            <column name="create_date" value="2023-08-18 09:08:45.613802"/>
-            <column name="engine_capacity" value="4497"/>
-            <column name="engine_horse_power" value="500"/>
-            <column name="first_registration_date" value="2013-04-24"/>
-            <column name="mileage" value="66666"/>
-            <column name="price" value="254500"/>
-            <column name="production_date" value="2015"/>
-            <column name="description" value="rs6 kozak mega"/>
-            <column name="drive_type" value="AWD"/>
-            <column name="engine_type" value="WIDLASTY"/>
-            <column name="fuel_type" value="DIESEL"/>
-            <column name="transmission_type" value="AUTOMAT"/>
-            <column name="user_id" value="1"/>
-            <column name="city_id" value="152"/>
-            <column name="price_unit" value="PLN"/>
-            <column name="mileage_unit" value="KM"/>
-        </insert>
-
-        <insert tableName="advertisements">
-            <column name="id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="9"/>
-            <column name="model_id" value="134"/>
-            <column name="name" value="RSQ8 MANHART"/>
-            <column name="main_photo_url" value="rsq8.jpg"/>
-            <column name="create_date" value="2023-08-14 03:08:45.613802"/>
-            <column name="engine_capacity" value="4197"/>
-            <column name="engine_horse_power" value="800"/>
-            <column name="first_registration_date" value="2006-12-24"/>
-            <column name="mileage" value="83342"/>
-            <column name="price" value="821000"/>
-            <column name="production_date" value="2022"/>
-            <column name="description" value="description"/>
-            <column name="drive_type" value="RWD"/>
-            <column name="engine_type" value="RZĘDOWY"/>
-            <column name="fuel_type" value="LPG"/>
-            <column name="transmission_type" value="AUTOMAT"/>
-            <column name="user_id" value="1"/>
-            <column name="city_id" value="742"/>
-            <column name="price_unit" value="PLN"/>
-            <column name="mileage_unit" value="KM"/>
-        </insert>
-
-        <insert tableName="advertisements">
-            <column name="id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="65"/>
-            <column name="model_id" value="1132"/>
-            <column name="name" value="MERCEDES C63 AMG OKAZJA KOZAK IGLA"/>
-            <column name="main_photo_url" value="c63.jpg"/>
-            <column name="create_date" value="2023-08-06 07:08:45.613802"/>
-            <column name="engine_capacity" value="3897"/>
-            <column name="engine_horse_power" value="649"/>
-            <column name="first_registration_date" value="1996-11-04"/>
-            <column name="mileage" value="32841"/>
-            <column name="price" value="232000"/>
-            <column name="production_date" value="2012"/>
-            <column name="description" value="1000hp"/>
-            <column name="drive_type" value="AWD"/>
-            <column name="engine_type" value="WIDLASTY"/>
-            <column name="fuel_type" value="HYBRYDA"/>
-            <column name="transmission_type" value="AUTOMAT"/>
-            <column name="user_id" value="2"/>
-            <column name="city_id" value="312"/>
-            <column name="price_unit" value="PLN"/>
-            <column name="mileage_unit" value="KM"/>
-        </insert>
-
-        <insert tableName="advertisements">
-            <column name="id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="65"/>
-            <column name="model_id" value="1134"/>
-            <column name="name" value="MERCEDES GKLASA"/>
-            <column name="main_photo_url" value="gklasa.jpg"/>
-            <column name="create_date" value="2023-07-30 00:08:45.613802"/>
-            <column name="engine_capacity" value="4997"/>
-            <column name="engine_horse_power" value="532"/>
-            <column name="first_registration_date" value="2019-07-09"/>
-            <column name="mileage" value="7600"/>
-            <column name="price" value="154000"/>
-            <column name="production_date" value="2007"/>
-            <column name="description" value="gelenda"/>
-            <column name="drive_type" value="AWD"/>
-            <column name="engine_type" value="WANKEL"/>
-            <column name="fuel_type" value="BENZYNA"/>
-            <column name="transmission_type" value="AUTOMAT"/>
-            <column name="user_id" value="2"/>
-            <column name="city_id" value="642"/>
-            <column name="price_unit" value="EUR"/>
-            <column name="mileage_unit" value="MIL"/>
-        </insert>
-
-        <insert tableName="advertisements">
-            <column name="id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>
-            <column name="status" value="ACTIVE"/>
-            <column name="brand_id" value="63"/>
-            <column name="model_id" value="1088"/>
-            <column name="name" value="MAZDA RX-8"/>
-            <column name="main_photo_url" value="rx8.jpg"/>
-            <column name="create_date" value="2023-07-30 00:08:45.613802"/>
-            <column name="engine_capacity" value="4997"/>
-            <column name="engine_horse_power" value="532"/>
-            <column name="first_registration_date" value="2019-07-09"/>
-            <column name="mileage" value="7600"/>
-            <column name="price" value="154000"/>
-            <column name="production_date" value="2005"/>
-            <column name="description" value="RX-8 WANKEL POZDRO"/>
-            <column name="drive_type" value="RWD"/>
-            <column name="engine_type" value="RZĘDOWY"/>
-            <column name="fuel_type" value="LPG"/>
-            <column name="transmission_type" value="MANUAL"/>
-            <column name="user_id" value="2"/>
-            <column name="city_id" value="134"/>
-            <column name="price_unit" value="USD"/>
-            <column name="mileage_unit" value="KM"/>
-        </insert>
+        <loadData tableName="advertisements" file="classpath:/db/changelog/csv/advertisements.csv" separator=",">
+        </loadData>
     </changeSet>
 
-    <!-- Insert Advertisement Images -->
     <changeSet id="insert_example_advertisement_images" author="michal-k">
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>
-            <column name="image_urls" value="rs3.png"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>
-            <column name="image_urls" value="rs3-2.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="9079429f-854c-4908-b833-915140612b79"/>
-            <column name="image_urls" value="rs6.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="9079429f-854c-4908-b833-915140612b79"/>
-            <column name="image_urls" value="rs6-2.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>
-            <column name="image_urls" value="rsq8.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>
-            <column name="image_urls" value="rsq8-2.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>
-            <column name="image_urls" value="c63.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>
-            <column name="image_urls" value="c63-2.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>
-            <column name="image_urls" value="gklasa.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>
-            <column name="image_urls" value="gklasa-2.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>
-            <column name="image_urls" value="rx8.jpg"/>
-        </insert>
-        <insert tableName="advertisement_images">
-            <column name="advertisement_id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>
-            <column name="image_urls" value="rx8-2.jpg"/>
-        </insert>
+        <loadData tableName="advertisement_images" file="classpath:/db/changelog/csv/advertisement_images.csv" separator=",">
+        </loadData>
     </changeSet>
 
 
@@ -295,5 +101,213 @@
             <where>id = 3</where>
         </update>
     </changeSet>
+
+
+
+
+
+    <!--    <changeSet id="insert_example_advertisements" author="michal-k">-->
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="9"/>-->
+    <!--            <column name="model_id" value="127"/>-->
+    <!--            <column name="name" value="Audi RS3 OKAZJA !"/>-->
+    <!--            <column name="main_photo_url" value="rs3.png"/>-->
+    <!--            <column name="create_date" value="2023-08-17 10:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="2497"/>-->
+    <!--            <column name="engine_horse_power" value="350"/>-->
+    <!--            <column name="first_registration_date" value="2014-04-30"/>-->
+    <!--            <column name="mileage" value="42069"/>-->
+    <!--            <column name="price" value="102500"/>-->
+    <!--            <column name="production_date" value="2016"/>-->
+    <!--            <column name="description" value="400hp itp"/>-->
+    <!--            <column name="drive_type" value="FWD"/>-->
+    <!--            <column name="engine_type" value="RZĘDOWY"/>-->
+    <!--            <column name="fuel_type" value="BENZYNA"/>-->
+    <!--            <column name="transmission_type" value="AUTOMAT"/>-->
+    <!--            <column name="user_id" value="1"/>-->
+    <!--            <column name="city_id" value="1"/>-->
+    <!--            <column name="price_unit" value="PLN"/>-->
+    <!--            <column name="mileage_unit" value="KM"/>-->
+    <!--        </insert>-->
+
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="9079429f-854c-4908-b833-915140612b79"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="9"/>-->
+    <!--            <column name="model_id" value="130"/>-->
+    <!--            <column name="name" value="Audi RS6 500HP SUPERCHARGED"/>-->
+    <!--            <column name="main_photo_url" value="rs6.jpg"/>-->
+    <!--            <column name="create_date" value="2023-08-18 09:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="4497"/>-->
+    <!--            <column name="engine_horse_power" value="500"/>-->
+    <!--            <column name="first_registration_date" value="2013-04-24"/>-->
+    <!--            <column name="mileage" value="66666"/>-->
+    <!--            <column name="price" value="254500"/>-->
+    <!--            <column name="production_date" value="2015"/>-->
+    <!--            <column name="description" value="rs6 kozak mega"/>-->
+    <!--            <column name="drive_type" value="AWD"/>-->
+    <!--            <column name="engine_type" value="WIDLASTY"/>-->
+    <!--            <column name="fuel_type" value="DIESEL"/>-->
+    <!--            <column name="transmission_type" value="AUTOMAT"/>-->
+    <!--            <column name="user_id" value="1"/>-->
+    <!--            <column name="city_id" value="152"/>-->
+    <!--            <column name="price_unit" value="PLN"/>-->
+    <!--            <column name="mileage_unit" value="KM"/>-->
+    <!--        </insert>-->
+
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="9"/>-->
+    <!--            <column name="model_id" value="134"/>-->
+    <!--            <column name="name" value="RSQ8 MANHART"/>-->
+    <!--            <column name="main_photo_url" value="rsq8.jpg"/>-->
+    <!--            <column name="create_date" value="2023-08-14 03:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="4197"/>-->
+    <!--            <column name="engine_horse_power" value="800"/>-->
+    <!--            <column name="first_registration_date" value="2006-12-24"/>-->
+    <!--            <column name="mileage" value="83342"/>-->
+    <!--            <column name="price" value="821000"/>-->
+    <!--            <column name="production_date" value="2022"/>-->
+    <!--            <column name="description" value="description"/>-->
+    <!--            <column name="drive_type" value="RWD"/>-->
+    <!--            <column name="engine_type" value="RZĘDOWY"/>-->
+    <!--            <column name="fuel_type" value="LPG"/>-->
+    <!--            <column name="transmission_type" value="AUTOMAT"/>-->
+    <!--            <column name="user_id" value="1"/>-->
+    <!--            <column name="city_id" value="742"/>-->
+    <!--            <column name="price_unit" value="PLN"/>-->
+    <!--            <column name="mileage_unit" value="KM"/>-->
+    <!--        </insert>-->
+
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="65"/>-->
+    <!--            <column name="model_id" value="1132"/>-->
+    <!--            <column name="name" value="MERCEDES C63 AMG OKAZJA KOZAK IGLA"/>-->
+    <!--            <column name="main_photo_url" value="c63.jpg"/>-->
+    <!--            <column name="create_date" value="2023-08-06 07:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="3897"/>-->
+    <!--            <column name="engine_horse_power" value="649"/>-->
+    <!--            <column name="first_registration_date" value="1996-11-04"/>-->
+    <!--            <column name="mileage" value="32841"/>-->
+    <!--            <column name="price" value="232000"/>-->
+    <!--            <column name="production_date" value="2012"/>-->
+    <!--            <column name="description" value="1000hp"/>-->
+    <!--            <column name="drive_type" value="AWD"/>-->
+    <!--            <column name="engine_type" value="WIDLASTY"/>-->
+    <!--            <column name="fuel_type" value="HYBRYDA"/>-->
+    <!--            <column name="transmission_type" value="AUTOMAT"/>-->
+    <!--            <column name="user_id" value="2"/>-->
+    <!--            <column name="city_id" value="312"/>-->
+    <!--            <column name="price_unit" value="PLN"/>-->
+    <!--            <column name="mileage_unit" value="KM"/>-->
+    <!--        </insert>-->
+
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="65"/>-->
+    <!--            <column name="model_id" value="1134"/>-->
+    <!--            <column name="name" value="MERCEDES GKLASA"/>-->
+    <!--            <column name="main_photo_url" value="gklasa.jpg"/>-->
+    <!--            <column name="create_date" value="2023-07-30 00:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="4997"/>-->
+    <!--            <column name="engine_horse_power" value="532"/>-->
+    <!--            <column name="first_registration_date" value="2019-07-09"/>-->
+    <!--            <column name="mileage" value="7600"/>-->
+    <!--            <column name="price" value="154000"/>-->
+    <!--            <column name="production_date" value="2007"/>-->
+    <!--            <column name="description" value="gelenda"/>-->
+    <!--            <column name="drive_type" value="AWD"/>-->
+    <!--            <column name="engine_type" value="WANKEL"/>-->
+    <!--            <column name="fuel_type" value="BENZYNA"/>-->
+    <!--            <column name="transmission_type" value="AUTOMAT"/>-->
+    <!--            <column name="user_id" value="2"/>-->
+    <!--            <column name="city_id" value="642"/>-->
+    <!--            <column name="price_unit" value="EUR"/>-->
+    <!--            <column name="mileage_unit" value="MIL"/>-->
+    <!--        </insert>-->
+
+    <!--        <insert tableName="advertisements">-->
+    <!--            <column name="id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>-->
+    <!--            <column name="status" value="ACTIVE"/>-->
+    <!--            <column name="brand_id" value="63"/>-->
+    <!--            <column name="model_id" value="1088"/>-->
+    <!--            <column name="name" value="MAZDA RX-8"/>-->
+    <!--            <column name="main_photo_url" value="rx8.jpg"/>-->
+    <!--            <column name="create_date" value="2023-07-30 00:08:45.613802"/>-->
+    <!--            <column name="engine_capacity" value="4997"/>-->
+    <!--            <column name="engine_horse_power" value="532"/>-->
+    <!--            <column name="first_registration_date" value="2019-07-09"/>-->
+    <!--            <column name="mileage" value="7600"/>-->
+    <!--            <column name="price" value="154000"/>-->
+    <!--            <column name="production_date" value="2005"/>-->
+    <!--            <column name="description" value="RX-8 WANKEL POZDRO"/>-->
+    <!--            <column name="drive_type" value="RWD"/>-->
+    <!--            <column name="engine_type" value="RZĘDOWY"/>-->
+    <!--            <column name="fuel_type" value="LPG"/>-->
+    <!--            <column name="transmission_type" value="MANUAL"/>-->
+    <!--            <column name="user_id" value="2"/>-->
+    <!--            <column name="city_id" value="134"/>-->
+    <!--            <column name="price_unit" value="USD"/>-->
+    <!--            <column name="mileage_unit" value="KM"/>-->
+    <!--        </insert>-->
+    <!--    </changeSet>-->
+
+    <!--    <changeSet id="insert_example_advertisement_images" author="michal-k">-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>-->
+    <!--            <column name="image_urls" value="rs3.png"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="323e2dca-f206-4893-bce6-478ffeff62a3"/>-->
+    <!--            <column name="image_urls" value="rs3-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="9079429f-854c-4908-b833-915140612b79"/>-->
+    <!--            <column name="image_urls" value="rs6.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="9079429f-854c-4908-b833-915140612b79"/>-->
+    <!--            <column name="image_urls" value="rs6-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>-->
+    <!--            <column name="image_urls" value="rsq8.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="80abd0c4-a99b-4461-8ff4-e71f64735151"/>-->
+    <!--            <column name="image_urls" value="rsq8-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>-->
+    <!--            <column name="image_urls" value="c63.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="5c2558e6-8106-4fd4-818a-78dfb8997cb5"/>-->
+    <!--            <column name="image_urls" value="c63-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>-->
+    <!--            <column name="image_urls" value="gklasa.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="7fc3b93e-3e8f-4a8e-83fd-31af9103a64f"/>-->
+    <!--            <column name="image_urls" value="gklasa-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>-->
+    <!--            <column name="image_urls" value="rx8.jpg"/>-->
+    <!--        </insert>-->
+    <!--        <insert tableName="advertisement_images">-->
+    <!--            <column name="advertisement_id" value="57efa14f-80c1-42f7-b694-c6319ae5e29d"/>-->
+    <!--            <column name="image_urls" value="rx8-2.jpg"/>-->
+    <!--        </insert>-->
+    <!--    </changeSet>-->
+
 
 </databaseChangeLog>

@@ -34,7 +34,6 @@ public class AdvertisementMapper {
                 .transmissionType(adv.getTransmissionType())
                 .user(adv.getUser().getUsername())
                 .city(CityMapper.mapToCityDTO(adv.getCity()))
-                .cityState(CityStateMapper.mapToCityStateDTO(adv.getCity().getCityState()))
                 .mileage(adv.getMileage())
                 .mileageUnit(adv.getMileageUnit())
                 .price(adv.getPrice())

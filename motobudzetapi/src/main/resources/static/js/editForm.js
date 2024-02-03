@@ -74,8 +74,8 @@ function populateFormData(data) {
     setSelectedOption(document.getElementById('driveType'), data.driveType);
     setSelectedOption(document.getElementById('engineType'), data.engineType);
     setSelectedOption(document.getElementById('transmissionType'), data.transmissionType);
-    setSelectedOption(document.getElementById('cityState'), data.cityState);
     document.getElementById('city').value = data.city.name || '';
+    document.getElementById('cityState').value = data.city.cityState.name || '';
     document.getElementById('name').value = data.name || '';
     document.getElementById('mileage').value = data.mileage || '';
     document.getElementById('price').value = data.price || '';

@@ -47,7 +47,6 @@ class LocationServiceImpl implements LocationService {
                 }
             }
         }
-
         return neighborCities;
     }
 
@@ -66,8 +65,4 @@ class LocationServiceImpl implements LocationService {
     public List<CityStateDTO> getAllCitiesStates() {
         return stateRepository.findAllCitiesStates().stream().map(CityStateMapper::mapToCityStateDTO).toList();
     }
-
-
-
-
 }

@@ -63,4 +63,6 @@ public class AdvertisementRequest {
     private String city;
     @NotNull(message = "City state cannot be empty!")
     private String cityState;
+    @NotNull(message = "Main Photo cannot be empty!")
+    private String mainPhotoUrl;
 }

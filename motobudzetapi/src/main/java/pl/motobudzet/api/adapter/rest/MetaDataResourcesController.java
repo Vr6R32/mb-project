@@ -4,7 +4,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.motobudzet.api.infrastructure.file_manager.PathsConfig;
+import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
 
 
 @RestController

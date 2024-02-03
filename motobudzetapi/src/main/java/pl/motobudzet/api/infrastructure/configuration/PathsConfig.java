@@ -1,4 +1,4 @@
-package pl.motobudzet.api.infrastructure.file_manager;
+package pl.motobudzet.api.infrastructure.configuration;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

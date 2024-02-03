@@ -4,7 +4,6 @@ import lombok.*;
 import pl.motobudzet.api.domain.advertisement.model.*;
 import pl.motobudzet.api.domain.brand.BrandDTO;
 import pl.motobudzet.api.domain.location.CityDTO;
-import pl.motobudzet.api.domain.location.CityStateDTO;
 import pl.motobudzet.api.domain.model.ModelDTO;
 
 import java.time.LocalDate;
@@ -31,7 +30,6 @@ public class AdvertisementDTO {
     private String mainPhotoUrl;
     private String user;
     private CityDTO city;
-    private CityStateDTO cityState;
     private Long mileage;
     private Long price;
     private Long engineCapacity;

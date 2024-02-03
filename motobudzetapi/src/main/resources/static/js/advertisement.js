@@ -27,7 +27,6 @@ function createHeaderTitle(advertisement, container, owner) {
 
     let loggedUser = getUserName();
 
-
     const titleContainer = document.createElement('div');
     titleContainer.setAttribute('id', 'titleDiv');
     titleContainer.classList.add('title-container');
@@ -146,7 +145,7 @@ function createHeaderTitle(advertisement, container, owner) {
     document.body.appendChild(toolTipFavourite);
 
 
-    editIcon.addEventListener('mouseenter', (event) => {
+    editIcon.addEventListener('mouseenter', () => {
         toolTipEdit.style.display = 'block';
         editIcon.style.cursor = 'pointer';
         document.addEventListener('mousemove', updateTooltipPosition);
@@ -157,7 +156,7 @@ function createHeaderTitle(advertisement, container, owner) {
         document.removeEventListener('mousemove', updateTooltipPosition);
     });
 
-    heartIcon.addEventListener('mouseenter', (event) => {
+    heartIcon.addEventListener('mouseenter', () => {
         toolTipFavourite.style.display = 'block';
         heartIcon.style.cursor = 'pointer';
         setTooltipText(heartIcon, toolTipFavourite);
@@ -169,7 +168,7 @@ function createHeaderTitle(advertisement, container, owner) {
         document.removeEventListener('mousemove', updateTooltipPosition);
     });
 
-    messageIcon.addEventListener('mouseenter', (event) => {
+    messageIcon.addEventListener('mouseenter', () => {
         toolTipMessageSend.style.display = 'block';
         editIcon.style.cursor = 'pointer';
         document.addEventListener('mousemove', updateTooltipPosition);
@@ -232,6 +231,7 @@ function updateHeartIconSrc() {
                 }
             })
             .catch(error => {
+                console.log(error);
                 heartIcon.src = '/api/static/heartEmpty';
             });
     }
@@ -241,31 +241,9 @@ function updateHeartIconSrc() {
 function createMessageBox(messageIcon, loggedUser) {
 
 
-    const overlay = document.createElement('div');
-    overlay.setAttribute('id', 'overlayId');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    const overlay = createSiteOverlay();
 
-    const dialogBox = document.createElement('div');
-    dialogBox.setAttribute('id', 'dialogBox')
-    dialogBox.style.position = 'fixed';
-    dialogBox.style.top = '50%';
-    dialogBox.style.left = '50%';
-    dialogBox.style.height = '250px';
-    dialogBox.style.width = '600px';
-    dialogBox.style.transform = 'translate(-50%, -50%)';
-    dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    dialogBox.style.borderRadius = '15px';
-    dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
-    dialogBox.style.flexDirection = 'column';
-    dialogBox.style.alignItems = 'center';
-    dialogBox.style.textAlign = 'center';
-    dialogBox.style.display = 'flex';
-    dialogBox.style.justifyContent = 'center';
+    const dialogBox = createOverlayDialogBox();
 
     const headerTitle = document.createElement('dialogBox');
     headerTitle.setAttribute('id', 'dialogBoxTitle');
@@ -275,10 +253,8 @@ function createMessageBox(messageIcon, loggedUser) {
     headerTitle.style.fontWeight = 'bold';
     headerTitle.style.marginTop = '15px'
 
-
     const textArea = document.createElement('textarea');
     textArea.style.backgroundColor = 'transparent';
-
     textArea.style.color = 'white';
     textArea.style.borderRadius = '10px';
     textArea.style.width = '100%';
@@ -287,18 +263,8 @@ function createMessageBox(messageIcon, loggedUser) {
     textArea.style.resize = 'none';
 
     const sendButton = document.createElement("button");
-    // settingsButton.setAttribute('id', 'menuPanelButton');
     sendButton.textContent = 'Wyślij';
-    sendButton.style.backgroundColor = "darkgoldenrod";
-    sendButton.style.border = "none";
-    sendButton.style.marginBottom = "20px";
-    sendButton.style.width = "150px";
-    sendButton.style.color = "black";
-    sendButton.style.marginTop = "20px";
-    sendButton.style.padding = "10px 20px";
-    sendButton.style.borderRadius = "5px";
-    sendButton.style.boxShadow = "0 0 20px darkgoldenrod";
-    sendButton.style.transition = "background-position 0.3s ease-in-out";
+    sendButton.className = 'overlay-send-button';
 
     sendButton.addEventListener("mouseover", function () {
         sendButton.style.boxShadow = '0 0 20px moccasin';
@@ -363,6 +329,7 @@ function sendNewMessage(messageValue, advertisementId) {
             }
         })
         .catch(error => {
+                console.log(error);
                 let dialogBox = document.getElementById('dialogBox');
                 let dialogBoxTitle = document.getElementById('dialogBoxTitle');
                 dialogBox.innerHTML = '';

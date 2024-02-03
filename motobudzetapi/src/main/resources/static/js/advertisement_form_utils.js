@@ -29,74 +29,9 @@ function handleFormElementsLogic(formElements, form) {
             input.style.textAlign = 'center';
         }
         if (element.id === 'city') {
-
-            const inputContainer = document.createElement("div");
-            inputContainer.style.position = "relative";
-            inputContainer.setAttribute('autocomplete', 'off');
-
-
-            input.style.position = 'relative';
-            input.setAttribute('autocomplete', 'off');
-
-            const suggestionsList = document.createElement('ul');
-
-            suggestionsList.style.right = '25px';
-            suggestionsList.style.top = '45px';
-
-            suggestionsList.id = 'suggestionsList';
-            suggestionsList.setAttribute('autocomplete', 'off');
-            suggestionsList.style.listStyleType = 'none';
-            suggestionsList.style.padding = '0';
-            suggestionsList.style.margin = '0';
-            suggestionsList.style.position = 'absolute';
-            suggestionsList.style.backgroundColor = 'black';
-            suggestionsList.style.color = 'white';
-            suggestionsList.style.border = '1px solid #ccc';
-            suggestionsList.style.borderRadius = '5px';
-            suggestionsList.style.maxHeight = '150px';
-            suggestionsList.style.minWidth = '200px';
-            suggestionsList.style.overflowY = 'auto';
-            suggestionsList.style.display = 'none';
-            suggestionsList.style.zIndex = '1000';
-
-            suggestionsList.style.scrollbarWidth = 'thin';
-            suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
-            suggestionsList.style.WebkitScrollbar = 'thin';
-            suggestionsList.style.WebkitScrollbarTrack = 'transparent';
-            suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
-            suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
-
-
-            suggestionsList.addEventListener('click', function (event) {
-                if (event.target && event.target.nodeName === 'LI') {
-                    input.value = event.target.textContent;
-                    suggestionsList.style.display = 'none';
-                }
-            });
-
-            inputContainer.appendChild(input);
-            inputContainer.appendChild(suggestionsList);
-            form.appendChild(inputContainer);
-
-            let timeoutId;
-            const debounceDelay = 200;
-
-            input.addEventListener("input", function () {
-                clearTimeout(timeoutId);
-
-                const partialCityName = input.value;
-
-                timeoutId = setTimeout(function () {
-                    fetch(`/api/cities?partialName=${partialCityName}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            updateCitySuggestions(data);
-                        })
-                        .catch(error => {
-                            console.error("Błąd podczas pobierania propozycji miast:", error);
-                        });
-                }, debounceDelay);
-            });
+            let suggestionList = handleCitySuggestionList(input, form);
+            suggestionList.style.right = '25px';
+            suggestionList.style.top = '45px';
         }
 
 
@@ -346,7 +281,7 @@ function createAdvertisementForm(titleText) {
 
     const submitButton = document.createElement('button');
     submitButton.type = 'button';
-    submitButton.value = 'Wyślij';
+    submitButton.textContent = 'Wyślij';
     submitButton.style.marginBottom = '15px';
     submitButton.style.backgroundColor = "black";
     submitButton.style.color = "white";

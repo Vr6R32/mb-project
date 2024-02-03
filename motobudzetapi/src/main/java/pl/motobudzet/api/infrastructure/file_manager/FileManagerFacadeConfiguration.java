@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
+import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
 
 @Configuration
 public class FileManagerFacadeConfiguration {

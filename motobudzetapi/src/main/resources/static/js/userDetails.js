@@ -113,6 +113,8 @@ function createLabel(forId, textContent) {
     label.textContent = textContent;
     return label;
 }
+
+
 function createInput(type, id, placeholder,form) {
     const input = document.createElement("input");
     input.type = type;
@@ -123,70 +125,10 @@ function createInput(type, id, placeholder,form) {
     input.required = true;
 
     if(id === 'city') {
-
-    const inputContainer = document.createElement("div");
-    inputContainer.style.position = "relative";
-    inputContainer.setAttribute('autocomplete', 'off');
-
-
-    input.style.position = 'relative';
-    input.setAttribute('autocomplete', 'off');
-
-    const suggestionsList = document.createElement('ul');
-    suggestionsList.style.right = '-19px';
-    suggestionsList.style.top = '140px';
-    suggestionsList.id = 'suggestionsList';
-    suggestionsList.setAttribute('autocomplete', 'off');
-    suggestionsList.style.listStyleType = 'none';
-    suggestionsList.style.padding = '0';
-    suggestionsList.style.margin = '0';
-    suggestionsList.style.position = 'absolute';
-    suggestionsList.style.backgroundColor = 'black';
-    suggestionsList.style.color = 'white';
-    suggestionsList.style.border = '1px solid #ccc';
-    suggestionsList.style.borderRadius = '5px';
-    suggestionsList.style.maxHeight = '150px';
-    suggestionsList.style.minWidth = '200px';
-    suggestionsList.style.overflowY = 'auto';
-    suggestionsList.style.display = 'none';
-    suggestionsList.style.zIndex = '1000';
-    suggestionsList.style.scrollbarWidth = 'thin';
-    suggestionsList.style.scrollbarColor = 'darkgoldenrod transparent';
-    suggestionsList.style.WebkitScrollbar = 'thin';
-    suggestionsList.style.WebkitScrollbarTrack = 'transparent';
-    suggestionsList.style.WebkitScrollbarThumb = 'darkgoldenrod';
-    suggestionsList.style.WebkitScrollbarThumbHover = 'goldenrod';
-    suggestionsList.addEventListener('click', function (event) {
-        if (event.target && event.target.nodeName === 'LI') {
-            input.value = event.target.textContent;
-            suggestionsList.style.display = 'none';
-        }
-    });
-
-    inputContainer.appendChild(input);
-    inputContainer.appendChild(suggestionsList);
-    form.appendChild(inputContainer);
-
-    let timeoutId;
-    const debounceDelay = 200;
-
-    input.addEventListener("input", function () {
-        clearTimeout(timeoutId);
-
-        const partialCityName = input.value;
-
-        timeoutId = setTimeout(function () {
-            fetch(`/api/cities?partialName=${partialCityName}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateCitySuggestions(data);
-                })
-                .catch(error => {
-                    console.error("Błąd podczas pobierania propozycji miast:", error);
-                });
-        }, debounceDelay);
-    });
-}
+        let suggestionList = handleCitySuggestionList(input, form);
+        suggestionList.style.right = '-19px';
+        suggestionList.style.top = '140px';
+    }
 
 
 return input;

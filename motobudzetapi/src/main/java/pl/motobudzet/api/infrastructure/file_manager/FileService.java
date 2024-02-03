@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
+import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -18,8 +18,6 @@ function createConversationResults(conversation, container) {
     resultDiv.style.height = '90%';
     resultDiv.style.marginBottom = '30px';
 
-
-
     // if (/Mobi|Android/i.test(navigator.userAgent)) {
         // let resultContainerRight = document.getElementById('resultContainerRight');
         // let rightContainer = document.getElementById('rightContainer');
@@ -60,24 +58,15 @@ function createConversationResults(conversation, container) {
     photoElement.style.maxWidth = '250px';
     photoElement.style.objectFit = "cover";
 
-    const fadeEffect = document.createElement('div');
-    fadeEffect.classList.add('fade-effect-miniature-search');
-    fadeEffect.appendChild(photoElement);
-    resultDiv.appendChild(fadeEffect);
+    createPhotoFadeEffect(photoElement, resultDiv);
 
-    const advertisementDetailsHeader = document.createElement("div");
-    advertisementDetailsHeader.className = "advertisementDetailsHeader";
+    const advertisementDetailsHeader = createAdvertisementDetailsHeaderDiv();
 
-    const titleElement = document.createElement("div");
-    titleElement.textContent = conversation.advertisement.name;
-    titleElement.style.color = "white";
-    titleElement.style.fontSize = "24px";
-    titleElement.style.textAlign = 'left';
-    titleElement.style.whiteSpace = 'nowrap';
-    titleElement.style.overflow = 'hidden';
-    titleElement.style.textOverflow = 'ellipsis';
+    const advertisementTitleDiv = document.createElement("div");
+    advertisementTitleDiv.className = 'advertisement-title-div';
+    advertisementTitleDiv.textContent = conversation.advertisement.name;
 
-    advertisementDetailsHeader.appendChild(titleElement);
+    advertisementDetailsHeader.appendChild(advertisementTitleDiv);
 
     if (conversation.lastMessage !== null) {
         const dateElement = document.createElement("div");
@@ -90,47 +79,15 @@ function createConversationResults(conversation, container) {
         advertisementDetailsHeader.appendChild(dateElement);
     }
 
-    ///////////////////////////////////////////////////////////////////////
-    ///////////////////////////////HEADER//////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////
-
-
-    const advertisementDetailsDiv = document.createElement("div");
-    advertisementDetailsDiv.className = "advertisementDetailsDiv";
-
-    const advertisementDetailsMain = document.createElement("div");
-    advertisementDetailsMain.className = "advertisementDetailsMain";
-
-    const advertisementDetails = document.createElement("div");
-    advertisementDetails.className = "advertisementDetails";
-
-    let priceUnitValue = document.createElement('span');
-    priceUnitValue.style.color = 'darkgoldenrod';
-    priceUnitValue.textContent = conversation.advertisement.priceUnit;
-
-    let mileageUnitValue = document.createElement('span');
+    const advertisementDetailsDiv = createAdvertisementDetailsDiv();
+    const advertisementDetailsMain = createAdvertisementDetailsMain();
+    const advertisementDetails = createAdvertisementDetails();
+    let mileageUnitValue = createMileageUnitSpan();
     mileageUnitValue.style.color = 'darkgoldenrod';
     mileageUnitValue.textContent = conversation.advertisement.mileageUnit;
-
-    let horsePower = document.createElement('span');
-    horsePower.style.color = 'darkgoldenrod';
-    horsePower.textContent = 'HP';
-
-    let productionYear = document.createElement('span');
-    productionYear.style.color = 'darkgoldenrod';
-    productionYear.textContent = 'ROK';
-
-    let engineCapacity = document.createElement('span');
-    engineCapacity.style.color = 'darkgoldenrod';
-    engineCapacity.textContent = 'CM';
-
-    let smallerDigit = document.createElement('span');
-    smallerDigit.textContent = '3';
-    smallerDigit.style.fontSize = '10px';
-    smallerDigit.style.verticalAlign = 'top';
-
-    engineCapacity.appendChild(smallerDigit);
-
+    let horsePower = createHorsePowerSpan();
+    let productionYear = createProductionYearSpan();
+    let engineCapacity = createEngineCapacitySpan();
 
     const conversationDetailsSecondUser = document.createElement("conversationDetailsCenter");
     conversationDetailsSecondUser.style.width = '100%';
@@ -235,7 +192,7 @@ function createConversationResults(conversation, container) {
     citySpan.style.fontSize = "22px";
 
     const stateSpan = document.createElement("span");
-    stateSpan.textContent = ' \t' + conversation.advertisement.cityState.name;
+    stateSpan.textContent = ' \t' + conversation.advertisement.city.cityState.name;
     stateSpan.style.color = 'darkgoldenrod';
     stateSpan.style.fontSize = "14px";
     stateSpan.style.marginTop = "6px";
@@ -252,7 +209,6 @@ function createConversationResults(conversation, container) {
     advertisementDetailsMain.appendChild(conversationDetailsSecondUser);
     advertisementDetailsMain.appendChild(advertisementDetails);
     advertisementDetailsMain.appendChild(conversationLastMessage);
-    // conversationDetailsMain.appendChild(conversationDeliveryDateTime);
     advertisementDetailsMain.appendChild(bottomDetailsHeader);
 
     advertisementDetailsDiv.appendChild(advertisementDetailsHeader);

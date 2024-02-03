@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.infrastructure.file_manager.PathsConfig;
+import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.domain.user.service.UserDetailsService;
 
@@ -33,27 +32,27 @@ class SpringMailSenderService {
     private static final String ADVERTISEMENT_URL_LINK = "/advertisement?id=";
     private static final String RESET_PASSWORD_TITLE = "Resetowanie hasła";
 
-    @Async
+
     public void sendMessageNotificationHtml(EmailMessageRequest request) {
         sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.getReceiverEmail());
     }
 
-    @Async
+
     public void sendRegisterActivationNotificationHtml(AppUser user) {
         sendEmail(REGISTRATION_ACTIVATION_TITLE, createHtmlStringRegisterActivation(user), user.getEmail());
     }
 
-    @Async
+
     public void sendResetPasswordNotificationCodeLink(AppUser user) {
         sendEmail(RESET_PASSWORD_TITLE, createHtmlStringResetPassword(user), user.getEmail());
     }
 
-    @Async
+
     public void sendAdvertisementActivationConfirmNotification(AppUser user, Advertisement advertisement) {
         sendEmail(ADVERTISEMENT_ACTIVATION_TITLE, createHtmlStringActivationConfirmation(user, advertisement), user.getEmail());
     }
 
-    @Async
+
     public void sendEmailNotificationToManagement(UUID id) {
         String[] receiverArray = userDetailsService.findManagementEmails().toArray(new String[0]);
         sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), receiverArray);

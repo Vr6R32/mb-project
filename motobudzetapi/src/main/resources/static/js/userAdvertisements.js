@@ -1,3 +1,17 @@
+function softlyRemoveDivWithOpacity(opacity, step, resultDiv, container, intervalDuration) {
+    const fadeOutInterval = setInterval(() => {
+        opacity -= step;
+        resultDiv.style.setProperty('opacity', String(opacity), 'important');
+
+        if (opacity <= 0) {
+            clearInterval(fadeOutInterval);
+            if (resultDiv.parentNode === container) {
+                container.removeChild(resultDiv);
+            }
+        }
+    }, intervalDuration);
+    return opacity;
+}
 
 function createSingleAdvertisementResultPanelDiv(ad, container) {
 
@@ -50,99 +64,35 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     photoElement.style.maxWidth = '250px';
     photoElement.style.objectFit = "cover"
 
-    const fadeEffect = document.createElement('div');
-    fadeEffect.classList.add('fade-effect-miniature-search');
-    fadeEffect.appendChild(photoElement);
-    resultDiv.appendChild(fadeEffect);
+    createPhotoFadeEffect(photoElement, resultDiv);
 
-    const advertisementDetailsHeader = document.createElement("div");
-    advertisementDetailsHeader.className = "advertisementDetailsHeader";
+    const advertisementDetailsHeader = createAdvertisementDetailsHeaderDiv();
 
     const headerTitleNameDiv = document.createElement('div');
     headerTitleNameDiv.className = 'headerTitleNameDiv';
 
-    const titleElement = document.createElement("div");
-    titleElement.textContent = ad.name;
-    titleElement.style.color = "white";
-    titleElement.style.fontSize = "24px";
-    titleElement.style.textAlign = 'left';
+    const advertisementTitleDiv = document.createElement("div");
+    advertisementTitleDiv.className = 'advertisement-title-div';
+    advertisementTitleDiv.textContent = ad.name;
 
-    const modelBrandElement = document.createElement("div");
-    modelBrandElement.textContent = ad.brand.name + ' ' + ad.model.name;
-    modelBrandElement.style.color = "darkgoldenrod";
-    modelBrandElement.style.fontSize = "16px";
-    modelBrandElement.style.textAlign = 'left';
+    const modelBrandElement = createModelBrandDiv(ad);
 
-    headerTitleNameDiv.appendChild(titleElement);
+    headerTitleNameDiv.appendChild(advertisementTitleDiv);
     headerTitleNameDiv.appendChild(modelBrandElement);
 
     advertisementDetailsHeader.appendChild(headerTitleNameDiv);
-
-    const priceHeader = document.createElement("div");
-    priceHeader.style.color = "darkgoldenrod";
-    priceHeader.style.fontSize = "18px";
-    priceHeader.style.position = 'relative';
-    priceHeader.style.bottom = '-5px';
-    priceHeader.style.textAlign = 'right';
-    priceHeader.style.marginRight = '25px';
-    priceHeader.style.whiteSpace = 'nowrap';
-
-    const priceElement = document.createElement('div');
-    priceElement.style.color = 'white';
-    priceElement.style.fontSize = "26px"; // Dostosuj rozmiar tekstu
-
-    const priceValueSpan = document.createElement('span');
-    priceValueSpan.textContent = ad.priceUnit;
-    priceValueSpan.style.color = 'darkgoldenrod';
-    priceValueSpan.style.verticalAlign = "top";
-    priceValueSpan.style.fontSize = "16px";
-
-    priceElement.textContent = formatInteger(ad.price) + ' ';
-    priceElement.appendChild(priceValueSpan);
-
-    priceHeader.appendChild(priceElement);
-
+    const priceHeader = createPriceHeader(ad);
     advertisementDetailsHeader.appendChild(priceHeader);
 
-
-    const advertisementDetailsDiv = document.createElement("div");
-    advertisementDetailsDiv.className = "advertisementDetailsDiv";
-
-    const advertisementDetailsMain = document.createElement("div");
-    advertisementDetailsMain.className = "advertisementDetailsMain";
-
-    const advertisementDetails = document.createElement("div");
-    advertisementDetails.className = "advertisementDetails";
-
-    let priceUnitValue = document.createElement('span');
-    priceUnitValue.style.color = 'darkgoldenrod';
-    priceUnitValue.textContent = ad.priceUnit;
-
-    let mileageUnitValue = document.createElement('span');
-    mileageUnitValue.style.color = 'darkgoldenrod';
+    const advertisementDetailsDiv = createAdvertisementDetailsDiv();
+    const advertisementDetailsMain = createAdvertisementDetailsMain();
+    const advertisementDetails = createAdvertisementDetails();
+    let mileageUnitValue = createMileageUnitSpan();
     mileageUnitValue.textContent = ad.mileageUnit;
-
-    let horsePower = document.createElement('span');
-    horsePower.style.color = 'darkgoldenrod';
-    horsePower.textContent = 'HP';
-
-    let productionYear = document.createElement('span');
-    productionYear.style.color = 'darkgoldenrod';
-    productionYear.textContent = 'ROK';
-
-    let engineCapacity = document.createElement('span');
-    engineCapacity.style.color = 'darkgoldenrod';
-    engineCapacity.textContent = 'CM';
-    let smallerDigit = document.createElement('span');
-    smallerDigit.textContent = '3';
-    smallerDigit.style.fontSize = '10px';
-    smallerDigit.style.verticalAlign = 'top';
-
-    engineCapacity.appendChild(smallerDigit);
-
-
-    const bottomDetailsHeader = document.createElement("div");
-    bottomDetailsHeader.className = "bottomDetailsHeader";
+    let horsePower = createHorsePowerSpan();
+    let productionYear = createProductionYearSpan();
+    let engineCapacity = createEngineCapacitySpan();
+    const bottomDetailsHeader = createBottomDetailsHeaderDiv();
 
     const locationDetailsDiv = document.createElement('div');
     locationDetailsDiv.style.display = 'column';
@@ -158,7 +108,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     citySpan.style.fontSize = "22px";
 
     const stateSpan = document.createElement("span");
-    stateSpan.textContent = ' \t' + ad.cityState.name;
+    stateSpan.textContent = ' \t' + ad.city.cityState.name;
     stateSpan.style.color = 'darkgoldenrod';
     stateSpan.style.fontSize = "14px";
     stateSpan.style.marginTop = "6px";
@@ -169,16 +119,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     locationDetailsDiv.appendChild(locationDetails);
     bottomDetailsHeader.appendChild(locationDetailsDiv);
-
-
-    const favouriteBottomHeaderDiv = document.createElement("div");
-    favouriteBottomHeaderDiv.style.color = "darkgoldenrod";
-    favouriteBottomHeaderDiv.style.fontSize = "18px";
-    favouriteBottomHeaderDiv.style.position = 'relative';
-    favouriteBottomHeaderDiv.style.bottom = '-25px';
-    favouriteBottomHeaderDiv.style.textAlign = 'right';
-    favouriteBottomHeaderDiv.style.marginRight = '25px';
-    favouriteBottomHeaderDiv.style.whiteSpace = 'nowrap';
+    const favouriteBottomHeaderDiv = createFavouriteBottomDiv();
 
     const favouriteWrapper = document.createElement('div');
     favouriteWrapper.id = 'favouriteWrapper';
@@ -189,16 +130,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
     favouriteIconDiv.style.color = 'white';
     favouriteIconDiv.style.fontSize = "26px";
     favouriteIconDiv.style.zIndex = '999';
-
-
-    const favouriteText = document.createElement('span');
-    favouriteText.id = 'favouriteText';
-    favouriteText.style.border = '5px';
-    favouriteText.style.color = 'white';
-    favouriteText.style.position = 'relative';
-    favouriteText.style.left = '-150px';
-    favouriteText.style.opacity = '0';
-    favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
+    const favouriteText = createFavouriteTextSpan();
 
 
     favouriteWrapper.appendChild(favouriteText);
@@ -209,7 +141,6 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     favouriteIconDiv.addEventListener('mouseover', function() {
         if (!isEventListenerActive) return;
-
         favouriteIconDiv.style.cursor = "pointer";
         favouriteText.style.left = '-15px';
         favouriteText.style.opacity = '1';
@@ -217,41 +148,16 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     favouriteIconDiv.addEventListener('mouseout', function() {
         if (!isEventListenerActive) return;
-
         favouriteIconDiv.style.cursor = "auto";
         favouriteText.style.left = '-150px';
         favouriteText.style.opacity = '0';
     });
 
 
-
-    const editBottomHeaderDiv = document.createElement("div");
-    editBottomHeaderDiv.style.color = "darkgoldenrod";
-    editBottomHeaderDiv.style.fontSize = "18px";
-    editBottomHeaderDiv.style.position = 'relative';
-    editBottomHeaderDiv.style.bottom = '0px';
-    editBottomHeaderDiv.style.textAlign = 'right';
-    editBottomHeaderDiv.style.marginRight = '25px';
-    editBottomHeaderDiv.style.whiteSpace = 'nowrap';
-
-    const editWrapper = document.createElement('div');
-    editWrapper.id = 'editWrapper';
-    editWrapper.style.display = 'flex';
-    editWrapper.style.alignItems = 'center';
-
-    const editText = document.createElement('span');
-    editText.id = 'editText';
-    editText.style.border = '5px';
-    editText.style.color = 'white';
-    editText.style.position = 'relative';
-    editText.style.left = '-150px';
-    editText.style.opacity = '0';
-    editText.style.transition = 'left 0.5s, opacity 0.5s';
-
-    const editIconDiv = document.createElement('div');
-    editIconDiv.style.color = 'white';
-    editIconDiv.style.fontSize = "26px";
-    editIconDiv.style.zIndex = '999';
+    const editBottomHeaderDiv = createEditBottomHeaderDiv();
+    const editWrapper = createEditWrapperDiv();
+    const editText = createEditTextSpan();
+    const editIconDiv = createEditIconDiv();
 
     editWrapper.appendChild(editText);
     editWrapper.appendChild(editIconDiv);
@@ -272,11 +178,6 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
         if (!isEventListenerActive) return;
         window.location = '/advertisement/edit?id=' + ad.id;
     });
-
-
-    // editIconDiv.addEventListener('click', handleEditIconClick);
-
-
 
     const deleteBottomHeaderDiv = document.createElement("div");
     deleteBottomHeaderDiv.style.color = "darkgoldenrod";
@@ -330,26 +231,11 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
         event.stopPropagation();
 
                 isEventListenerActive = false;
-
                 let opacity = 1;
                 const step = 0.01;
                 const intervalDuration = 10;
-
                 resultDiv.style.opacity = String(opacity);
-
-                const fadeOutInterval = setInterval(() => {
-                    opacity -= step;
-                    resultDiv.style.setProperty('opacity', String(opacity), 'important');
-
-                    if (opacity <= 0) {
-                        clearInterval(fadeOutInterval);
-                        if (resultDiv.parentNode === container) {
-                            container.removeChild(resultDiv);
-                        }
-                    }
-                }, intervalDuration);
-
-
+                softlyRemoveDivWithOpacity(opacity, step, resultDiv, container, intervalDuration);
 
         fetch('/api/advertisements/' + ad.id, {
             method: 'DELETE',
@@ -393,18 +279,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
                 favouriteText.style.left = '-150px';
                 favouriteText.style.opacity = '0';
                 favouriteText.innerHTML = "Usuń z ulubionych";
-
-                const fadeOutInterval = setInterval(() => {
-                    opacity -= step;
-                    resultDiv.style.setProperty('opacity', String(opacity), 'important');
-
-                    if (opacity <= 0) {
-                        clearInterval(fadeOutInterval);
-                        if (resultDiv.parentNode === container) {
-                            container.removeChild(resultDiv);
-                        }
-                    }
-                }, intervalDuration);
+                softlyRemoveDivWithOpacity(opacity, step, resultDiv, container, intervalDuration);
             }
 
         } else if (heartIcon.src.includes("heartEmpty")) {
@@ -432,59 +307,18 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
             });
     });
 
-
-
-
-    function formatInteger(price) {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
-
-    const containers = [
-        // createInfoContainer('price', 'PriceIcon', formatInteger(ad.price)),
-        createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
-        createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
-        createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
-        createInfoContainer('engineCapacity', 'CapacityIcon', formatInteger(ad.engineCapacity)),
-        createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-        createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
-        createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
-    ];
-
-    // containers[0].appendChild(priceUnitValue);
-    containers[0].appendChild(mileageUnitValue);
-    containers[1].appendChild(horsePower);
-    containers[2].appendChild(productionYear);
-    containers[3].appendChild(engineCapacity);
-
-    containers.forEach(container => {
-        advertisementDetails.appendChild(container);
-    });
-
-    const maxTextWidth = Math.max(
-        ...containers.map(container => container.querySelector('span').offsetWidth)
-    );
-
-    containers.forEach(container => {
-        container.style.width = maxTextWidth + '65px';
-    });
+    addContainerSpans(ad, mileageUnitValue, horsePower, productionYear, engineCapacity, advertisementDetails);
 
     advertisementDetailsMain.appendChild(advertisementDetails);
     advertisementDetailsDiv.appendChild(advertisementDetailsHeader);
     advertisementDetailsDiv.appendChild(advertisementDetailsMain);
     advertisementDetailsDiv.appendChild(bottomDetailsHeader);
 
-
-
-
-
     resultDiv.appendChild(advertisementDetailsDiv);
 
     resultDiv.style.gridColumn = 1;
-
     resultDiv.style.gridRowStart = row;
     resultDiv.style.gridRowEnd = row + 1;
-
-
 
     container.appendChild(resultDiv);
     handleDarkModeInverse(resultDiv,iconWrapper);

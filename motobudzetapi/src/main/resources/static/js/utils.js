@@ -9,6 +9,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
+
+function formatInteger(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function createPriceHeader(ad) {
+    const priceHeader = document.createElement("div");
+    priceHeader.style.color = "darkgoldenrod";
+    priceHeader.style.fontSize = "18px";
+    priceHeader.style.position = 'relative';
+    priceHeader.style.bottom = '-5px';
+    priceHeader.style.textAlign = 'right';
+    priceHeader.style.marginRight = '25px';
+    priceHeader.style.whiteSpace = 'nowrap';
+
+    const priceElement = document.createElement('div');
+    priceElement.style.color = 'white';
+    priceElement.style.fontSize = "26px";
+
+    const priceValueSpan = document.createElement('span');
+    priceValueSpan.textContent = ad.priceUnit;
+    priceValueSpan.style.color = 'darkgoldenrod';
+    priceValueSpan.style.verticalAlign = "top";
+    priceValueSpan.style.fontSize = "16px";
+
+    priceElement.textContent = formatInteger(ad.price) + ' ';
+    priceElement.appendChild(priceValueSpan);
+
+    priceHeader.appendChild(priceElement);
+    return priceHeader;
+}
+
 function isMobileDevice() {
     const userAgent = navigator.userAgent;
     const maxMobileWidth = 300;
@@ -24,7 +56,89 @@ async function fetchWithAuth(url, options = {}) {
     // await checkIsTokenValid(true);
     return fetch(url, options);
 }
+function createEditBottomHeaderDiv() {
+    const editBottomHeaderDiv = document.createElement("div");
+    editBottomHeaderDiv.className = 'edit-bottom-header';
+    return editBottomHeaderDiv;
+}
 
+function addContainerSpans(ad, mileageUnitValue, horsePower, productionYear, engineCapacity, advertisementDetails) {
+    const containers = [
+        createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
+        createInfoContainer('engineHorsePower', 'EngineIcon', ad.engineHorsePower),
+        createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
+        createInfoContainer('engineCapacity', 'CapacityIcon', formatInteger(ad.engineCapacity)),
+        createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
+        createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
+        createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
+    ];
+
+    containers[0].appendChild(mileageUnitValue);
+    containers[1].appendChild(horsePower);
+    containers[2].appendChild(productionYear);
+    containers[3].appendChild(engineCapacity);
+
+    containers.forEach(container => {
+        advertisementDetails.appendChild(container);
+    });
+
+    const maxTextWidth = Math.max(
+        ...containers.map(container => container.querySelector('span').offsetWidth)
+    );
+
+    containers.forEach(container => {
+        container.style.width = maxTextWidth + '55px';
+    });
+}
+
+
+
+
+function createEditWrapperDiv() {
+    const editWrapper = document.createElement('div');
+    editWrapper.id = 'editWrapper';
+    editWrapper.style.display = 'flex';
+    editWrapper.style.alignItems = 'center';
+    return editWrapper;
+}
+
+function createFavouriteBottomDiv() {
+    const favouriteBottomHeaderDiv = document.createElement("div");
+    favouriteBottomHeaderDiv.className = 'favourite-bottom-header';
+    return favouriteBottomHeaderDiv;
+}
+
+function createFavouriteTextSpan() {
+    const favouriteText = document.createElement('span');
+    favouriteText.id = 'favouriteText';
+    favouriteText.style.border = '5px';
+    favouriteText.style.color = 'white';
+    favouriteText.style.position = 'relative';
+    favouriteText.style.left = '-150px';
+    favouriteText.style.opacity = '0';
+    favouriteText.style.transition = 'left 0.5s, opacity 0.5s';
+    return favouriteText;
+}
+
+function createEditTextSpan() {
+    const editText = document.createElement('span');
+    editText.id = 'editText';
+    editText.style.border = '5px';
+    editText.style.color = 'white';
+    editText.style.position = 'relative';
+    editText.style.left = '-150px';
+    editText.style.opacity = '0';
+    editText.style.transition = 'left 0.5s, opacity 0.5s';
+    return editText;
+}
+
+function createEditIconDiv() {
+    const editIconDiv = document.createElement('div');
+    editIconDiv.style.color = 'white';
+    editIconDiv.style.fontSize = "26px";
+    editIconDiv.style.zIndex = '999';
+    return editIconDiv;
+}
 
 function handleZoomSlider() {
     const slider = document.getElementById('zoom-slider');
@@ -399,11 +513,15 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
         figure.style.width = '220px';
         figure.style.height = '170px';
         figure.style.margin = '10px';
+        figure.style.overflow = 'hidden';
         figure.style.cursor = 'pointer';
         figure.style.userSelect = 'none';
 
         const img = document.createElement('img');
         img.src = '/api/static/photo/' + imageUrl;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
         figure.appendChild(img);
 
         // Dodanie event listenera
@@ -437,6 +555,7 @@ function createParalaxMiniature(image,parrentDiv) {
         figure.style.width = '350px';
         figure.style.minWidth = '250px';
         figure.style.height = '200px';
+        figure.style.overflow = 'hidden';
         figure.style.marginLeft = '10px';
         figure.appendChild(image);
         parrentDiv.appendChild(figure);
@@ -681,46 +800,193 @@ function getUserName() {
         return null;
     }
 }
+
+
+function handleCitySuggestionList(input, form) {
+    input.style.position = 'relative';
+    input.setAttribute('autocomplete', 'off');
+
+    const inputContainer = document.createElement("div");
+    inputContainer.style.position = "relative";
+    inputContainer.setAttribute('autocomplete', 'off');
+
+    const suggestionsList = document.createElement('ul');
+    suggestionsList.id = 'suggestionsList';
+    suggestionsList.className = 'suggestions-list';
+
+    suggestionsList.addEventListener('click', function (event) {
+        if (event.target && event.target.nodeName === 'LI') {
+            input.value = event.target.textContent;
+            suggestionsList.style.display = 'none';
+        }
+    });
+
+    inputContainer.appendChild(input);
+    inputContainer.appendChild(suggestionsList);
+    if(form) {
+        form.appendChild(inputContainer);
+
+    }
+
+    let timeoutId;
+    const debounceDelay = 200;
+
+    input.addEventListener("input", function () {
+        clearTimeout(timeoutId);
+
+        const partialCityName = input.value;
+
+        timeoutId = setTimeout(function () {
+            fetch(`/api/cities?partialName=${partialCityName}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateCitySuggestions(data);
+                })
+                .catch(error => {
+                    console.error("Błąd podczas pobierania propozycji miast:", error);
+                });
+        }, debounceDelay);
+    });
+
+    return suggestionsList;
+}
+
+
+
+
+
+function createSiteOverlay() {
+    const overlay = document.createElement('div');
+    overlay.setAttribute('id', 'overlayId');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    return overlay;
+}
+
+
+function createAdvertisementDetailsDiv() {
+    const advertisementDetailsDiv = document.createElement("div");
+    advertisementDetailsDiv.className = "advertisementDetailsDiv";
+    return advertisementDetailsDiv;
+}
+
+function createAdvertisementDetailsMain() {
+    const advertisementDetailsMain = document.createElement("div");
+    advertisementDetailsMain.className = "advertisementDetailsMain";
+    return advertisementDetailsMain;
+}
+
+function createAdvertisementDetails() {
+    const advertisementDetails = document.createElement("div");
+    advertisementDetails.className = "advertisementDetails";
+    return advertisementDetails;
+}
+
+function createMileageUnitSpan() {
+    let mileageUnitValue = document.createElement('span');
+    mileageUnitValue.style.color = 'darkgoldenrod';
+    return mileageUnitValue;
+}
+
+function createModelBrandDiv(ad) {
+    const modelBrandElement = document.createElement("div");
+    modelBrandElement.textContent = ad.brand.name + ' ' + ad.model.name;
+    modelBrandElement.style.color = "darkgoldenrod";
+    modelBrandElement.style.fontSize = "16px";
+    modelBrandElement.style.textAlign = 'left';
+    return modelBrandElement;
+}
+
+
+function createAdvertisementDetailsHeaderDiv() {
+    const advertisementDetailsHeader = document.createElement("div");
+    advertisementDetailsHeader.className = "advertisementDetailsHeader";
+    return advertisementDetailsHeader;
+}
+
+function createHorsePowerSpan() {
+    let horsePower = document.createElement('span');
+    horsePower.style.color = 'darkgoldenrod';
+    horsePower.textContent = 'HP';
+    return horsePower;
+}
+
+function createProductionYearSpan() {
+    let productionYear = document.createElement('span');
+    productionYear.style.color = 'darkgoldenrod';
+    productionYear.textContent = 'ROK';
+    return productionYear;
+}
+
+function createPhotoFadeEffect(photoElement, resultDiv) {
+    const fadeEffect = document.createElement('div');
+    fadeEffect.classList.add('fade-effect-miniature-search');
+    fadeEffect.appendChild(photoElement);
+    resultDiv.appendChild(fadeEffect);
+}
+
+function createEngineCapacitySpan() {
+    let engineCapacity = document.createElement('span');
+    engineCapacity.style.color = 'darkgoldenrod';
+    engineCapacity.textContent = 'CM';
+    applySmallerDigitSpan(engineCapacity);
+    return engineCapacity;
+}
+
+function applySmallerDigitSpan(engineCapacity) {
+    let smallerDigit = document.createElement('span');
+    smallerDigit.textContent = '3';
+    smallerDigit.style.fontSize = '10px';
+    smallerDigit.style.verticalAlign = 'top';
+    engineCapacity.appendChild(smallerDigit);
+}
+
+function createBottomDetailsHeaderDiv() {
+    const bottomDetailsHeader = document.createElement("div");
+    bottomDetailsHeader.className = "bottomDetailsHeader";
+    return bottomDetailsHeader;
+}
+
+function createOverlayDialogBox() {
+    const dialogBox = document.createElement('div');
+    dialogBox.setAttribute('id', 'dialogBox')
+    dialogBox.style.position = 'fixed';
+    dialogBox.style.top = '50%';
+    dialogBox.style.left = '50%';
+    dialogBox.style.height = '250px';
+    dialogBox.style.width = '600px';
+    dialogBox.style.transform = 'translate(-50%, -50%)';
+    dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    dialogBox.style.borderRadius = '15px';
+    dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
+    dialogBox.style.flexDirection = 'column';
+    dialogBox.style.alignItems = 'center';
+    dialogBox.style.textAlign = 'center';
+    dialogBox.style.display = 'flex';
+    dialogBox.style.justifyContent = 'center';
+    return dialogBox;
+}
+
 function createDialogBox(message){
     if(!document.getElementById('overlayId')){
 
-        const overlay = document.createElement('div');
-        overlay.setAttribute('id', 'overlayId');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-
-
+        const overlay = createSiteOverlay();
         overlay.addEventListener('click', (event) => {
             if (event.target === overlay) {
                 document.body.removeChild(overlay);
             }
         });
 
-        const dialogBox = document.createElement('div');
-        dialogBox.setAttribute('id','dialogBox')
-        dialogBox.style.position = 'fixed';
-        dialogBox.style.top = '50%';
-        dialogBox.style.left = '50%';
-        dialogBox.style.height = '250px';
-        dialogBox.style.width = '600px';
-        dialogBox.style.transform = 'translate(-50%, -50%)';
-        dialogBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        dialogBox.style.borderRadius = '15px';
-        dialogBox.style.boxShadow = '0 0 20px darkgoldenrod';
-        dialogBox.style.flexDirection = 'column';
-        dialogBox.style.alignItems = 'center';
-        dialogBox.style.textAlign = 'center';
-        dialogBox.style.display = 'flex';
-        dialogBox.style.justifyContent = 'center';
+        const dialogBox = createOverlayDialogBox();
 
         const headerTitle = document.createElement('dialogBox');
-        headerTitle.style.width = "100%";
         headerTitle.setAttribute('id', 'dialogBoxTitle');
         headerTitle.textContent = message;
+        headerTitle.style.width = "100%";
         headerTitle.style.color = 'darkgoldenrod';
         headerTitle.style.fontSize = '32px';
         headerTitle.style.fontWeight = 'bold';
@@ -987,7 +1253,7 @@ function advertisementFormDataExtract() {
     formData.append('productionDate', getValue('productionDate'));
     formData.append('firstRegistrationDate', getValue('firstRegistrationDate'));
     formData.append('city', getValue('city'));
-    // formData.append('cityId', cityId);
+    formData.append('mainPhotoUrl', getValue('name') + '-' +selectedFiles[0].name)
     formData.append('cityState', getValue('cityState'));
     // formData.append('cityStateId', cityStateId);
 

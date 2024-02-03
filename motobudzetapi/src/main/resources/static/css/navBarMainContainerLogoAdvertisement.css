@@ -16,6 +16,83 @@ header.header-hidden {
     opacity: 80%;
     transition: opacity 1s ease;
 }
+.overlay-send-button {
+    background-color: darkgoldenrod;
+    border: none;
+    margin-bottom: 20px;
+    width: 150px;
+    color: black;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px darkgoldenrod;
+    transition: background-color 0.3s ease-in-out;
+}
+.advertisement-title-div {
+    color: white;
+    font-size: 24px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.edit-bottom-header {
+    color: darkgoldenrod;
+    font-size: 18px;
+    position: relative;
+    text-align: right;
+    margin-right: 25px;
+    white-space: nowrap;
+}
+
+.favourite-bottom-header {
+    color: darkgoldenrod;
+    font-size: 18px;
+    position: relative;
+    bottom: -25px;
+    text-align: right;
+    margin-right: 25px;
+    white-space: nowrap;
+}
+
+
+
+.suggestions-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: black;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 150px;
+    min-width: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    scrollbar-width: thin;
+    scrollbar-color: darkgoldenrod transparent;
+}
+
+/* For Webkit browsers */
+.suggestions-list::-webkit-scrollbar {
+    width: thin;
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+    background-color: darkgoldenrod;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb:hover {
+    background-color: goldenrod;
+}
 
 #popupNavbar {
     position: fixed;
