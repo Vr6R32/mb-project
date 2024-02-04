@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.domain.user.UserDoesntExistException;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
@@ -67,7 +68,7 @@ public class RegistrationService {
     }
 
     public void confirmEmail(String registrationCode, HttpServletResponse response, HttpServletRequest request) {
-        AppUser user = userRepository.findUserByRegistrationCode(registrationCode).orElseThrow(() -> new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
+        AppUser user = userRepository.findUserByRegistrationCode(registrationCode).orElseThrow(() -> new UserDoesntExistException("WRONG_ACTIVATION_CODE"));
 
         if (user != null && !user.isEnabled()) {
             user.setAccountEnabled(true);
@@ -97,7 +98,7 @@ public class RegistrationService {
         int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.getEmail());
 
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
-                .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+                .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
 
         mailService.sendResetPasswordNotificationCodeLink(user);
 
@@ -111,7 +112,7 @@ public class RegistrationService {
             return 0;
         }
         AppUser user = userRepository.findUserByResetPasswordCode(request.getResetCode())
-                .orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+                .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
         if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now())) {
             return userRepository.insertNewUserPassword(passwordEncoder.encode(request.getPassword()), request.getResetCode());
         }

@@ -49,7 +49,8 @@ public class OpenApiConfiguration {
                         .license(new License()
                                 .name("Moto-Budżet")
                                 .url(MOTOBUDZET_URL)))
-                .addServersItem(new Server().url("https://localhost:443").description("LOCAL ENV"))
+                .addServersItem(new Server().url("https://localhost:443").description("LOCAL DOCKER ENV"))
+                .addServersItem(new Server().url("http://localhost:20134").description("LOCAL HTTP ENV"))
                 .addServersItem(new Server().url(MOTOBUDZET_URL).description("PROD ENV"))
                 .addSecurityItem(new SecurityRequirement().addList("HTTP only cookie"))
                 .addSecurityItem(new SecurityRequirement().addList("JWT Bearer Token"));

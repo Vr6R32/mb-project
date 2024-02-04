@@ -7,20 +7,12 @@ import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.domain.location.CityState;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CityStateRepository extends JpaRepository<CityState, Long> {
 
     @Cacheable(value = "cities_states")
-    Optional<CityState> findByName(String name);
-
-    @Cacheable(value = "cities_states")
     @Query("select c from CityState c")
     List<CityState> findAllCitiesStates();
-
-    @Query("select c from City c")
-    @Cacheable(value = "cities_states")
-    Optional<CityState> findByAjdi(Long id);
 
 }

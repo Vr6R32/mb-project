@@ -1,7 +1,6 @@
 package pl.motobudzet.api.adapter.facade;
 
 import lombok.AllArgsConstructor;
-import pl.motobudzet.api.domain.messaging.Conversation;
 import pl.motobudzet.api.domain.messaging.ConversationDTO;
 import pl.motobudzet.api.domain.messaging.MessageDTO;
 import pl.motobudzet.api.domain.messaging.MessagingService;
@@ -20,9 +19,6 @@ public class MessagingFacade {
     }
     public Long getConversationIdByAdvIdAndSender(UUID advertisementId, String name) {
         return messagingService.findConversationIdByAdvIdAndSender(advertisementId, name);
-    }
-    public Conversation getConversationByAdvertisementIdAndUserSender(UUID advertisementId, AppUser messageSender) {
-        return messagingService.findConversationByAdvertisementIdAndUserSender(advertisementId, messageSender);
     }
     public String sendMessage(String message, UUID advertisementId, AppUser user) {
         return messagingService.sendMessage(message, advertisementId, user);

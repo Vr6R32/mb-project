@@ -1140,9 +1140,18 @@ function cleanResultsDiv() {
 
     resultContainerRight.style.display = 'flex';
 }
-function handleError(error) {
-    console.error(error);
-    alert(error.message);
+function handleError(response) {
+    if (response instanceof Response) {
+        response.json().then(body => {
+            if (body.errors && Array.isArray(body.errors)) {
+                alert("Server error: " + body.errors.join('\n'));
+            } else {
+                alert("Server error: An unexpected error occurred.");
+            }
+        }).catch(() => {
+            alert("Server error: The server response could not be parsed as JSON.");
+        });
+    }
 }
 function getValue(id) {
     return document.getElementById(id).value;
@@ -1253,8 +1262,10 @@ function advertisementFormDataExtract() {
     formData.append('productionDate', getValue('productionDate'));
     formData.append('firstRegistrationDate', getValue('firstRegistrationDate'));
     formData.append('city', getValue('city'));
-    formData.append('mainPhotoUrl', getValue('name') + '-' +selectedFiles[0].name)
+    formData.append('mainPhotoUrl', getValue('name') + '-' + selectedFiles[0].name)
     formData.append('cityState', getValue('cityState'));
+    formData.append('vinNumber', getValue('vinNumber'));
+    formData.append('accidentFree', getValue('accidentFree'));
     // formData.append('cityStateId', cityStateId);
 
     const descriptionContent = quill.container.firstChild.innerHTML;

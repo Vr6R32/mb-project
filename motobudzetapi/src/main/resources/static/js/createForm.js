@@ -18,20 +18,22 @@ function submitFormWithFiles() {
         body: formData
     })
         .then(response => {
-            if(response.ok){
+            if (response.ok) {
                 resetFileDropArea();
                 const redirectURL = response.headers.get('location');
                 const parameter = response.headers.get('created');
                 if (redirectURL) {
-                    window.location.href = redirectURL + '&created='+parameter;
+                    window.location.href = redirectURL + '&created=' + parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }
             } else {
-                handleResponse(response);
+                handleError(response);
             }
         })
-        .catch(handleError);
+        .catch(error => {
+            handleError(error);
+        });
 }
 async function handleFileFromUrl(url) {
     const allowedMimeTypes = ["image/jpeg", "image/png", "image/heic", "image/heif", "image/webp"];

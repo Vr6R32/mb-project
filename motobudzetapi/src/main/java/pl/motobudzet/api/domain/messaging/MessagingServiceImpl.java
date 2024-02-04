@@ -85,7 +85,7 @@ class MessagingServiceImpl implements MessagingService {
         }
     }
     public List<MessageDTO> getAllMessages(Long conversationId, String loggedUser) {
-        List<Message> messagesList = messageRepository.getAllMessages(conversationId);
+        List<Message> messagesList = messageRepository.getAllMessagesByConversationId(conversationId);
         if (messagesList.isEmpty()) return Collections.emptyList();
         if (authorizeMessageGetAccess(messagesList, loggedUser)) {
             updateMessagesRead(loggedUser, messagesList);
@@ -94,7 +94,6 @@ class MessagingServiceImpl implements MessagingService {
         }
         return Collections.emptyList();
     }
-
 
 
     private String getLastMessageUserName(Conversation conversation) {
@@ -120,6 +119,7 @@ class MessagingServiceImpl implements MessagingService {
         } else {
             List<Message> messageList = conversation.getMessages();
             messageList.add(newMessage);
+            // TODO is it necceseary to set messages list again ?
             conversation.setMessages(messageList);
         }
         conversation.setLastMessage(newMessage);
@@ -138,7 +138,6 @@ class MessagingServiceImpl implements MessagingService {
 
 
     private void updateMessagesRead(String loggedUser, List<Message> messagesList) {
-
         for (Message message : messagesList) {
             String messageSenderUsername = message.getMessageSender().getUsername();
             if (!loggedUser.equals(messageSenderUsername) && (message.getMessageReadDateTime() == null)) {

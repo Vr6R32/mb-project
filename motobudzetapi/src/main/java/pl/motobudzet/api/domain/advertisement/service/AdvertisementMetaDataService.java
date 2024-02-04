@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface AdvertisementMetaDataService {
 
-    MetaDataDTO findMetaDataForAdvertisementById(UUID uuid);
+    MetaDataDTO getMetaDataForAdvertisementById(UUID uuid);
 }

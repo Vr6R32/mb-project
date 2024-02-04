@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
+import pl.motobudzet.api.domain.user.UserDoesntExistException;
 import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.AppUserDTO;
@@ -35,7 +36,7 @@ public class UserDetailsService {
     }
 
     public AppUserDTO getUserDetails(String userName) {
-        AppUser user = userRepository.findByUserNameWithRelationEntities(userName).orElseThrow(() -> new IllegalArgumentException("USER_DOESNT_EXIST"));
+        AppUser user = userRepository.findByUserNameWithRelationEntities(userName).orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
         return mapUserToDTO(user);
     }
 

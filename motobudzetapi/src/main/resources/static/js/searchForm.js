@@ -360,6 +360,10 @@ function createSearchForm(formContainer) {
     const fuelTypesOptions = [];
     const transmissionTypesOptions = [];
     const brandsOptions = [];
+    const accidentFreeOptions = [
+        { name: "Tak", value: "true" },
+        { name: "Nie", value: "false" }
+    ];
 
 
     if (/Mobi|Android/i.test(navigator.userAgent)) {
@@ -393,7 +397,7 @@ function createSearchForm(formContainer) {
     form.appendChild(createRowWithInputElement("np. -> Gdańsk", "Miasto:", "text", "city", "city"));
     form.appendChild(createRowWithInputElement("np. -> Pomorskie", "Województwo:", "select", "cityState", "cityState"));
     form.appendChild(createRowWithInputElement("(KM) np. -> 150", "Odległość:", "number", "distanceFrom", "distanceFrom"));
-    form.appendChild(createRowWithInputElement(null, "Anglik:", "select", "jaj", "jaj"));
+    form.appendChild(createRowWithInputElement(null, "Bezwypadkowy:", "select", "accidentFree", "accidentFree",accidentFreeOptions));
 
 
     let queryWithButtonDiv = document.createElement('div');
@@ -562,7 +566,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     label.setAttribute("for", inputId);
     label.setAttribute("id", inputId+'label');
     label.textContent = labelText;
-    label.style.width = "100%"; // Szerokość etykiety - 100% kolumny etykiet
+    label.style.width = "100%";
     label.style.textAlign = "center";
     label.style.maxWidth = "100%";
     label.style.color = 'darkgoldenrod';
@@ -629,13 +633,26 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
         rowDiv.style.marginBottom = "0px";
     }
 
-
+    if(inputId === 'accidentFree') {
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        inputElement.style.color = 'gray';
+        defaultOption.textContent = "Wybierz...";
+        defaultOption.selected = true;
+        // defaultOption.disabled = true;
+        // defaultOption.hidden = true;
+        inputElement.appendChild(defaultOption);
+        inputElement.addEventListener('change', function() {
+            this.style.color = this.value === "" ? 'gray' : 'white';
+        });
+    }
 
     if (selectOptions) {
         selectOptions.forEach(option => {
             const optionElement = document.createElement("option");
-            optionElement.value = option.name;
+            optionElement.value = option.value;
             optionElement.textContent = option.name;
+            optionElement.style.color = 'white';
             inputElement.appendChild(optionElement);
         });
     }
@@ -1367,8 +1384,6 @@ function executeSearch(formData) {
 
 function populateSelectOptions(options, selectId) {
     const selectElement = document.getElementById(selectId);
-
-
     selectElement.style.color = 'gray';
         const defaultOption = document.createElement("option");
         defaultOption.setAttribute('id', 'emptyOption');

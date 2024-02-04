@@ -13,7 +13,7 @@ class AdvertisementMetaDataServiceImpl implements AdvertisementMetaDataService {
     private final AdvertisementRepository advertisementRepository;
 
     @Override
-    public MetaDataDTO findMetaDataForAdvertisementById(UUID uuid) {
+    public MetaDataDTO getMetaDataForAdvertisementById(UUID uuid) {
         return advertisementRepository.findMetaDataById(uuid).orElse(null);
     }
 }

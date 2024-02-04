@@ -27,6 +27,8 @@ public class AdvertisementDTO {
     private DriveType driveType;
     private EngineType engineType;
     private TransmissionType transmissionType;
+    private String vinNumber;
+    private Boolean accidentFree;
     private String mainPhotoUrl;
     private String user;
     private CityDTO city;

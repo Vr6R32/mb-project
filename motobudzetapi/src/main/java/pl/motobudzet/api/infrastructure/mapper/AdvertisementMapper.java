@@ -32,6 +32,8 @@ public class AdvertisementMapper {
                 .driveType(adv.getDriveType())
                 .engineType(adv.getEngineType())
                 .transmissionType(adv.getTransmissionType())
+                .vinNumber(adv.getVinNumber())
+                .accidentFree(adv.isAccidentFree())
                 .user(adv.getUser().getUsername())
                 .city(CityMapper.mapToCityDTO(adv.getCity()))
                 .mileage(adv.getMileage())
@@ -73,6 +75,7 @@ public class AdvertisementMapper {
                 .description(request.getDescription())
                 .model(model)
                 .brand(brand)
+                .vinNumber(request.getVinNumber())
                 .fuelType(request.getFuelType())
                 .driveType(request.getDriveType())
                 .engineType(request.getEngineType())
@@ -92,6 +95,7 @@ public class AdvertisementMapper {
     }
 
     public static void setAdvertisementByEditRequest(AdvertisementRequest request, Advertisement advertisement) {
+
         BrandDTO brand = BrandDTO.builder()
                 .id(request.getBrandId())
                 .name(request.getBrand())
@@ -107,6 +111,8 @@ public class AdvertisementMapper {
         advertisement.setDescription(request.getDescription());
         advertisement.setModel(mapToModelEntity(model));
         advertisement.setBrand(mapToBrandEntity(brand));
+        advertisement.setVinNumber(request.getVinNumber());
+        advertisement.setAccidentFree(request.getAccidentFree());
         advertisement.setFuelType(request.getFuelType());
         advertisement.setDriveType(request.getDriveType());
         advertisement.setEngineType(request.getEngineType());

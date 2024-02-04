@@ -15,6 +15,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             " LEFT JOIN FETCH m.conversation c" +
             " LEFT JOIN FETCH c.userOwner" +
             " WHERE m.conversation.id = ?1")
-    List<Message> getAllMessages(Long conversationId);
+    List<Message> getAllMessagesByConversationId(Long conversationId);
 
 }

@@ -63,7 +63,7 @@ public class AdvertisementFacade {
     }
 
     public MetaDataDTO getAdvertisementMetaDataById(UUID uuid) {
-        return advertisementMetaDataService.findMetaDataForAdvertisementById(uuid);
+        return advertisementMetaDataService.getMetaDataForAdvertisementById(uuid);
     }
 
     public String verifyAdvertisement(UUID id) {

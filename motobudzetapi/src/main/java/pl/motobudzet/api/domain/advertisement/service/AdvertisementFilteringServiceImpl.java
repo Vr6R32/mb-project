@@ -58,6 +58,15 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
             return FilteringHelper.handleTitleQueryPredicate(titleQueryParam, root, criteriaBuilder, statusActivePredicate);
         };
 
+
+        Boolean isAccidentFree = request.getAccidentFree();
+        if(isAccidentFree!=null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("accidentFree"), isAccidentFree)
+            );
+        }
+
+
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
 
         serviceFunctionMap.put("brand", brandFacade::getBrand);

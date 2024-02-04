@@ -35,4 +35,5 @@ public class AdvertisementFilterRequest {
     private Long engineHorsePowerTo;
     private Long productionDateFrom;
     private Long productionDateTo;
+    private Boolean accidentFree;
 }

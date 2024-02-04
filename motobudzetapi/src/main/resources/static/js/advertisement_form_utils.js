@@ -27,6 +27,22 @@ function handleFormElementsLogic(formElements, form) {
         }
         if (element.type === 'select') {
             input.style.textAlign = 'center';
+
+            if(element.id==='accidentFree'){
+                element.options.forEach(optionData => {
+                    const option = document.createElement('option');
+                    option.value = optionData.value;
+                    option.textContent = optionData.text;
+
+                    if (optionData.value === '') {
+                        option.disabled = true;
+                        option.selected = true;
+                    }
+
+                    input.appendChild(option);
+                });
+            }
+
         }
         if (element.id === 'city') {
             let suggestionList = handleCitySuggestionList(input, form);
@@ -93,6 +109,7 @@ function createFormElements() {
             required: true
         },
         {label: 'Model:', type: 'select', id: 'model', name: 'model', required: true},
+        {label: 'Numer VIN:', type: 'text', id: 'vinNumber', name: 'vinNumber', required: false},
         {label: 'Rodzaj paliwa:', type: 'select', id: 'fuelType', name: 'fuelType', required: true},
         {label: 'Rodzaj napędu:', type: 'select', id: 'driveType', name: 'driveType', required: true},
         {label: 'Rodzaj silnika:', type: 'select', id: 'engineType', name: 'engineType', required: true},
@@ -102,6 +119,14 @@ function createFormElements() {
             id: 'transmissionType',
             name: 'transmissionType',
             required: true
+        },
+        {
+            label: 'Bezwypadkowy:', type: 'select', id: 'accidentFree', name: 'accidentFree', required: true,
+            options: [
+                { value: '', text: 'Wybierz...' },
+                { value: 'true', text: 'Tak' },
+                { value: 'false', text: 'Nie' }
+            ]
         },
         {
             label: 'Przebieg:', type: 'number', id: 'mileage', name: 'mileage', required: true,

@@ -1,10 +1,7 @@
 package pl.motobudzet.api.domain.advertisement.dto;
 
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import pl.motobudzet.api.domain.advertisement.model.MileageUnit;
 import pl.motobudzet.api.domain.advertisement.model.PriceUnit;
@@ -28,6 +25,10 @@ public class AdvertisementRequest {
     private String description;
     @NotEmpty(message = "Model cannot be empty!")
     private String model;
+    @Pattern(regexp = "^$|.{17}", message = "Vin must be exactly 17 characters or empty")
+    private String vinNumber;
+    @NotNull(message = "Please specify the accident history.")
+    private Boolean accidentFree;
     @NotNull(message = "Model id cannot be empty!")
     private Long modelId;
     @NotEmpty(message = "Brand cannot be empty!")

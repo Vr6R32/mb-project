@@ -17,7 +17,7 @@ public class DBInserter {
 
     //    @EventListener(ApplicationReadyEvent.class)
     public void insertCoordinates() {
-        List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
+        List<City> allCitiesWithCityStates = cityRepository.getAllCities();
 
         List<City> txtList = CoordinateExtractor.extractCoordinates();
 

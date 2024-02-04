@@ -25,9 +25,6 @@ public class LocationFacade {
     public City getCityByNameAndState(String cityName, String stateName) {
         return locationService.getCityByNameAndState(cityName, stateName);
     }
-    public City getCityByName(String name) {
-        return locationService.getCityByNameWithout(name);
-    }
     public List<CityDTO> getCityByPartialName(String partialName){
         return locationService.getCityByPartialName(partialName);
     }

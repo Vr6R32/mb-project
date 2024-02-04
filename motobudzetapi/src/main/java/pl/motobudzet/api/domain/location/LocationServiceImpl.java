@@ -18,20 +18,20 @@ class LocationServiceImpl implements LocationService {
     private final CityStateRepository stateRepository;
 
     public List<CityDTO> getAllCities() {
-        return cityRepository.getAllCitiesWithCityStates().stream().map(CityMapper::mapToCityDTO).toList();
+        return cityRepository.getAllCities().stream().map(CityMapper::mapToCityDTO).toList();
     }
     public double calculateCityDistance(String cityOne, String cityTwo) {
-        City firstCity = cityRepository.getCityByNameWithState(cityOne).orElseThrow(() -> new IllegalArgumentException(WRONG_CITY_NAME));
-        City secondCity = cityRepository.getCityByNameWithState(cityTwo).orElseThrow(() -> new IllegalArgumentException(WRONG_CITY_NAME));
+        City firstCity = cityRepository.getCityByName(cityOne).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
+        City secondCity = cityRepository.getCityByName(cityTwo).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
         return DistanceCalculator.calculateDistance(firstCity.getNLatitude(), firstCity.getELongitude(), secondCity.getNLatitude(), secondCity.getELongitude());
     }
 
     public List<City> getCitiesWithinDistance(String mainCity, Integer distanceMax) {
-        List<City> allCitiesWithCityStates = cityRepository.getAllCitiesWithCityStates();
+        List<City> allCitiesWithCityStates = cityRepository.getAllCities();
         City mainLocation = allCitiesWithCityStates.stream()
                 .filter(city -> city.getName().equals(mainCity))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(WRONG_CITY_NAME));
+                .orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
 
         Double mainLatitude = mainLocation.getNLatitude();
         Double mainLongitude = mainLocation.getELongitude();
@@ -51,11 +51,7 @@ class LocationServiceImpl implements LocationService {
     }
 
     public City getCityByNameAndState(String cityName, String stateName) {
-        return cityRepository.getCityByNameAndState(cityName, stateName.toUpperCase()).orElseThrow(() -> new IllegalArgumentException(WRONG_CITY_NAME));
-    }
-
-    public City getCityByNameWithout(String name) {
-        return cityRepository.getCityByNameWithoutState(name).orElseThrow(() -> new IllegalArgumentException(WRONG_CITY_NAME));
+        return cityRepository.getCityByNameAndState(cityName, stateName.toUpperCase()).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
     }
 
     public List<CityDTO> getCityByPartialName(String partialName) {

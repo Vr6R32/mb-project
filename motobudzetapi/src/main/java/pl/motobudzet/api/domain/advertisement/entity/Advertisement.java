@@ -45,7 +45,10 @@ public class Advertisement {
     private String name;
     @Column(length = 60000)
     private String description;
+    @Column(length = 17)
+    private String vinNumber;
     private String mainPhotoUrl;
+    private boolean accidentFree;
     private Long mileage;
     private Long price;
     private Long engineCapacity;

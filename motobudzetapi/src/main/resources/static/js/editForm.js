@@ -83,6 +83,9 @@ function populateFormData(data) {
     document.getElementById('engineHorsePower').value = data.engineHorsePower || '';
     document.getElementById('productionDate').value = data.productionDate || '';
     document.getElementById('firstRegistrationDate').value = data.firstRegistrationDate || '';
+    document.getElementById('vinNumber').value = data.vinNumber || '';
+    document.getElementById('accidentFree').value = data.accidentFree ? 'true' : 'false';
+
     quill.clipboard.dangerouslyPasteHTML(0, data.description || '');
 
 
