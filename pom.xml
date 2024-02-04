@@ -22,6 +22,10 @@
     <name>mb-project</name>
 
     <properties>
+
+        <repo.username>YOUR_USERNAME_HERE</repo.username>
+        <repo.password>YOUR_PASSWORD_HERE</repo.password>
+
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -137,8 +141,8 @@
                             <to>
                                 <image>michaelkey/motobudzet:${project.version}</image>
                                 <auth>
-                                    <username>xxx</username>
-                                    <password>xxx</password>
+                                    <username>${repo.username}</username>
+                                    <password>${repo.password}</password>
                                 </auth>
                             </to>
                         </configuration>

@@ -86,6 +86,7 @@ function createSingleAdvertisementResultPanelDiv(ad, container) {
 
     const advertisementDetailsDiv = createAdvertisementDetailsDiv();
     const advertisementDetailsMain = createAdvertisementDetailsMain();
+    advertisementDetailsMain.style.marginTop = '35px';
     const advertisementDetails = createAdvertisementDetails();
     let mileageUnitValue = createMileageUnitSpan();
     mileageUnitValue.textContent = ad.mileageUnit;

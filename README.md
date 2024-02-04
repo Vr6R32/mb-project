@@ -41,9 +41,8 @@ process of posting and browsing automotive listings.
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)  &nbsp;
 ![THYMELEAF](https://img.shields.io/badge/Thymeleaf-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)  &nbsp;
 
-
-![YAML](https://img.shields.io/badge/yaml-%23ffffff.svg?style=for-the-badge&logo=yaml&logoColor=151515)  &nbsp;
-![JSON](https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white)  &nbsp;
+[//]: # (![YAML]&#40;https://img.shields.io/badge/yaml-%23ffffff.svg?style=for-the-badge&logo=yaml&logoColor=151515&#41;  &nbsp;)
+[//]: # (![JSON]&#40;https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white&#41;  &nbsp;)
 <br><br>
 ## Deployed on :<br>
 ![DOCKER](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white) &nbsp;
@@ -60,16 +59,16 @@ process of posting and browsing automotive listings.
 ![PROMTAIL](https://img.shields.io/badge/promtail-black?style=for-the-badge&logo=grafana&logoColor=orange) &nbsp;
 ![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) &nbsp;
 <br><br>
-## Frontend stack :<br>
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
-![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
-![JS](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-<br><br>
 ## Testing libraries :<br>
 ![JUNIT](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white) &nbsp;
 ![ASSERTJ](https://img.shields.io/badge/AssertJ-25A162?style=for-the-badge) &nbsp;
 ![MOCKITO](https://img.shields.io/badge/Mockito-78A641?style=for-the-badge) &nbsp;
 ![TESTCONTAINERS](https://img.shields.io/badge/Testcontainers-9B489A?style=for-the-badge) &nbsp;
+<br><br>
+## Frontend stack :<br>
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
+![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
+![JS](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 <br><br>
 ## Technical REST API Documentation :<br>
 ![SWAGGER](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
@@ -80,7 +79,7 @@ https://motobudzet.pl/swagger-ui/index.html
 
 <br>
 
-Authorize credentials needed to access :
+Authorize credentials needed to access admin account:
 ## Login : 
 ```
 admin
@@ -89,16 +88,49 @@ admin
 ```
 admin
 ```
-## Project compilation: 
+
+## Project compilation & local docker mount: 
 ```bash
  mvn clean install jib:dockerBuild -Plocal
 ```
+
 ## Docker deployment:
 ```bash
 docker compose up
 ```
 ## Url when running locally:
+## Landing page :
 ```bash
-https://localhost/
+http://localhost:20134/
 ```
+## Prometheus :
+```bash
+http://localhost:9090/
+```
+## Grafana :
+```bash
+http://localhost:3000/
+```
+## Zipkin :
+```bash
+http://localhost:9411/
+```
+
+
+
+## Exporting docker images on remote repository:
+## Pre-requisites for Compilation & Deployment
+<br>
+Before running the build and push command, make sure to update your credentials in the `pom.xml` file. This is necessary for the authentication process with the repository where the image will be pushed.
+
+Here are the steps to follow:
+
+1. Open the `pom.xml` file.
+2. Locate the `<auth>` configuration block within the `<configuration>` section of the `jib-maven-plugin`.
+3. Replace the `${username}` and `${password}` placeholders in project properties with your actual repository username and password.
+
+```bash
+ mvn clean install jib:build -Ppush
+```
+
 

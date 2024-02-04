@@ -74,58 +74,6 @@ function animateImages(container, addAnimationClass, activeAnimationClass) {
     });
 }
 
-function funnyNeonTextPrice(subContainer, price) {
-
-    let priceValue = formatInteger(price);
-    let length = priceValue.length;
-    let topValue;
-    let maxHeight;
-
-    let fontSize;
-    if (length === 10) {
-        fontSize = '62px'
-        topValue = '-2px';
-        maxHeight = '68px';
-    } else if (length === 9) {
-        fontSize = '70px'
-        topValue = '0px';
-    } else if (length === 7) {
-        fontSize = '86px';
-        topValue = '-3px';
-    } else if (length === 6) {
-        fontSize = '102px';
-        topValue = '-15px';
-        maxHeight = '83px';
-    } else if (length === 5) {
-        fontSize = '124px';
-        topValue = '-23px';
-        maxHeight = '98px';
-    }
-
-    let neon = document.createElement('div');
-    neon.className = 'neon';
-    neon.style.marginTop = '20px';
-    neon.style.maxHeight = maxHeight
-    let text = document.createElement('span');
-    text.setAttribute('data-text', priceValue);
-    text.className = 'text';
-    text.style.top = topValue;
-    text.textContent = priceValue;
-    text.style.fontSize = fontSize;
-    text.style.display = 'inline-block';
-    text.style.overflow = 'hidden';
-    text.style.textOverflow = 'ellipsis';
-
-    let gradient = document.createElement('span');
-    gradient.className = 'gradient';
-    let spotlight = document.createElement('span');
-    spotlight.className = 'spotlight';
-    neon.appendChild(text);
-    neon.appendChild(gradient);
-    neon.appendChild(spotlight);
-    subContainer.appendChild(neon);
-}
-
 function funnyh1Paragraph(subContainer) {
     let heading = document.createElement('h1');
     heading.textContent = '112.300';
@@ -234,10 +182,6 @@ function displayLastUploaded(min,max,direction){
         paralaxHover();
 
     });
-}
-
-function formatValue(value) {
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
 
 function createInfoDiv(value, iconName, valueClass) {

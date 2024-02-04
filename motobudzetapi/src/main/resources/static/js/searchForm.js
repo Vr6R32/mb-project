@@ -912,6 +912,7 @@ function displayResults(data) {
         conversationDetailsMain.style.flexBasis = 'auto';
         conversationDetailsMain.style.display = 'grid';
         conversationDetailsMain.style.gridTemplateRows = 'auto 1fr auto';
+        // conversationDetailsMain.style.fontFamily = '"Courier New", monospace';
 
 
         const advertisementDetails = document.createElement("conversationDetailsBottom");

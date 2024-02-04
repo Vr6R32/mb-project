@@ -3,6 +3,9 @@ window.addEventListener('scroll', hideNavBar);
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // document.body.style.fontFamily = '"Courier New", monospace';
+    document.body.style.fontFamily = '"Arial", sans-serif';
+
     applySavedZoom();
     handleZoomSlider();
     applyDarkMode();
@@ -24,21 +27,27 @@ function createPriceHeader(ad) {
     priceHeader.style.marginRight = '25px';
     priceHeader.style.whiteSpace = 'nowrap';
 
-    const priceElement = document.createElement('div');
-    priceElement.style.color = 'white';
-    priceElement.style.fontSize = "26px";
-
     const priceValueSpan = document.createElement('span');
     priceValueSpan.textContent = ad.priceUnit;
     priceValueSpan.style.color = 'darkgoldenrod';
     priceValueSpan.style.verticalAlign = "top";
     priceValueSpan.style.fontSize = "16px";
 
+
+    const priceElement = document.createElement('div');
+    priceElement.style.color = 'white';
+    priceElement.style.fontSize = "26px";
+    // priceElement.style.fontFamily = '"Arial", sans-serif'; // for a sans-serif font
+
+
     priceElement.textContent = formatInteger(ad.price) + ' ';
     priceElement.appendChild(priceValueSpan);
 
+
     priceHeader.appendChild(priceElement);
     return priceHeader;
+
+
 }
 
 function isMobileDevice() {
@@ -62,6 +71,10 @@ function createEditBottomHeaderDiv() {
     return editBottomHeaderDiv;
 }
 
+function formatValue(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
 function addContainerSpans(ad, mileageUnitValue, horsePower, productionYear, engineCapacity, advertisementDetails) {
     const containers = [
         createInfoContainer('mileage', 'MileageIcon', formatInteger(ad.mileage)),
@@ -69,8 +82,8 @@ function addContainerSpans(ad, mileageUnitValue, horsePower, productionYear, eng
         createInfoContainer('productionDate', 'ProductionDateIcon', ad.productionDate),
         createInfoContainer('engineCapacity', 'CapacityIcon', formatInteger(ad.engineCapacity)),
         createInfoContainer('fuelType', 'FuelTypeIcon', ad.fuelType),
-        createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', ad.engineType),
-        createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', ad.transmissionType),
+        createInfoContainer('engineType/' + ad.engineType, 'transmissionIcon', formatValue(ad.engineType)),
+        createInfoContainer('transmissionType/' + ad.transmissionType, 'transmissionIcon', formatValue(ad.transmissionType)),
     ];
 
     containers[0].appendChild(mileageUnitValue);
@@ -365,7 +378,8 @@ function paralaxHover() {
 }
 
 function applyDarkMode() {
-    var darkModeCheckbox = document.getElementById('darkModeCheckbox');
+
+    let darkModeCheckbox = document.getElementById('darkModeCheckbox');
     if (darkModeCheckbox) {
         darkModeCheckbox.addEventListener('change', function () {
             toggleDarkMode();
@@ -405,6 +419,15 @@ function applySavedZoom() {
         }
     }
 }
+function changeBoxShadowColorToWhite() {
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(element => {
+        if (element.style.color.includes('darkgoldenrod')) {
+            element.style.color = element.style.boxShadow.replace('darkgoldenrod', 'white');
+        }
+    });
+}
+
 function handleDarkModeInverse(resultDiv,iconWrapper) {
     if (localStorage.getItem('darkMode') === 'true') {
         resultDiv.style.boxShadow = "0 0 20px moccasin";
@@ -465,6 +488,63 @@ function showSuccessNotification(message) {
         }, 7000);
     });
 }
+
+function funnyNeonTextPrice(subContainer, price) {
+
+    let priceValue = formatInteger(price);
+    let length = priceValue.length;
+    let topValue;
+    let maxHeight;
+
+    let fontSize;
+    if (length === 10) {
+        fontSize = '62px'
+        topValue = '-2px';
+        maxHeight = '68px';
+    } else if (length === 9) {
+        fontSize = '70px'
+        topValue = '0px';
+    } else if (length === 7) {
+        fontSize = '86px';
+        topValue = '-3px';
+    } else if (length === 6) {
+        fontSize = '102px';
+        topValue = '-15px';
+        maxHeight = '83px';
+    } else if (length === 5) {
+        fontSize = '124px';
+        topValue = '-23px';
+        maxHeight = '98px';
+    }
+
+    let neon = document.createElement('div');
+    neon.className = 'neon';
+    neon.style.marginTop = '20px';
+    neon.style.maxHeight = maxHeight
+    let text = document.createElement('span');
+    // text.setAttribute('data-text', priceValue + '€');
+    text.setAttribute('data-text', priceValue);
+    text.className = 'text';
+    text.style.top = topValue;
+    text.textContent = priceValue;
+    // text.textContent = priceValue + '€';
+    text.style.fontSize = fontSize;
+    text.style.display = 'inline-block';
+    text.style.overflow = 'hidden';
+    text.style.textOverflow = 'ellipsis';
+
+    let gradient = document.createElement('span');
+    gradient.className = 'gradient';
+    let spotlight = document.createElement('span');
+    spotlight.className = 'spotlight';
+    neon.appendChild(text);
+    neon.appendChild(gradient);
+    neon.appendChild(spotlight);
+    subContainer.appendChild(neon);
+    return neon;
+}
+
+
 function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
     let rows = Math.ceil(images.length / 6);
     let imagesPerRow = Math.ceil(images.length / rows);
