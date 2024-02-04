@@ -1092,7 +1092,7 @@ function displayResults(data) {
                 favouriteText.innerHTML = "Usuń z ulubionych";
             }
 
-            if(getUserName()!=='ZALOGUJ'){
+            if(getUserName()!==null){
                 fetch('/api/users/favourites', {
                     method: 'POST',
                     headers: {
@@ -1104,6 +1104,8 @@ function displayResults(data) {
                     .catch(error => {
                         console.error('Error:', error);
                     });
+            } else {
+                createDialogBox("Musisz się zalogować!");
             }
         });
 

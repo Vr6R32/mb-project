@@ -27,6 +27,7 @@ function handlePaginationArrows(prevPageButton, nextPageButton, container) {
             setTimeout(() => {
                 displayLastUploaded(currentMinIndex, currentMaxIndex, 'left');
             }, 500);
+
         }
     });
 
@@ -72,6 +73,69 @@ function animateImages(container, addAnimationClass, activeAnimationClass) {
         }, 500);
     });
 }
+
+function funnyNeonTextPrice(subContainer, price) {
+
+    let priceValue = formatInteger(price);
+    let length = priceValue.length;
+    let topValue;
+    let maxHeight;
+
+    let fontSize;
+    if (length === 10) {
+        fontSize = '62px'
+        topValue = '-2px';
+        maxHeight = '68px';
+    } else if (length === 9) {
+        fontSize = '70px'
+        topValue = '0px';
+    } else if (length === 7) {
+        fontSize = '86px';
+        topValue = '-3px';
+    } else if (length === 6) {
+        fontSize = '102px';
+        topValue = '-15px';
+        maxHeight = '83px';
+    } else if (length === 5) {
+        fontSize = '124px';
+        topValue = '-23px';
+        maxHeight = '98px';
+    }
+
+    let neon = document.createElement('div');
+    neon.className = 'neon';
+    neon.style.marginTop = '20px';
+    neon.style.maxHeight = maxHeight
+    let text = document.createElement('span');
+    text.setAttribute('data-text', priceValue);
+    text.className = 'text';
+    text.style.top = topValue;
+    text.textContent = priceValue;
+    text.style.fontSize = fontSize;
+    text.style.display = 'inline-block';
+    text.style.overflow = 'hidden';
+    text.style.textOverflow = 'ellipsis';
+
+    let gradient = document.createElement('span');
+    gradient.className = 'gradient';
+    let spotlight = document.createElement('span');
+    spotlight.className = 'spotlight';
+    neon.appendChild(text);
+    neon.appendChild(gradient);
+    neon.appendChild(spotlight);
+    subContainer.appendChild(neon);
+}
+
+function funnyh1Paragraph(subContainer) {
+    let heading = document.createElement('h1');
+    heading.textContent = '112.300';
+    heading.setAttribute('contenteditable', 'false');
+    heading.setAttribute('spellcheck', 'false');
+    heading.style.width = '200px';
+    heading.style.height = '75px';
+    subContainer.appendChild(heading);
+}
+
 function displayLastUploaded(min,max,direction){
     const container = document.getElementById('results2');
     advertisements.slice(min,max).forEach(advertisement => {
@@ -79,6 +143,7 @@ function displayLastUploaded(min,max,direction){
         subContainer.classList.add('sub-container-miniature');
         subContainer.style.color = 'darkgoldenrod';
         subContainer.style.textAlign = 'center';
+        subContainer.style.padding = '15px';
 
         subContainer.classList.add(direction === 'left' ? 'slide-left-enter' : 'slide-right-enter');
         setTimeout(() => {
@@ -129,7 +194,6 @@ function displayLastUploaded(min,max,direction){
         subContainer.appendChild(photoDiv);
 
 
-
         mainPhoto.addEventListener('mouseover', () => {
             mainPhoto.style.cursor = 'pointer';
         });
@@ -142,131 +206,62 @@ function displayLastUploaded(min,max,direction){
             window.location.href = '/advertisement?id=' + advertisement.id + '&title=' + advertisement.name;
         });
 
-        const infoContainerFirst = document.createElement('div');
-        infoContainerFirst.style.display = 'flex';
-        infoContainerFirst.style.alignItems = 'center';
-        infoContainerFirst.style.justifyContent = 'space-evenly';
-        infoContainerFirst.style.marginTop = '30px';
+        const lastUploadedIconsDetailsContainer = document.createElement('div');
+        lastUploadedIconsDetailsContainer.style.display = 'grid';
+        lastUploadedIconsDetailsContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        lastUploadedIconsDetailsContainer.style.gridTemplateRows = 'auto auto';
+        lastUploadedIconsDetailsContainer.style.gap = '30px';
+        lastUploadedIconsDetailsContainer.style.marginTop = '30px';
+        lastUploadedIconsDetailsContainer.style.fontSize = '20px';
+        lastUploadedIconsDetailsContainer.style.alignItems = 'center';
+        lastUploadedIconsDetailsContainer.style.justifyItems = 'center';
+        lastUploadedIconsDetailsContainer.style.color = 'white';
 
-        const infoContainerSecond = document.createElement('div');
-        infoContainerSecond.style.display = 'flex';
-        infoContainerSecond.style.alignItems = 'center';
-        infoContainerSecond.style.justifyContent = 'space-evenly';
-        infoContainerSecond.style.marginTop = '30px';
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(formatInteger(advertisement.mileage), 'mileage', 'mileageValue'));
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(advertisement.productionDate, 'productionDate', 'productionDateValue'));
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(advertisement.fuelType, 'fuelType', 'fuelTypeValue'));
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(formatValue(advertisement.engineType), 'engineType/'+ advertisement.engineType, 'engineValue'));
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(formatValue(advertisement.transmissionType), 'transmissionType/'+ advertisement.transmissionType, 'transmissionValue'));
+        lastUploadedIconsDetailsContainer.appendChild(createInfoDiv(advertisement.engineHorsePower + 'HP', 'engineHorsePower', 'engineHorsePowerValue'));
 
-        const mileageInfo = document.createElement('div');
-        mileageInfo.style.display = 'flex';
-        mileageInfo.style.flexDirection = 'column';
-        mileageInfo.style.alignItems = 'center';
-        mileageInfo.style.marginRight = '30px';
-
-        const mileageIcon = document.createElement('img');
-        mileageIcon.src = '/api/static/mileage';
-        mileageIcon.alt = 'MileageIcon';
-        mileageIcon.style.marginBottom = '2px';
-
-        const mileageValue = document.createElement('span');
-        mileageValue.textContent = advertisement.mileage;
-        mileageInfo.appendChild(mileageIcon);
-        mileageInfo.appendChild(mileageValue);
-
-        const productionDateInfo = document.createElement('div');
-        productionDateInfo.style.display = 'flex';
-        productionDateInfo.style.flexDirection = 'column';
-        productionDateInfo.style.alignItems = 'center';
-
-        const productionDateIcon = document.createElement('img');
-        productionDateIcon.src = '/api/static/productionDate';
-        productionDateIcon.alt = 'ProductionDateIcon';
-        productionDateIcon.style.marginBottom = '2px';
-
-        const productionDateValue = document.createElement('span');
-        productionDateValue.textContent = advertisement.productionDate
-        productionDateInfo.appendChild(productionDateIcon);
-        productionDateInfo.appendChild(productionDateValue);
-
-        const fuelTypeInfo = document.createElement('div');
-        fuelTypeInfo.style.display = 'flex';
-        fuelTypeInfo.style.flexDirection = 'column';
-        fuelTypeInfo.style.alignItems = 'center';
-        fuelTypeInfo.style.marginLeft = '30px';
-
-        const fuelTypeIcon = document.createElement('img');
-        fuelTypeIcon.src = '/api/static/fuelType';
-        fuelTypeIcon.alt = 'FuelTypeIcon';
-        fuelTypeIcon.style.marginBottom = '2px';
-
-        const fuelTypeValue = document.createElement('span');
-        fuelTypeValue.textContent = advertisement.fuelType;
-        fuelTypeInfo.appendChild(fuelTypeIcon);
-        fuelTypeInfo.appendChild(fuelTypeValue);
-
-        const transmissionInfo = document.createElement('div');
-        transmissionInfo.style.display = 'flex';
-        transmissionInfo.style.flexDirection = 'column';
-        transmissionInfo.style.alignItems = 'center';
-
-        const transmissionIcon = document.createElement('img');
-        transmissionIcon.src = '/api/static/transmissionType/' + advertisement.transmissionType;
-        transmissionIcon.alt = 'TransmissionIcon';
-        transmissionIcon.style.marginBottom = '2px';
-
-        const transmissionValue = document.createElement('span');
-        transmissionValue.textContent = advertisement.transmissionType.charAt(0).toUpperCase() + advertisement.transmissionType.slice(1).toLowerCase();
-        transmissionInfo.appendChild(transmissionIcon);
-        transmissionInfo.appendChild(transmissionValue);
-
-        const engineInfo = document.createElement('div');
-        engineInfo.style.display = 'flex';
-        engineInfo.style.flexDirection = 'column';
-        engineInfo.style.alignItems = 'center';
-        engineInfo.style.marginRight = '30px';
-
-        const engineIcon = document.createElement('img');
-        engineIcon.src = '/api/static/engineType/' + advertisement.engineType;
-        engineIcon.alt = 'EngineIcon';
-        engineIcon.style.marginBottom = '2px';
-
-        const engineValue = document.createElement('span');
-        engineValue.textContent = advertisement.engineType.charAt(0).toUpperCase() + advertisement.engineType.slice(1).toLowerCase();
-        engineInfo.appendChild(engineIcon);
-        engineInfo.appendChild(engineValue);
-
-        const engineHorsePowerInfo = document.createElement('div');
-        engineHorsePowerInfo.style.display = 'flex';
-        engineHorsePowerInfo.style.flexDirection = 'column';
-        engineHorsePowerInfo.style.alignItems = 'center';
-        engineHorsePowerInfo.style.marginLeft = '30px';
-
-        const engineHorsePowerIcon = document.createElement('img');
-        engineHorsePowerIcon.src = '/api/static/engineHorsePower';
-        engineHorsePowerIcon.alt = 'EngineIcon';
-        engineHorsePowerIcon.style.marginBottom = '2px';
-
-        const engineHorsePowerValue = document.createElement('span');
-        engineHorsePowerValue.textContent = advertisement.engineHorsePower + ' KM';
-        engineHorsePowerInfo.appendChild(engineHorsePowerIcon);
-        engineHorsePowerInfo.appendChild(engineHorsePowerValue);
-
-        infoContainerFirst.appendChild(mileageInfo);
-        infoContainerFirst.appendChild(productionDateInfo);
-        infoContainerFirst.appendChild(fuelTypeInfo);
-
-        infoContainerSecond.appendChild(engineInfo)
-        infoContainerSecond.appendChild(transmissionInfo)
-        infoContainerSecond.appendChild(engineHorsePowerInfo)
-
-
-        infoContainerFirst.style.fontSize = '20px';
-        infoContainerSecond.style.fontSize = '20px';
-
-        subContainer.appendChild(infoContainerFirst);
-        subContainer.appendChild(infoContainerSecond);
+        subContainer.appendChild(lastUploadedIconsDetailsContainer);
 
         handleDarkModeInverse(subContainer);
+
+        funnyNeonTextPrice(subContainer,advertisement.price);
+
         container.appendChild(subContainer);
+        paralaxHover();
+
     });
 }
+
+function formatValue(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+function createInfoDiv(value, iconName, valueClass) {
+    const infoDiv = document.createElement('div');
+    infoDiv.style.display = 'flex';
+    infoDiv.style.flexDirection = 'column';
+    infoDiv.style.alignItems = 'center';
+    infoDiv.style.justifyContent = 'center';
+
+    const icon = document.createElement('img');
+    icon.src = `/api/static/${iconName}`;
+    icon.alt = `${iconName}`;
+    icon.style.width = '24px';
+    icon.style.marginBottom = '2px';
+
+    const text = document.createElement('span');
+    text.textContent = value;
+    text.className = valueClass;
+    infoDiv.appendChild(icon);
+    infoDiv.appendChild(text);
+
+    return infoDiv;
+}
+
 function clearAdvertisements(container, direction) {
     const advertisementElements = [...container.getElementsByClassName('sub-container-miniature')];
     advertisementElements.forEach(elem => {

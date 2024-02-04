@@ -312,26 +312,21 @@ function changeZoom(value) {
 }
 
 function paralaxHover() {
-    /*
-   * Paralax Hover
-   */
+
     (function() {
 
-        // TODO: Make these names suck less.
-        var config = {
-            rotation: 0.035, // Rotation modifier, larger number = less rotation
-            alpha: 0.2, // Alpha channel modifer
-            shadow: 10 // How much the shadow moves
-        }
-
-        var imagesList = document.querySelectorAll('.ph-image');
-        var imagesArray = Array.prototype.slice.call(imagesList);
-        var imageWidth, imageHeight, imageShadow, imageLighting;
+        const config = {
+            rotation: 0.035,
+            alpha: 0.2,
+            shadow: 10
+        };
+        const imagesList = document.querySelectorAll('.ph-image');
+        const imagesArray = Array.prototype.slice.call(imagesList);
+        let imageWidth, imageHeight, imageShadow, imageLighting;
 
         if (imagesArray.length <= 0) {
             return;
         }
-
         /*
          * TODO: This could get seriously gnarly with too many images on screen
          * Would be better to defer these to a single listener on a wrapping element.
@@ -346,44 +341,23 @@ function paralaxHover() {
             imageWidth = this.offsetWidth || this.clientWidth || this.scrollWidth;
             imageHeight = this.offsetHeight || this.clientHeight || this.scrollheight;
 
-            // TODO: Give these a unique ID for better selection later
             imageShadow = this.querySelector('.ph-shadow');
             imageLighting = this.querySelector('.ph-lighting');
-
             this.style.transform = 'perspective(' + imageWidth * 3 + 'px)';
         }
 
         function handleMouseMove(e) {
-            let bounds = e.target.getBoundingClientRect();
             let centerX = imageWidth / 2;
             let centerY = imageHeight / 2;
             let deltaX = e.offsetX - centerX;
             let deltaY = e.offsetY - centerY;
-
-            //Invert the sign for rotateX to correct the vertical inversion
-            let rotateX = -deltaY / (config.rotation * 100); // Inverted rotation around X-axis for vertical movement
-            let rotateY = deltaX / (config.rotation * 100); // Rotation around Y-axis for horizontal movement
-
-            let angleRad = Math.atan2(deltaY, deltaX);
-            let angleDeg = angleRad * 180 / Math.PI - 90;
-
-            // var movement = e.offsetY / bounds.top;
-            // var lightAlpha = movement * config.alpha;
-            // var shadowMovement = movement * 5;
-
-            if (angleDeg <= 0) {
-                angleDeg = angleDeg + 360;
-            }
-
+            let rotateX = -deltaY / (config.rotation * 100);
+            let rotateY = deltaX / (config.rotation * 100);
             this.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
-            // imageLighting.style.background = 'linear-gradient(' + angleDeg + 'deg, rgba(255,255,255, ' + lightAlpha + ') 0%, rgba(255,255,255,0) 60%)';
-            // imageShadow.style.transform = 'translateX(' + shadowMovement + 'px) translateY(' + shadowMovement + 'px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
         }
 
-        function handleMouseLeave(e) {
+        function handleMouseLeave() {
             this.style.transform = '';
-            // imageLighting.style.background = '';
-            // imageLighting.style.transform = '';
         }
 
     })();

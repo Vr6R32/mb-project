@@ -68,6 +68,11 @@ function createHeaderTitle(advertisement, container, owner) {
 
     heartIcon.addEventListener('click', () => {
 
+        if(getUserName()===null) {
+            createDialogBox('Musisz się zalogować !');
+            return;
+        }
+
         fetchWithAuth('/api/users/favourites', {
             method: 'POST',
             headers: {
@@ -240,9 +245,7 @@ function updateHeartIconSrc() {
 }
 function createMessageBox(messageIcon, loggedUser) {
 
-
     const overlay = createSiteOverlay();
-
     const dialogBox = createOverlayDialogBox();
 
     const headerTitle = document.createElement('dialogBox');
@@ -315,6 +318,15 @@ function sendNewMessage(messageValue, advertisementId) {
     formData.append("message", messageValue);
     formData.append("advertisementId", advertisementId);
 
+    if(getUserName()===null) {
+        let dialogBox = document.getElementById('dialogBox');
+        let dialogBoxTitle = document.getElementById('dialogBoxTitle');
+        dialogBox.innerHTML = '';
+        dialogBoxTitle.textContent = "Musisz się zalogować !";
+        dialogBox.appendChild(dialogBoxTitle);
+        return;
+    }
+
     fetchWithAuth("/api/messages", {
         method: "POST",
         body: formData,
@@ -333,7 +345,7 @@ function sendNewMessage(messageValue, advertisementId) {
                 let dialogBox = document.getElementById('dialogBox');
                 let dialogBoxTitle = document.getElementById('dialogBoxTitle');
                 dialogBox.innerHTML = '';
-                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości." + " Musisz się zalogować !";
+                dialogBoxTitle.textContent = "Błąd podczas wysyłania wiadomości.";
                 dialogBox.appendChild(dialogBoxTitle);
         });
 }

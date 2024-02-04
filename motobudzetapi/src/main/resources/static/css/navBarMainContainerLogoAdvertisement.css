@@ -209,9 +209,9 @@ header {
     box-shadow: 0 0 20px darkgoldenrod;
     overflow: hidden;
     border-radius: 30px;
-    width: 330px;
+    width: 310px;
     height: 550px;
-    margin: 20px;
+    margin: 15px;
     position: relative;
     background-color: #000000;
     white-space: nowrap;
