@@ -25,13 +25,14 @@
 
         <repo.username>YOUR_USERNAME_HERE</repo.username>
         <repo.password>YOUR_PASSWORD_HERE</repo.password>
+        <repo.prefix>michaelkey</repo.prefix>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.maven.plugin.version>3.2.0</spring.boot.maven.plugin.version>
         <spring.boot.dependencies.version>3.2.0</spring.boot.dependencies.version>
-        <image>michaelkey/${project.artifactId}:${project.version}</image>
+        <image>${repo.prefix}/${project.artifactId}:${project.version}</image>
     </properties>
 
     <dependencyManagement>
@@ -139,7 +140,7 @@
                                 <image>eclipse-temurin:17.0.4.1_1-jre</image>
                             </from>
                             <to>
-                                <image>michaelkey/motobudzet:${project.version}</image>
+                                <image>${repo.prefix}/${project.artifactId}:${project.version}</image>
                                 <auth>
                                     <username>${repo.username}</username>
                                     <password>${repo.password}</password>
