@@ -184,12 +184,12 @@ Here are the steps to follow:
 <h1 align="center">User navigation bar</h1>
 <br>
 
-<p align="center">
-All user account interactions & possibilities can be accesed from navigation bar which is located on top of the site.<br>
-If user is logged in, after clicking each button is directly redirected to section that he is interested in.<br>
-If user is not logged , he is redirected to the login page on which he also can create an account.<br>
-Site graphic logo, sends an user to main landing page.<br>
-Whole navigation bar is responsive , it fades opacity out when scrolling on to the bottom of site, also buttons change their look with mouse on.<br>
+<p align="left">
+1. All user account interactions & possibilities can be accesed from navigation bar which is located on top of the site.<br>
+2. If user is logged in, after clicking each button is directly redirected to section that he is interested in.<br>
+3. If user is not logged , he is redirected to the login page on which he also can create an account.<br>
+4. Site graphic logo, sends an user to main landing page.<br>
+5. Whole navigation bar is responsive, it fades opacity out when scrolling on to the bottom of site, also buttons react when mouse on.<br>
 </p>
 
 <br>
@@ -202,9 +202,9 @@ Whole navigation bar is responsive , it fades opacity out when scrolling on to t
 
 <br>
 
-<p align="center">
-In the left bottom corner appears to be an panel which controls dark/light theme of the site.<br>
-It also has an slider which sets up a size of each element on the page. User can individually choose his own scale depending on his needs.<br>
+<p align="left">
+1. In the left bottom corner appears to be an panel which controls dark/light theme of the site.<br>
+2. It also has an slider which sets up a size of each element on the page. User can individually choose his own scale depending on his needs.<br>
 </p>
 
 <br>
@@ -220,14 +220,14 @@ It also has an slider which sets up a size of each element on the page. User can
 
 <br>
 
-<p align="center">
-Displayed on main landing page search form allows user to rapidly iterate through database data.<br>
-User can specify his needs by filling parameters which he is interested in.<br>
-Each change on search form automatically sends a get request to display specified filter count on the search button.<br>
-Filled form values change color to create clear contrast which parameters have been set up.<br>
-User can add advertisement to favourites or edit his own directly from searching page.<br>
-Sorting & paging is handled by friendly gui buttons seen on the screen.<br>
-Search url link is being build up dynamically from specified search,sort and pagination params.<br>
+<p align="left">
+1. Displayed on main landing page search form allows user to rapidly iterate through database data.<br>
+2. User can specify his needs by filling parameters which he is interested in.<br>
+3. Each change on search form automatically sends a get request to display specified filter count on the search button.<br>
+4. Filled form values change color to create clear contrast which parameters have been set up.<br>
+5. User can add advertisement to favourites or edit his own directly from searching page.<br>
+6. Sorting & paging is handled by friendly gui buttons seen on the screen.<br>
+7. Search url link is being build up dynamically from specified search,sort and pagination params.<br>
 </p>
 
 <br>
@@ -240,12 +240,14 @@ Search url link is being build up dynamically from specified search,sort and pag
 
 <h1 align="center">Advertisement layout page</h1>
 <br>
-<p align="center">
-Each advertisement has its own unique url guiding you to a page with its detailed information and full description.<br>
-It has nice looking gallery on which u can pick photo or iterate with keyboard left&right arrows.<br>
-Layout contains advertisement details and formatted description provided by user.<br>
-On the top of the site next to advertisement title , we can see few buttons which can create new conversation, add link to favourites or edit advertisement if user is an owner.
+
+<p align="left">
+1. Each advertisement has its own unique url guiding you to a page with its detailed information and full description.<br>
+2. It has nice looking gallery on which u can pick photo or iterate with keyboard left&right arrows.<br>
+3. Layout contains advertisement details and formatted description provided by user.<br>
+4. On the top of the site next to advertisement title , we can see few buttons which can create new conversation, add link to favourites or edit advertisement if user is an owner.
 </p>
+
 <br>
 
 <p align="center">
@@ -260,13 +262,15 @@ On the top of the site next to advertisement title , we can see few buttons whic
 
 <br>
 
-<p align="center">
-Graphically friendly form allows user to interact with api very kind and smoothly.<br>
-User just has to fill the form parameters and pick up some photos with drag&drop method or selecting files manually from disk space.<br>
-Position of photos can be easily swapped just by grabbing them with left mouse click and drag with mouse move.<br>
-Each photo uploaded on site is getting an unique url link and watermark on the bottom right side with service logo.
+<p align="left">
+1. Graphically friendly form allows user to interact with api very kind and smoothly.<br>
+2. User just has to fill the form parameters and pick up some photos with drag&drop method or selecting files manually from disk space.<br>
+3. Position of photos can be easily swapped just by grabbing them with left mouse click and drag with mouse move.<br>
+4. Each photo uploaded on site is getting an unique url link and watermark on the bottom right side with service logo.
 </p>
+
 <br>
+
 <p align="center">
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/423105650_1780116722450997_7640040345684711473_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=rDwV9q9ANngAX9bZc8k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQuw4PW7OtalMIfwosBZx8q9S7SldJX0MUkxRF_45HFUg&oe=65E7D5B1">
 </p>
@@ -292,10 +296,10 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 
 <br>
 
-<p align="center">
-Messaging section provides user friendly gui with a list of created conversations.<br>
-Conversation list is ordered by last message descending timestamp.<br>
-Each conversation preserves some basic data as advertisement title ,  name of second user , last message value and when message was delivered or displayed.
+<p align="left">
+1. Messaging section provides user friendly gui with a list of created conversations.<br>
+2. Conversation list is ordered by last message descending timestamp.<br>
+3. Each conversation preserves some basic data as advertisement title ,  name of second user , last message value and when message was delivered or displayed.
 </p>
 
 <br>
@@ -339,10 +343,10 @@ User can manage his own advertisements or favourites in specified tab which can 
  
 <br>
 
-<p align="center">
-Whole api is completed with active mailing service.<br>
-Mailing service sends an email each time when some activity happens.<br>
-As displayed below , it sends an email every time when user tries to : <br>
+<p align="left">
+1. Whole api is completed with active mailing service.<br>
+2. Mailing service sends an email each time when some activity happens.<br>
+3. As displayed below , it sends an email every time when user tries to : <br>
  
 <br>
 - Register a new account <br>
