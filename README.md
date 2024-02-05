@@ -137,35 +137,35 @@ Here are the steps to follow:
 ##  <center>Project GUI :
 
 <hr>
-<center style="font-size: 25px; font-weight: bold">User navigation bar </center>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">User navigation bar </div>
 <br>
-<center>
+<div style="text-align: center;">
 All user account interactions & possibilities can be accesed from navigation bar which is located on top of the site.<br>
 If user is logged in, after clicking each button is directly redirected to section that he is interested in.<br>
 If user is not logged , he is redirected to the login page on which he also can create an account.<br>
 Site graphic logo, sends an user to main landing page.<br>
 Whole navigation bar is responsive , it fades opacity out when scrolling on to the bottom of site, also buttons change their look with mouse on.<br>
 <br>
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/423147411_698521395799102_238197426782614510_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=YfwN3QWE9O0AX84Ylo3&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQYO_DevqbMdF0f9ItjW3FCLdoh7ATiyjqk2jo7JJ64Rg&oe=65E81748">
-<center style="font-size: 25px; font-weight: bold">Zoom in-out & dark-light mode section</center>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Zoom in-out & dark-light mode section</div>
 <br>
-<center>
+<div style="text-align: center;">
 In the left bottom corner appears to be an panel which controls dark/light theme of the site.<br>
 It also has an slider which sets up a size of each element on the page. User can individually choose his own scale depending on his needs.<br>
 <br>
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422466624_1575198149972618_3612689015995557063_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=xQ5NemmzGesAX8Gmg2k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdR2hCGVKtKohMlNdGwlwa752tX5kFqteBIOneC5QSloYA&oe=65E8030E">
 
 <br>
-</center>
+</div>
 
 <hr>
 
-<center style="font-size: 25px; font-weight: bold">Filtering & searching specified advertisements</center>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Filtering & searching specified advertisements</div>
 <br>
-<center>
+<div style="text-align: center;">
 Displayed on main landing page search form allows user to rapidly iterate through database data.<br>
 User can specify his needs by filling parameters which he is interested in.<br>
 Each change on search form automatically sends a get request to display specified filter count on the search button.<br>
@@ -173,7 +173,7 @@ Filled form values change color to create clear contrast which parameters have b
 User can add advertisement to favourites or edit his own directly from searching page.<br>
 Sorting & paging is handled by friendly gui buttons seen on the screen.<br>
 Search url link is being build up dynamically from specified search,sort and pagination params.<br>
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422917132_374871275150249_4980121352853950744_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=EM5y7FWP1c0AX-Ttbwn&_nc_oc=AQkm2mXq6iyAqYBPQ9XcOYpCKw3_D8Pf6B2QaCcttVvGVaDHa-oD6-4zSIc6U7DxMBU&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQ_fQWPcwxGh7wdB80OQ7l8ISih2vE1eDELCybrgdl-Qw&oe=65E81759">
@@ -205,21 +205,21 @@ On the top of the site next to advertisement title , we can see few buttons whic
 
 
 <hr>
-<center style="font-size: 25px; font-weight: bold">Creating and editing an advertisement</center>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Creating and editing an advertisement</div>
 <br>
-<center>
+<div style="text-align: center;">
 Graphically friendly form allows user to interact with api very kind and smoothly.<br>
 User just has to fill the form parameters and pick up some photos with drag&drop method or selecting files manually from disk space.<br>
 Position of photos can be easily swapped just by grabbing them with left mouse click and drag with mouse move.<br>
 Each photo uploaded on site is getting an unique url link and watermark on the bottom right side with service logo.
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/423105650_1780116722450997_7640040345684711473_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=rDwV9q9ANngAX9bZc8k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQuw4PW7OtalMIfwosBZx8q9S7SldJX0MUkxRF_45HFUg&oe=65E7D5B1">
 <br><br>
-<center>
+<div style="text-align: center;">
 Create & edit form comes with a nice text formatting editor for creating a description of the specified advertisement.<br>
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421695291_1485639528683820_374135017219074944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=0sgOdAkkf7sAX_cHMud&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdSk_A0kvdBeQoqfC6fArKqzMTOpVrGUdbBkViO3Dny2-g&oe=65E7FF9F">
@@ -230,21 +230,21 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 <hr>
 
 
-<center style="font-size: 25px; font-weight: bold">Messaging between users</center><br><br>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Messaging between users</div><br><br>
 
-<center>
+<div style="text-align: center;">
 Messaging section provides user friendly gui with a list of created conversations.<br>
 Conversation list is ordered by last message descending timestamp.<br>
 Each conversation preserves some basic data as advertisement title ,  name of second user , last message value and when message was delivered or displayed.
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/423062794_422504793542248_1369098636429791305_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5aqLPsiwE5IAX_-BGfT&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQ9C-6lai2QZ4xAS_ROVpepB_m3vMAxa008Z4aFpTxjCw&oe=65E8045D">
 <br>
 <br>
-<center>
+<div style="text-align: center;">
 We can easily enter picked chat with a left click and display set of messages that appeared in each conversation.
-</center>
+</div>
 <br>
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421681127_7169175966496745_2842020596038635088_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=lWag90VUhVkAX-eb8vX&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdTG73Vi2X3TktDvud8zqURl9FJhqg5Io8_XODwPoRFSvQ&oe=65E81E1C">
 
@@ -252,11 +252,11 @@ We can easily enter picked chat with a left click and display set of messages th
 <br>
 <hr>
 
-<center style="font-size: 25px; font-weight: bold">Managing advertisements & favourites </center><br><br>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Managing advertisements & favourites </div><br><br>
 
-<center>
+<div style="text-align: center;">
 User can manage his own advertisements or favourites in specified tab which can be accesed from top navigation bar<br>
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421837276_926134135664151_1174917246925344725_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=7ysFHpkQS40AX-UhUwd&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQzYFuWKzNAql6ApkMQkh3SxVbXpRB5CbmY1ftozrS9wQ&oe=65E7EF6F">
@@ -265,9 +265,9 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <hr>
 
-<center style="font-size: 25px; font-weight: bold">Mailing service</center><br><br>
+<div style="font-size: 25px; font-weight: bold; text-align: center;">Mailing service</div><br><br>
 
-<center>
+<div style="text-align: center;">
 Whole api is completed with active mailing service.<br>
 Mailing service sends an email each time when some activity happens.<br>
 As displayed below , it sends an email every time when user tries to : <br>
@@ -278,7 +278,7 @@ As displayed below , it sends an email every time when user tries to : <br>
 - Create a new advertisement (sends e-mail to management) <br>
 - Edit existing advertisement (sends e-mail to management) <br>
 - When admin activates an advertisement (user gets an email with link and confirmation that is active)
-</center>
+</div>
 <br>
 
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/423036509_1833572503782083_5473750886199136916_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=A6pMBLeeTLIAX-ebhsd&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdSs2A73k7vu3k50frQtqJ1Wn8JOGOG3JJ7f6Fl_2RkPVQ&oe=65E7F8CB">
