@@ -211,7 +211,28 @@ Here are the steps to follow:
 <p align="center">
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422466624_1575198149972618_3612689015995557063_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=xQ5NemmzGesAX8Gmg2k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdR2hCGVKtKohMlNdGwlwa752tX5kFqteBIOneC5QSloYA&oe=65E8030E">
 </p>
-</div>
+
+
+<h1 align="center">Management Button</h1>
+
+<br>
+
+<p align="left">
+1. When user has specified admin role, a button appears in site control section.<br>
+2. After clicking this button, user is redirected to management section which allows to approve or reject advertisements that has PENDING_VERIFICATION status.<br>
+</p>
+
+<br>
+<p align="center">
+<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421569127_2698926376932505_7001156687979102144_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=MhJ7li3WJV4AX9B_Zqb&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQxd6AlUmbkI1KbNM8ZYKJOwQD0d2-TPxrKAV4JoujExQ&oe=65E82ADD">
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422610907_1332604710712368_7509768594715880137_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=21G_VPOd7poAX9wNWQd&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRm5KlGIr72D-CkUSAQ-g1ta_HG5hzvuLdEv8ZcePkDSA&oe=65E81BFA">
+ 
+<p align="center">
+When admin management user enters into advertisement that status needs to be resolved , an verification panel occurs.<br>
+</p>
+
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421531962_351118654382827_1098160725967692080_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=jTuZ6-_KiskAX8bLPk-&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRsNgYTgi80KGBMtd_Ww6YaK7yDX91rp2iz1mScKnyJzA&oe=65E808AC">
+</p>
 
 <br>
 <hr>
@@ -234,6 +255,14 @@ Here are the steps to follow:
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422917132_374871275150249_4980121352853950744_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=EM5y7FWP1c0AX-Ttbwn&_nc_oc=AQkm2mXq6iyAqYBPQ9XcOYpCKw3_D8Pf6B2QaCcttVvGVaDHa-oD6-4zSIc6U7DxMBU&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQ_fQWPcwxGh7wdB80OQ7l8ISih2vE1eDELCybrgdl-Qw&oe=65E81759">
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421433460_230513610128028_258298521341429348_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=rvCTnzpw3q4AX9cVl8g&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTbFUusZgSv7vtCpA5lMBX6mqp8NdVMebTeOw35XyrlPA&oe=65E80032">
+
+
+<p align="center">
+On the bottom of homepage we can find last uploaded advertisements which are being filtered by descending order.
+</p>
+
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421581511_272464132365946_2358247215889232667_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=raCJ15uEeUMAX-C9eiW&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRyc5CrrzmuM8zXpGz8yH7ZeCowOHKT35tHrCJVBsIhlQ&oe=65E81AC8">
+
 
 <br>
 <hr>
