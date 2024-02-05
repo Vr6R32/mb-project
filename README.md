@@ -223,7 +223,7 @@ Here are the steps to follow:
 <p align="left">
 1. Displayed on main landing page search form allows user to rapidly iterate through database data.<br>
 2. User can specify his needs by filling parameters which he is interested in.<br>
-3. Each change on search form automatically sends a get request to display specified filter count on the search button.<br>
+3. Each change on form automatically sends api request to fetch & display specified filter count on the search button.<br>
 4. Filled form values change color to create clear contrast which parameters have been set up.<br>
 5. User can add advertisement to favourites or edit his own directly from searching page.<br>
 6. Sorting & paging is handled by friendly gui buttons seen on the screen.<br>
@@ -243,7 +243,7 @@ Here are the steps to follow:
 
 <p align="left">
 1. Each advertisement has its own unique url guiding you to a page with its detailed information and full description.<br>
-2. It has nice looking gallery on which u can pick photo or iterate with keyboard left&right arrows.<br>
+2. It has nice looking gallery on which u can pick photo or iterate with keyboard left & right arrows.<br>
 3. Layout contains advertisement details and formatted description provided by user.<br>
 4. On the top of the site next to advertisement title , we can see few buttons which can create new conversation, add link to favourites or edit advertisement if user is an owner.
 </p>
