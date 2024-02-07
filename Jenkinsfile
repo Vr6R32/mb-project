@@ -24,7 +24,7 @@ pipeline {
                     def retries = 0
 
                     while (retries < maxRetries) {
-                        def result = sh(script: 'docker exec postgres-db pg_isready -h test-db -p 5432', returnStatus: true)
+                        def result = sh(script: 'docker exec postgres-db pg_isready -h postgres-db -p 5432', returnStatus: true)
                         if (result == 0) {
                             echo 'DB is ready .'
                             break
