@@ -26,3 +26,14 @@ tool:
     installations:
       - name: "Apache Maven"
         home: "/usr/share/maven"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "admin-credentials"
+              username: "admin"
+              password: "pass123"
+              description: "admin credentials"

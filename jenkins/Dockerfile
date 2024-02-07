@@ -21,4 +21,4 @@ RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 
 RUN usermod -aG docker jenkins
 
-USER jenkins
+USER root

@@ -10,7 +10,7 @@ pipeline {
         stage('Start Database') {
             steps {
                 sh 'docker run --name test-db -e POSTGRES_DB=motobudzet -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=dontgotosql -p 5432:5432 -d postgres'
-                sh 'docker cp init.sql test-db:/docker-entrypoint-initdb.d/init.sql'
+                sh 'docker cp /db-init/db-init.sql test-db:/docker-entrypoint-initdb.d/db-init.sql'
                 script {
                     def maxRetries = 30
                     def retryInterval = 10
@@ -40,6 +40,12 @@ pipeline {
             }
         }
     }
+        post {
+            always {
+                cleanWs()
+                sh 'docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
+            }
+        }
 }
 
 

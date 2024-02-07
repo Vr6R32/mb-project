@@ -166,8 +166,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins/jenkins.yml:/var/jenkins_home/casc_configs/jenkins.yml:ro
       - ./jenkins/plugins.txt:/usr/share/jenkins/ref/plugins.txt
+      - ./db-init/db-init.sql:/var/jenkins_home/workspace/mb/db-init.sql
       - api-logs:/var/log/spring
-      - ./db-init/db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
     environment:
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
       CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs/jenkins.yml"
