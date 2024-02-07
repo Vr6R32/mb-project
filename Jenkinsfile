@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Start Database') {
             steps {
-                sh 'docker run --name test-db -e POSTGRES_DB=motobudzet -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=dontgotosql -p 3309:5432 -d postgres'
+                sh 'docker run --name test-db -e POSTGRES_DB=motobudzet -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=dontgotosql -p 5432:5432 -d postgres'
                 sh 'docker cp init.sql test-db:/docker-entrypoint-initdb.d/init.sql'
                 script {
                     def maxRetries = 30
@@ -17,7 +17,7 @@ pipeline {
                     def retries = 0
 
                     while (retries < maxRetries) {
-                        def result = sh(script: 'docker exec test-db pg_isready -h localhost -p 3309', returnStatus: true)
+                        def result = sh(script: 'docker exec test-db pg_isready -h localhost -p 5432', returnStatus: true)
                         if (result == 0) {
                             echo 'DB is ready .'
                             break
