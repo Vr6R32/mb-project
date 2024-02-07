@@ -10,7 +10,7 @@ pipeline {
         stage('Start Database') {
             steps {
                 sh 'docker run --name test-db -e POSTGRES_DB=motobudzet -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=dontgotosql -p 5432:5432 -d postgres'
-                sh 'docker cp /db-init/db-init.sql test-db:/docker-entrypoint-initdb.d/db-init.sql'
+                sh 'docker cp ../../mb/db-init.sql test-db:/docker-entrypoint-initdb.d/db-init.sql'
                 script {
                     def maxRetries = 30
                     def retryInterval = 10
