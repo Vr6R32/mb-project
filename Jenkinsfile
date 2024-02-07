@@ -11,8 +11,8 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'mkdir -p $WORKSPACE/logs'
-                        sh 'chmod 777 $WORKSPACE/logs'
+                    sh 'mkdir -p /var/log/spring'
+                    sh 'chmod 777 /var/log/spring'
                     }
                 }
             }

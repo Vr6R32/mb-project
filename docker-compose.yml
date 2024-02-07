@@ -172,7 +172,6 @@ services:
       CASC_JENKINS_CONFIG: "/var/jenkins_home/casc_configs/jenkins.yml"
     command: >
       sh -c "jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt && exec /usr/local/bin/jenkins.sh"
-
     restart: unless-stopped
 
 volumes:
