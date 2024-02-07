@@ -25,7 +25,7 @@ spring:
   datasource:
     hikari:
       max-lifetime: 600000
-    url: jdbc:postgresql://postgres-db:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:postgresql://docker.host.internal:5432/motobudzet?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     username: postgres
     password: dontgotosql
   servlet:
