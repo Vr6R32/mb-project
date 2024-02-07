@@ -7,4 +7,3 @@ pipeline-maven:latest
 jacoco:latest
 cobertura:latest
 ws-cleanup:latest
-
