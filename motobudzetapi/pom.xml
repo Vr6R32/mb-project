@@ -175,7 +175,7 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <spring.profiles.active>docker</spring.profiles.active>
+                        <spring.profiles.active>default</spring.profiles.active>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
