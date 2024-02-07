@@ -13,6 +13,8 @@ jenkins:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
 
+
+
 tool:
   git:
     installations:
