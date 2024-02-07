@@ -850,7 +850,7 @@ function displayResults(data) {
             event.preventDefault();
             window.location.href = `/advertisement?id=${ad.id}&title=${ad.name}`;
         };
-        resultDiv.addEventListener('mouseup', (event) => {
+        resultDiv.addEventListener('mousedown', (event) => {
             if (event.button === 1) {
                 event.preventDefault();
                 window.open(`/advertisement?id=${ad.id}&title=${ad.name}`, '_blank');

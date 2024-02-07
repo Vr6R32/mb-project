@@ -74,16 +74,6 @@ function animateImages(container, addAnimationClass, activeAnimationClass) {
     });
 }
 
-function funnyh1Paragraph(subContainer) {
-    let heading = document.createElement('h1');
-    heading.textContent = '112.300';
-    heading.setAttribute('contenteditable', 'false');
-    heading.setAttribute('spellcheck', 'false');
-    heading.style.width = '200px';
-    heading.style.height = '75px';
-    subContainer.appendChild(heading);
-}
-
 function displayLastUploaded(min,max,direction){
     const container = document.getElementById('results2');
     advertisements.slice(min,max).forEach(advertisement => {
@@ -91,7 +81,9 @@ function displayLastUploaded(min,max,direction){
         subContainer.classList.add('sub-container-miniature');
         subContainer.style.color = 'darkgoldenrod';
         subContainer.style.textAlign = 'center';
-        subContainer.style.padding = '15px';
+        subContainer.style.paddingBottom = '15px';
+        subContainer.style.paddingLeft = '15px';
+        subContainer.style.paddingRight = '15px';
 
         subContainer.classList.add(direction === 'left' ? 'slide-left-enter' : 'slide-right-enter');
         setTimeout(() => {
@@ -135,7 +127,8 @@ function displayLastUploaded(min,max,direction){
         photoDiv.style.display = 'flex';
         photoDiv.style.justifyContent = 'center';
         photoDiv.style.alignItems = 'center';
-
+        photoDiv.style.marginLeft = '-15px';
+        photoDiv.style.marginRight = '-15px';
 
         createParalaxMiniatureLastUploaded(mainPhoto, photoDiv,photoHeight,photoWidth);
 
@@ -153,6 +146,14 @@ function displayLastUploaded(min,max,direction){
         mainPhoto.addEventListener('click', () => {
             window.location.href = '/advertisement?id=' + advertisement.id + '&title=' + advertisement.name;
         });
+
+        mainPhoto.addEventListener('mousedown', (event) => {
+            if (event.button === 1) {
+                event.preventDefault();
+                window.open('/advertisement?id=' + advertisement.id + '&title=' + advertisement.name, '_blank');
+            }
+        });
+
 
         const lastUploadedIconsDetailsContainer = document.createElement('div');
         lastUploadedIconsDetailsContainer.style.display = 'grid';
@@ -177,6 +178,18 @@ function displayLastUploaded(min,max,direction){
         handleDarkModeInverse(subContainer);
 
         funnyNeonTextPrice(subContainer,advertisement.price);
+
+
+        let hrLine = document.createElement('hr');
+        subContainer.appendChild(hrLine);
+
+        let priceUnitSpan = document.createElement('span');
+        priceUnitSpan.style.fontSize = '55px';
+        priceUnitSpan.style.fontFamily = 'Honk';
+        priceUnitSpan.style.position = 'relative';
+        priceUnitSpan.style.top = '-10px';
+        priceUnitSpan.textContent = advertisement.priceUnit;
+        subContainer.appendChild(priceUnitSpan);
 
         container.appendChild(subContainer);
         paralaxHover();

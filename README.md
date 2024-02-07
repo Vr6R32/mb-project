@@ -261,7 +261,7 @@ When admin management user enters into advertisement that status needs to be res
 On the bottom of homepage we can find last uploaded advertisements which are being filtered by descending order.
 </p>
 
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421581511_272464132365946_2358247215889232667_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=raCJ15uEeUMAX-C9eiW&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRyc5CrrzmuM8zXpGz8yH7ZeCowOHKT35tHrCJVBsIhlQ&oe=65E81AC8">
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426133342_405427435236223_5536719586035504641_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=cDwOMbBFRncAX-hPGYj&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTeIcPmuTf2GTS_dc-O0Wv5xphGWg0unejlcBxvC5uowA&oe=65EAA546">
 
 
 <br>

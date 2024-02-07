@@ -187,9 +187,7 @@ function getLastUploaded(pageNumber){
         .then(data => {
             advertisements = data;
             displayLastUploaded(currentMinIndex,currentMaxIndex,'left');
-            if(!isMobileDevice()){
                 paralaxHover();
-            }
         })
         .catch(error => {
             console.error('Błąd pobierania danych:', error);
@@ -326,55 +324,58 @@ function changeZoom(value) {
 
 function paralaxHover() {
 
-    (function() {
+    if(!isMobileDevice()) {
 
-        const config = {
-            rotation: 0.035,
-            alpha: 0.2,
-            shadow: 10
-        };
-        const imagesList = document.querySelectorAll('.ph-image');
-        const imagesArray = Array.prototype.slice.call(imagesList);
-        let imageWidth, imageHeight, imageShadow, imageLighting;
 
-        if (imagesArray.length <= 0) {
-            return;
-        }
-        /*
-         * TODO: This could get seriously gnarly with too many images on screen
-         * Would be better to defer these to a single listener on a wrapping element.
-         */
-        imagesArray.forEach(function(image) {
-            image.addEventListener('mouseenter', handleMouseEnter);
-            image.addEventListener('mousemove', handleMouseMove);
-            image.addEventListener('mouseleave', handleMouseLeave);
-        });
+        (function () {
 
-        function handleMouseEnter() {
-            imageWidth = this.offsetWidth || this.clientWidth || this.scrollWidth;
-            imageHeight = this.offsetHeight || this.clientHeight || this.scrollheight;
+            const config = {
+                rotation: 0.035,
+                alpha: 0.2,
+                shadow: 10
+            };
+            const imagesList = document.querySelectorAll('.ph-image');
+            const imagesArray = Array.prototype.slice.call(imagesList);
+            let imageWidth, imageHeight, imageShadow, imageLighting;
 
-            imageShadow = this.querySelector('.ph-shadow');
-            imageLighting = this.querySelector('.ph-lighting');
-            this.style.transform = 'perspective(' + imageWidth * 3 + 'px)';
-        }
+            if (imagesArray.length <= 0) {
+                return;
+            }
+            /*
+             * TODO: This could get seriously gnarly with too many images on screen
+             * Would be better to defer these to a single listener on a wrapping element.
+             */
+            imagesArray.forEach(function (image) {
+                image.addEventListener('mouseenter', handleMouseEnter);
+                image.addEventListener('mousemove', handleMouseMove);
+                image.addEventListener('mouseleave', handleMouseLeave);
+            });
 
-        function handleMouseMove(e) {
-            let centerX = imageWidth / 2;
-            let centerY = imageHeight / 2;
-            let deltaX = e.offsetX - centerX;
-            let deltaY = e.offsetY - centerY;
-            let rotateX = -deltaY / (config.rotation * 100);
-            let rotateY = deltaX / (config.rotation * 100);
-            this.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
-        }
+            function handleMouseEnter() {
+                imageWidth = this.offsetWidth || this.clientWidth || this.scrollWidth;
+                imageHeight = this.offsetHeight || this.clientHeight || this.scrollheight;
 
-        function handleMouseLeave() {
-            this.style.transform = '';
-        }
+                imageShadow = this.querySelector('.ph-shadow');
+                imageLighting = this.querySelector('.ph-lighting');
+                this.style.transform = 'perspective(' + imageWidth * 3 + 'px)';
+            }
 
-    })();
+            function handleMouseMove(e) {
+                let centerX = imageWidth / 2;
+                let centerY = imageHeight / 2;
+                let deltaX = e.offsetX - centerX;
+                let deltaY = e.offsetY - centerY;
+                let rotateX = -deltaY / (config.rotation * 100);
+                let rotateY = deltaX / (config.rotation * 100);
+                this.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+            }
 
+            function handleMouseLeave() {
+                this.style.transform = '';
+            }
+
+        })();
+    }
 }
 
 function applyDarkMode() {
@@ -495,6 +496,7 @@ function funnyNeonTextPrice(subContainer, price) {
     let length = priceValue.length;
     let topValue;
     let maxHeight;
+    let neon = document.createElement('div');
 
     let fontSize;
     if (length === 10) {
@@ -514,12 +516,14 @@ function funnyNeonTextPrice(subContainer, price) {
     } else if (length === 5) {
         fontSize = '124px';
         topValue = '-23px';
-        maxHeight = '98px';
+        maxHeight = '83px';
+        neon.style.transform = 'scale(0.78)';
+        neon.style.transformOrigin = 'center';
     }
 
-    let neon = document.createElement('div');
+
     neon.className = 'neon';
-    neon.style.marginTop = '20px';
+    neon.style.marginTop = '5px';
     neon.style.maxHeight = maxHeight
     let text = document.createElement('span');
     // text.setAttribute('data-text', priceValue + '€');

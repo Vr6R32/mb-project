@@ -1,0 +1,28 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin"
+  numExecutors: 2
+  scmCheckoutRetryCount: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+        - id: "admin"
+          password: "admin"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+tool:
+  git:
+    installations:
+      - home: "git"
+        name: "git default"
+  jdk:
+    installations:
+      - name: "JDK 17"
+        home: "/usr/lib/jvm/java-17-openjdk-amd64"
+  maven:
+    installations:
+      - name: "Apache Maven"
+        home: "/usr/share/maven"

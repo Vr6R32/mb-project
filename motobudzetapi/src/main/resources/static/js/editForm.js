@@ -78,7 +78,9 @@ function populateFormData(data) {
     document.getElementById('cityState').value = data.city.cityState.name || '';
     document.getElementById('name').value = data.name || '';
     document.getElementById('mileage').value = data.mileage || '';
+    document.getElementById('mileageUnit').value = data.mileageUnit || '';
     document.getElementById('price').value = data.price || '';
+    document.getElementById('priceUnit').value = data.priceUnit || '';
     document.getElementById('engineCapacity').value = data.engineCapacity || '';
     document.getElementById('engineHorsePower').value = data.engineHorsePower || '';
     document.getElementById('productionDate').value = data.productionDate || '';

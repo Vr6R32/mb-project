@@ -1,0 +1,8 @@
+configuration-as-code:latest
+maven-plugin:latest
+git:latest
+workflow-aggregator:latest
+junit:latest
+pipeline-maven:latest
+jacoco:latest
+cobertura:latest
