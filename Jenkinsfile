@@ -43,7 +43,8 @@ pipeline {
         post {
             always {
                 cleanWs()
-                sh 'docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
+//                 sh 'docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
+                   sh 'docker stop test-db && docker rm test-db'
             }
         }
 }

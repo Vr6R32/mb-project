@@ -35,5 +35,5 @@ credentials:
               scope: GLOBAL
               id: "admin-credentials"
               username: "admin"
-              password: "pass123"
+              password: "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"
               description: "admin credentials"
