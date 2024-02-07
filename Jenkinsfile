@@ -43,7 +43,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-               sh 'mvn clean install -Pdocker'
+               sh 'mvn clean install'
             }
         }
     }
