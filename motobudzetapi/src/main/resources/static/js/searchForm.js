@@ -366,16 +366,15 @@ function createSearchForm(formContainer) {
     ];
 
 
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    if (isMobileDevice()) {
         isMobile = true;
-        handleTabletChange({ matches: true });
+        formContainer.style.height = '1400px';
+        form.style.display = 'grid';
+        form.style.flexDirection = "column";
+        form.style.alignItems = "center";
+        form.style.height = "1400px";
     }
-    function handleTabletChange(e) {
-        if (e.matches) {
-            form.style.flexDirection = "column";
-            form.style.alignItems = "center";
-        }
-    }
+
 
 
     form.appendChild(createRowWithInputElement("np. -> Nissan","Marka:", "select", "brand", "brand", brandsOptions));
@@ -472,7 +471,7 @@ function executeAdvertisementFilterResultCount() {
 function handleProposalOptions(inputId,proposeElements) {
     switch (inputId) {
         case 'productionDateFrom':
-            for (let year = 1970; year <= 2024; year++) {
+            for (let year = 1990; year <= 2024; year++) {
                 proposeElements.push(year.toString());
             }
             break;
@@ -534,15 +533,19 @@ function handleProposalOptions(inputId,proposeElements) {
 }
 function createRowWithInputElement(exampleValue,labelText, inputType, inputId, inputName, selectOptions) {
     let rowFlexBasis = '25%';
-    let labelFlexBasis = '40%';
+    let labelFlexBasis = '50%';
     let inputFlexBasis = '60%'
+    let inputFontSize = '18px';
+    let labelColumnMarginRight = '5px';
 
     const rowDiv = document.createElement("div");
-    if(isMobile === true){
+    if(isMobile){
         rowFlexBasis = '100%';
         labelFlexBasis = '100%';
-        inputFlexBasis = '100%';
+        inputFlexBasis = '60%';
         rowDiv.style.minWidth = '100%';
+        inputFontSize = '28px';
+        labelColumnMarginRight = '-55px';
     }
 
     rowDiv.classList.add('searchDivElement');
@@ -558,7 +561,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     labelColumn.style.flexBasis = labelFlexBasis;
     labelColumn.style.display = "flex";
     labelColumn.style.alignItems = "center";
-    labelColumn.style.marginRight = "5px";
+    labelColumn.style.marginRight = labelColumnMarginRight;
     labelColumn.style.marginLeft = "5px";
     labelColumn.style.maxWidth = "100%";
 
@@ -571,7 +574,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     label.style.maxWidth = "100%";
     label.style.color = 'darkgoldenrod';
     label.style.fontWeight = 'bold';
-    label.style.fontSize = '17px';
+    label.style.fontSize = '18px';
     labelColumn.appendChild(label);
     rowDiv.appendChild(labelColumn);
 
@@ -587,6 +590,7 @@ function createRowWithInputElement(exampleValue,labelText, inputType, inputId, i
     inputElement.type = inputType;
     inputElement.setAttribute('id',inputId);
     inputElement.name = inputName;
+    inputElement.style.fontSize = inputFontSize;
     inputElement.style.width = "100%";
     inputElement.style.padding = "5px";
     inputElement.style.boxSizing = "border-box";
@@ -883,9 +887,13 @@ function displayResults(data) {
 
         const titleElement = document.createElement("div");
         titleElement.textContent = ad.name;
+        titleElement.style.maxWidth = 'calc(100% - 30px)';
         titleElement.style.color = "white";
         titleElement.style.fontSize = "24px";
         titleElement.style.textAlign = 'left';
+        titleElement.style.whiteSpace = 'nowrap';
+        titleElement.style.overflow = 'hidden';
+        titleElement.style.textOverflow = 'ellipsis';
 
         const modelBrandElement = createModelBrandDiv(ad);
 
@@ -1282,13 +1290,15 @@ function createPaginationButton(pageNumber, label, sortBy, sortOrder) {
         formData.set("sortBy", sortBy);
         formData.set("sortOrder", sortOrder);
         executeSearch(formData);
-        setTimeout(function() {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-        }, 500);
+        if(!isMobile){
+            setTimeout(function() {
+                window.scroll({
+                    top: 350,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }, 500);
+        }
     });
     paginationButtonDiv.appendChild(paginationButton);
     return paginationButtonDiv;
@@ -1377,9 +1387,7 @@ function executeSearch(formData) {
         .then(data => {
             displayResults(data, sortingBy, sortOrder);
             updatePaginationButtons(data, sortingBy, sortOrder);
-            if(!isMobileDevice()){
                 paralaxHover();
-            }
         })
         .catch(error => console.error("Error fetching data:", error));
 }

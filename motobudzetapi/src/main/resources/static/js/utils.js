@@ -553,7 +553,6 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
     let rows = Math.ceil(images.length / 6);
     let imagesPerRow = Math.ceil(images.length / rows);
 
-    // Stwórz kontener na wiersze
     let rowContainers = [];
     for (let i = 0; i < rows; i++) {
         let row = document.createElement('div');
@@ -582,7 +581,6 @@ function createParalaxMiniaturesGallery(images, parentDiv, mainPhoto) {
         img.style.objectFit = 'cover';
         figure.appendChild(img);
 
-        // Dodanie event listenera
         figure.addEventListener('click', function() {
             if(index!==currentPhotoIndex){
                 currentPhotoIndex = index;

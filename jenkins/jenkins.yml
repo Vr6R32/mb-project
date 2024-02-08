@@ -13,8 +13,6 @@ jenkins:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
 
-
-
 tool:
   git:
     installations:
@@ -37,5 +35,5 @@ credentials:
               scope: GLOBAL
               id: "admin-credentials"
               username: "admin"
-              password: "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"
+              password: "admin"
               description: "admin credentials"
