@@ -1,18 +1,9 @@
 package pl.motobudzet.api.domain.model;
 
-
-import lombok.*;
+import lombok.Builder;
 import pl.motobudzet.api.domain.brand.BrandDTO;
 
-@Data
-@RequiredArgsConstructor
-@AllArgsConstructor
-@ToString
 @Builder
-public class ModelDTO {
-
-    private Long id;
-    private String name;
-    private BrandDTO brand;
+public record ModelDTO(Long id, String name, BrandDTO brand) {
 
 }

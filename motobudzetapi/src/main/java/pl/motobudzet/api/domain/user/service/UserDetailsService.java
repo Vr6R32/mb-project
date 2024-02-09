@@ -43,10 +43,10 @@ public class UserDetailsService {
     @Transactional
     public ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest) {
 
-        City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
-        String name = request.getName();
-        String surname = request.getSurname();
-        String phoneNumber = request.getPhoneNumber();
+        City city = locationFacade.getCityByNameAndState(request.city(), request.cityState());
+        String name = request.name();
+        String surname = request.surname();
+        String phoneNumber = request.phoneNumber();
         Role role = Role.ROLE_USER;
         String userEmail = loggedUser.getEmail();
 

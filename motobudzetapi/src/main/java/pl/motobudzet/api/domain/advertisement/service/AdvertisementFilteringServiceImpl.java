@@ -51,7 +51,7 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
 
     private Specification<Advertisement> setAdvertisementFilterSpecification(AdvertisementFilterRequest request) {
 
-        String titleQueryParam = request.getTitle();
+        String titleQueryParam = request.title();
 
         Specification<Advertisement> specification = (root, query, criteriaBuilder) -> {
             Predicate statusActivePredicate = criteriaBuilder.equal(root.get("status"), Status.ACTIVE);
@@ -59,7 +59,7 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
         };
 
 
-        Boolean isAccidentFree = request.getAccidentFree();
+        Boolean isAccidentFree = request.accidentFree();
         if(isAccidentFree!=null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accidentFree"), isAccidentFree)
@@ -70,19 +70,19 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
         Map<String, ServiceFunction> serviceFunctionMap = new HashMap<>();
 
         serviceFunctionMap.put("brand", brandFacade::getBrand);
-        serviceFunctionMap.put("model", modelName -> modelFacade.getModelByNameAndBrandName(request.getModel(), request.getBrand()));
+        serviceFunctionMap.put("model", modelName -> modelFacade.getModelByNameAndBrandName(request.model(), request.brand()));
 
         specification = FilteringHelper.handleEntities(request, specification, serviceFunctionMap);
 
-        specification = handleEnumValue(specification, request.getFuelType(), "fuelType");
-        specification = handleEnumValue(specification, request.getDriveType(), "driveType");
-        specification = handleEnumValue(specification, request.getEngineType(), "engineType");
-        specification = handleEnumValue(specification, request.getTransmissionType(), "transmissionType");
-        specification = FilteringHelper.handleValueInRangeBetween(specification, "price", request.getPriceMin(), request.getPriceMax());
-        specification = FilteringHelper.handleValueInRangeBetween(specification, "mileage", request.getMileageFrom(), request.getMileageTo());
-        specification = FilteringHelper.handleValueInRangeBetween(specification, "engineCapacity", request.getEngineCapacityFrom(), request.getEngineCapacityTo());
-        specification = FilteringHelper.handleValueInRangeBetween(specification, "engineHorsePower", request.getEngineHorsePowerFrom(), request.getEngineHorsePowerTo());
-        specification = FilteringHelper.handleValueInRangeBetween(specification, "productionDate", request.getProductionDateFrom(), request.getProductionDateTo());
+        specification = handleEnumValue(specification, request.fuelType(), "fuelType");
+        specification = handleEnumValue(specification, request.driveType(), "driveType");
+        specification = handleEnumValue(specification, request.engineType(), "engineType");
+        specification = handleEnumValue(specification, request.transmissionType(), "transmissionType");
+        specification = FilteringHelper.handleValueInRangeBetween(specification, "price", request.priceMin(), request.priceMax());
+        specification = FilteringHelper.handleValueInRangeBetween(specification, "mileage", request.mileageFrom(), request.mileageTo());
+        specification = FilteringHelper.handleValueInRangeBetween(specification, "engineCapacity", request.engineCapacityFrom(), request.engineCapacityTo());
+        specification = FilteringHelper.handleValueInRangeBetween(specification, "engineHorsePower", request.engineHorsePowerFrom(), request.engineHorsePowerTo());
+        specification = FilteringHelper.handleValueInRangeBetween(specification, "productionDate", request.productionDateFrom(), request.productionDateTo());
 
 
         specification = handleCityAndStateValue(request, specification);
@@ -101,9 +101,9 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
         return specification;
     }
     private Specification<Advertisement> handleCityAndStateValue(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
-        String city = request.getCity();
-        String cityState = request.getCityState();
-        int distanceFrom = request.getDistanceFrom() != null ? request.getDistanceFrom() : 0;
+        String city = request.city();
+        String cityState = request.cityState();
+        int distanceFrom = request.distanceFrom() != null ? request.distanceFrom() : 0;
 
         if (cityState != null && !cityState.isEmpty() && (city == null || city.isEmpty())) {
             specification = specification.and((root, query, criteriaBuilder) -> {

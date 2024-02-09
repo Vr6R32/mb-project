@@ -17,9 +17,9 @@ public class ModelMapper {
 
     public static Model mapToModelEntity(ModelDTO model) {
         return Model.builder()
-                .id(model.getId())
-                .name(model.getName())
-                .brand(BrandMapper.mapToBrandEntity(model.getBrand()))
+                .id(model.id())
+                .name(model.name())
+                .brand(BrandMapper.mapToBrandEntity(model.brand()))
                 .build();
     }
 

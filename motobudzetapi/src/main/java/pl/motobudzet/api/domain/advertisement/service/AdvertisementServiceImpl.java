@@ -67,9 +67,9 @@ class AdvertisementServiceImpl implements AdvertisementService {
     public ResponseEntity<String> createAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files) {
         log.info("[ADVERTISEMENT-SERVICE] -> CREATE NEW ADVERTISEMENT BY {}", user);
         Advertisement advertisement = mapCreateAdvertisementRequestToEntity(request, user);
-        City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
+        City city = locationFacade.getCityByNameAndState(request.city(), request.cityState());
         advertisement.setCity(city);
-        advertisement.setMainPhotoUrl(request.getMainPhotoUrl());
+        advertisement.setMainPhotoUrl(request.mainPhotoUrl());
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
@@ -86,7 +86,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
         if (advertisement.getUser().getUsername().equals(loggedUser)) {
             setAdvertisementByEditRequest(request, advertisement);
             String mainPhotoUrl = fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
-            City city = locationFacade.getCityByNameAndState(request.getCity(), request.getCityState());
+            City city = locationFacade.getCityByNameAndState(request.city(), request.cityState());
 
             advertisement.setMainPhotoUrl(mainPhotoUrl);
             advertisement.setCity(city);

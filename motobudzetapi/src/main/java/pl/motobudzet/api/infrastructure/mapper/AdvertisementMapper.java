@@ -11,6 +11,7 @@ import pl.motobudzet.api.domain.model.ModelDTO;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static pl.motobudzet.api.infrastructure.mapper.BrandMapper.mapToBrandEntity;
 import static pl.motobudzet.api.infrastructure.mapper.ModelMapper.mapToModelEntity;
@@ -21,73 +22,69 @@ public class AdvertisementMapper {
     }
 
     public static AdvertisementDTO mapToAdvertisementDTO(Advertisement adv, boolean includeImages) {
+        List<String> urlList = includeImages ? adv.getImageUrls() : List.of();
 
-        AdvertisementDTO builder = AdvertisementDTO.builder()
-                .id(adv.getId())
-                .name(adv.getName())
-                .description(adv.getDescription())
-                .model(ModelMapper.mapToModelDTO(adv.getModel()))
-                .brand(BrandMapper.mapToBrandDTO(adv.getBrand()))
-                .fuelType(adv.getFuelType())
-                .driveType(adv.getDriveType())
-                .engineType(adv.getEngineType())
-                .transmissionType(adv.getTransmissionType())
-                .vinNumber(adv.getVinNumber())
-                .accidentFree(adv.isAccidentFree())
-                .user(adv.getUser().getUsername())
-                .city(CityMapper.mapToCityDTO(adv.getCity()))
-                .mileage(adv.getMileage())
-                .mileageUnit(adv.getMileageUnit())
-                .price(adv.getPrice())
-                .priceUnit(adv.getPriceUnit())
-                .engineCapacity(adv.getEngineCapacity())
-                .engineHorsePower(adv.getEngineHorsePower())
-                .firstRegistrationDate(adv.getFirstRegistrationDate())
-                .productionDate(adv.getProductionDate())
-                .createDate(adv.getCreateDate().toLocalDate())
-                .createTime(adv.getCreateDate().toLocalTime())
-                .mainPhotoUrl(adv.getMainPhotoUrl())
-                .status(adv.getStatus())
-                .build();
-
-        if (includeImages) {
-            builder.setUrlList(adv.getImageUrls());
-        }
-
-        return builder;
+        return new AdvertisementDTO(
+                adv.getId(),
+                adv.getName(),
+                adv.getDescription(),
+                ModelMapper.mapToModelDTO(adv.getModel()),
+                BrandMapper.mapToBrandDTO(adv.getBrand()),
+                adv.getFuelType(),
+                adv.getDriveType(),
+                adv.getEngineType(),
+                adv.getTransmissionType(),
+                adv.getVinNumber(),
+                adv.isAccidentFree(),
+                adv.getMainPhotoUrl(),
+                adv.getUser().getUsername(),
+                CityMapper.mapToCityDTO(adv.getCity()),
+                adv.getMileage(),
+                adv.getPrice(),
+                adv.getEngineCapacity(),
+                adv.getEngineHorsePower(),
+                adv.getProductionDate(),
+                adv.getMileageUnit(),
+                adv.getPriceUnit(),
+                adv.getCreateDate().toLocalTime(),
+                adv.getCreateDate().toLocalDate(),
+                adv.getFirstRegistrationDate(),
+                adv.getStatus(),
+                urlList
+        );
     }
 
     public static Advertisement mapCreateAdvertisementRequestToEntity(AdvertisementRequest request, AppUser currentUser) {
 
         Brand brand = Brand.builder()
-                .id(request.getBrandId())
-                .name(request.getBrand())
+                .id(request.brandId())
+                .name(request.brand())
                 .build();
 
         Model model = Model.builder()
-                .id(request.getModelId())
-                .name(request.getModel())
+                .id(request.modelId())
+                .name(request.model())
                 .brand(brand)
                 .build();
 
         return Advertisement.builder()
-                .name(request.getName())
-                .description(request.getDescription())
+                .name(request.name())
+                .description(request.description())
                 .model(model)
                 .brand(brand)
-                .vinNumber(request.getVinNumber())
-                .fuelType(request.getFuelType())
-                .driveType(request.getDriveType())
-                .engineType(request.getEngineType())
-                .transmissionType(request.getTransmissionType())
-                .mileage(request.getMileage())
-                .mileageUnit(request.getMileageUnit())
-                .price(request.getPrice())
-                .priceUnit(request.getPriceUnit())
-                .engineCapacity(request.getEngineCapacity())
-                .engineHorsePower(request.getEngineHorsePower())
-                .firstRegistrationDate(request.getFirstRegistrationDate())
-                .productionDate(request.getProductionDate())
+                .vinNumber(request.vinNumber())
+                .fuelType(request.fuelType())
+                .driveType(request.driveType())
+                .engineType(request.engineType())
+                .transmissionType(request.transmissionType())
+                .mileage(request.mileage())
+                .mileageUnit(request.mileageUnit())
+                .price(request.price())
+                .priceUnit(request.priceUnit())
+                .engineCapacity(request.engineCapacity())
+                .engineHorsePower(request.engineHorsePower())
+                .firstRegistrationDate(request.firstRegistrationDate())
+                .productionDate(request.productionDate())
                 .user(currentUser)
                 .imageUrls(new ArrayList<>())
                 .status(Status.PENDING_VERIFICATION)
@@ -97,34 +94,34 @@ public class AdvertisementMapper {
     public static void setAdvertisementByEditRequest(AdvertisementRequest request, Advertisement advertisement) {
 
         BrandDTO brand = BrandDTO.builder()
-                .id(request.getBrandId())
-                .name(request.getBrand())
+                .id(request.brandId())
+                .name(request.brand())
                 .build();
 
         ModelDTO model = ModelDTO.builder()
-                .id(request.getModelId())
-                .name(request.getModel())
+                .id(request.modelId())
+                .name(request.model())
                 .brand(brand)
                 .build();
 
-        advertisement.setName(request.getName());
-        advertisement.setDescription(request.getDescription());
+        advertisement.setName(request.name());
+        advertisement.setDescription(request.description());
         advertisement.setModel(mapToModelEntity(model));
         advertisement.setBrand(mapToBrandEntity(brand));
-        advertisement.setVinNumber(request.getVinNumber());
-        advertisement.setAccidentFree(request.getAccidentFree());
-        advertisement.setFuelType(request.getFuelType());
-        advertisement.setDriveType(request.getDriveType());
-        advertisement.setEngineType(request.getEngineType());
-        advertisement.setTransmissionType(request.getTransmissionType());
-        advertisement.setMileage(request.getMileage());
-        advertisement.setMileageUnit(request.getMileageUnit());
-        advertisement.setPrice(request.getPrice());
-        advertisement.setPriceUnit(request.getPriceUnit());
-        advertisement.setEngineCapacity(request.getEngineCapacity());
-        advertisement.setEngineHorsePower(request.getEngineHorsePower());
-        advertisement.setFirstRegistrationDate(request.getFirstRegistrationDate());
-        advertisement.setProductionDate(request.getProductionDate());
+        advertisement.setVinNumber(request.vinNumber());
+        advertisement.setAccidentFree(request.accidentFree());
+        advertisement.setFuelType(request.fuelType());
+        advertisement.setDriveType(request.driveType());
+        advertisement.setEngineType(request.engineType());
+        advertisement.setTransmissionType(request.transmissionType());
+        advertisement.setMileage(request.mileage());
+        advertisement.setMileageUnit(request.mileageUnit());
+        advertisement.setPrice(request.price());
+        advertisement.setPriceUnit(request.priceUnit());
+        advertisement.setEngineCapacity(request.engineCapacity());
+        advertisement.setEngineHorsePower(request.engineHorsePower());
+        advertisement.setFirstRegistrationDate(request.firstRegistrationDate());
+        advertisement.setProductionDate(request.productionDate());
         advertisement.setStatus(Status.PENDING_VERIFICATION);
     }
 }

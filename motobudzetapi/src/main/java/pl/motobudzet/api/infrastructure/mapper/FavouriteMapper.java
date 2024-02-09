@@ -12,7 +12,7 @@ public class FavouriteMapper {
     public static Favourite mapFavouriteRequestToEntity(FavouriteRequest request, AppUser appUser) {
         return Favourite.builder()
                 .appUser(appUser)
-                .advertisementId(request.getAdvertisementId())
+                .advertisementId(request.advertisementId())
                 .userName(appUser.getUsername())
                 .build();
     }

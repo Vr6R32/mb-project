@@ -22,7 +22,7 @@ public class FavouritesServiceImpl implements FavouriteService {
 
     public String manageUserFavourite(FavouriteRequest request, AppUser loggedUser) {
 
-        Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(loggedUser, request.getAdvertisementId());
+        Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(loggedUser, request.advertisementId());
 
         if (existingFavourite.isEmpty()) {
             favouritesRepository.save(mapFavouriteRequestToEntity(request, loggedUser));

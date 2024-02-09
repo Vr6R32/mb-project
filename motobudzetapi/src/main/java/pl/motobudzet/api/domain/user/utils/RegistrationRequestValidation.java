@@ -11,7 +11,7 @@ public class RegistrationRequestValidation {
 
     public static String validate(RegistrationRequest request, AppUserRepository userRepository) {
 
-        String result = userRepository.checkUsernameAndEmailAvailability(request.getUserName(), request.getEmail());
+        String result = userRepository.checkUsernameAndEmailAvailability(request.userName(), request.email());
 
         switch (result) {
             case "Username is already taken" -> result = "Nazwa użytkownika jest już zajęta!";

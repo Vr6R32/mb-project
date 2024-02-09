@@ -65,7 +65,7 @@ class RegistrationServiceTest {
 
         //given
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
-        when(userRepository.checkUsernameAndEmailAvailability(request.getUserName(),request.getEmail())).thenReturn("Both username and email are available");
+        when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Both username and email are available");
         //when
         registrationService.register(request);
         //then
@@ -84,7 +84,7 @@ class RegistrationServiceTest {
     void should_not_register_user_when_username_already_exists(){
         //given
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
-        when(userRepository.checkUsernameAndEmailAvailability(request.getUserName(),request.getEmail())).thenReturn("Username is already taken");
+        when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Username is already taken");
         //when
         registrationService.register(request);
         //then
@@ -95,7 +95,7 @@ class RegistrationServiceTest {
     void should_not_register_user_when_email_already_exists(){
         //given
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
-        when(userRepository.checkUsernameAndEmailAvailability(request.getUserName(),request.getEmail())).thenReturn("Email is already taken");
+        when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Email is already taken");
         //when
         registrationService.register(request);
         //then
@@ -170,7 +170,7 @@ class RegistrationServiceTest {
         AppUser mockUser = AppUser.builder().email(email).build();
         LocalDateTime expectedDateTime = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MINUTES);
 
-        given(userRepository.insertResetPasswordCode(any(String.class), any(LocalDateTime.class), eq(resetPasswordRequest.getEmail())))
+        given(userRepository.insertResetPasswordCode(any(String.class), any(LocalDateTime.class), eq(resetPasswordRequest.email())))
                 .willReturn(1);
 
         given(userRepository.findUserByResetPasswordCode(any(String.class)))
@@ -185,7 +185,7 @@ class RegistrationServiceTest {
         ArgumentCaptor<String> resetCodeCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<LocalDateTime> dateTimeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
 
-        verify(userRepository).insertResetPasswordCode(resetCodeCaptor.capture(), dateTimeCaptor.capture(), eq(resetPasswordRequest.getEmail()));
+        verify(userRepository).insertResetPasswordCode(resetCodeCaptor.capture(), dateTimeCaptor.capture(), eq(resetPasswordRequest.email()));
 
         String resetCodeValue = resetCodeCaptor.getValue();
         LocalDateTime codeDateValidUntil = dateTimeCaptor.getValue().truncatedTo(ChronoUnit.MINUTES);
@@ -203,9 +203,9 @@ class RegistrationServiceTest {
         String resetCode = RandomStringUtils.random(30);
         NewPasswordRequest passwordRequest = NewPasswordRequest.builder().password("test123").passwordRepeat("test123").resetCode(resetCode).build();
         AppUser user = AppUser.builder().resetPasswordCode(resetCode).resetPasswordCodeExpiration(LocalDateTime.now().plusHours(2)).build();
-        String encodedPassword = "encoded" + passwordRequest.getPassword();
+        String encodedPassword = "encoded" + passwordRequest.password();
         given(userRepository.findUserByResetPasswordCode(resetCode)).willReturn(Optional.of(user));
-        given(passwordEncoder.encode(passwordRequest.getPassword())).willReturn(encodedPassword);
+        given(passwordEncoder.encode(passwordRequest.password())).willReturn(encodedPassword);
 
         //when
         registrationService.changeUserPassword(passwordRequest);
@@ -217,7 +217,7 @@ class RegistrationServiceTest {
         verify(userRepository).insertNewUserPassword(newPassword.capture(),resetCodeCaptor.capture());
         assertAll(
                 () -> assertThat(newPassword.getValue()).isEqualTo(encodedPassword),
-                () -> assertThat(resetCodeCaptor.getValue()).isEqualTo(passwordRequest.getResetCode())
+                () -> assertThat(resetCodeCaptor.getValue()).isEqualTo(passwordRequest.resetCode())
         );
 
     }

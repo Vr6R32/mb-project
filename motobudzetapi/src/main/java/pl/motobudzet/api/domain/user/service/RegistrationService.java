@@ -45,9 +45,9 @@ public class RegistrationService {
 
             String code = RandomStringUtils.randomAlphanumeric(30, 30);
             AppUser newUser = AppUser.builder()
-                    .userName(request.getUserName())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .email(request.getEmail())
+                    .userName(request.userName())
+                    .password(passwordEncoder.encode(request.password()))
+                    .email(request.email())
                     .registerCode(code)
                     .accountEnabled(false)
                     .accountNotLocked(true)
@@ -95,7 +95,7 @@ public class RegistrationService {
         String resetCode = RandomStringUtils.randomAlphanumeric(30);
         LocalDateTime resetCodeExpirationTime = LocalDateTime.now().plusDays(1);
 
-        int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.getEmail());
+        int result = userRepository.insertResetPasswordCode(resetCode, resetCodeExpirationTime, request.email());
 
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
@@ -108,13 +108,13 @@ public class RegistrationService {
     @Transactional
     public int changeUserPassword(NewPasswordRequest request) {
 
-        if (!request.getPassword().equals(request.getPasswordRepeat())) {
+        if (!request.password().equals(request.passwordRepeat())) {
             return 0;
         }
-        AppUser user = userRepository.findUserByResetPasswordCode(request.getResetCode())
+        AppUser user = userRepository.findUserByResetPasswordCode(request.resetCode())
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
         if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now())) {
-            return userRepository.insertNewUserPassword(passwordEncoder.encode(request.getPassword()), request.getResetCode());
+            return userRepository.insertNewUserPassword(passwordEncoder.encode(request.password()), request.resetCode());
         }
         return 0;
     }

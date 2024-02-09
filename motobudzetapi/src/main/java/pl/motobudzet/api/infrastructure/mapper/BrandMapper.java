@@ -17,8 +17,8 @@ public class BrandMapper {
 
     public static Brand mapToBrandEntity(BrandDTO brand) {
         return Brand.builder()
-                .id(brand.getId())
-                .name(brand.getName())
+                .id(brand.id())
+                .name(brand.name())
                 .build();
     }
 }
