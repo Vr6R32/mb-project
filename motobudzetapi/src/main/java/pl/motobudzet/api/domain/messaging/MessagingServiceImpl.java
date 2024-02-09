@@ -8,7 +8,7 @@ import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.dto.ConversationDTO;
 import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
-import pl.motobudzet.api.infrastructure.mailing.EmailNotificationRequest;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
@@ -79,7 +79,7 @@ class MessagingServiceImpl implements MessagingService {
 
             AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
             if (lastMessageUserName == null || !Objects.equals(lastMessageUserName, messageSenderName)) {
-                sendEmailMessageNotificationAsync(message, emailNotificationReceiver, user, conversation);
+                sendEmailMessageNotification(message, emailNotificationReceiver, user, conversation);
             }
             return "Message Sent!";
         } else {
@@ -127,11 +127,11 @@ class MessagingServiceImpl implements MessagingService {
         conversation.setLastMessage(newMessage);
     }
 
-    private void sendEmailMessageNotificationAsync(String message, AppUser emailNotificationReceiver, AppUser messageSender, Conversation conversation) {
+    private void sendEmailMessageNotification(String message, AppUser emailNotificationReceiver, AppUser messageSender, Conversation conversation) {
         EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder()
                 .message(message)
                 .senderName(messageSender.getUsername())
-                .receiverEmail(emailNotificationReceiver.getEmail())
+                .receiverEmail(List.of(emailNotificationReceiver.getEmail()))
                 .advertisementTitle(conversation.getAdvertisement().getName())
                 .build();
         mailService.sendMessageNotificationHtml(emailNotificationRequest);

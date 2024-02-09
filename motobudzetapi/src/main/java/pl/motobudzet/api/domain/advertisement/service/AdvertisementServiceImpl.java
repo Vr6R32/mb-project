@@ -10,8 +10,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper;
-import pl.motobudzet.api.infrastructure.mapper.UserMapper;
+import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.Status;
 import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.dto.AdvertisementDTO;
@@ -21,6 +21,7 @@ import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.persistance.AppUserRepository;
 
 
 import java.security.InvalidParameterException;
@@ -37,6 +38,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
     public static final Sort LAST_UPLOADED_SORT_PARAMS = Sort.by(Sort.Direction.DESC, "createDate");
 
     private final AdvertisementRepository advertisementRepository;
+    private final AppUserRepository userRepository;
     private final EmailManagerFacade emailManagerFacade;
     private final FileManagerFacade fileManagerFacade;
     private final LocationFacade locationFacade;
@@ -75,7 +77,10 @@ class AdvertisementServiceImpl implements AdvertisementService {
         UUID advertisementId = advertisementRepository.saveAndFlush(advertisement).getId();
         fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
-        emailManagerFacade.sendEmailNotificationToManagement(advertisementId);
+
+
+        emailManagerFacade.sendEmailNotificationToManagement(buildEmailNotificationRequest(advertisementId));
+
         return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").body("inserted !");
     }
 
@@ -96,7 +101,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
 
             String redirectUrl = "/advertisement?id=" + advertisementId;
 
-            emailManagerFacade.sendEmailNotificationToManagement(advertisementId);
+            emailManagerFacade.sendEmailNotificationToManagement(buildEmailNotificationRequest(advertisementId));
             return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
         }
         return ResponseEntity.badRequest().body("not inserted");
@@ -114,10 +119,19 @@ class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public String verifyAndEnableAdvertisement(UUID id) {
         Advertisement advertisement = getAdvertisement(id);
-        AppUser advertisementOwner = advertisement.getUser();
+        AppUser userOwner = advertisement.getUser();
         advertisement.setStatus(Status.ACTIVE);
         advertisementRepository.save(advertisement);
-        emailManagerFacade.sendAdvertisementActivationConfirmNotification(UserMapper.mapUserEntityToDTO(advertisementOwner), AdvertisementMapper.mapToAdvertisementDTO(advertisement,false));
+
+        EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder()
+                .userName(userOwner.getUsername())
+                .advertisementBrand(advertisement.getBrand().getName())
+                .advertisementModel(advertisement.getModel().getName())
+                .advertisementId(advertisement.getId())
+                .receiverEmail(List.of(userOwner.getEmail()))
+                .build();
+
+        emailManagerFacade.sendAdvertisementActivationConfirmNotification(emailNotificationRequest);
         return "verified !";
     }
 
@@ -146,6 +160,12 @@ class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public int rejectAdvertisement(UUID id) {
         return advertisementRepository.updateAdvertisementIsRejected(id);
+    }
+
+
+    private EmailNotificationRequest buildEmailNotificationRequest(UUID advertisementId) {
+        List<String> managementEmails = userRepository.findAllManagementEmails(Role.ROLE_ADMIN);
+        return EmailNotificationRequest.builder().receiverEmail(managementEmails).advertisementId(advertisementId).build();
     }
 
 }

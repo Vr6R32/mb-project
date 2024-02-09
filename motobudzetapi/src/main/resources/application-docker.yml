@@ -1,11 +1,7 @@
 spring:
   application:
     name: mb-api
-  zipkin:
-    baseUrl: http://zipkin:9411
-  sleuth:
-    sampler:
-      probability: 1.0
+
   mail:
     host: serwer2379308.home.pl
     port: 587
@@ -22,6 +18,7 @@ spring:
             connection-timeout: 5000
             timeout: 3000
             write timeout: 5000
+
   datasource:
     hikari:
       max-lifetime: 600000
@@ -32,6 +29,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 25MB
+
   jpa:
     properties:
       hibernate:
@@ -41,20 +39,23 @@ spring:
         hbm2ddl:
           auto: none
   #          auto: create-drop
+
   banner:
     location: classpath:banner.txt
+
   liquibase:
     enabled: true
     drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 
 management:
-  metrics:
-    tags:
-      application: mb-api
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
+  observations:
+    key-values:
+      application: mailing-service
+
   endpoints:
     web:
       exposure:
@@ -87,8 +88,6 @@ server:
 #    key-alias: spring-boot
 
 
-
-
 application:
   security:
     jwt:
@@ -110,8 +109,3 @@ paths:
 email-service:
   url: https://localhost
   email-address: info@motobudzet.pl
-
-mailing:
-  module:
-    enabled: false
-

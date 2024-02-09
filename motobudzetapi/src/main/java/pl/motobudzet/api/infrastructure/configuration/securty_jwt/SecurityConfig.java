@@ -95,7 +95,7 @@ public class SecurityConfig {
             "/api/user/forgot",
             "/api/static/**",
             "/api/v1/clone/**",
-            "/api/user/resetPasswordCode",
+            "/api/user/resetCode",
             "/api/user/register",
             "/api/user/confirm",
             "/api/user/resetPassword",

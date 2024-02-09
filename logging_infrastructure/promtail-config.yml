@@ -16,3 +16,10 @@ scrape_configs:
         labels:
           job: 'mb-api'
           __path__: '/var/log/spring/mb-api.*.log'
+
+  - job_name: 'mailing-service'
+    static_configs:
+      - targets: ['localhost']
+        labels:
+          job: 'mailing-service'
+          __path__: '/var/log/spring/mailing-service.*.log'

@@ -3,8 +3,8 @@ version: '3'
 services:
 
 
-# openssl pkcs12 -in keystore.p12 -nokeys -out certificate.crt -nodes
-# openssl pkcs12 -in keystore.p12 -nocerts -out private.key -nodes
+  # openssl pkcs12 -in keystore.p12 -nokeys -out certificate.crt -nodes
+  # openssl pkcs12 -in keystore.p12 -nocerts -out private.key -nodes
   nginx:
     image: nginx:latest
     ports:
@@ -20,7 +20,6 @@ services:
       - mb-api
 
   mb-api:
-    build: .
     container_name: mb-api
     image: michaelkey/mb-api:0.0.1-SNAPSHOT
     ports:
@@ -36,8 +35,25 @@ services:
     depends_on:
       - postgres
     networks:
+      - kafka-network
       - logging
       - postgres
+    restart: unless-stopped
+
+
+  mailing-service:
+    container_name: mailing-service
+    image: michaelkey/mailing-service:0.0.1-SNAPSHOT
+    ports:
+      - "20135:20135"
+    volumes:
+      - api-logs:/var/log/spring
+    environment:
+      SERVER_PORT: 20135
+      TZ: Europe/Warsaw
+    networks:
+      - kafka-network
+      - logging
     restart: unless-stopped
 
   postgres:
@@ -120,8 +136,8 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:latest
-#    ports:
-#      - "3100:3100"
+    #    ports:
+    #      - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - logging
@@ -166,7 +182,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins/jenkins.yml:/var/jenkins_home/casc_configs/jenkins.yml:ro
       - ./jenkins/plugins.txt:/usr/share/jenkins/ref/plugins.txt
-      - ./db-init/db-init.sql:/var/jenkins_home/mb/db-init.sql
+#      - ./db-init/db-init.sql:/var/jenkins_home/mb/db-init.sql
       - api-logs:/var/log/spring
     environment:
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
@@ -174,6 +190,65 @@ services:
     command: >
       sh -c "jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt && exec /usr/local/bin/jenkins.sh"
     restart: unless-stopped
+
+
+  kafka-broker:
+    container_name: kafka-broker
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    user: "0:0"
+    hostname: kafka-broker
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_COMPRESSION_TYPE: producer
+    networks:
+      - kafka-network
+
+  zookeeper:
+    container_name: kafka-zookeeper
+    image: confluentinc/cp-zookeeper:${KAFKA_VERSION}
+    user: "0:0"
+    hostname: kafka-zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: 'kafka-zookeeper:2888:3888'
+    networks:
+     - kafka-network
+
+  init-kafka:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    entrypoint: [ '/bin/sh', '-c' ]
+    depends_on:
+      - zookeeper
+      - kafka-broker
+    command: |
+      "
+      # waiting for kafka will be ready
+      kafka-topics --bootstrap-server kafka-broker:9092 --list
+      
+      echo -e 'Creating topic mailing-service'
+      kafka-topics --bootstrap-server kafka-broker:9092 --create --if-not-exists --topic mailing-service --replication-factor 1 --partitions 1
+      
+      echo -e 'Created topics:'
+      kafka-topics --bootstrap-server kafka-broker:9092 --list
+      "
+    networks:
+      - kafka-network
+
 
 volumes:
   api-logs:
@@ -191,5 +266,7 @@ networks:
   postgres:
     driver: bridge
   logging:
+    driver: bridge
+  kafka-network:
     driver: bridge
 

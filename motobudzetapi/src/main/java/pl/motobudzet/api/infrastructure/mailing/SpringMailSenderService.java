@@ -7,13 +7,10 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.domain.user.dto.AppUserDTO;
-import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.infrastructure.configuration.PathsConfig;
-import pl.motobudzet.api.domain.user.service.UserDetailsService;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 
 import java.io.File;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +20,6 @@ class SpringMailSenderService {
 
     private final JavaMailSender mailSender;
     private final PathsConfig pathsConfig;
-    private final UserDetailsService userDetailsService;
 
     private static final String NEW_CONVERSATION_MESSAGE_TITLE = "Dostałeś nową wiadomość ";
     private static final String REGISTRATION_ACTIVATION_TITLE = "Link aktywacyjny";
@@ -34,28 +30,27 @@ class SpringMailSenderService {
 
 
     public void sendMessageNotificationHtml(EmailNotificationRequest request) {
-        sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.receiverEmail());
+        sendEmail(NEW_CONVERSATION_MESSAGE_TITLE, createHtmlStringMessageNotification(request), request.receiverEmail().get(0));
     }
 
 
-    public void sendRegisterActivationNotificationHtml(AppUserDTO user) {
-        sendEmail(REGISTRATION_ACTIVATION_TITLE, createHtmlStringRegisterActivation(user), user.email());
+    public void sendRegisterActivationNotificationHtml(EmailNotificationRequest request) {
+        sendEmail(REGISTRATION_ACTIVATION_TITLE, createHtmlStringRegisterActivation(request), request.receiverEmail().get(0));
     }
 
 
-    public void sendResetPasswordNotificationCodeLink(AppUserDTO user) {
-        sendEmail(RESET_PASSWORD_TITLE, createHtmlStringResetPassword(user), user.email());
+    public void sendResetPasswordNotificationCodeLink(EmailNotificationRequest request) {
+        sendEmail(RESET_PASSWORD_TITLE, createHtmlStringResetPassword(request), request.receiverEmail().get(0));
     }
 
 
-    public void sendAdvertisementActivationConfirmNotification(AppUserDTO user, AdvertisementDTO advertisement) {
-        sendEmail(ADVERTISEMENT_ACTIVATION_TITLE, createHtmlStringActivationConfirmation(user, advertisement), user.email());
+    public void sendAdvertisementActivationConfirmNotification(EmailNotificationRequest request) {
+        sendEmail(ADVERTISEMENT_ACTIVATION_TITLE, createHtmlStringActivationConfirmation(request), request.receiverEmail().get(0));
     }
 
 
-    public void sendEmailNotificationToManagement(UUID id) {
-        String[] receiverArray = userDetailsService.findManagementEmails().toArray(new String[0]);
-        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(id), receiverArray);
+    public void sendEmailNotificationToManagement(EmailNotificationRequest request) {
+        sendEmail(ADVERTISEMENT_TO_ACTIVATE, createHtmlNewAdvertisementToActivate(request), request.receiverEmail().toArray(new String[0]));
     }
 
 
@@ -100,28 +95,28 @@ class SpringMailSenderService {
                 "</center>";
     }
 
-    private String createHtmlStringRegisterActivation(AppUserDTO user) {
+    private String createHtmlStringRegisterActivation(EmailNotificationRequest request) {
         return "<center>" +
                 "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
-                "<b><font color='moccasin' size='+3'>" + "Witaj " + user.userName() + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "Witaj " + request.userName() + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Twój link aktywacyjny :</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/api/user/confirm?activationCode=" + user.registerCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/api/user/confirm?activationCode=" + request.userRegisterCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby aktywowac swoje konto oraz dokończyć rejerstracje" + "</font>" +
                 "</td></tr></table>" +
                 "</center>";
     }
 
-    private String createHtmlStringResetPassword(AppUserDTO user) {
+    private String createHtmlStringResetPassword(EmailNotificationRequest request) {
         return "<center>" +
                 "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
-                "<b><font color='moccasin' size='+3'>" + "Witaj " + user.userName() + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "Witaj " + request.userName() + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Twój link resetujący hasło :</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/reset?code=" + user.resetPasswordCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + "/reset?code=" + request.userResetPasswordCode() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby zresetować swoje hasło." + "</font><br>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Jeśli nie prosiłeś o zmianę hasła, zignoruj tą wiadomość." + "</font>" +
@@ -129,29 +124,29 @@ class SpringMailSenderService {
                 "</center>";
     }
 
-    private String createHtmlStringActivationConfirmation(AppUserDTO user, AdvertisementDTO advertisement) {
+    private String createHtmlStringActivationConfirmation(EmailNotificationRequest request) {
         return "<center>" +
                 "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
-                "<b><font color='moccasin' size='+3'>" + "Witaj " + user.userName() + "</font></b><br>" +
-                "<font color='darkgoldenrod'>Twoje ogłoszenie <br>" + advertisement.brand().name() + advertisement.model().name() + "<br>"
-                + advertisement.name() + "<br> jest już widoczne !</font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + advertisement.id() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "Witaj " + request.userName() + "</font></b><br>" +
+                "<font color='darkgoldenrod'>Twoje ogłoszenie <br>" + request.advertisementBrand() + request.advertisementModel() + "<br>"
+                + request.advertisementTitle() + "<br> jest już widoczne !</font><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + request.advertisementId() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby przejść do swojego ogłoszenia." + "</font>" +
                 "</td></tr></table>" +
                 "</center>";
     }
 
-    private String createHtmlNewAdvertisementToActivate(UUID id) {
+    private String createHtmlNewAdvertisementToActivate(EmailNotificationRequest request) {
         return "<center>" +
                 "<table width='100%' style='text-align: center; padding: 20px; background-image: url(" + BACKGROUND_IMAGE_URL + "); background-size: cover;'>" +
                 "<tr><td>" +
                 "<img src='cid:image001'/><br>" +
                 "<b><font color='moccasin' size='+3'>" + "Witaj, pojawilo sie nowe ogłoszenie do aktywacji. " + "</font></b><br>" +
                 "<font color='darkgoldenrod'>Wykonaj proszę weryfikacje ogłoszenia. <br>" + "<br></font><br>" +
-                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + id + "'>Kliknij tutaj</a>" + "</font></b><br>" +
+                "<b><font color='moccasin' size='+3'>" + "<a href='" + pathsConfig.getSiteUrlPath() + ADVERTISEMENT_URL_LINK + request.advertisementId() + "'>Kliknij tutaj</a>" + "</font></b><br>" +
                 "<hr>" +
                 "<font color='darkgoldenrod' size='+2'>" + "Kliknij aby przejść do ogłoszenia." + "</font>" +
                 "</td></tr></table>" +

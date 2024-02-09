@@ -30,7 +30,7 @@ function createForgotPasswordLink() {
         forgotPasswordLink.style.color = "darkgoldenrod";
     });
 
-    forgotPasswordLink.addEventListener("click", createForgotPasswordForm);
+    forgotPasswordLink.addEventListener("click", createForgotPasswordFormEmail);
     return forgotPasswordLink;
 }
 

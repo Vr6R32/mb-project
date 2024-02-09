@@ -1,11 +1,7 @@
 spring:
   application:
     name: mb-api
-  zipkin:
-    baseUrl: http://zipkin:9411
-  sleuth:
-    sampler:
-      probability: 1.0
+
   mail:
     host: serwer2379308.home.pl
     port: 587
@@ -47,17 +43,19 @@ spring:
 #          auto: create-drop
   banner:
     location: classpath:banner.txt
+
   liquibase:
     enabled: true
-    drop-first: false
+    drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.xml
+
 management:
-  metrics:
-    tags:
-      application: mb-api
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
+  observations:
+    key-values:
+      application: mailing-service
   endpoints:
     web:
       exposure:
@@ -69,7 +67,6 @@ management:
     shutdown:
       enabled: true
   prometheus:
-
     metrics:
       export:
         enabled: true
@@ -112,8 +109,3 @@ paths:
 email-service:
   url: http://localhost:20134
   email-address: info@motobudzet.pl
-
-mailing:
-    module:
-      enabled: false
-

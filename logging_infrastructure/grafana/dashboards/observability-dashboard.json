@@ -468,13 +468,13 @@
             "uid": "cde9d699-3d9c-4b21-bde6-c29b58402ec6"
           },
           "editorMode": "code",
-          "expr": "{job=\"mb-api\"}",
+          "expr": "{job=\"${app_name}\"}",
           "hide": false,
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Log of All Spring Boot Apps",
+      "title": "Actual service logs",
       "type": "logs"
     },
     {

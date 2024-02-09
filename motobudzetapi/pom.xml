@@ -34,7 +34,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!--@@@@@@@@@@@@@@@@@@@@@@@@@ TRACING & LOGGING @@@@@@@@@@@@@@@@@@@@@@@@@@-->
 
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+            <version>1.2.1</version>
+        </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -50,6 +56,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--@@@@@@@@@@@@@@@@@@@@@@@@@ END TRACING & LOGGING @@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>org.sejda.imageio</groupId>
@@ -127,9 +140,7 @@
         </dependency>
 
 
-
-
-
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@ TEST DEPENDENCIES @@@@@@@@@@@@@@@@@@@@@@@@@@-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
@@ -154,6 +165,7 @@
             <version>${mockito-core.version}</version>
             <scope>test</scope>
         </dependency>
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@ END TEST DEPENDENCIES @@@@@@@@@@@@@@@@@@@@@@@@@@-->
 
 
 

@@ -177,7 +177,7 @@ function clearForm() {
     });
 }
 
-function createForgotPasswordForm()  {
+function createForgotPasswordFormEmail()  {
     const addEnterKeyListener = (element)=> {
         element.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !document.getElementById('overlayId')) {
@@ -231,6 +231,8 @@ function createForgotPasswordForm()  {
     submitButtonDiv.style.justifyContent = 'center';
 
     const submitButton = createSubmitButton("Wyślij");
+    submitButton.onclick = submitForm;
+    submitButton.type = "button";
     const registerLink = createRegisterLinkDiv();
     const loginLink = createLoginLinkDiv();
 

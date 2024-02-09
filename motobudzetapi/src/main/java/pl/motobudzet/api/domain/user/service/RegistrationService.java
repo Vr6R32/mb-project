@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
-import pl.motobudzet.api.infrastructure.mapper.UserMapper;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
@@ -23,6 +23,7 @@ import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static pl.motobudzet.api.infrastructure.configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
 
@@ -45,6 +46,7 @@ public class RegistrationService {
         } else {
 
             String code = RandomStringUtils.randomAlphanumeric(30, 30);
+
             AppUser newUser = AppUser.builder()
                     .userName(request.userName())
                     .password(passwordEncoder.encode(request.password()))
@@ -56,8 +58,9 @@ public class RegistrationService {
                     .credentialsNotExpired(true)
                     .role(Role.ROLE_AWAITING_DETAILS)
                     .build();
-            userRepository.saveAndFlush(newUser);
-            mailService.sendRegisterActivationNotificationHtml(UserMapper.mapUserEntityToDTO(newUser));
+            userRepository.save(newUser);
+
+            mailService.sendRegisterActivationNotificationHtml(buildEmailNotificationRequest(newUser));
 
             return ResponseEntity.ok()
                     .headers(httpHeaders -> {
@@ -66,6 +69,14 @@ public class RegistrationService {
                     .contentType(MediaType.TEXT_HTML)
                     .body("Zarejerstrowano pomyślnie !" + "Na podany adres e-mail przyjdzie link aktywacyjny.");
         }
+    }
+
+    private EmailNotificationRequest buildEmailNotificationRequest(AppUser newUser) {
+        return EmailNotificationRequest.builder()
+                .userName(newUser.getUsername())
+                .userRegisterCode(newUser.getRegisterCode())
+                .receiverEmail(List.of(newUser.getEmail()))
+                .build();
     }
 
     public void confirmEmail(String registrationCode, HttpServletResponse response, HttpServletRequest request) {
@@ -101,7 +112,7 @@ public class RegistrationService {
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
 
-        mailService.sendResetPasswordNotificationCodeLink(UserMapper.mapUserEntityToDTO(user));
+        mailService.sendResetPasswordNotificationCodeLink(EmailNotificationRequest.builder().userName(user.getUsername()).userResetPasswordCode(user.getResetPasswordCode()).receiverEmail(List.of(user.getEmail())).build());
 
         return result;
     }

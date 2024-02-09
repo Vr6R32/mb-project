@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
-import pl.motobudzet.api.infrastructure.mapper.UserMapper;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
@@ -24,6 +24,7 @@ import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,11 +71,15 @@ class RegistrationServiceTest {
         //when
         registrationService.register(request);
         //then
-        then(userRepository).should().saveAndFlush(appUserArgumentCaptor.capture());
+        then(userRepository).should().save(appUserArgumentCaptor.capture());
 
         AppUser savedUser = appUserArgumentCaptor.getValue();
 
-        verify(mailService, times(1)).sendRegisterActivationNotificationHtml(UserMapper.mapUserEntityToDTO(savedUser));
+        EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder().userName(savedUser.getUsername()).userRegisterCode(savedUser.getRegisterCode()).receiverEmail(List.of(savedUser.getEmail())).build();
+
+
+        verify(mailService, times(1)).sendRegisterActivationNotificationHtml(emailNotificationRequest);
+
 
         assertThat(savedUser)
                 .hasFieldOrPropertyWithValue("userName", "mockeymock")
@@ -193,7 +198,7 @@ class RegistrationServiceTest {
 
         assertThat(resetCodeValue).hasSize(30);
         assertThat(codeDateValidUntil).isEqualTo(expectedDateTime);
-        verify(mailService).sendResetPasswordNotificationCodeLink(UserMapper.mapUserEntityToDTO(mockUser));
+        verify(mailService).sendResetPasswordNotificationCodeLink(EmailNotificationRequest.builder().receiverEmail(List.of(email)).build());
 
     }
 

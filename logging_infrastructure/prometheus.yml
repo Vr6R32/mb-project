@@ -9,13 +9,14 @@ scrape_configs:
       - targets: ['mb-api:20134']
         labels:
           application: 'mb-api'
-#          bearer_token_file: '/path/to/token/file'
-#        headers:
-#          prometheus-service: 'prometheus9090auth'
     authorization:
       type: Bearer
       credentials: 'Bearer prometheus9090auth'
-#    tls_config:
-#      cert_file: /etc/prometheus/motobudzet.pl.intermediate.pem
-#      key_file: /etc/prometheus/motobudzet.pl.key
-#      insecure_skip_verify: false
+
+  - job_name: 'mailing-service'
+    scheme: http
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['mailing-service:20135']
+        labels:
+          application: 'mailing-service'

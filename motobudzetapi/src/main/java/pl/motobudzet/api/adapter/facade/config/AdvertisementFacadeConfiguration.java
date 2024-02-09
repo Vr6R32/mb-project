@@ -11,12 +11,14 @@ import pl.motobudzet.api.domain.advertisement.service.*;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
 import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.persistance.AppUserRepository;
 
 @Configuration
 @AllArgsConstructor
 class AdvertisementFacadeConfiguration {
 
     private final AdvertisementRepository advertisementRepository;
+    private final AppUserRepository userRepository;
     private final EmailManagerFacade emailManagerFacade;
     private final FileManagerFacade fileManagerFacade;
     private final LocationFacade locationFacade;
@@ -27,7 +29,7 @@ class AdvertisementFacadeConfiguration {
     public AdvertisementFacade advertisementFacade() {
 
         AdvertisementService advertisementService =
-                FactoryAdvertisementService.createService(advertisementRepository,emailManagerFacade,fileManagerFacade,locationFacade);
+                FactoryAdvertisementService.createService(advertisementRepository,userRepository,emailManagerFacade,fileManagerFacade,locationFacade);
 
         AdvertisementFilteringService advertisementFilteringService =
                 FactoryAdvertisementService.createFilteringService(advertisementRepository,brandFacade,modelFacade,locationFacade);
