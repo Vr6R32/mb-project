@@ -2,8 +2,8 @@ package pl.motobudzet.api.adapter.facade;
 
 import lombok.AllArgsConstructor;
 import pl.motobudzet.api.domain.brand.Brand;
-import pl.motobudzet.api.domain.brand.BrandDTO;
 import pl.motobudzet.api.domain.brand.BrandService;
+import pl.motobudzet.api.dto.BrandDTO;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package pl.motobudzet.api.adapter.rest;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import pl.motobudzet.api.domain.brand.BrandDTO;
+import pl.motobudzet.api.dto.BrandDTO;
 import pl.motobudzet.api.adapter.facade.BrandFacade;
 
 import java.util.List;

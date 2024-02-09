@@ -3,10 +3,10 @@ package pl.motobudzet.api.adapter.rest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.motobudzet.api.domain.advertisement.model.DriveType;
-import pl.motobudzet.api.domain.advertisement.model.EngineType;
-import pl.motobudzet.api.domain.advertisement.model.FuelType;
-import pl.motobudzet.api.domain.advertisement.model.TransmissionType;
+import pl.motobudzet.api.model.DriveType;
+import pl.motobudzet.api.model.EngineType;
+import pl.motobudzet.api.model.FuelType;
+import pl.motobudzet.api.model.TransmissionType;
 
 import java.util.Arrays;
 import java.util.List;

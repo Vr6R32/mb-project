@@ -1,4 +1,4 @@
-package pl.motobudzet.api.domain.location;
+package pl.motobudzet.api.dto;
 
 import lombok.Builder;
 

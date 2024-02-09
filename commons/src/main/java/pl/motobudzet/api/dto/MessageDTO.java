@@ -1,4 +1,4 @@
-package pl.motobudzet.api.domain.messaging;
+package pl.motobudzet.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

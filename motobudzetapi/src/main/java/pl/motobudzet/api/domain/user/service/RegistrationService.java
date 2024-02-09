@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
+import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
@@ -56,7 +57,7 @@ public class RegistrationService {
                     .role(Role.ROLE_AWAITING_DETAILS)
                     .build();
             userRepository.saveAndFlush(newUser);
-            mailService.sendRegisterActivationNotificationHtml(newUser);
+            mailService.sendRegisterActivationNotificationHtml(UserMapper.mapUserEntityToDTO(newUser));
 
             return ResponseEntity.ok()
                     .headers(httpHeaders -> {
@@ -100,7 +101,7 @@ public class RegistrationService {
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
 
-        mailService.sendResetPasswordNotificationCodeLink(user);
+        mailService.sendResetPasswordNotificationCodeLink(UserMapper.mapUserEntityToDTO(user));
 
         return result;
     }

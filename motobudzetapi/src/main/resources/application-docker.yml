@@ -87,6 +87,8 @@ server:
 #    key-alias: spring-boot
 
 
+
+
 application:
   security:
     jwt:

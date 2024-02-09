@@ -1,6 +1,8 @@
 package pl.motobudzet.api.domain.location;
 
 import lombok.AllArgsConstructor;
+import pl.motobudzet.api.dto.CityDTO;
+import pl.motobudzet.api.dto.CityStateDTO;
 import pl.motobudzet.api.infrastructure.mapper.CityMapper;
 import pl.motobudzet.api.infrastructure.mapper.CityStateMapper;
 import pl.motobudzet.api.persistance.CityRepository;

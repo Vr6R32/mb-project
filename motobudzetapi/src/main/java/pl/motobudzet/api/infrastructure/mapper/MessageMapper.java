@@ -1,7 +1,7 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
 import pl.motobudzet.api.domain.messaging.Message;
-import pl.motobudzet.api.domain.messaging.MessageDTO;
+import pl.motobudzet.api.dto.MessageDTO;
 
 import java.time.LocalDateTime;
 

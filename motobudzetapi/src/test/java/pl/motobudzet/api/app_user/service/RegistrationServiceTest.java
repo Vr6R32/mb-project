@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
@@ -73,7 +74,7 @@ class RegistrationServiceTest {
 
         AppUser savedUser = appUserArgumentCaptor.getValue();
 
-        verify(mailService, times(1)).sendRegisterActivationNotificationHtml(savedUser);
+        verify(mailService, times(1)).sendRegisterActivationNotificationHtml(UserMapper.mapUserEntityToDTO(savedUser));
 
         assertThat(savedUser)
                 .hasFieldOrPropertyWithValue("userName", "mockeymock")
@@ -192,7 +193,7 @@ class RegistrationServiceTest {
 
         assertThat(resetCodeValue).hasSize(30);
         assertThat(codeDateValidUntil).isEqualTo(expectedDateTime);
-        verify(mailService).sendResetPasswordNotificationCodeLink(mockUser);
+        verify(mailService).sendResetPasswordNotificationCodeLink(UserMapper.mapUserEntityToDTO(mockUser));
 
     }
 

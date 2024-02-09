@@ -22,8 +22,6 @@ spring:
             connection-timeout: 5000
             timeout: 3000
             write timeout: 5000
-  kafka:
-    bootstrap-servers: localhost:9092
   datasource:
 #    url: jdbc:postgresql://serwer2379308.home.pl/37515270_motobudzet69
 #    username: 37515270_motobudzet69

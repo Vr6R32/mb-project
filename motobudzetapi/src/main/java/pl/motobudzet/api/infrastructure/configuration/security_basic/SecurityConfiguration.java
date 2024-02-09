@@ -73,7 +73,7 @@
 //                                .requestMatchers("/api/v1/clone/**").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/api/user/confirm").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/api/user/resetCode").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/api/user/resetPasswordCode").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/api/user/resetPassword").permitAll()
 //

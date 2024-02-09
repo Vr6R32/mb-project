@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementFilterRequest;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementFilterRequest;
 
 @RestController
 @RequestMapping(value = "api/advertisements/filter")

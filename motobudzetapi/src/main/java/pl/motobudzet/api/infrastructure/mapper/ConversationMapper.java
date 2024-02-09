@@ -1,8 +1,8 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
 import pl.motobudzet.api.domain.messaging.Conversation;
-import pl.motobudzet.api.domain.messaging.ConversationDTO;
 import pl.motobudzet.api.domain.messaging.Message;
+import pl.motobudzet.api.dto.ConversationDTO;
 
 import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.mapToAdvertisementDTO;
 

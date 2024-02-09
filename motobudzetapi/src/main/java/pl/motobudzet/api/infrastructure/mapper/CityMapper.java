@@ -1,7 +1,8 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
 import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.domain.location.CityDTO;
+import pl.motobudzet.api.dto.CityDTO;
+
 
 public class CityMapper {
 

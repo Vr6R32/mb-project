@@ -2,8 +2,8 @@ package pl.motobudzet.api.adapter.facade;
 
 import lombok.AllArgsConstructor;
 import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.domain.location.CityDTO;
-import pl.motobudzet.api.domain.location.CityStateDTO;
+import pl.motobudzet.api.dto.CityDTO;
+import pl.motobudzet.api.dto.CityStateDTO;
 import pl.motobudzet.api.domain.location.LocationService;
 
 import java.util.List;

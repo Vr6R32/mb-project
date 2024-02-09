@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.adapter.facade.FavouriteFacade;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.favourites.FavouriteRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 

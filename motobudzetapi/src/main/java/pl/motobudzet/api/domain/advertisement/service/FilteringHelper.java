@@ -4,8 +4,8 @@ import jakarta.persistence.criteria.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementFilterRequest;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementFilterRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 
 import java.lang.reflect.Field;

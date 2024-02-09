@@ -1,7 +1,7 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
 import pl.motobudzet.api.domain.brand.Brand;
-import pl.motobudzet.api.domain.brand.BrandDTO;
+import pl.motobudzet.api.dto.BrandDTO;
 
 public class BrandMapper {
 

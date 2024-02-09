@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.dto.ConversationDTO;
+import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
-import pl.motobudzet.api.infrastructure.mailing.EmailMessageRequest;
+import pl.motobudzet.api.infrastructure.mailing.EmailNotificationRequest;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
@@ -126,14 +128,13 @@ class MessagingServiceImpl implements MessagingService {
     }
 
     private void sendEmailMessageNotificationAsync(String message, AppUser emailNotificationReceiver, AppUser messageSender, Conversation conversation) {
-        EmailMessageRequest emailMessageRequest = EmailMessageRequest.builder()
+        EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder()
                 .message(message)
                 .senderName(messageSender.getUsername())
                 .receiverEmail(emailNotificationReceiver.getEmail())
                 .advertisementTitle(conversation.getAdvertisement().getName())
-                .advertisementId(String.valueOf(conversation.getAdvertisement().getId()))
                 .build();
-        mailService.sendMessageNotificationHtml(emailMessageRequest);
+        mailService.sendMessageNotificationHtml(emailNotificationRequest);
     }
 
 

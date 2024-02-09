@@ -1,4 +1,4 @@
-package pl.motobudzet.api.domain.advertisement.model;
+package pl.motobudzet.api.model;
 
 public enum Status {
     VERIFIED,

@@ -1,6 +1,6 @@
-package pl.motobudzet.api.domain.brand;
+package pl.motobudzet.api.dto;
 
-import lombok.*;
+import lombok.Builder;
 
 @Builder
 public record BrandDTO(Long id, String name) {

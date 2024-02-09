@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementFilterRequest;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementFilterRequest;
+import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 
 import pl.motobudzet.api.domain.advertisement.service.AdvertisementFilteringService;

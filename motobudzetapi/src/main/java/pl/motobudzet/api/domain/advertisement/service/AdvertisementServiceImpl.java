@@ -9,11 +9,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.advertisement.model.Status;
+import pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper;
+import pl.motobudzet.api.infrastructure.mapper.UserMapper;
+import pl.motobudzet.api.model.Status;
 import pl.motobudzet.api.domain.location.City;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
@@ -115,7 +117,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
         AppUser advertisementOwner = advertisement.getUser();
         advertisement.setStatus(Status.ACTIVE);
         advertisementRepository.save(advertisement);
-        emailManagerFacade.sendAdvertisementActivationConfirmNotification(advertisementOwner, advertisement);
+        emailManagerFacade.sendAdvertisementActivationConfirmNotification(UserMapper.mapUserEntityToDTO(advertisementOwner), AdvertisementMapper.mapToAdvertisementDTO(advertisement,false));
         return "verified !";
     }
 

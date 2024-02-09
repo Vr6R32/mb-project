@@ -1,10 +1,18 @@
 package pl.motobudzet.api.domain.user.dto;
 
-
 import lombok.Builder;
-import pl.motobudzet.api.domain.location.CityDTO;
+import pl.motobudzet.api.dto.CityDTO;
 
 @Builder
-public record AppUserDTO(String name,CityDTO city) {
-
+public record AppUserDTO(
+        Long id,
+        String userName,
+        String email,
+        String registerCode,
+        String resetPasswordCode,
+        String name,
+        String surname,
+        String phoneNumber,
+        CityDTO city
+) {
 }

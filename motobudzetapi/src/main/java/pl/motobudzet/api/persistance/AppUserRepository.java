@@ -20,7 +20,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "left join fetch a.city c " +
             "left join fetch c.cityState cs " +
             "where a.userName = ?1")
-    Optional<AppUser> findByUserNameWithRelationEntities(String userName);
+    Optional<AppUser> findUserDetailsByName(String userName);
 
     @Modifying
     @Query("UPDATE AppUser a SET a.resetPasswordCode = ?1, a.resetPasswordCodeExpiration = ?2 WHERE a.email = ?3")

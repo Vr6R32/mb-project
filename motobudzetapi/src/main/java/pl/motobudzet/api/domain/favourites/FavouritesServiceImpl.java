@@ -1,7 +1,7 @@
 package pl.motobudzet.api.domain.favourites;
 
 import lombok.RequiredArgsConstructor;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.persistance.FavouritesRepository;

@@ -1,8 +1,7 @@
-package pl.motobudzet.api.domain.messaging;
+package pl.motobudzet.api.dto;
 
 
 import lombok.Builder;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
 
 
 @Builder

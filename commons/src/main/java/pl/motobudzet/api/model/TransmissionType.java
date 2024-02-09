@@ -1,18 +1,16 @@
-package pl.motobudzet.api.domain.advertisement.model;
+package pl.motobudzet.api.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FuelType {
-    LPG("LPG"),
-    PB("PB"),
-    ON("ON"),
-    EV("EV"),
-    PHEV("PHEV");
+
+public enum TransmissionType {
+    MANUAL("MANUAL"),
+    AUTOMAT("AUTOMAT");
 
     @JsonValue
     private final String name;
 
-    FuelType(String name) {
+    TransmissionType(String name) {
         this.name = name;
     }
 

@@ -2,7 +2,7 @@ package pl.motobudzet.api.adapter.facade;
 
 import lombok.AllArgsConstructor;
 import pl.motobudzet.api.domain.model.Model;
-import pl.motobudzet.api.domain.model.ModelDTO;
+import pl.motobudzet.api.dto.ModelDTO;
 import pl.motobudzet.api.domain.model.ModelService;
 
 import java.util.List;

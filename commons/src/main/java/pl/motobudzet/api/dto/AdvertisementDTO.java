@@ -1,10 +1,8 @@
-package pl.motobudzet.api.domain.advertisement.dto;
+package pl.motobudzet.api.dto;
 
 import lombok.*;
-import pl.motobudzet.api.domain.advertisement.model.*;
-import pl.motobudzet.api.domain.brand.BrandDTO;
-import pl.motobudzet.api.domain.location.CityDTO;
-import pl.motobudzet.api.domain.model.ModelDTO;
+import pl.motobudzet.api.model.*;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,7 +1,8 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
+
 import pl.motobudzet.api.domain.model.Model;
-import pl.motobudzet.api.domain.model.ModelDTO;
+import pl.motobudzet.api.dto.ModelDTO;
 
 public class ModelMapper {
 

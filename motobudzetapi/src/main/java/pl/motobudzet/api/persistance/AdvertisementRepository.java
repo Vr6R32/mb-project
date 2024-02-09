@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.advertisement.model.Status;
+import pl.motobudzet.api.model.Status;
 import pl.motobudzet.api.infrastructure.thymeleaf.MetaDataDTO;
 
 import java.util.List;

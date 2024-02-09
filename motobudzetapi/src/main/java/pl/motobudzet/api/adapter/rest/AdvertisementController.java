@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 
 import java.util.List;

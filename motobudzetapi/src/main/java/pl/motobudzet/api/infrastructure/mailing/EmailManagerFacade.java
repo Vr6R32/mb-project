@@ -2,8 +2,8 @@ package pl.motobudzet.api.infrastructure.mailing;
 
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
-import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.dto.AppUserDTO;
+import pl.motobudzet.api.dto.AdvertisementDTO;
 
 import java.util.UUID;
 
@@ -12,19 +12,19 @@ public class EmailManagerFacade {
 
     private final SpringMailSenderService mailSenderService;
     @Async
-    public void sendMessageNotificationHtml(EmailMessageRequest request) {
+    public void sendMessageNotificationHtml(EmailNotificationRequest request) {
         mailSenderService.sendMessageNotificationHtml(request);
     }
     @Async
-    public void sendRegisterActivationNotificationHtml(AppUser user) {
+    public void sendRegisterActivationNotificationHtml(AppUserDTO user) {
         mailSenderService.sendRegisterActivationNotificationHtml(user);
     }
     @Async
-    public void sendResetPasswordNotificationCodeLink(AppUser user) {
+    public void sendResetPasswordNotificationCodeLink(AppUserDTO user) {
         mailSenderService.sendResetPasswordNotificationCodeLink(user);
     }
     @Async
-    public void sendAdvertisementActivationConfirmNotification(AppUser user, Advertisement advertisement) {
+    public void sendAdvertisementActivationConfirmNotification(AppUserDTO user, AdvertisementDTO advertisement) {
         mailSenderService.sendAdvertisementActivationConfirmNotification(user,advertisement);
     }
     @Async

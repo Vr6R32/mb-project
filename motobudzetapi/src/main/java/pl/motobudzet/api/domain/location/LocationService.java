@@ -1,4 +1,7 @@
 package pl.motobudzet.api.domain.location;
+import pl.motobudzet.api.dto.CityDTO;
+import pl.motobudzet.api.dto.CityStateDTO;
+
 import java.util.List;
 
 

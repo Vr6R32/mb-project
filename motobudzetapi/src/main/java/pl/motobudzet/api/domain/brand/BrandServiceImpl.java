@@ -1,5 +1,6 @@
 package pl.motobudzet.api.domain.brand;
 
+import pl.motobudzet.api.dto.BrandDTO;
 import pl.motobudzet.api.infrastructure.mapper.BrandMapper;
 import pl.motobudzet.api.persistance.BrandRepository;
 

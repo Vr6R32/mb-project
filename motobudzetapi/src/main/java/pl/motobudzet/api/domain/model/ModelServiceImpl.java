@@ -1,5 +1,6 @@
 package pl.motobudzet.api.domain.model;
 
+import pl.motobudzet.api.dto.ModelDTO;
 import pl.motobudzet.api.infrastructure.mapper.ModelMapper;
 import pl.motobudzet.api.persistance.ModelRepository;
 

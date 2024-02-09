@@ -1,10 +1,10 @@
-package pl.motobudzet.api.domain.advertisement.dto;
+package pl.motobudzet.api.dto;
 
-import pl.motobudzet.api.domain.advertisement.model.DriveType;
-import pl.motobudzet.api.domain.advertisement.model.EngineType;
-import pl.motobudzet.api.domain.advertisement.model.FuelType;
-import pl.motobudzet.api.domain.advertisement.model.TransmissionType;
 
+import pl.motobudzet.api.model.DriveType;
+import pl.motobudzet.api.model.EngineType;
+import pl.motobudzet.api.model.FuelType;
+import pl.motobudzet.api.model.TransmissionType;
 
 public record AdvertisementFilterRequest(
         Integer pageNumber,

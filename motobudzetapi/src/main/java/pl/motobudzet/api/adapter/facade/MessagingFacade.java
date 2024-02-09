@@ -1,8 +1,8 @@
 package pl.motobudzet.api.adapter.facade;
 
 import lombok.AllArgsConstructor;
-import pl.motobudzet.api.domain.messaging.ConversationDTO;
-import pl.motobudzet.api.domain.messaging.MessageDTO;
+import pl.motobudzet.api.dto.ConversationDTO;
+import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.domain.messaging.MessagingService;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 

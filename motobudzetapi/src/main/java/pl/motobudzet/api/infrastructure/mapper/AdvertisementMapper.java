@@ -1,14 +1,16 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementRequest;
+
+
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.advertisement.model.Status;
 import pl.motobudzet.api.domain.brand.Brand;
-import pl.motobudzet.api.domain.brand.BrandDTO;
 import pl.motobudzet.api.domain.model.Model;
-import pl.motobudzet.api.domain.model.ModelDTO;
 import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementRequest;
+import pl.motobudzet.api.dto.BrandDTO;
+import pl.motobudzet.api.dto.ModelDTO;
+import pl.motobudzet.api.model.Status;
 
 import java.util.ArrayList;
 import java.util.List;

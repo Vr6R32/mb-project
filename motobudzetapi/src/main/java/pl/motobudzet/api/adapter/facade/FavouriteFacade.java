@@ -2,7 +2,7 @@ package pl.motobudzet.api.adapter.facade;
 
 
 import lombok.AllArgsConstructor;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.favourites.FavouriteRequest;
 import pl.motobudzet.api.domain.favourites.FavouriteService;
 import pl.motobudzet.api.domain.user.entity.AppUser;

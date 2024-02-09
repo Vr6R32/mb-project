@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
 import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
+import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.AppUserDTO;
 import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
@@ -21,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static pl.motobudzet.api.infrastructure.configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
-import static pl.motobudzet.api.infrastructure.mapper.UserMapper.mapUserToDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +36,9 @@ public class UserDetailsService {
     }
 
     public AppUserDTO getUserDetails(String userName) {
-        AppUser user = userRepository.findByUserNameWithRelationEntities(userName).orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
-        return mapUserToDTO(user);
+        return userRepository.findUserDetailsByName(userName)
+                .map(UserMapper::mapUserEntityToDTOwithLocationDetail)
+                .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
     }
 
     @Transactional

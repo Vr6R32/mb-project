@@ -2,8 +2,8 @@ package pl.motobudzet.api.domain.advertisement.service;
 
 
 import org.springframework.data.domain.Page;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementDTO;
-import pl.motobudzet.api.domain.advertisement.dto.AdvertisementFilterRequest;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementFilterRequest;
 
 public interface AdvertisementFilteringService {
 
