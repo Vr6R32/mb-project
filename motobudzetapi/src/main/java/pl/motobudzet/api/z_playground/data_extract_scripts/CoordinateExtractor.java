@@ -1,4 +1,4 @@
-package pl.motobudzet.api.utils;
+package pl.motobudzet.api.z_playground.data_extract_scripts;
 
 import pl.motobudzet.api.domain.location.City;
 

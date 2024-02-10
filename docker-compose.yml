@@ -136,8 +136,6 @@ services:
   loki:
     container_name: loki
     image: grafana/loki:latest
-    #    ports:
-    #      - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - logging
@@ -241,7 +239,7 @@ services:
       kafka-topics --bootstrap-server kafka-broker:9092 --list
       
       echo -e 'Creating topic mailing-service'
-      kafka-topics --bootstrap-server kafka-broker:9092 --create --if-not-exists --topic mailing-service --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka-broker:9092 --create --if-not-exists --topic mailing-service --replication-factor 1 --partitions 3
       
       echo -e 'Created topics:'
       kafka-topics --bootstrap-server kafka-broker:9092 --list
