@@ -1,7 +1,7 @@
 package pl.motobudzet.api.domain.messaging;
 
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
 

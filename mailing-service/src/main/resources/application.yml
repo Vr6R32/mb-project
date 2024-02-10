@@ -43,3 +43,7 @@ management:
     metrics:
       export:
         enabled: true
+
+email-service:
+  url: https://motobudzet.pl
+  email-address: info@motobudzet.pl

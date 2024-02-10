@@ -496,6 +496,7 @@ function funnyNeonTextPrice(subContainer, price) {
     let length = priceValue.length;
     let topValue;
     let maxHeight;
+    let marginTopValue = '5px';
     let neon = document.createElement('div');
 
     let fontSize;
@@ -503,12 +504,15 @@ function funnyNeonTextPrice(subContainer, price) {
         fontSize = '62px'
         topValue = '-2px';
         maxHeight = '68px';
+        marginTopValue = '15px';
     } else if (length === 9) {
         fontSize = '70px'
         topValue = '0px';
+        marginTopValue = '8px';
     } else if (length === 7) {
         fontSize = '86px';
         topValue = '-3px';
+        marginTopValue = '8px';
     } else if (length === 6) {
         fontSize = '102px';
         topValue = '-15px';
@@ -523,7 +527,7 @@ function funnyNeonTextPrice(subContainer, price) {
 
 
     neon.className = 'neon';
-    neon.style.marginTop = '5px';
+    neon.style.marginTop = marginTopValue;
     neon.style.maxHeight = maxHeight
     let text = document.createElement('span');
     // text.setAttribute('data-text', priceValue + '€');

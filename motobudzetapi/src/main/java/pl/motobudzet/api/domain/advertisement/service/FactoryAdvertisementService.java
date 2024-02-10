@@ -3,8 +3,8 @@ package pl.motobudzet.api.domain.advertisement.service;
 import pl.motobudzet.api.adapter.facade.BrandFacade;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.adapter.facade.ModelFacade;
-import pl.motobudzet.api.infrastructure.file_manager.FileManagerFacade;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.FileManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
 import pl.motobudzet.api.persistance.AppUserRepository;
 

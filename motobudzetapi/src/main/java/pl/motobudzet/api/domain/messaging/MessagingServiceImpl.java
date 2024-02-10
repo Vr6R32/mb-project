@@ -7,9 +7,10 @@ import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.dto.ConversationDTO;
 import pl.motobudzet.api.dto.MessageDTO;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;
+import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
 
@@ -129,12 +130,13 @@ class MessagingServiceImpl implements MessagingService {
 
     private void sendEmailMessageNotification(String message, AppUser emailNotificationReceiver, AppUser messageSender, Conversation conversation) {
         EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder()
+                .type(EmailType.MESSAGE_NOTIFICATION)
                 .message(message)
                 .senderName(messageSender.getUsername())
                 .receiverEmail(List.of(emailNotificationReceiver.getEmail()))
                 .advertisementTitle(conversation.getAdvertisement().getName())
                 .build();
-        mailService.sendMessageNotificationHtml(emailNotificationRequest);
+        mailService.publishEmailNotificationEvent(emailNotificationRequest);
     }
 
 

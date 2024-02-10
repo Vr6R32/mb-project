@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-import static pl.motobudzet.api.infrastructure.configuration.securty_jwt.UserDetailsServiceImpl.mapRolesToAuthorities;
+import static pl.motobudzet.api.infrastructure.configuration.security.UserDetailsServiceImpl.mapRolesToAuthorities;
 
 
 @Entity

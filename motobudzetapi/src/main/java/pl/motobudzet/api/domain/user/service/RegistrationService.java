@@ -11,21 +11,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
 import pl.motobudzet.api.model.EmailNotificationRequest;
+import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.domain.user.model.Role;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.utils.RegistrationRequestValidation;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
+import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static pl.motobudzet.api.infrastructure.configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
+import static pl.motobudzet.api.infrastructure.configuration.security.RedirectURLHandler.buildRedirectUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -60,12 +61,12 @@ public class RegistrationService {
                     .build();
             userRepository.save(newUser);
 
-            mailService.sendRegisterActivationNotificationHtml(buildEmailNotificationRequest(newUser));
+            mailService.publishEmailNotificationEvent(buildEmailNotificationRequest(newUser));
 
             return ResponseEntity.ok()
-                    .headers(httpHeaders -> {
-                        httpHeaders.set("registered", "true");
-                    })
+                    .headers(httpHeaders ->
+                        httpHeaders.set("registered", "true")
+                    )
                     .contentType(MediaType.TEXT_HTML)
                     .body("Zarejerstrowano pomyślnie !" + "Na podany adres e-mail przyjdzie link aktywacyjny.");
         }
@@ -73,6 +74,7 @@ public class RegistrationService {
 
     private EmailNotificationRequest buildEmailNotificationRequest(AppUser newUser) {
         return EmailNotificationRequest.builder()
+                .type(EmailType.REGISTER_ACTIVATION)
                 .userName(newUser.getUsername())
                 .userRegisterCode(newUser.getRegisterCode())
                 .receiverEmail(List.of(newUser.getEmail()))
@@ -112,7 +114,7 @@ public class RegistrationService {
         AppUser user = userRepository.findUserByResetPasswordCode(resetCode)
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
 
-        mailService.sendResetPasswordNotificationCodeLink(EmailNotificationRequest.builder().userName(user.getUsername()).userResetPasswordCode(user.getResetPasswordCode()).receiverEmail(List.of(user.getEmail())).build());
+        mailService.publishEmailNotificationEvent(EmailNotificationRequest.builder().type(EmailType.RESET_PASS_CODE).userName(user.getUsername()).userResetPasswordCode(user.getResetPasswordCode()).receiverEmail(List.of(user.getEmail())).build());
 
         return result;
     }

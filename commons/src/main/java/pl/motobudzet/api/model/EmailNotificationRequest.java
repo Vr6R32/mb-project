@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Builder
 public record EmailNotificationRequest(
+        EmailType type,
         String message,
         String senderName,
 

@@ -1,0 +1,9 @@
+package pl.motobudzet.api.model;
+
+public enum EmailType {
+    MESSAGE_NOTIFICATION,
+    REGISTER_ACTIVATION,
+    RESET_PASS_CODE,
+    ADV_ACTIVE_CONFIRMATION,
+    MANAGEMENT_NOTIFICATION
+}

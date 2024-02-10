@@ -12,14 +12,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.model.EmailNotificationRequest;
+import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
+import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -75,10 +76,10 @@ class RegistrationServiceTest {
 
         AppUser savedUser = appUserArgumentCaptor.getValue();
 
-        EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder().userName(savedUser.getUsername()).userRegisterCode(savedUser.getRegisterCode()).receiverEmail(List.of(savedUser.getEmail())).build();
+        EmailNotificationRequest emailNotificationRequest = EmailNotificationRequest.builder().type(EmailType.REGISTER_ACTIVATION).userName(savedUser.getUsername()).userRegisterCode(savedUser.getRegisterCode()).receiverEmail(List.of(savedUser.getEmail())).build();
 
 
-        verify(mailService, times(1)).sendRegisterActivationNotificationHtml(emailNotificationRequest);
+        verify(mailService, times(1)).publishEmailNotificationEvent(emailNotificationRequest);
 
 
         assertThat(savedUser)
@@ -198,7 +199,7 @@ class RegistrationServiceTest {
 
         assertThat(resetCodeValue).hasSize(30);
         assertThat(codeDateValidUntil).isEqualTo(expectedDateTime);
-        verify(mailService).sendResetPasswordNotificationCodeLink(EmailNotificationRequest.builder().receiverEmail(List.of(email)).build());
+        verify(mailService).publishEmailNotificationEvent(EmailNotificationRequest.builder().type(EmailType.RESET_PASS_CODE).receiverEmail(List.of(email)).build());
 
     }
 

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
-import pl.motobudzet.api.infrastructure.configuration.securty_jwt.JwtService;
+import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.AppUserDTO;
@@ -21,7 +21,7 @@ import pl.motobudzet.api.domain.location.City;
 import java.util.Collections;
 import java.util.List;
 
-import static pl.motobudzet.api.infrastructure.configuration.securty_jwt.RedirectURLHandler.buildRedirectUrl;
+import static pl.motobudzet.api.infrastructure.configuration.security.RedirectURLHandler.buildRedirectUrl;
 
 @Service
 @RequiredArgsConstructor

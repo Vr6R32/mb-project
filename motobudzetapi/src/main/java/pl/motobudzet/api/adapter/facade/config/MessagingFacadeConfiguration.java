@@ -7,7 +7,7 @@ import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 import pl.motobudzet.api.adapter.facade.MessagingFacade;
 import pl.motobudzet.api.domain.messaging.FactoryMessagingService;
 import pl.motobudzet.api.domain.messaging.MessagingService;
-import pl.motobudzet.api.infrastructure.mailing.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
 
