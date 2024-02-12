@@ -18,17 +18,17 @@ public interface AdvertisementService {
 
     ResponseEntity<String> createAdvertisement(AdvertisementRequest request, AppUser user, List<MultipartFile> files);
 
-    ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files);
+    ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, AppUser loggedUser, List<MultipartFile> files);
 
     List<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber);
 
-    String verifyAndEnableAdvertisement(UUID id);
+    String verifyAndEnableAdvertisement(UUID id,AppUser loggedUser);
 
     Advertisement getAdvertisement(UUID advertisementId);
 
     List<AdvertisementDTO> getAllUserAdvertisements(AppUser loggedUser);
 
-    int deleteUserAdvertisement(UUID id, String loggedUser);
+    int deleteAdvertisement(UUID id, AppUser loggedUser);
 
-    int rejectAdvertisement(UUID id);
+    int rejectAdvertisement(UUID id, AppUser loggedUser);
 }

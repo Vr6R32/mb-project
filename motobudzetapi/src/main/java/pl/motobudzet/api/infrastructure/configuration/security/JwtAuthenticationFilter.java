@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException{
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
         String accessToken = requestCookies.accessToken();
         String refreshToken = requestCookies.refreshToken();
@@ -115,28 +115,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void clearTokensAndSendRedirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/login");
-        HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
+        HttpHeaders httpHeaders = jwtService.buildHttpTokenCookies("", "", 0, 0);
         jwtService.applyHttpHeaders(response, httpHeaders);
     }
 
-    private void authenticateAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken) throws IOException, ServletException {
-        String username = jwtService.extractUsername(accessToken);
-        authenticate(request, response, filterChain, accessToken, username);
+    private void authenticateAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken){
+        try {
+            authenticate(request, response, filterChain, accessToken);
+        } catch (IOException | ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void handleRefreshTokenAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String refreshToken) throws IOException, ServletException {
+    private void handleRefreshTokenAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String refreshToken){
         String refreshedAccessToken = jwtService.refreshToken(refreshToken, response);
         authenticateAccessToken(request, response, filterChain, refreshedAccessToken);
     }
 
-    private void authenticate(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken, String username) throws IOException, ServletException {
+    private void authenticate(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken) throws IOException, ServletException {
 
         // TODO : think is it okay to pass user data without fetching user from db ? it saves db usage and in general we have all needed user data from token
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        //        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
             Long userId = jwtService.extractUserId(accessToken);
             String userEmail = jwtService.extractUserEmail(accessToken);
+            String username = jwtService.extractUsername(accessToken);
 
             AppUser principal = AppUser.builder()
                     .userName(username)

@@ -42,7 +42,8 @@ class AdvertisementController {
 
     @DeleteMapping("/{id}")
     public int deleteAdvertisement(@PathVariable UUID id, Authentication authentication) {
-        return advertisementFacade.deleteAdvertisement(id, authentication.getName());
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementFacade.deleteAdvertisement(id,loggedUser);
     }
 
     @PutMapping(value = "/{id}")
@@ -50,7 +51,8 @@ class AdvertisementController {
                                                             @ModelAttribute @Valid AdvertisementRequest request,
                                                             @RequestParam List<MultipartFile> files,
                                                             Authentication authentication) {
-        return advertisementFacade.editAdvertisement(id, request, authentication.getName(), files);
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementFacade.editAdvertisement(id, request, loggedUser, files);
     }
 
     @GetMapping("/last-uploaded")
@@ -66,13 +68,15 @@ class AdvertisementController {
     }
 
     @PostMapping("verify/{id}")
-    public String verifyAndEnableAdvertisement(@PathVariable UUID id) {
-        return advertisementFacade.verifyAdvertisement(id);
+    public String verifyAndEnableAdvertisement(@PathVariable UUID id,Authentication authentication) {
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementFacade.verifyAdvertisement(id,loggedUser);
     }
 
     @PostMapping("reject/{id}")
-    public int rejectAdvertisement(@PathVariable UUID id) {
-        return advertisementFacade.rejectAdvertisement(id);
+    public int rejectAdvertisement(@PathVariable UUID id,Authentication authentication) {
+        AppUser loggedUser = (AppUser) authentication.getPrincipal();
+        return advertisementFacade.rejectAdvertisement(id,loggedUser);
     }
 
 }

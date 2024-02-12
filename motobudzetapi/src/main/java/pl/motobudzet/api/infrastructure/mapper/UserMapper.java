@@ -13,8 +13,6 @@ public class UserMapper {
                 .id(user.getId())
                 .userName(user.getUsername())
                 .email(user.getEmail())
-                .registerCode(user.getRegisterCode())
-                .resetPasswordCode(user.getResetPasswordCode())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .phoneNumber(user.getPhoneNumber())

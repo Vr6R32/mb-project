@@ -58,7 +58,7 @@ public class AdvertisementFacade {
         return advertisementService.createAdvertisement(request, user, files);
     }
 
-    public ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, String loggedUser, List<MultipartFile> files) {
+    public ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, AppUser loggedUser, List<MultipartFile> files) {
         return advertisementService.editAdvertisement(advertisementId,request,loggedUser,files);
     }
 
@@ -66,17 +66,17 @@ public class AdvertisementFacade {
         return advertisementMetaDataService.getMetaDataForAdvertisementById(uuid);
     }
 
-    public String verifyAdvertisement(UUID id) {
-        return advertisementService.verifyAndEnableAdvertisement(id);
+    public String verifyAdvertisement(UUID id,AppUser loggedUser) {
+        return advertisementService.verifyAndEnableAdvertisement(id,loggedUser);
     }
 
-    public int rejectAdvertisement(UUID id) {
-        return advertisementService.rejectAdvertisement(id);
+    public int rejectAdvertisement(UUID id,AppUser loggedUser) {
+        return advertisementService.rejectAdvertisement(id,loggedUser);
     }
 
     @Transactional
-    public int deleteAdvertisement(UUID id, String loggedUser) {
-        return advertisementService.deleteUserAdvertisement(id, loggedUser);
+    public int deleteAdvertisement(UUID id, AppUser loggedUser) {
+        return advertisementService.deleteAdvertisement(id, loggedUser);
     }
 
 }

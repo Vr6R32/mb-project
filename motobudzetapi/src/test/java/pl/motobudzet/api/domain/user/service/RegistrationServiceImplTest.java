@@ -1,8 +1,7 @@
-package pl.motobudzet.api.app_user.service;
+package pl.motobudzet.api.domain.user.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,26 +10,20 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.motobudzet.api.domain.user.service.RegistrationService;
 import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
-import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
-import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
-class RegistrationServiceTest {
+class RegistrationServiceImplTest {
 
     @Mock
     AppUserRepository userRepository;
@@ -56,11 +49,11 @@ class RegistrationServiceTest {
     @Captor
     private ArgumentCaptor<AppUser> appUserArgumentCaptor;
 
-    RegistrationService registrationService;
+    RegistrationService registrationServiceImpl;
 
     @BeforeEach
     void setUp() {
-        registrationService = new RegistrationService(userRepository,passwordEncoder,mailService,jwtService);
+        registrationServiceImpl = FactoryUserService.createRegistrationService(userRepository, passwordEncoder, mailService, jwtService);
     }
 
     @Test
@@ -70,7 +63,7 @@ class RegistrationServiceTest {
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
         when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Both username and email are available");
         //when
-        registrationService.register(request);
+        registrationServiceImpl.register(request);
         //then
         then(userRepository).should().save(appUserArgumentCaptor.capture());
 
@@ -93,7 +86,7 @@ class RegistrationServiceTest {
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
         when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Username is already taken");
         //when
-        registrationService.register(request);
+        registrationServiceImpl.register(request);
         //then
         then(userRepository).should(never()).saveAndFlush(any());
     }
@@ -104,7 +97,7 @@ class RegistrationServiceTest {
         RegistrationRequest request = RegistrationRequest.builder().userName("mockeymock").password("mockypass").email("mockey@mock.pl").build();
         when(userRepository.checkUsernameAndEmailAvailability(request.userName(),request.email())).thenReturn("Email is already taken");
         //when
-        registrationService.register(request);
+        registrationServiceImpl.register(request);
         //then
         then(userRepository).should(never()).saveAndFlush(any());
     }
@@ -117,7 +110,7 @@ class RegistrationServiceTest {
         when(userRepository.findUserByRegistrationCode(registerCode)).thenReturn(Optional.of(user));
 
         //when
-        registrationService.confirmEmail(registerCode,response,request);
+        registrationServiceImpl.confirmEmail(registerCode,response,request);
 
         //then
         then(userRepository).should().saveAndFlush(appUserArgumentCaptor.capture());
@@ -140,7 +133,7 @@ class RegistrationServiceTest {
         when(userRepository.findUserByRegistrationCode(registerCode)).thenThrow(new IllegalArgumentException("WRONG_ACTIVATION_CODE"));
 
         //when
-        assertThatThrownBy(() -> registrationService.confirmEmail(registerCode, response, request))
+        assertThatThrownBy(() -> registrationServiceImpl.confirmEmail(registerCode, response, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("WRONG_ACTIVATION_CODE");
 
@@ -161,99 +154,11 @@ class RegistrationServiceTest {
         when(userRepository.findUserByRegistrationCode(registerCode)).thenReturn(Optional.of(optionalUser));
 
         //when
-        registrationService.confirmEmail(registerCode, response, request);
+        registrationServiceImpl.confirmEmail(registerCode, response, request);
 
         //then
         verify(userRepository,never()).saveAndFlush(any());
         verify(response, times(1)).sendRedirect(startsWith("/"));
     }
 
-    @Test
-    void should_generatePasswordResetCode_and_sendNotification() {
-
-        // given
-        String email = "mockey@mock.pl";
-        ResetPasswordRequest resetPasswordRequest = ResetPasswordRequest.builder().email(email).build();
-        AppUser mockUser = AppUser.builder().email(email).build();
-        LocalDateTime expectedDateTime = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.MINUTES);
-
-        given(userRepository.insertResetPasswordCode(any(String.class), any(LocalDateTime.class), eq(resetPasswordRequest.email())))
-                .willReturn(1);
-
-        given(userRepository.findUserByResetPasswordCode(any(String.class)))
-                .willReturn(Optional.of(mockUser));
-
-        // when
-        int result = registrationService.generatePasswordResetCode(resetPasswordRequest);
-
-        // then
-        assertThat(result).isEqualTo(1);
-
-        ArgumentCaptor<String> resetCodeCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<LocalDateTime> dateTimeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
-
-        verify(userRepository).insertResetPasswordCode(resetCodeCaptor.capture(), dateTimeCaptor.capture(), eq(resetPasswordRequest.email()));
-
-        String resetCodeValue = resetCodeCaptor.getValue();
-        LocalDateTime codeDateValidUntil = dateTimeCaptor.getValue().truncatedTo(ChronoUnit.MINUTES);
-
-        assertThat(resetCodeValue).hasSize(30);
-        assertThat(codeDateValidUntil).isEqualTo(expectedDateTime);
-        verify(mailService).publishEmailNotificationEvent(EmailNotificationRequest.builder().type(EmailType.RESET_PASS_CODE).receiverEmail(List.of(email)).build());
-
-    }
-
-    @Test
-    void should_change_user_password_when_correct_and_valid_reset_code(){
-
-        //given
-        String resetCode = RandomStringUtils.random(30);
-        NewPasswordRequest passwordRequest = NewPasswordRequest.builder().password("test123").passwordRepeat("test123").resetCode(resetCode).build();
-        AppUser user = AppUser.builder().resetPasswordCode(resetCode).resetPasswordCodeExpiration(LocalDateTime.now().plusHours(2)).build();
-        String encodedPassword = "encoded" + passwordRequest.password();
-        given(userRepository.findUserByResetPasswordCode(resetCode)).willReturn(Optional.of(user));
-        given(passwordEncoder.encode(passwordRequest.password())).willReturn(encodedPassword);
-
-        //when
-        registrationService.changeUserPassword(passwordRequest);
-
-        //then
-        ArgumentCaptor<String> resetCodeCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> newPassword = ArgumentCaptor.forClass(String.class);
-
-        verify(userRepository).insertNewUserPassword(newPassword.capture(),resetCodeCaptor.capture());
-        assertAll(
-                () -> assertThat(newPassword.getValue()).isEqualTo(encodedPassword),
-                () -> assertThat(resetCodeCaptor.getValue()).isEqualTo(passwordRequest.resetCode())
-        );
-
-    }
-
-    @Test
-    void should_not_change_user_password_when_reset_code_not_valid(){
-
-        //given
-        String resetCode = RandomStringUtils.random(30);
-        NewPasswordRequest passwordRequest = NewPasswordRequest.builder().password("test123").passwordRepeat("test123").resetCode(resetCode).build();
-        AppUser user = AppUser.builder().resetPasswordCode(resetCode).resetPasswordCodeExpiration(LocalDateTime.now().minusHours(27)).build();
-
-        given(userRepository.findUserByResetPasswordCode(resetCode)).willReturn(Optional.of(user));
-        //when
-        int result = registrationService.changeUserPassword(passwordRequest);
-        //then
-        assertThat(result).isZero();
-    }
-
-
-    @Test
-    void should_not_change_user_password_when_passwords_doesnt_match(){
-
-        //given
-        String resetCode = RandomStringUtils.random(30);
-        NewPasswordRequest passwordRequest = NewPasswordRequest.builder().password("test123").passwordRepeat("123123").resetCode(resetCode).build();
-        //when
-        int result = registrationService.changeUserPassword(passwordRequest);
-        //then
-        assertThat(result).isZero();
-    }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.domain.user.UserDoesntExistException;
 import pl.motobudzet.api.domain.user.model.Role;
 import pl.motobudzet.api.persistance.AppUserRepository;
 
@@ -21,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User Doesn't exists !"));
+        return userRepository.findByUserName(userName).orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
     }
 
     public static Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

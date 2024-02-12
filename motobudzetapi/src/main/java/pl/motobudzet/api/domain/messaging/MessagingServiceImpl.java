@@ -2,6 +2,7 @@ package pl.motobudzet.api.domain.messaging;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.user.entity.AppUser;
@@ -19,9 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
 import static pl.motobudzet.api.infrastructure.mapper.ConversationMapper.mapConversationToDTO;
 
+@Slf4j
 @RequiredArgsConstructor
 class MessagingServiceImpl implements MessagingService {
 
@@ -40,6 +41,8 @@ class MessagingServiceImpl implements MessagingService {
                 .userClient(loggedUser)
                 .build();
 
+        log.info("[MESSAGING-SERVICE] -> CREATE NEW CONVERSATION FOR ADVERTISEMENT WITH ID -> [{}] WITH USER WITH ID -> [{}] BY USER WITH ID -> [{}]",
+                advertisementId,advertisement.getUser().getId(), loggedUser.getId());
         conversationRepository.saveAndFlush(conversation);
 
         return conversation;
@@ -78,8 +81,14 @@ class MessagingServiceImpl implements MessagingService {
             updateConversation(conversation, newMessage);
             messageRepository.save(newMessage);
 
+
             AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
+
+            log.info("[MESSAGING-SERVICE] -> SEND PRIVATE MESSAGE FOR ADVERTISEMENT WITH ID -> [{}] TO USER WITH ID -> [{}] BY USER WITH ID -> [{}]",
+                    advertisementId,emailNotificationReceiver.getId(), user.getId());
+
             if (lastMessageUserName == null || !Objects.equals(lastMessageUserName, messageSenderName)) {
+
                 sendEmailMessageNotification(message, emailNotificationReceiver, user, conversation);
             }
             return "Message Sent!";
@@ -122,7 +131,6 @@ class MessagingServiceImpl implements MessagingService {
         } else {
             List<Message> messageList = conversation.getMessages();
             messageList.add(newMessage);
-            // TODO is it necceseary to set messages list again ?
             conversation.setMessages(messageList);
         }
         conversation.setLastMessage(newMessage);
