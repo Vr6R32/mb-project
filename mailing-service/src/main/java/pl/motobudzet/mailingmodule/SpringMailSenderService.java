@@ -11,7 +11,7 @@ import pl.motobudzet.api.model.EmailNotificationRequest;
 
 @Service
 @RequiredArgsConstructor
-class SpringMailSenderService {
+public class SpringMailSenderService {
 
     public static final String BACKGROUND_IMAGE_URL = "https://motobudzet.pl/api/static/background_email";
 

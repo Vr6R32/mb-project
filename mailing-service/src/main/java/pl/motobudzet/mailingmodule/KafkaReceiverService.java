@@ -6,6 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 
+import static pl.motobudzet.mailingmodule.KafkaConsumerConfig.MAILING_SERVICE_GROUP;
 import static pl.motobudzet.mailingmodule.KafkaConsumerConfig.MAILING_TOPIC;
 
 @Slf4j
@@ -15,7 +16,7 @@ public class KafkaReceiverService {
 
     private final SpringMailSenderService mailService;
 
-    @KafkaListener(topics = MAILING_TOPIC, groupId = "mailing-service-group")
+    @KafkaListener(topics = MAILING_TOPIC, groupId = MAILING_SERVICE_GROUP)
     public void listen(EmailNotificationRequest request) {
 
         switch (request.type()) {
