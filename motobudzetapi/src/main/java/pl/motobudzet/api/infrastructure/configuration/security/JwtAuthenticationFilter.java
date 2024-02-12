@@ -115,7 +115,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void clearTokensAndSendRedirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/login");
-        HttpHeaders httpHeaders = jwtService.buildHttpTokenCookies("", "", 0, 0);
+        HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
         jwtService.applyHttpHeaders(response, httpHeaders);
     }
 

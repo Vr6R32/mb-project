@@ -190,7 +190,7 @@ public class JwtService {
         revokeAllUserTokens(user);
         saveUserToken(user, encryptedRefreshToken);
 
-        HttpHeaders httpHeaders = buildHttpTokenCookies(encryptedAccessToken, encryptedRefreshToken, jwtExpiration, refreshExpiration);
+        HttpHeaders httpHeaders = buildHttpTokenHeaders(encryptedAccessToken, encryptedRefreshToken, jwtExpiration, refreshExpiration);
         applyHttpHeaders(response, httpHeaders);
         response.setStatus(HttpServletResponse.SC_OK);
         return accessToken;
@@ -213,7 +213,7 @@ public class JwtService {
         );
     }
 
-    HttpHeaders buildHttpTokenCookies(String accessToken, String refreshToken, long jwtExpiration, long refreshExpiration) {
+    HttpHeaders buildHttpTokenHeaders(String accessToken, String refreshToken, long jwtExpiration, long refreshExpiration) {
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
