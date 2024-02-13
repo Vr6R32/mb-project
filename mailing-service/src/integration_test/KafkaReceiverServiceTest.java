@@ -6,7 +6,10 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -24,10 +27,12 @@ import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.mailingmodule.KafkaReceiverService;
 import pl.motobudzet.mailingmodule.MailingModuleApplication;
+import pl.motobudzet.mailingmodule.SpringMailSenderService;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,10 +48,19 @@ class KafkaReceiverServiceTest {
     @SpyBean
     KafkaReceiverService kafkaReceiverService;
 
+    @SpyBean
+    SpringMailSenderService mailService;
+
+    @BeforeAll
+    static void startKafkaContainer() {
+        kafkaContainer.start();
+    }
+
     @AfterAll
     static void tearDown() {
         kafkaContainer.stop();
     }
+
 
     @Container
     static KafkaContainer kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.2"))
@@ -72,13 +86,19 @@ class KafkaReceiverServiceTest {
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
+    static Collection<EmailType> emailTypes() {
+        return Arrays.asList(
+                EmailType.RESET_PASS_CODE,
+                EmailType.MESSAGE_NOTIFICATION,
+                EmailType.ADV_ACTIVE_CONFIRMATION,
+                EmailType.REGISTER_ACTIVATION,
+                EmailType.MANAGEMENT_NOTIFICATION
+        );
+    }
 
-    @Test
-    void testProduceAndConsumeKafkaMessage() throws InterruptedException {
-
-        //given
-
-        kafkaContainer.start();
+    @ParameterizedTest
+    @MethodSource("emailTypes")
+    void testProduceAndConsumeKafkaMessageWithDifferentEmailTypes(EmailType emailType) throws InterruptedException {
 
         AdminClient adminClient = AdminClient.create(Map.of("bootstrap.servers", kafkaContainer.getBootstrapServers()));
 
@@ -90,7 +110,7 @@ class KafkaReceiverServiceTest {
         adminClient.createTopics(List.of(mailingTopic));
 
         EmailNotificationRequest notificationRequest = new EmailNotificationRequest(
-                EmailType.MANAGEMENT_NOTIFICATION, "message", "sender", UUID.randomUUID(),
+                emailType, "message", "sender", UUID.randomUUID(),
                 "title", "model", "brand", "username", "registerCode", "resetCode", List.of("mockey@mock.pl"));
 
         KafkaTemplate<String, Object> kafkaTemplate = new KafkaTemplate<>(producerFactory());
@@ -101,9 +121,7 @@ class KafkaReceiverServiceTest {
 
         kafkaTemplate.send(MAILING_TOPIC, notificationRequest);
 
-        // then
-
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(10, SECONDS).untilAsserted(() -> {
 
             ArgumentCaptor<EmailNotificationRequest> argumentCaptor = ArgumentCaptor.forClass(EmailNotificationRequest.class);
             verify(kafkaReceiverService, times(1)).listen(argumentCaptor.capture());
@@ -111,8 +129,30 @@ class KafkaReceiverServiceTest {
             EmailNotificationRequest capturedRequest = argumentCaptor.getValue();
 
             assertThat(capturedRequest).isEqualToComparingFieldByField(notificationRequest);
-        });
 
+            switch (capturedRequest.type()) {
+                case RESET_PASS_CODE -> {
+                    verify(mailService, times(1)).sendResetPasswordNotificationCodeLink(capturedRequest);
+                }
+                case MESSAGE_NOTIFICATION -> {
+                    verify(mailService, times(1)).sendMessageNotification(capturedRequest);
+                }
+                case ADV_ACTIVE_CONFIRMATION -> {
+                    verify(mailService, times(1)).sendAdvertisementActivationConfirmNotification(capturedRequest);
+                }
+                case REGISTER_ACTIVATION -> {
+                    verify(mailService, times(1)).sendRegisterActivationNotification(capturedRequest);
+                }
+                case MANAGEMENT_NOTIFICATION -> {
+                    verify(mailService, times(1)).sendEmailNotificationToManagement(capturedRequest);
+                }
+                default -> {
+
+                }
+            }
+        });
     }
+
+
 }
 
