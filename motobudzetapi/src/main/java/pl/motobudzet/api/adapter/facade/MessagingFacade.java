@@ -17,13 +17,16 @@ public class MessagingFacade {
     public List<ConversationDTO> getConversations(AppUser loggedUser) {
         return messagingService.getAllUserConversations(loggedUser);
     }
+
     public Long getConversationIdByAdvIdAndSender(UUID advertisementId, String name) {
         return messagingService.findConversationIdByAdvIdAndSender(advertisementId, name);
     }
+
     public String sendMessage(String message, UUID advertisementId, AppUser user) {
         return messagingService.sendMessage(message, advertisementId, user);
     }
+
     public List<MessageDTO> getConversationMessages(Long conversationId, String loggedUser) {
-        return messagingService.getAllMessages(conversationId,loggedUser);
+        return messagingService.getAllMessages(conversationId, loggedUser);
     }
 }

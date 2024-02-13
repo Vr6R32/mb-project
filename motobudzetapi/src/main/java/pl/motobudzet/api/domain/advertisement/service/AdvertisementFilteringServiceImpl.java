@@ -1,23 +1,28 @@
 package pl.motobudzet.api.domain.advertisement.service;
 
 
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import pl.motobudzet.api.dto.AdvertisementDTO;
-import pl.motobudzet.api.dto.AdvertisementFilterRequest;
-import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.model.Status;
-import pl.motobudzet.api.persistance.AdvertisementRepository;
 import pl.motobudzet.api.adapter.facade.BrandFacade;
-import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.adapter.facade.ModelFacade;
+import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
+import pl.motobudzet.api.domain.location.City;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementFilterRequest;
+import pl.motobudzet.api.model.Status;
+import pl.motobudzet.api.persistance.AdvertisementRepository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService {
@@ -60,7 +65,7 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
 
 
         Boolean isAccidentFree = request.accidentFree();
-        if(isAccidentFree!=null) {
+        if (isAccidentFree != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accidentFree"), isAccidentFree)
             );
@@ -100,6 +105,7 @@ class AdvertisementFilteringServiceImpl implements AdvertisementFilteringService
         }
         return specification;
     }
+
     private Specification<Advertisement> handleCityAndStateValue(AdvertisementFilterRequest request, Specification<Advertisement> specification) {
         String city = request.city();
         String cityState = request.cityState();

@@ -14,11 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.infrastructure.configuration.security.token.TokenEncryption;
-import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.infrastructure.configuration.security.token.Token;
+import pl.motobudzet.api.infrastructure.configuration.security.token.TokenEncryption;
 import pl.motobudzet.api.infrastructure.configuration.security.token.TokenRepository;
 import pl.motobudzet.api.infrastructure.configuration.security.token.TokenType;
+import pl.motobudzet.api.persistance.AppUserRepository;
 
 import java.security.Key;
 import java.util.Collection;
@@ -72,7 +72,7 @@ public class JwtService {
 
     public String generateAccessToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(),"email",user.getEmail());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(), "email", user.getEmail());
         return buildToken(userClaims, userDetails, jwtExpiration);
     }
 
@@ -96,7 +96,7 @@ public class JwtService {
 
     public String generateRefreshToken(UserDetails userDetails) {
         AppUser user = (AppUser) userDetails;
-        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(),"email",user.getEmail());
+        Map<String, Object> userClaims = Map.of("roles", userDetails.getAuthorities(), "userId", user.getId(), "email", user.getEmail());
         return buildToken(userClaims, userDetails, refreshExpiration);
     }
 
@@ -196,20 +196,20 @@ public class JwtService {
         return accessToken;
     }
 
-    private String encryptToken(String token){
+    private String encryptToken(String token) {
         return tokenEncryption.encrypt(token);
     }
 
-    public String decryptToken(String token){
+    public String decryptToken(String token) {
         return tokenEncryption.decrypt(token);
     }
 
 
     public void applyHttpHeaders(HttpServletResponse response, HttpHeaders httpHeaders) {
         httpHeaders.forEach((headerName, headerValues) ->
-            headerValues.forEach(value ->
-                response.addHeader(headerName, value)
-            )
+                headerValues.forEach(value ->
+                        response.addHeader(headerName, value)
+                )
         );
     }
 

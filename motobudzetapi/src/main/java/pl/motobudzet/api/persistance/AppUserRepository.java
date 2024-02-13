@@ -28,7 +28,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Modifying
     @Query("UPDATE AppUser a SET a.city.id = ?1, a.name = ?2, a.surname = ?3, a.phoneNumber = ?4, a.role = ?5 WHERE a.email = ?6")
-    void insertUserFirstDetails(Long cityId, String name, String surname, String phoneNumber, Role role , String userEmail);
+    void insertUserFirstDetails(Long cityId, String name, String surname, String phoneNumber, Role role, String userEmail);
 
     @Modifying
     @Query("UPDATE AppUser a SET a.password = ?1, a.resetPasswordCode = null WHERE a.resetPasswordCode = ?2")

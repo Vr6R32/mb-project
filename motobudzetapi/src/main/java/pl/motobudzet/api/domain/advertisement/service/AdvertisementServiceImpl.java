@@ -9,24 +9,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
+import pl.motobudzet.api.adapter.facade.FileManagerFacade;
+import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
+import pl.motobudzet.api.domain.location.City;
+import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.model.Status;
-import pl.motobudzet.api.domain.location.City;
-import pl.motobudzet.api.dto.AdvertisementDTO;
-import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
-import pl.motobudzet.api.adapter.facade.LocationFacade;
-import pl.motobudzet.api.adapter.facade.FileManagerFacade;
-import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
-import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.persistance.AppUserRepository;
 
-
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static pl.motobudzet.api.infrastructure.mapper.AdvertisementMapper.*;
 
@@ -79,7 +79,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
         fileManagerFacade.verifySortAndSaveImages(advertisementId, files);
         String redirectUrl = "/advertisement?id=" + advertisement.getId();
 
-        log.info("[ADVERTISEMENT-SERVICE] -> CREATE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",advertisementId, user.getId());
+        log.info("[ADVERTISEMENT-SERVICE] -> CREATE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", advertisementId, user.getId());
 
         emailManagerFacade.publishEmailNotificationEvent(buildEmailNotificationRequest(advertisementId));
         return ResponseEntity.ok().header("location", redirectUrl).header("created", "true").body("inserted !");
@@ -101,7 +101,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
 
             String redirectUrl = "/advertisement?id=" + advertisementId;
 
-            log.info("[ADVERTISEMENT-SERVICE] -> EDIT ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",advertisementId, user.getId());
+            log.info("[ADVERTISEMENT-SERVICE] -> EDIT ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", advertisementId, user.getId());
 
             emailManagerFacade.publishEmailNotificationEvent(buildEmailNotificationRequest(advertisementId));
             return ResponseEntity.ok().header("location", redirectUrl).header("edited", "true").body("inserted !");
@@ -119,7 +119,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public String verifyAndEnableAdvertisement(UUID id,AppUser user) {
+    public String verifyAndEnableAdvertisement(UUID id, AppUser user) {
         Advertisement advertisement = getAdvertisement(id);
         AppUser userOwner = advertisement.getUser();
         advertisement.setStatus(Status.ACTIVE);
@@ -134,7 +134,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
                 .receiverEmail(List.of(userOwner.getEmail()))
                 .build();
 
-        log.info("[ADVERTISEMENT-SERVICE] -> VERIFY ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",id, user.getId());
+        log.info("[ADVERTISEMENT-SERVICE] -> VERIFY ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", id, user.getId());
 
         emailManagerFacade.publishEmailNotificationEvent(emailNotificationRequest);
         return "verified !";
@@ -156,8 +156,8 @@ class AdvertisementServiceImpl implements AdvertisementService {
     @Transactional
     public int deleteAdvertisement(UUID id, AppUser user) {
         boolean isOwner = advertisementRepository.checkAdvertisementOwnerByUserName(id, user.getUsername());
-        if(isOwner){
-            log.info("[ADVERTISEMENT-SERVICE] -> DELETE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",id, user.getId());
+        if (isOwner) {
+            log.info("[ADVERTISEMENT-SERVICE] -> DELETE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", id, user.getId());
             return advertisementRepository.updateAdvertisementIsDeleted(id);
         }
         return 0;
@@ -165,7 +165,7 @@ class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     public int rejectAdvertisement(UUID id, AppUser user) {
-        log.info("[ADVERTISEMENT-SERVICE] -> REJECT ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",id, user.getId());
+        log.info("[ADVERTISEMENT-SERVICE] -> REJECT ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", id, user.getId());
         return advertisementRepository.updateAdvertisementIsRejected(id);
     }
 

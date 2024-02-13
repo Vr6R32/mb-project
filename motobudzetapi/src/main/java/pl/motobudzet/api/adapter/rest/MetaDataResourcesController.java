@@ -20,6 +20,7 @@ public class MetaDataResourcesController {
     public Resource getFaviconForApple() {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "favicon.ico");
     }
+
     @GetMapping(value = "favicon.ico", produces = "image/x-icon")
     public Resource getFaviconForRobots() {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "favicon.ico");

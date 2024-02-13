@@ -47,6 +47,7 @@ public class SecurityConfig {
     public SessionListener httpSessionListener() {
         return new SessionListener();
     }
+
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -56,7 +57,7 @@ public class SecurityConfig {
     public SimpleUrlLogoutSuccessHandler successLogoutHandler() {
         return new SimpleUrlLogoutSuccessHandler() {
             @Override
-            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)throws IOException {
+            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
                 String redirectUrl = buildRedirectUrl(request, "/login?logout=true");
                 response.sendRedirect(redirectUrl);
             }
@@ -104,58 +105,58 @@ public class SecurityConfig {
             "/api/advertisements/filter/search",
             "/test"};
 
-@Bean
+    @Bean
     @SuppressWarnings("deprecation")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
-            .addFilterAfter(new UserAwaitingDetailsFilter(), JwtAuthenticationFilter.class)
-            .authorizeHttpRequests(authorizeRequests ->
-                    authorizeRequests
-                            .requestMatchers(WHITE_LIST_URL).permitAll()
-                            .requestMatchers("/", "index", "advertisement").permitAll()
-                            .requestMatchers("/user/details/**").hasRole("AWAITING_DETAILS")
-                            .requestMatchers("/api/user/updateDetails/**").hasRole("AWAITING_DETAILS")
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AddressLoggingFilter(), SecurityContextPersistenceFilter.class)
+                .addFilterAfter(new UserAwaitingDetailsFilter(), JwtAuthenticationFilter.class)
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(WHITE_LIST_URL).permitAll()
+                                .requestMatchers("/", "index", "advertisement").permitAll()
+                                .requestMatchers("/user/details/**").hasRole("AWAITING_DETAILS")
+                                .requestMatchers("/api/user/updateDetails/**").hasRole("AWAITING_DETAILS")
 
-                            .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
-                            .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").authenticated()
 
-                            .requestMatchers("/logout").authenticated()
-                            .requestMatchers("/account").authenticated()
-                            .requestMatchers("/messages").authenticated()
-                            .requestMatchers("/favourites").authenticated()
-                            .requestMatchers("/advertisements").authenticated()
-                            .requestMatchers("/api/messages/**").authenticated()
-                            .requestMatchers("/api/user/details").authenticated()
-                            .requestMatchers("/advertisement/new").authenticated()
-                            .requestMatchers("/advertisement/edit").authenticated()
-                            .requestMatchers("/api/conversations/**").authenticated()
-                            .requestMatchers("/api/users/favourites/**").authenticated()
-                            .requestMatchers("/actuator/prometheus").hasAnyRole("ADMIN","MONITORING")
+                                .requestMatchers("/logout").authenticated()
+                                .requestMatchers("/account").authenticated()
+                                .requestMatchers("/messages").authenticated()
+                                .requestMatchers("/favourites").authenticated()
+                                .requestMatchers("/advertisements").authenticated()
+                                .requestMatchers("/api/messages/**").authenticated()
+                                .requestMatchers("/api/user/details").authenticated()
+                                .requestMatchers("/advertisement/new").authenticated()
+                                .requestMatchers("/advertisement/edit").authenticated()
+                                .requestMatchers("/api/conversations/**").authenticated()
+                                .requestMatchers("/api/users/favourites/**").authenticated()
+                                .requestMatchers("/actuator/prometheus").hasAnyRole("ADMIN", "MONITORING")
 
-                            .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
-                            .requestMatchers("/management").hasRole("ADMIN")
-                            .anyRequest().hasRole("ADMIN")
+                                .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
+                                .requestMatchers("/management").hasRole("ADMIN")
+                                .anyRequest().hasRole("ADMIN")
 
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-            .authenticationProvider(authenticationProvider())
-            .logout(logout ->
-                    logout
-                            .logoutUrl("/logout")
-                            .addLogoutHandler(logoutHandler)
-                            .logoutSuccessHandler(successLogoutHandler())
-            )
-            .exceptionHandling(exception ->
-                    exception
-                            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                            .accessDeniedPage("/"));
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .addLogoutHandler(logoutHandler)
+                                .logoutSuccessHandler(successLogoutHandler())
+                )
+                .exceptionHandling(exception ->
+                        exception
+                                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                                .accessDeniedPage("/"));
         return http.build();
     }
 

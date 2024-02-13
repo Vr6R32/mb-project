@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import pl.motobudzet.api.adapter.facade.AppUserFacade;
 import pl.motobudzet.api.domain.user.dto.*;
 import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.adapter.facade.AppUserFacade;
 
 
 @RestController
@@ -26,7 +26,7 @@ class UserController {
 
     @GetMapping("confirm")
     public void confirmEmail(@RequestParam String activationCode, HttpServletResponse response, HttpServletRequest request) {
-        appUserFacade.confirmEmail(activationCode, response,request);
+        appUserFacade.confirmEmail(activationCode, response, request);
     }
 
     @GetMapping("details")
@@ -37,7 +37,7 @@ class UserController {
     @PutMapping("updateDetails")
     public ResponseEntity<?> updateFirstUserDetails(@RequestBody UserDetailsRequest userDetailsRequest, Authentication authentication, HttpServletResponse response, HttpServletRequest request) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
-        return appUserFacade.updateFirstUserDetails(userDetailsRequest,loggedUser,response,request);
+        return appUserFacade.updateFirstUserDetails(userDetailsRequest, loggedUser, response, request);
     }
 
     @PostMapping("resetCode")

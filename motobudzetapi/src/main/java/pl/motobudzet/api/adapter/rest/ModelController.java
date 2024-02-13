@@ -1,9 +1,12 @@
 package pl.motobudzet.api.adapter.rest;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import pl.motobudzet.api.adapter.facade.ModelFacade;
 import pl.motobudzet.api.domain.model.Model;
 import pl.motobudzet.api.dto.ModelDTO;
-import pl.motobudzet.api.adapter.facade.ModelFacade;
 
 import java.util.List;
 

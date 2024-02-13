@@ -55,5 +55,5 @@ management:
         enabled: true
 
 email-service:
-  url: http://localhost:20134
+  url: https://motobudzet.pl
   email-address: info@motobudzet.pl

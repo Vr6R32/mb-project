@@ -7,7 +7,6 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
@@ -30,7 +29,6 @@ import pl.motobudzet.mailingmodule.MailingModuleApplication;
 import pl.motobudzet.mailingmodule.SpringMailSenderService;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +51,18 @@ class KafkaReceiverServiceTest {
 
     @BeforeAll
     static void startKafkaContainer() {
+
         kafkaContainer.start();
+
+        AdminClient adminClient = AdminClient.create(Map.of("bootstrap.servers", kafkaContainer.getBootstrapServers()));
+
+        NewTopic mailingTopic = TopicBuilder.name(MAILING_TOPIC)
+                .replicas(1)
+                .partitions(1)
+                .build();
+
+        adminClient.createTopics(List.of(mailingTopic));
+
     }
 
     @AfterAll
@@ -100,14 +109,7 @@ class KafkaReceiverServiceTest {
     @MethodSource("emailTypes")
     void testProduceAndConsumeKafkaMessageWithDifferentEmailTypes(EmailType emailType) throws InterruptedException {
 
-        AdminClient adminClient = AdminClient.create(Map.of("bootstrap.servers", kafkaContainer.getBootstrapServers()));
-
-        NewTopic mailingTopic = TopicBuilder.name(MAILING_TOPIC)
-                .replicas(1)
-                .partitions(1)
-                .build();
-
-        adminClient.createTopics(List.of(mailingTopic));
+        //given
 
         EmailNotificationRequest notificationRequest = new EmailNotificationRequest(
                 emailType, "message", "sender", UUID.randomUUID(),
@@ -121,6 +123,8 @@ class KafkaReceiverServiceTest {
 
         kafkaTemplate.send(MAILING_TOPIC, notificationRequest);
 
+        //then
+
         await().atMost(10, SECONDS).untilAsserted(() -> {
 
             ArgumentCaptor<EmailNotificationRequest> argumentCaptor = ArgumentCaptor.forClass(EmailNotificationRequest.class);
@@ -131,24 +135,16 @@ class KafkaReceiverServiceTest {
             assertThat(capturedRequest).isEqualToComparingFieldByField(notificationRequest);
 
             switch (capturedRequest.type()) {
-                case RESET_PASS_CODE -> {
-                    verify(mailService, times(1)).sendResetPasswordNotificationCodeLink(capturedRequest);
-                }
-                case MESSAGE_NOTIFICATION -> {
-                    verify(mailService, times(1)).sendMessageNotification(capturedRequest);
-                }
-                case ADV_ACTIVE_CONFIRMATION -> {
-                    verify(mailService, times(1)).sendAdvertisementActivationConfirmNotification(capturedRequest);
-                }
-                case REGISTER_ACTIVATION -> {
-                    verify(mailService, times(1)).sendRegisterActivationNotification(capturedRequest);
-                }
-                case MANAGEMENT_NOTIFICATION -> {
-                    verify(mailService, times(1)).sendEmailNotificationToManagement(capturedRequest);
-                }
-                default -> {
+                case RESET_PASS_CODE -> verify(mailService, times(1)).sendResetPasswordNotificationCodeLink(capturedRequest);
 
-                }
+                case MESSAGE_NOTIFICATION -> verify(mailService, times(1)).sendMessageNotification(capturedRequest);
+
+                case ADV_ACTIVE_CONFIRMATION -> verify(mailService, times(1)).sendAdvertisementActivationConfirmNotification(capturedRequest);
+
+                case REGISTER_ACTIVATION -> verify(mailService, times(1)).sendRegisterActivationNotification(capturedRequest);
+
+                case MANAGEMENT_NOTIFICATION -> verify(mailService, times(1)).sendEmailNotificationToManagement(capturedRequest);
+
             }
         });
     }

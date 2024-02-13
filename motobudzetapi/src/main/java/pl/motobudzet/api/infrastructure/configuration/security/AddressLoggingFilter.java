@@ -11,10 +11,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 public class AddressLoggingFilter extends OncePerRequestFilter {
 
-    protected final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "actuator/prometheus", "js/", "api/spec", "api/brands", "api/cities",  "api/models", "api/advertisements", "favicon.ico");
+    protected final List<String> IGNORED_PATHS = Arrays.asList("api/static", "css/", "actuator/prometheus", "js/", "api/spec", "api/brands", "api/cities", "api/models", "api/advertisements", "favicon.ico");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

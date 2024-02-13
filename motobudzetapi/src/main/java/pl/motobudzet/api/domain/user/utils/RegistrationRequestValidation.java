@@ -1,7 +1,7 @@
 package pl.motobudzet.api.domain.user.utils;
 
-import pl.motobudzet.api.persistance.AppUserRepository;
 import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
+import pl.motobudzet.api.persistance.AppUserRepository;
 
 
 public class RegistrationRequestValidation {

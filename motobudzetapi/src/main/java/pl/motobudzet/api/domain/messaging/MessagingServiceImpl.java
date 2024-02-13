@@ -4,13 +4,13 @@ package pl.motobudzet.api.domain.messaging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.dto.ConversationDTO;
 import pl.motobudzet.api.dto.MessageDTO;
-import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
-import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;
+import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.ConversationRepository;
 import pl.motobudzet.api.persistance.MessageRepository;
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
 import static pl.motobudzet.api.infrastructure.mapper.ConversationMapper.mapConversationToDTO;
 
 @Slf4j
@@ -42,7 +43,7 @@ class MessagingServiceImpl implements MessagingService {
                 .build();
 
         log.info("[MESSAGING-SERVICE] -> CREATE NEW CONVERSATION FOR ADVERTISEMENT WITH ID -> [{}] WITH USER WITH ID -> [{}] BY USER WITH ID -> [{}]",
-                advertisementId,advertisement.getUser().getId(), loggedUser.getId());
+                advertisementId, advertisement.getUser().getId(), loggedUser.getId());
         conversationRepository.saveAndFlush(conversation);
 
         return conversation;
@@ -56,9 +57,10 @@ class MessagingServiceImpl implements MessagingService {
     public Long findConversationIdByAdvIdAndSender(UUID advertisementId, String name) {
         return conversationRepository.findByUserClientIdAndAdvertisementId(advertisementId, name).orElse(-1L);
     }
+
     public Conversation findConversationByAdvertisementIdAndUserSender(UUID advertisementId, AppUser messageSender) {
         return conversationRepository
-                .findByAdvertisementIdAndUserClientId(messageSender,advertisementId).orElse(null);
+                .findByAdvertisementIdAndUserClientId(messageSender, advertisementId).orElse(null);
     }
 
     public String sendMessage(String message, UUID advertisementId, AppUser user) {
@@ -85,7 +87,7 @@ class MessagingServiceImpl implements MessagingService {
             AppUser emailNotificationReceiver = conversationUserClient.getUsername().equals(messageSenderName) ? conversationUserOwner : conversationUserClient;
 
             log.info("[MESSAGING-SERVICE] -> SEND PRIVATE MESSAGE FOR ADVERTISEMENT WITH ID -> [{}] TO USER WITH ID -> [{}] BY USER WITH ID -> [{}]",
-                    advertisementId,emailNotificationReceiver.getId(), user.getId());
+                    advertisementId, emailNotificationReceiver.getId(), user.getId());
 
             if (lastMessageUserName == null || !Objects.equals(lastMessageUserName, messageSenderName)) {
 
@@ -96,6 +98,7 @@ class MessagingServiceImpl implements MessagingService {
             return "Error while sending a message!";
         }
     }
+
     public List<MessageDTO> getAllMessages(Long conversationId, String loggedUser) {
         List<Message> messagesList = messageRepository.getAllMessagesByConversationId(conversationId);
         if (messagesList.isEmpty()) return Collections.emptyList();
@@ -119,7 +122,7 @@ class MessagingServiceImpl implements MessagingService {
     private Conversation findConversationOrCreateNew(UUID advertisementId, AppUser user) {
         Conversation conversation = findConversationByAdvertisementIdAndUserSender(advertisementId, user);
 
-        if(conversation==null){
+        if (conversation == null) {
             conversation = createConversation(advertisementId, user);
         }
         return conversation;

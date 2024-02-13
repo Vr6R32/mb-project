@@ -18,12 +18,15 @@ public class FavouriteFacade {
     public String manageUserFavourite(FavouriteRequest request, AppUser loggedUser) {
         return favouriteService.manageUserFavourite(request, loggedUser);
     }
+
     public boolean checkIsFavourite(String advertisementId, String loggedUser) {
         return favouriteService.checkIsFavourite(advertisementId, loggedUser);
     }
+
     public List<UUID> getUserFavouriteAdvertisementIds(String loggedUser) {
         return favouriteService.getUserFavouriteAdvertisementIds(loggedUser);
     }
+
     public List<AdvertisementDTO> getUserFavouriteAdvertisements(String loggedUser) {
         return favouriteService.getUserFavouriteAdvertisements(loggedUser);
     }

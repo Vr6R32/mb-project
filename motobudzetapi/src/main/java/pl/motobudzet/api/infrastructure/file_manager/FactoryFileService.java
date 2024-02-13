@@ -12,6 +12,6 @@ public class FactoryFileService {
     }
 
     public static FileService createFileService(AdvertisementFacade advertisementFacade, PathsConfig pathsConfig, EntityManager entityManager) {
-        return new FileServiceImpl(advertisementFacade,pathsConfig,entityManager);
+        return new FileServiceImpl(advertisementFacade, pathsConfig, entityManager);
     }
 }

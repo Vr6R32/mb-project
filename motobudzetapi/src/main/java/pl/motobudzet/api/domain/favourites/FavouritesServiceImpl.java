@@ -2,9 +2,9 @@ package pl.motobudzet.api.domain.favourites;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.persistance.AdvertisementRepository;
-import pl.motobudzet.api.domain.user.entity.AppUser;
 import pl.motobudzet.api.persistance.FavouritesRepository;
 
 import java.util.List;
@@ -26,11 +26,11 @@ public class FavouritesServiceImpl implements FavouriteService {
         Optional<Favourite> existingFavourite = favouritesRepository.findByUserAndAdvertisementId(user, request.advertisementId());
 
         if (existingFavourite.isEmpty()) {
-            log.info("[FAVOURITE-SERVICE] -> ADD TO FAVOURITE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",request.advertisementId(), user.getId());
+            log.info("[FAVOURITE-SERVICE] -> ADD TO FAVOURITE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", request.advertisementId(), user.getId());
             favouritesRepository.save(mapFavouriteRequestToEntity(request, user));
             return "Dodano do ulubionych";
         } else {
-            log.info("[FAVOURITE-SERVICE] -> REMOVE FROM FAVOURITE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]",request.advertisementId(), user.getId());
+            log.info("[FAVOURITE-SERVICE] -> REMOVE FROM FAVOURITE ADVERTISEMENT WITH ID -> [{}] BY USER WITH ID -> [{}]", request.advertisementId(), user.getId());
             favouritesRepository.delete(existingFavourite.get());
             return "Usunieto z ulubionych";
         }

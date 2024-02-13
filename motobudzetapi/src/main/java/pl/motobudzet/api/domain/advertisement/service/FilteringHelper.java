@@ -1,12 +1,14 @@
 package pl.motobudzet.api.domain.advertisement.service;
 
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.dto.AdvertisementFilterRequest;
-import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 
 import java.lang.reflect.Field;
 import java.util.List;

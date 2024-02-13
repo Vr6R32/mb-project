@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.model.Status;
 import pl.motobudzet.api.infrastructure.thymeleaf.MetaDataDTO;
+import pl.motobudzet.api.model.Status;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, UU
             "LEFT JOIN FETCH a.city c " +
             "LEFT JOIN FETCH a.city.cityState cs " +
             "WHERE a.id IN ?1")
-    //            "WHERE a.id IN ?1 ORDER BY FIELD(a.id,?1)")
+        //            "WHERE a.id IN ?1 ORDER BY FIELD(a.id,?1)")
     List<Advertisement> findByListOfUUIDs(List<UUID> uuidList);
 
     @Query("SELECT a FROM Advertisement a " +

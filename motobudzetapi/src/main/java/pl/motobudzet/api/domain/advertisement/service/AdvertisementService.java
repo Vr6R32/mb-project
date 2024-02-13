@@ -2,10 +2,10 @@ package pl.motobudzet.api.domain.advertisement.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import pl.motobudzet.api.dto.AdvertisementDTO;
-import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.dto.AdvertisementDTO;
+import pl.motobudzet.api.dto.AdvertisementRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public interface AdvertisementService {
 
     List<AdvertisementDTO> findAllAdvertisementsToVerify(Integer pageNumber);
 
-    String verifyAndEnableAdvertisement(UUID id,AppUser loggedUser);
+    String verifyAndEnableAdvertisement(UUID id, AppUser loggedUser);
 
     Advertisement getAdvertisement(UUID advertisementId);
 

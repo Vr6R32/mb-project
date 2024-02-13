@@ -8,5 +8,6 @@ import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
 public interface RegistrationService {
 
     ResponseEntity<String> register(RegistrationRequest request);
+
     void confirmEmail(String registrationCode, HttpServletResponse response, HttpServletRequest request);
 }

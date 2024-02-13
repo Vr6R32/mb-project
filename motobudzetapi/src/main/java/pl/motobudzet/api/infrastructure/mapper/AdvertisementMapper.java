@@ -1,7 +1,6 @@
 package pl.motobudzet.api.infrastructure.mapper;
 
 
-
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.brand.Brand;
 import pl.motobudzet.api.domain.model.Model;

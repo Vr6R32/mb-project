@@ -11,6 +11,6 @@ public class FactoryMessagingService {
     }
 
     public static MessagingService createMessagingService(ConversationRepository conversationRepository, MessageRepository messageRepository, EmailManagerFacade emailManagerFacade, AdvertisementFacade advertisementFacade) {
-        return new MessagingServiceImpl(conversationRepository,messageRepository,emailManagerFacade,advertisementFacade);
+        return new MessagingServiceImpl(conversationRepository, messageRepository, emailManagerFacade, advertisementFacade);
     }
 }

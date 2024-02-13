@@ -45,6 +45,7 @@ public class KafkaConsumerConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, EmailNotificationRequest> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, EmailNotificationRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.getContainerProperties().setObservationEnabled(true);
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }

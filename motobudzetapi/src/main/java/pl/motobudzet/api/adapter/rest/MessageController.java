@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.adapter.facade.MessagingFacade;
 import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.dto.MessageDTO;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,7 +24,7 @@ class MessageController {
     public ResponseEntity<String> sendMessage(@RequestParam String message, @RequestParam UUID advertisementId, Authentication authentication) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
 
-        String response = messagingFacade.sendMessage(message,advertisementId,loggedUser);
+        String response = messagingFacade.sendMessage(message, advertisementId, loggedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

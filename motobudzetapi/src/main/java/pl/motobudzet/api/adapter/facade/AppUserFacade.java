@@ -19,9 +19,11 @@ public class AppUserFacade {
     public AppUserDTO getUserDetails(String userName){
         return userService.getUserDetails(userName);
     }
+
     public int changeUserPassword(NewPasswordRequest request){
         return userService.changeUserPassword(request);
     }
+
     public int generatePasswordResetCode(ResetPasswordRequest request){
         return userService.generatePasswordResetCode(request);
     }

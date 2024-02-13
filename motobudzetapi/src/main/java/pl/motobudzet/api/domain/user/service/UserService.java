@@ -11,7 +11,10 @@ import pl.motobudzet.api.domain.user.entity.AppUser;
 
 public interface UserService {
     int changeUserPassword(NewPasswordRequest request);
+
     int generatePasswordResetCode(ResetPasswordRequest request);
+
     ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest);
+
     AppUserDTO getUserDetails(String userName);
 }

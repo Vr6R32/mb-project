@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.dto.CityDTO;
 import pl.motobudzet.api.dto.CityStateDTO;
-import pl.motobudzet.api.adapter.facade.LocationFacade;
 
 import java.util.List;
 

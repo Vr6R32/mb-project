@@ -59,19 +59,19 @@ public class AdvertisementFacade {
     }
 
     public ResponseEntity<String> editAdvertisement(UUID advertisementId, AdvertisementRequest request, AppUser loggedUser, List<MultipartFile> files) {
-        return advertisementService.editAdvertisement(advertisementId,request,loggedUser,files);
+        return advertisementService.editAdvertisement(advertisementId, request, loggedUser, files);
     }
 
     public MetaDataDTO getAdvertisementMetaDataById(UUID uuid) {
         return advertisementMetaDataService.getMetaDataForAdvertisementById(uuid);
     }
 
-    public String verifyAdvertisement(UUID id,AppUser loggedUser) {
-        return advertisementService.verifyAndEnableAdvertisement(id,loggedUser);
+    public String verifyAdvertisement(UUID id, AppUser loggedUser) {
+        return advertisementService.verifyAndEnableAdvertisement(id, loggedUser);
     }
 
-    public int rejectAdvertisement(UUID id,AppUser loggedUser) {
-        return advertisementService.rejectAdvertisement(id,loggedUser);
+    public int rejectAdvertisement(UUID id, AppUser loggedUser) {
+        return advertisementService.rejectAdvertisement(id, loggedUser);
     }
 
     @Transactional

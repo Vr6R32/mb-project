@@ -9,16 +9,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
+import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
+import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.domain.user.utils.RegistrationRequestValidation;
+import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
-import pl.motobudzet.api.domain.user.model.Role;
-import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
-import pl.motobudzet.api.domain.user.utils.RegistrationRequestValidation;
-import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 
 import java.io.IOException;
 import java.util.List;
@@ -60,14 +60,14 @@ class RegistrationServiceImpl implements RegistrationService {
             userRepository.save(newUser);
 
             log.info("[REGISTRATION-SERVICE] -> REGISTER NEW USER WITH ID -> [{}] EMAIL -> [{}] USERNAME -> [{}]",
-                    newUser.getId(),newUser.getEmail(), newUser.getUsername());
+                    newUser.getId(), newUser.getEmail(), newUser.getUsername());
 
             mailService.publishEmailNotificationEvent(buildEmailNotificationRequest(newUser));
 
 
             return ResponseEntity.ok()
                     .headers(httpHeaders ->
-                        httpHeaders.set("registered", "true")
+                            httpHeaders.set("registered", "true")
                     )
                     .contentType(MediaType.TEXT_HTML)
                     .body("Zarejerstrowano pomyślnie !" + "Na podany adres e-mail przyjdzie link aktywacyjny.");
@@ -80,13 +80,13 @@ class RegistrationServiceImpl implements RegistrationService {
         if (user != null && !user.isEnabled()) {
             user.setAccountEnabled(true);
             AppUser enabledUser = userRepository.saveAndFlush(user);
-            jwtService.authenticate(enabledUser,response);
+            jwtService.authenticate(enabledUser, response);
 
             try {
                 String redirectUrl = buildRedirectUrl(request, "/user/details?activation=true");
 
                 log.info("[REGISTRATION-SERVICE] -> CONFIRM USER ACCOUNT EMAIL WITH ID -> [{}] EMAIL -> [{}] USERNAME -> [{}]",
-                        user.getId(),user.getEmail(), user.getUsername());
+                        user.getId(), user.getEmail(), user.getUsername());
 
                 response.sendRedirect(redirectUrl);
             } catch (IOException e) {

@@ -50,6 +50,7 @@ services:
       - api-logs:/var/log/spring
     environment:
       SERVER_PORT: 20135
+      SPRING_PROFILES_ACTIVE: docker
       TZ: Europe/Warsaw
     networks:
       - kafka-network
@@ -206,7 +207,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_COMPRESSION_TYPE: producer
+      KAFKA_COMPRESSION_TYPE: gzip
     networks:
       - kafka-network
 

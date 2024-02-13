@@ -26,7 +26,6 @@ public class StaticResourceController {
     }
 
 
-
     @GetMapping(value = "/photo/{imageUrl}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> getAdvertisementPhoto(@PathVariable String imageUrl) {
 
@@ -46,6 +45,7 @@ public class StaticResourceController {
     public Resource getEmailBackgroundImage() {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "emailBackground.jpg");
     }
+
     @GetMapping(value = "/validationFail", produces = MediaType.IMAGE_PNG_VALUE)
     public Resource getValidationFailGif() {
         return new FileSystemResource(pathsConfig.getPrivateFilePath() + "validationFail.webp");

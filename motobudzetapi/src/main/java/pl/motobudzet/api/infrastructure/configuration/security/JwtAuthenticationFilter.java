@@ -56,9 +56,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void checkIsAnyInternalService(HttpServletRequest request){
+    private void checkIsAnyInternalService(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
-        if(authorization!=null && authorization.contains("Bearer prometheus9090auth")){
+        if (authorization != null && authorization.contains("Bearer prometheus9090auth")) {
             AppUser principal = AppUser.builder().userName("admin").id(1L).build();
             List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_MONITORING"));
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException{
+    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
         String accessToken = requestCookies.accessToken();
         String refreshToken = requestCookies.refreshToken();
@@ -119,7 +119,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwtService.applyHttpHeaders(response, httpHeaders);
     }
 
-    private void authenticateAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken){
+    private void authenticateAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String accessToken) {
         try {
             authenticate(request, response, filterChain, accessToken);
         } catch (IOException | ServletException e) {
@@ -127,7 +127,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void handleRefreshTokenAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String refreshToken){
+    private void handleRefreshTokenAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String refreshToken) {
         String refreshedAccessToken = jwtService.refreshToken(refreshToken, response);
         authenticateAccessToken(request, response, filterChain, refreshedAccessToken);
     }
@@ -137,21 +137,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // TODO : think is it okay to pass user data without fetching user from db ? it saves db usage and in general we have all needed user data from token
         //        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
-            Long userId = jwtService.extractUserId(accessToken);
-            String userEmail = jwtService.extractUserEmail(accessToken);
-            String username = jwtService.extractUsername(accessToken);
+        Collection<? extends GrantedAuthority> authorities = jwtService.extractAuthorities(accessToken);
+        Long userId = jwtService.extractUserId(accessToken);
+        String userEmail = jwtService.extractUserEmail(accessToken);
+        String username = jwtService.extractUsername(accessToken);
 
-            AppUser principal = AppUser.builder()
-                    .userName(username)
-                    .id(userId)
-                    .email(userEmail)
-                    .build();
+        AppUser principal = AppUser.builder()
+                .userName(username)
+                .id(userId)
+                .email(userEmail)
+                .build();
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    principal, null, authorities);
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-            filterChain.doFilter(request, response);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                principal, null, authorities);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        filterChain.doFilter(request, response);
     }
 }

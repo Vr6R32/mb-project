@@ -16,7 +16,7 @@ public class RedirectURLHandler {
             serverName = "localhost:20134";
         }
 
-        if(serverName.equals("localhost") && scheme.equals("http")){
+        if (serverName.equals("localhost") && scheme.equals("http")) {
             serverName = serverName + ":20134";
         }
 

@@ -12,19 +12,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
+import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
+import pl.motobudzet.api.domain.user.dto.AppUserDTO;
 import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
 import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
+import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
+import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.model.Role;
 import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
-import pl.motobudzet.api.domain.user.dto.AppUserDTO;
-import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.user.model.Role;
-import pl.motobudzet.api.domain.location.City;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -60,11 +60,11 @@ class UserServiceImpl implements UserService {
         String userEmail = loggedUser.getEmail();
         Role role = Role.ROLE_USER;
 
-            userRepository.insertUserFirstDetails(city.getId(), name, surname, phoneNumber, role, userEmail);
-            String redirectUrl = buildRedirectUrl(httpServletRequest, "/?activation=true");
-            loggedUser.setRole(role);
-            jwtService.authenticate(loggedUser,response);
-            return ResponseEntity.ok().body(Collections.singletonMap("redirectUrl", redirectUrl));
+        userRepository.insertUserFirstDetails(city.getId(), name, surname, phoneNumber, role, userEmail);
+        String redirectUrl = buildRedirectUrl(httpServletRequest, "/?activation=true");
+        loggedUser.setRole(role);
+        jwtService.authenticate(loggedUser, response);
+        return ResponseEntity.ok().body(Collections.singletonMap("redirectUrl", redirectUrl));
     }
 
     @Transactional
@@ -78,7 +78,7 @@ class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
 
         log.info("[REGISTRATION-SERVICE] -> GENERATE PASSWORD RESET CODE FOR USER WITH ID -> [{}] EMAIL -> [{}] USERNAME -> [{}]",
-                user.getId(),user.getEmail(), user.getUsername());
+                user.getId(), user.getEmail(), user.getUsername());
 
         mailService.publishEmailNotificationEvent(EmailNotificationRequest.builder().type(EmailType.RESET_PASS_CODE).userName(user.getUsername()).userResetPasswordCode(user.getResetPasswordCode()).receiverEmail(List.of(user.getEmail())).build());
 
@@ -96,7 +96,7 @@ class UserServiceImpl implements UserService {
         if (user.getResetPasswordCodeExpiration().isAfter(LocalDateTime.now())) {
 
             log.info("[REGISTRATION-SERVICE] -> CHANGE PASSWORD FOR USER WITH ID -> [{}] EMAIL -> [{}] USERNAME -> [{}]",
-                    user.getId(),user.getEmail(), user.getUsername());
+                    user.getId(), user.getEmail(), user.getUsername());
 
             return userRepository.insertNewUserPassword(passwordEncoder.encode(request.password()), request.resetCode());
         }

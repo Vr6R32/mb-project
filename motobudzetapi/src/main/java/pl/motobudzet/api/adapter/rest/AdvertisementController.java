@@ -43,21 +43,21 @@ class AdvertisementController {
     @DeleteMapping("/{id}")
     public int deleteAdvertisement(@PathVariable UUID id, Authentication authentication) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
-        return advertisementFacade.deleteAdvertisement(id,loggedUser);
+        return advertisementFacade.deleteAdvertisement(id, loggedUser);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<String> editAdvertisement(@PathVariable UUID id,
-                                                            @ModelAttribute @Valid AdvertisementRequest request,
-                                                            @RequestParam List<MultipartFile> files,
-                                                            Authentication authentication) {
+                                                    @ModelAttribute @Valid AdvertisementRequest request,
+                                                    @RequestParam List<MultipartFile> files,
+                                                    Authentication authentication) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
         return advertisementFacade.editAdvertisement(id, request, loggedUser, files);
     }
 
     @GetMapping("/last-uploaded")
     public List<AdvertisementDTO> getFewLastUploadedAdvertisements(@RequestParam(required = false) Integer pageNumber,
-                                                   @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
+                                                                   @RequestParam(required = false, defaultValue = "12") Integer pageSize) {
         return advertisementFacade.getFewLastUploadedAdvertisements(pageNumber, pageSize);
     }
 
@@ -68,15 +68,15 @@ class AdvertisementController {
     }
 
     @PostMapping("verify/{id}")
-    public String verifyAndEnableAdvertisement(@PathVariable UUID id,Authentication authentication) {
+    public String verifyAndEnableAdvertisement(@PathVariable UUID id, Authentication authentication) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
-        return advertisementFacade.verifyAdvertisement(id,loggedUser);
+        return advertisementFacade.verifyAdvertisement(id, loggedUser);
     }
 
     @PostMapping("reject/{id}")
-    public int rejectAdvertisement(@PathVariable UUID id,Authentication authentication) {
+    public int rejectAdvertisement(@PathVariable UUID id, Authentication authentication) {
         AppUser loggedUser = (AppUser) authentication.getPrincipal();
-        return advertisementFacade.rejectAdvertisement(id,loggedUser);
+        return advertisementFacade.rejectAdvertisement(id, loggedUser);
     }
 
 }

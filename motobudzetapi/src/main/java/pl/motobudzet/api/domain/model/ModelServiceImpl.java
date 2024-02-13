@@ -14,9 +14,11 @@ class ModelServiceImpl implements ModelService {
     public ModelServiceImpl(ModelRepository modelRepository) {
         this.modelRepository = modelRepository;
     }
+
     public List<Model> findAllModels() {
         return modelRepository.findAll();
     }
+
     public List<ModelDTO> findModelsByBrandName(String brandName) {
         return modelRepository.findAllModelsByBrandName(brandName.toUpperCase())
                 .stream()
