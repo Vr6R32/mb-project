@@ -136,28 +136,28 @@ admin
 docker compose up
 ```
 
-<h1 align="center">Url's when running docker locally:</h1>
 
-## Landing page :
-```bash
-http://localhost:20134/
-```
-## Prometheus :
-```bash
-http://localhost:9090/
-```
-## Grafana :
-```bash
-http://localhost:3000/
-```
-## Zipkin :
-```bash
-http://localhost:9411/
-```
 
 <hr>
+<h1 align="center">URLs</h1>
 
+| Service     |                       LOCAL                        |                        PRODUCTION                        |
+|:---: |:--------------------------------------------------:|:--------------------------------------------------------:|
+|     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        |                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                  |                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                        |
+| LandingPage | [http://localhost:20134/](http://localhost:20134/) |      [https://motobudzet.pl](https://motobudzet.pl)      |
+| Prometheus  |  [http://localhost:9090/](http://localhost:9090/)  |  [http://46.41.150.96:9090/](http://46.41.150.96:9090/)  |
+| Grafana     |  [http://localhost:3000/](http://localhost:3000/)  |  [http://46.41.150.96:3000/](http://46.41.150.96:3000/)  |
+| Zipkin      |  [http://localhost:9411/](http://localhost:9411/)  |  [http://46.41.150.96:9411/](http://46.41.150.96:9411/)  |
+| Jenkins     | [http://localhost:27015/](http://localhost:27015/) | [http://46.41.150.96:27015/](http://46.41.150.96:27015/) |
+| pgAdmin     |  [http://localhost:5050/](http://localhost:5050/)  |  [http://46.41.150.96:5050/](http://46.41.150.96:5050/)  |
 
+<h1 align="center" style="color: red">Warning </h1>
+
+<p align="center">
+Due to weak VPS (1vCore , 2GB RAM) , jenkins and pgAdmin is turned off on production environment.
+</p>
+<br>
+<hr>
 <h1 align="center">Exporting docker images on remote repository:</h1>
 
 <h1 align="center">Pre-requisites for Compilation & Deployment</h1>
@@ -232,7 +232,7 @@ When admin management user enters into advertisement that status needs to be res
 </p>
 
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421531962_351118654382827_1098160725967692080_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=jTuZ6-_KiskAX8bLPk-&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRsNgYTgi80KGBMtd_Ww6YaK7yDX91rp2iz1mScKnyJzA&oe=65E808AC">
-</p>
+
 
 <br>
 <hr>
@@ -368,14 +368,16 @@ User can manage his own advertisements or favourites in specified tab which can 
 </p>
 <hr>
 
-<h1 align="center">Mailing service</h1>
+<h1 align="center">Asynchronous mailing service</h1>
  
 <br>
 
 <p align="left">
 1. Whole api is completed with active mailing service.<br>
-2. Mailing service sends an email each time when some activity happens.<br>
-3. As displayed below , it sends an email every time when user tries to : <br>
+2. Mailing service is asynchronously handled through apache kafka message queue.<br>
+3. Every request between services is being traced with trace & span ID.<br>
+4. Mailing service sends an email each time when some activity happens.<br>
+5. As displayed below , it sends an email every time when user tries to : <br>
  
 <br>
 - Register a new account <br>
@@ -389,6 +391,9 @@ User can manage his own advertisements or favourites in specified tab which can 
 <br>
 
 <p align="center">
+<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/426807304_322062893636099_1287820160081465929_n.png?stp=dst-png_s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5WoELij58bsAX85T95_&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdTuJBAoYdG796POSgezBnBq5p_gGAEAPtTnPtVb4st-wA&oe=65F2BC7E">
+<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/426715838_919687946151721_9131697903424628067_n.png?stp=dst-png_s2048x2048&_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=XNByxPi4dbsAX_Vy-VS&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQ_TXITvzR7Y_Sb0Azw08wCC_VVEUsyW4BUNpjg97ynNg&oe=65F2BEFD">
+<br>
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/423036509_1833572503782083_5473750886199136916_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=A6pMBLeeTLIAX-ebhsd&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdSs2A73k7vu3k50frQtqJ1Wn8JOGOG3JJ7f6Fl_2RkPVQ&oe=65E7F8CB">
 <img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/422783272_398823966119665_7372210058124691296_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=lYLXPXwMYeYAX-xLyLe&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQ7XNVSG1iiOc4tyUPqkr5UIXc9UVeLujDOxzy-32sBwA&oe=65E81CB0">
 <img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422708941_399342009261369_3259540669228235302_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=77WZvHn0jbEAX-lLcP-&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdT-ucyuBhRrGPq8nYMtTtZBVLvMaQ1tr2eEdgbgn_f0tg&oe=65E8242F">
