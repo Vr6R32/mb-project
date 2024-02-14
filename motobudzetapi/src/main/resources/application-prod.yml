@@ -1,27 +1,11 @@
 spring:
   application:
     name: mb-api
-  zipkin:
-    baseUrl: http://zipkin:9411
-  sleuth:
-    sampler:
-      probability: 1.0
-  mail:
-    host: serwer2379308.home.pl
-    port: 587
-    username: info@motobudzet.pl
-    password: dontgotosql
-    properties:
-      mail:
-        smtp:
-          ssl:
-            trust: "*"
-            auth: true
-            starttls:
-              enable: true
-            connection-timeout: 5000
-            timeout: 3000
-            write timeout: 5000
+  kafka:
+    bootstrap-servers: kafka-broker:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   datasource:
     hikari:
       max-lifetime: 600000
@@ -49,12 +33,13 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
 
 management:
-  metrics:
-    tags:
-      application: mb-api
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
+  observations:
+    key-values:
+      application: mailing-service
+
   endpoints:
     web:
       exposure:
@@ -97,12 +82,3 @@ token:
 paths:
   public: "app/files/public/"
   private: "app/files/private/"
-
-email-service:
-  url: https://motobudzet.pl
-  email-address: info@motobudzet.pl
-
-mailing:
-  module:
-    enabled: false
-

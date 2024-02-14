@@ -1,7 +1,11 @@
 spring:
   application:
     name: mb-api
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   mail:
     host: serwer2379308.home.pl
     port: 587
@@ -105,7 +109,3 @@ token:
 paths:
   public: "files/public/"
   private: "files/private/"
-
-email-service:
-  url: http://localhost:20134
-  email-address: info@motobudzet.pl

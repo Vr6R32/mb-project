@@ -1,24 +1,11 @@
 spring:
   application:
     name: mb-api
-
-  mail:
-    host: serwer2379308.home.pl
-    port: 587
-    username: info@motobudzet.pl
-    password: dontgotosql
-    properties:
-      mail:
-        smtp:
-          ssl:
-            trust: "*"
-            auth: true
-            starttls:
-              enable: true
-            connection-timeout: 5000
-            timeout: 3000
-            write timeout: 5000
-
+  kafka:
+    bootstrap-servers: kafka-broker:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   datasource:
     hikari:
       max-lifetime: 600000
@@ -105,7 +92,3 @@ token:
 paths:
   public: "app/files/public/"
   private: "app/files/private/"
-
-email-service:
-  url: https://localhost
-  email-address: info@motobudzet.pl

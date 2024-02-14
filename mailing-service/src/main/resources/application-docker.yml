@@ -13,7 +13,8 @@ spring:
       properties:
         spring.json.value.default.type: pl.motobudzet.api.model.EmailNotificationRequest
         spring.json.trusted.packages: '*'
-
+  banner:
+    location: classpath:banner.txt
 
   mail:
     host: serwer2379308.home.pl
