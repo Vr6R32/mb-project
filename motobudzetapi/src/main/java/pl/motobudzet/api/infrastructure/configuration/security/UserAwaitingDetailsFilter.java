@@ -11,9 +11,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static pl.motobudzet.api.model.Role.ROLE_AWAITING_DETAILS;
+
 public class UserAwaitingDetailsFilter extends OncePerRequestFilter {
 
-    private static final String ROLE_AWAITING_DETAILS = "ROLE_AWAITING_DETAILS";
     private static final String REDIRECT_URL = "/user/details";
     private static final String UPDATE_DETAILS_URL = ("/api/user/confirm/**");
 
@@ -39,6 +40,6 @@ public class UserAwaitingDetailsFilter extends OncePerRequestFilter {
     private boolean hasAwaitingDetailsRole(Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .anyMatch(ROLE_AWAITING_DETAILS::equals);
+                .anyMatch(ROLE_AWAITING_DETAILS.name()::equals);
     }
 }

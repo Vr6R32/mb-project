@@ -25,6 +25,7 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.motobudzet.api.model.Role;
 
 import java.io.IOException;
 
@@ -39,9 +40,9 @@ import static pl.motobudzet.api.infrastructure.configuration.security.RedirectUR
 public class SecurityConfig {
 
     public static final String API_ADVERTISEMENTS_PATH = "/api/advertisements/**";
-    public static final String ROLE_AWAITING_DETAILS = "AWAITING_DETAILS";
-    public static final String ROLE_ADMIN = "ADMIN";
-    public static final String ROLE_MONITORING = "MONITORING";
+    public static final String ROLE_AWAITING_DETAILS = Role.ROLE_AWAITING_DETAILS.toString();
+    public static final String ROLE_ADMIN = Role.ROLE_ADMIN.toString();
+    public static final String ROLE_MONITORING = Role.ROLE_MONITORING.toString();
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthFilter;
