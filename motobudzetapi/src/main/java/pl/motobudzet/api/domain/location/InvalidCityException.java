@@ -1,9 +1,11 @@
 package pl.motobudzet.api.domain.location;
 
+
 public class InvalidCityException extends RuntimeException {
 
-    public InvalidCityException(String message) {
-        super(message);
-    }
+    public static final String WRONG_CITY_NAME = "WRONG_CITY_NAME";
 
+    public InvalidCityException() {
+        super(WRONG_CITY_NAME);
+    }
 }

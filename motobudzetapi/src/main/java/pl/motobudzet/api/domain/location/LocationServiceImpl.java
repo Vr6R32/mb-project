@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 class LocationServiceImpl implements LocationService {
 
-    public static final String WRONG_CITY_NAME = "WRONG_CITY_NAME";
     private final CityRepository cityRepository;
     private final CityStateRepository stateRepository;
 
@@ -23,8 +22,8 @@ class LocationServiceImpl implements LocationService {
         return cityRepository.getAllCities().stream().map(CityMapper::mapToCityDTO).toList();
     }
     public double calculateCityDistance(String cityOne, String cityTwo) {
-        City firstCity = cityRepository.getCityByName(cityOne).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
-        City secondCity = cityRepository.getCityByName(cityTwo).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
+        City firstCity = cityRepository.getCityByName(cityOne).orElseThrow(InvalidCityException::new);
+        City secondCity = cityRepository.getCityByName(cityTwo).orElseThrow(InvalidCityException::new);
         return DistanceCalculator.calculateDistance(firstCity.getNLatitude(), firstCity.getELongitude(), secondCity.getNLatitude(), secondCity.getELongitude());
     }
 
@@ -33,7 +32,7 @@ class LocationServiceImpl implements LocationService {
         City mainLocation = allCitiesWithCityStates.stream()
                 .filter(city -> city.getName().equals(mainCity))
                 .findFirst()
-                .orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
+                .orElseThrow(InvalidCityException::new);
 
         Double mainLatitude = mainLocation.getNLatitude();
         Double mainLongitude = mainLocation.getELongitude();
@@ -53,7 +52,7 @@ class LocationServiceImpl implements LocationService {
     }
 
     public City getCityByNameAndState(String cityName, String stateName) {
-        return cityRepository.getCityByNameAndState(cityName, stateName.toUpperCase()).orElseThrow(() -> new InvalidCityException(WRONG_CITY_NAME));
+        return cityRepository.getCityByNameAndState(cityName, stateName.toUpperCase()).orElseThrow(InvalidCityException::new);
     }
 
     public List<CityDTO> getCityByPartialName(String partialName) {
