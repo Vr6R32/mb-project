@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.domain.favourites.FavouriteRequest;
 import pl.motobudzet.api.domain.favourites.FavouriteService;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 
 import java.util.List;
 import java.util.UUID;

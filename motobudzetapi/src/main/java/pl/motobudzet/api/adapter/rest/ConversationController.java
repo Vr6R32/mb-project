@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.motobudzet.api.adapter.facade.MessagingFacade;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.dto.ConversationDTO;
 
 import java.util.List;

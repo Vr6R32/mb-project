@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.dto.AdvertisementRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 
 import java.util.List;
 import java.util.UUID;

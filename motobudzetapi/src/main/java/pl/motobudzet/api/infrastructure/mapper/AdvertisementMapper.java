@@ -4,7 +4,7 @@ package pl.motobudzet.api.infrastructure.mapper;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.brand.Brand;
 import pl.motobudzet.api.domain.model.Model;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 import pl.motobudzet.api.dto.AdvertisementRequest;
 import pl.motobudzet.api.dto.BrandDTO;

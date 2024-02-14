@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.infrastructure.configuration.security.token.Token;
 import pl.motobudzet.api.infrastructure.configuration.security.token.TokenEncryption;
 import pl.motobudzet.api.infrastructure.configuration.security.token.TokenRepository;

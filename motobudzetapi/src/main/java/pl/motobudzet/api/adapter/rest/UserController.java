@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.motobudzet.api.adapter.facade.AppUserFacade;
-import pl.motobudzet.api.domain.user.dto.*;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
+import pl.motobudzet.api.dto.*;
 
 
 @RestController

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import pl.motobudzet.api.adapter.facade.AdvertisementFacade;
 import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.dto.ConversationDTO;
 import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.infrastructure.mapper.MessageMapper;

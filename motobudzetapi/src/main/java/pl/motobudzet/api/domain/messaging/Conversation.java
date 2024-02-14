@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 
 import java.util.List;
 

@@ -14,8 +14,8 @@ import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.model.EmailNotificationRequest;
 import pl.motobudzet.api.model.EmailType;
 import pl.motobudzet.api.persistance.AppUserRepository;
-import pl.motobudzet.api.domain.user.dto.RegistrationRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.dto.RegistrationRequest;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 
 import java.io.IOException;

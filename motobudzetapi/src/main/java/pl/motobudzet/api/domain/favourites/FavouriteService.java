@@ -1,6 +1,6 @@
 package pl.motobudzet.api.domain.favourites;
 
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.dto.AdvertisementDTO;
 
 import java.util.List;

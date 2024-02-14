@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.domain.user.AppUser;
+import pl.motobudzet.api.model.Role;
 
 import java.time.LocalDateTime;
 import java.util.List;

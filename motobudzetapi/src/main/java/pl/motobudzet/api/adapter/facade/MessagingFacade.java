@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import pl.motobudzet.api.dto.ConversationDTO;
 import pl.motobudzet.api.dto.MessageDTO;
 import pl.motobudzet.api.domain.messaging.MessagingService;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 
 import java.util.List;
 import java.util.UUID;

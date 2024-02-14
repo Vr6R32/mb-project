@@ -2,7 +2,7 @@ package pl.motobudzet.api.infrastructure.mapper;
 
 import pl.motobudzet.api.domain.favourites.Favourite;
 import pl.motobudzet.api.domain.favourites.FavouriteRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 
 public class FavouriteMapper {
 

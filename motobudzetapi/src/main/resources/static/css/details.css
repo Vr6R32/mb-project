@@ -1,6 +1,4 @@
 
-
-/* Stylowanie nagłówka */
 .form-signin-heading {
     text-align: center;
     margin-bottom: 20px;
@@ -9,20 +7,20 @@
 }
 
 #suggestionsList::-webkit-scrollbar {
-    width: 5px; /* Szerokość paska przewijania */
+    width: 5px;
 }
 
 #suggestionsList::-webkit-scrollbar-thumb {
-    background-color: darkgoldenrod; /* Kolor paska przewijania */
-    border-radius: 10px; /* Zaokrąglenie rantów paska przewijania */
+    background-color: darkgoldenrod;
+    border-radius: 10px;
 }
 
 #suggestionsList::-webkit-scrollbar-track {
-    background-color: transparent; /* Kolor tła paska przewijania */
+    background-color: transparent;
 }
 
 
-/* Stylowanie formularza */
+
 .form-signin {
     max-width: 400px;
     margin: 0 auto;
@@ -31,14 +29,14 @@
     border-radius: 5px;
 }
 
-/* Stylowanie etykiet i pól tekstowych */
+
 .form-signin label {
     display: block;
     margin-bottom: 10px;
     color: darkgoldenrod;
     width: 120px;
     text-align: left;
-    margin-right: 50px;
+    margin-right: 260px;
 
 }
 
@@ -53,7 +51,6 @@
 }
 
 #userDetailsForm {
-    /*background-color: #181818;*/
     background-color: #000000;
     border-radius: 30px;
     box-shadow: 0 0 40px darkgoldenrod;
@@ -63,11 +60,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Dodaj padding, aby uzyskać odstęp od krawędzi */
+    padding: 20px;
     box-sizing: border-box;
     max-width: 100%;
-    height: 100vh; /* Ustaw wysokość na 100% widoku (viewport height) */
-    margin: 0 auto; /* Wycentruj w poziomie */
+    height: 100vh;
+    margin: 0 auto;
     transition: box-shadow 0s ease-in-out;
 }
 

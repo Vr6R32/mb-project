@@ -883,9 +883,9 @@ function handleCitySuggestionList(input, form) {
 
     inputContainer.appendChild(input);
     inputContainer.appendChild(suggestionsList);
+
     if(form) {
         form.appendChild(inputContainer);
-
     }
 
     let timeoutId;
@@ -900,7 +900,7 @@ function handleCitySuggestionList(input, form) {
             fetch(`/api/cities?partialName=${partialCityName}`)
                 .then(response => response.json())
                 .then(data => {
-                    updateCitySuggestions(data);
+                    updateCitySuggestions(data,form);
                 })
                 .catch(error => {
                     console.error("Błąd podczas pobierania propozycji miast:", error);
@@ -1057,7 +1057,7 @@ function createDialogBox(message){
         document.body.appendChild(overlay);
     }
 }
-function updateCitySuggestions(suggestions) {
+function updateCitySuggestions(suggestions,form) {
     const cityInput = document.getElementById('city');
     const cityStateInput = document.getElementById('cityState');
     const cityStateLabel = document.getElementById('cityStatelabel');
@@ -1077,8 +1077,10 @@ function updateCitySuggestions(suggestions) {
             cityStateInput.value = suggestion.cityState.name;
 
             cityStateInput.setAttribute('data-selected-city-state-id', suggestion.cityState.id);
-            cityStateInput.style.color = 'white';
-            cityStateLabel.style.color = 'white';
+            if(!form){
+                cityStateInput.style.color = 'white';
+                cityStateLabel.style.color = 'white';
+            }
             suggestionsList.innerHTML = '';
         });
         suggestionsList.appendChild(suggestionItem);

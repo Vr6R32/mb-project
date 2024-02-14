@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import pl.motobudzet.api.domain.user.dto.*;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.domain.user.service.RegistrationService;
 import pl.motobudzet.api.domain.user.service.UserService;
+import pl.motobudzet.api.dto.*;
 
 @AllArgsConstructor
 public class AppUserFacade {

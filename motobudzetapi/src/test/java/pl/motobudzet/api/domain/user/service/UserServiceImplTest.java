@@ -16,12 +16,12 @@ import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.domain.location.CityState;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
-import pl.motobudzet.api.domain.user.dto.AppUserDTO;
-import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
-import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
-import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.dto.AppUserDTO;
+import pl.motobudzet.api.dto.NewPasswordRequest;
+import pl.motobudzet.api.dto.ResetPasswordRequest;
+import pl.motobudzet.api.dto.UserDetailsRequest;
+import pl.motobudzet.api.domain.user.AppUser;
+import pl.motobudzet.api.model.Role;
 import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.model.EmailNotificationRequest;
@@ -74,7 +74,7 @@ class UserServiceImplTest {
         CityState cityState = CityState.builder().id(1L).name("cityState").cities(List.of()).build();
         City city = City.builder().name("city").id(1L).cityState(cityState).build();
         AppUser user = AppUser.builder().userName(username).id(1L).name("mockey").surname("mock").email("mockey@mock.pl").city(city).build();
-        AppUserDTO expectedDTO = UserMapper.mapUserEntityToDTOwithLocationDetail(user);
+        AppUserDTO expectedDTO = UserMapper.mapUserEntityToDTO(user);
 
         given(userRepository.findUserDetailsByName(username)).willReturn(Optional.of(user));
 

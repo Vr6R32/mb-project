@@ -28,7 +28,7 @@ spring:
 #    password: dontgotosql
     hikari:
       max-lifetime: 600000
-    url: jdbc:postgresql://localhost:5432/motobudzet
+    url: jdbc:postgresql://localhost:3309/motobudzet
     username: postgres
     password: dontgotosql
 

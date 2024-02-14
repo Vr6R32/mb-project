@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.motobudzet.api.domain.brand.Brand;
 import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.domain.model.Model;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.model.*;
 
 import java.time.LocalDate;

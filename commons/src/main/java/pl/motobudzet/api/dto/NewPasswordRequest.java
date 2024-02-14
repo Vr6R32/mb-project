@@ -1,4 +1,4 @@
-package pl.motobudzet.api.domain.user.dto;
+package pl.motobudzet.api.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

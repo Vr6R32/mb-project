@@ -13,7 +13,7 @@ import pl.motobudzet.api.domain.advertisement.entity.Advertisement;
 import pl.motobudzet.api.domain.advertisement.service.AdvertisementFilteringService;
 import pl.motobudzet.api.domain.advertisement.service.AdvertisementMetaDataService;
 import pl.motobudzet.api.domain.advertisement.service.AdvertisementService;
-import pl.motobudzet.api.domain.user.entity.AppUser;
+import pl.motobudzet.api.domain.user.AppUser;
 import pl.motobudzet.api.infrastructure.thymeleaf.MetaDataDTO;
 
 import java.util.List;

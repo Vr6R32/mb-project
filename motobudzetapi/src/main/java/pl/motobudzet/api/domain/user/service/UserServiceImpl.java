@@ -14,12 +14,12 @@ import pl.motobudzet.api.adapter.facade.EmailManagerFacade;
 import pl.motobudzet.api.adapter.facade.LocationFacade;
 import pl.motobudzet.api.domain.location.City;
 import pl.motobudzet.api.domain.user.UserDoesntExistException;
-import pl.motobudzet.api.domain.user.dto.AppUserDTO;
-import pl.motobudzet.api.domain.user.dto.NewPasswordRequest;
-import pl.motobudzet.api.domain.user.dto.ResetPasswordRequest;
-import pl.motobudzet.api.domain.user.dto.UserDetailsRequest;
-import pl.motobudzet.api.domain.user.entity.AppUser;
-import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.dto.AppUserDTO;
+import pl.motobudzet.api.dto.NewPasswordRequest;
+import pl.motobudzet.api.dto.ResetPasswordRequest;
+import pl.motobudzet.api.dto.UserDetailsRequest;
+import pl.motobudzet.api.domain.user.AppUser;
+import pl.motobudzet.api.model.Role;
 import pl.motobudzet.api.infrastructure.configuration.security.JwtService;
 import pl.motobudzet.api.infrastructure.mapper.UserMapper;
 import pl.motobudzet.api.model.EmailNotificationRequest;
@@ -46,7 +46,7 @@ class UserServiceImpl implements UserService {
 
     public AppUserDTO getUserDetails(String userName) {
         return userRepository.findUserDetailsByName(userName)
-                .map(UserMapper::mapUserEntityToDTOwithLocationDetail)
+                .map(UserMapper::mapUserEntityToDTO)
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
     }
 

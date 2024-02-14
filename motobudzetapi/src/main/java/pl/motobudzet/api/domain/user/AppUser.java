@@ -1,10 +1,10 @@
-package pl.motobudzet.api.domain.user.entity;
+package pl.motobudzet.api.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.motobudzet.api.domain.user.model.Role;
+import pl.motobudzet.api.model.Role;
 import pl.motobudzet.api.domain.location.City;
 
 import java.time.LocalDateTime;
