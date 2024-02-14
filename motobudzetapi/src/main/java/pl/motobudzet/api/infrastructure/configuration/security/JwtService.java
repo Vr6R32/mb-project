@@ -173,8 +173,8 @@ public class JwtService {
         return null;
     }
 
-    public void authenticate(AppUser user, HttpServletResponse response) {
-        setAuthenticationResponse(user, response);
+    public String authenticate(AppUser user, HttpServletResponse response) {
+        return setAuthenticationResponse(user, response);
     }
 
     private String setAuthenticationResponse(AppUser user, HttpServletResponse response) {
@@ -193,7 +193,7 @@ public class JwtService {
         HttpHeaders httpHeaders = buildHttpTokenHeaders(encryptedAccessToken, encryptedRefreshToken, jwtExpiration, refreshExpiration);
         applyHttpHeaders(response, httpHeaders);
         response.setStatus(HttpServletResponse.SC_OK);
-        return accessToken;
+        return encryptedAccessToken;
     }
 
     private String encryptToken(String token) {

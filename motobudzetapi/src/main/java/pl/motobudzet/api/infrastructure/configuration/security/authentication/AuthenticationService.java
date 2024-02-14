@@ -3,6 +3,8 @@ package pl.motobudzet.api.infrastructure.configuration.security.authentication;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +22,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public void authenticate(AuthenticationRequest credentials, HttpServletResponse response) {
-
+    public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest credentials, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -31,10 +32,10 @@ public class AuthenticationService {
             );
 
             AppUser user = (AppUser) authentication.getPrincipal();
-            jwtService.authenticate(user, response);
-
+            String accessToken = jwtService.authenticate(user, response);
+            return ResponseEntity.ok(new AuthenticationResponse(accessToken));
         } catch (AuthenticationException e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthenticationResponse(null));
         }
     }
 }

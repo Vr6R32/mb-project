@@ -181,7 +181,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins/jenkins.yml:/var/jenkins_home/casc_configs/jenkins.yml:ro
       - ./jenkins/plugins.txt:/usr/share/jenkins/ref/plugins.txt
-#      - ./db-init/db-init.sql:/var/jenkins_home/mb/db-init.sql
       - api-logs:/var/log/spring
     environment:
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"

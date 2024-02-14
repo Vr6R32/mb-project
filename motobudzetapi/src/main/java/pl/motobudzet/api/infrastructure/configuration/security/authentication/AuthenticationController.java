@@ -2,6 +2,7 @@ package pl.motobudzet.api.infrastructure.configuration.security.authentication;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/authenticate")
-    public void authenticate(@RequestBody AuthenticationRequest credentials, HttpServletResponse response) {
-        authenticationService.authenticate(credentials,response);
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest credentials, HttpServletResponse response) {
+        return authenticationService.authenticate(credentials,response);
     }
 }

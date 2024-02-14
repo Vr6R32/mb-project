@@ -42,14 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (areTokensMissing(request)) {
-            checkIsAnyInternalService(request);
-            filterChain.doFilter(request, response);
+        if (areHttpCookieTokensMissing(request)) {
+            processBearerTokenAuthorization(request,response,filterChain);
             return;
         }
 
         try {
-            processAuthentication(request, response, filterChain);
+            processHttpCookieTokenAuthorization(request, response, filterChain);
         } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
             log.warn(e.getMessage());
             filterChain.doFilter(request, response);
@@ -68,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void processAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+    private void processHttpCookieTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
         String accessToken = requestCookies.accessToken();
         String refreshToken = requestCookies.refreshToken();
@@ -103,12 +102,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
+    private void processBearerTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+
+        String accessToken = null;
+        String authorization = request.getHeader("Authorization");
+
+        if(authorization.contains("Bearer")){
+            accessToken = authorization.substring(7);
+        }
+
+        if(accessToken != null && accessToken.contains("prometheus9090auth")){
+            checkIsAnyInternalService(request);
+            return;
+        }
+
+        String decryptedAccessToken = null;
+
+        if (accessToken != null) {
+            decryptedAccessToken = jwtService.decryptToken(accessToken);
+        }
+
+        try {
+            if (decryptedAccessToken != null) {
+                authenticateAccessToken(request, response, filterChain, decryptedAccessToken);
+            }
+        } catch (ExpiredJwtException e) {
+            clearTokensAndSendRedirect(response);
+        }
+    }
+
+
     private boolean isRequestWhiteListed(String path) {
         return Arrays.stream(SecurityConfig.WHITE_LIST_URL)
                 .anyMatch(whiteListedPath -> path.matches(whiteListedPath.replace("**", ".*")));
     }
 
-    private boolean areTokensMissing(HttpServletRequest request) {
+    private boolean areHttpCookieTokensMissing(HttpServletRequest request) {
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
         return requestCookies.accessToken() == null && requestCookies.refreshToken() == null;
     }
