@@ -50,7 +50,6 @@ class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserDoesntExistException("USER_DOESNT_EXIST"));
     }
 
-    @Transactional
     public ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest) {
 
         City city = locationFacade.getCityByNameAndState(request.city(), request.cityState());

@@ -55,16 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private void checkIsAnyInternalService(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.contains("Bearer prometheus9090auth")) {
-            AppUser principal = AppUser.builder().userName("admin").id(1L).build();
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_MONITORING"));
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    principal, null, authorities);
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-        }
+    private void setInternalServiceAuthorization(HttpServletRequest request) {
+        AppUser principal = AppUser.builder().userName("monitoring").id(1L).build();
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_MONITORING"));
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                principal, null, authorities);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
     private void processHttpCookieTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
@@ -104,7 +101,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void processBearerTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        String accessToken = null;
+        String accessToken;
         String authorization = request.getHeader("Authorization");
 
         if(authorization == null){
@@ -114,18 +111,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(authorization.contains("Bearer")){
             accessToken = authorization.substring(7);
-        }
-
-        if(accessToken != null && accessToken.contains("prometheus9090auth")){
-            checkIsAnyInternalService(request);
+        } else {
+            filterChain.doFilter(request,response);
             return;
         }
 
-        String decryptedAccessToken = null;
-
-        if (accessToken != null) {
-            decryptedAccessToken = jwtService.decryptToken(accessToken);
+        if(accessToken.contains("prometheus9090auth")){
+            setInternalServiceAuthorization(request);
+            filterChain.doFilter(request,response);
+            return;
         }
+
+        String decryptedAccessToken = jwtService.decryptToken(accessToken);
 
         try {
             if (decryptedAccessToken != null) {

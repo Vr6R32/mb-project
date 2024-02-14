@@ -2,6 +2,7 @@ package pl.motobudzet.api.adapter.facade;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import pl.motobudzet.api.domain.user.dto.*;
@@ -32,6 +33,7 @@ public class AppUserFacade {
         return registrationService.register(request);
     }
 
+    @Transactional
     public ResponseEntity<?> updateFirstUserDetails(UserDetailsRequest request, AppUser loggedUser, HttpServletResponse response, HttpServletRequest httpServletRequest){
         return userService.updateFirstUserDetails(request, loggedUser, response, httpServletRequest);
     }
