@@ -102,10 +102,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
-    private void processBearerTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+    private void processBearerTokenAuthorization(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         String accessToken = null;
         String authorization = request.getHeader("Authorization");
+
+        if(authorization == null){
+            filterChain.doFilter(request,response);
+            return;
+        }
 
         if(authorization.contains("Bearer")){
             accessToken = authorization.substring(7);

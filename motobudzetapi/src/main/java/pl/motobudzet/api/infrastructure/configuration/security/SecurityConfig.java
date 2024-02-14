@@ -25,7 +25,6 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import pl.motobudzet.api.z_playground.session.SessionListener;
 
 import java.io.IOException;
 
@@ -39,14 +38,14 @@ import static pl.motobudzet.api.infrastructure.configuration.security.RedirectUR
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SecurityConfig {
 
+    public static final String API_ADVERTISEMENTS_PATH = "/api/advertisements/**";
+    public static final String ROLE_AWAITING_DETAILS = "AWAITING_DETAILS";
+    public static final String ROLE_ADMIN = "ADMIN";
+
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final LogoutHandler logoutHandler;
 
-    @Bean
-    public SessionListener httpSessionListener() {
-        return new SessionListener();
-    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -119,13 +118,13 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers("/", "index", "advertisement").permitAll()
-                                .requestMatchers("/user/details/**").hasRole("AWAITING_DETAILS")
-                                .requestMatchers("/api/user/updateDetails/**").hasRole("AWAITING_DETAILS")
+                                .requestMatchers("/user/details/**").hasRole(ROLE_AWAITING_DETAILS)
+                                .requestMatchers("/api/user/updateDetails/**").hasRole(ROLE_AWAITING_DETAILS)
 
-                                .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/advertisements/**").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/api/advertisements/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, API_ADVERTISEMENTS_PATH).permitAll()
+                                .requestMatchers(HttpMethod.PUT, API_ADVERTISEMENTS_PATH).authenticated()
+                                .requestMatchers(HttpMethod.POST, API_ADVERTISEMENTS_PATH).authenticated()
+                                .requestMatchers(HttpMethod.DELETE, API_ADVERTISEMENTS_PATH).authenticated()
 
                                 .requestMatchers("/logout").authenticated()
                                 .requestMatchers("/account").authenticated()
@@ -138,11 +137,11 @@ public class SecurityConfig {
                                 .requestMatchers("/advertisement/edit").authenticated()
                                 .requestMatchers("/api/conversations/**").authenticated()
                                 .requestMatchers("/api/users/favourites/**").authenticated()
-                                .requestMatchers("/actuator/prometheus").hasAnyRole("ADMIN", "MONITORING")
+                                .requestMatchers("/actuator/prometheus").hasAnyRole(ROLE_ADMIN, "MONITORING")
 
-                                .requestMatchers("/swagger-ui/**").hasRole("ADMIN")
-                                .requestMatchers("/management").hasRole("ADMIN")
-                                .anyRequest().hasRole("ADMIN")
+                                .requestMatchers("/swagger-ui/**").hasRole(ROLE_ADMIN)
+                                .requestMatchers("/management").hasRole(ROLE_ADMIN)
+                                .anyRequest().hasRole(ROLE_ADMIN)
 
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

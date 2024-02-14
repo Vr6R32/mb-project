@@ -62,7 +62,7 @@ class AdvertisementController {
     }
 
 
-    @GetMapping("all-to-verify")
+    @GetMapping("/all-to-verify")
     public List<AdvertisementDTO> findAllAdvertisementsToVerify(@RequestParam(required = false) Integer pageNumber) {
         return advertisementFacade.getAdvertisementsToVerify(pageNumber);
     }

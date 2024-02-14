@@ -121,9 +121,9 @@ function submitFormWithFiles() {
             if(response.ok){
                 resetFileDropArea();
                 const redirectURL = response.headers.get('location');
-                const parameter = response.headers.get('created');
+                const parameter = response.headers.get('edited');
                 if (redirectURL) {
-                    window.location.href = redirectURL + '&created='+parameter;
+                    window.location.href = redirectURL + '&edited='+parameter;
                 } else {
                     console.error('Błąd przekierowania: Brak nagłówka "Location" w odpowiedzi serwera.');
                 }
