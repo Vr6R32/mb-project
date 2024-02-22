@@ -406,5 +406,23 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <br>
 
+<hr>
 
+<h1 align="center">Facebook meta-tags</h1>
+
+<br>
+
+<p align="left">
+1. Forwarding site and advertisement urls on facebok supports meta data <br>
+2. Meta tags contain pictures and some description of site or specified advertisement<br>
+</p>
+
+<p align="center">
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426720604_1103082880897929_258655246820775960_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=3bRk8GYMSMUAX_rtGIm&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTpCBYqRcReoePUjKiwY5eisMmUmS7_OhadR3-SlAgH_Q&oe=65FE7378">
+<br>
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426833066_2080429175673127_6361307846383199271_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5t5mHGqKgG8AX8mCLLR&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRlZN7sMnidVT1aBfSMTAw3TLG-9DFttfktt0frJ9jyNg&oe=65FE8C4F">
+<br>
+<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/429101611_1796181394214758_3614352600299081160_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=wKdwYmb8SKsAX8nHLTT&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRDyHr6iqryIR3Pvia4GwIqgaVnnub3EZAbcpd_zD-7Aw&oe=65FE78CA"><img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/429022842_412576094640428_3184806122587294638_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=QT0G9ntymWIAX-J18RC&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdR3sSJ9AkyvyXQyU21ku6W_4GVxUxPziOUnW2ojKHl6xQ&oe=65FE6EF7">
+
+</p>
 

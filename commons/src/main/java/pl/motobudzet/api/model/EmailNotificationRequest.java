@@ -11,12 +11,10 @@ public record EmailNotificationRequest(
         EmailType type,
         String message,
         String senderName,
-
         UUID advertisementId,
         String advertisementTitle,
         String advertisementModel,
         String advertisementBrand,
-
         String userName,
         String userRegisterCode,
         String userResetPasswordCode,
