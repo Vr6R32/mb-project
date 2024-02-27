@@ -25,8 +25,8 @@
 
     <properties>
 
-        <repo.username>YOUR_USERNAME_HERE</repo.username>
-        <repo.password>YOUR_PASSWORD_HERE</repo.password>
+        <repo.username>kowalkowski.michal24@gmail.com</repo.username>
+        <repo.password>odi123123</repo.password>
         <repo.prefix>michaelkey</repo.prefix>
 
         <maven.compiler.source>17</maven.compiler.source>
@@ -75,6 +75,16 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>1.4.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.26.0</version>
         </dependency>
 
 
