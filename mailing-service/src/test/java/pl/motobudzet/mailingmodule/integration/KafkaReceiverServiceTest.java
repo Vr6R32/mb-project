@@ -1,3 +1,5 @@
+package pl.motobudzet.mailingmodule.integration;
+
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
@@ -54,7 +56,7 @@ class KafkaReceiverServiceTest {
 
         kafkaContainer.start();
 
-        AdminClient adminClient = AdminClient.create(Map.of("bootstrap.servers", kafkaContainer.getBootstrapServers()));
+        AdminClient adminClient = AdminClient.create(Map.of("bootstrap.servers", "localhost:" + kafkaContainer.getMappedPort(9093)));
 
         NewTopic mailingTopic = TopicBuilder.name(MAILING_TOPIC)
                 .replicas(1)
@@ -89,7 +91,7 @@ class KafkaReceiverServiceTest {
 
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:" + kafkaContainer.getMappedPort(9093));
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);

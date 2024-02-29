@@ -25,8 +25,8 @@
 
     <properties>
 
-        <repo.username>kowalkowski.michal24@gmail.com</repo.username>
-        <repo.password>odi123123</repo.password>
+        <repo.username>xxxx</repo.username>
+        <repo.password>xxxx</repo.password>
         <repo.prefix>michaelkey</repo.prefix>
 
         <maven.compiler.source>17</maven.compiler.source>
