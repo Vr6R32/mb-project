@@ -442,6 +442,21 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <br>
 
+
+<p align="center">
+  <img src="readme-files/trace-span-1.png" />
+</p>
+
+<br>
+
+<p align="center">
+  <img src="readme-files/trace-span-2.png" />
+</p>
+
+
+
+<br>
+
 <p align="center">
   <img src="readme-files/email-1.png" />
 </p>
