@@ -197,7 +197,9 @@ Here are the steps to follow:
 
 <br>
 
-![](readme-files/navbar.png)
+<p align="center">
+  <img src="readme-files/navbar.png" />
+</p>
 
 <h1 align="center">Zoom in-out & dark-light mode section</h1>
 
@@ -210,9 +212,9 @@ Here are the steps to follow:
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/user-panel.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/user-panel.png" />
+</p>
 
 
 <h1 align="center">Management Button</h1>
@@ -226,9 +228,9 @@ Here are the steps to follow:
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/admin-panel.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/admin-panel.png" />
+</p>
 
 <br>
 <br>
@@ -237,9 +239,10 @@ When admin management user enters into advertisement that status needs to be res
 </p>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advert-verification.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advert-verification.png" />
+</p>
+
 
 <br>
 <hr>
@@ -260,27 +263,27 @@ When admin management user enters into advertisement that status needs to be res
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/search-form-1.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/search-form-1.png" />
+</p>
 
 <br>
 <br>
 <br>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/search-form-2.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/search-form-2.png" />
+</p>
 
 
 <p align="center">
 On the bottom of homepage we can find last uploaded advertisements which are being filtered by descending order.
 </p>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/last-uploaded.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/last-uploaded.png" />
+</p>
 
 <br>
 <hr>
@@ -297,14 +300,15 @@ On the bottom of homepage we can find last uploaded advertisements which are bei
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advertisement-layout-1.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advertisement-layout-1.png" />
+</p>
 
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advertisement-layout-2.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advertisement-layout-2.png" />
+</p>
+
 
 
  
@@ -324,9 +328,10 @@ On the bottom of homepage we can find last uploaded advertisements which are bei
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advertisement-form.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advertisement-form.png" />
+</p>
+
 
 
 
@@ -338,9 +343,9 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advertisement-form-editor.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advertisement-form-editor.png" />
+</p>
 
 <br>
 <hr>
@@ -358,9 +363,10 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/messages.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/messages.png" />
+</p>
+
 <br>
 
 <p align="center">
@@ -369,18 +375,19 @@ We can easily enter picked chat with a left click and display set of messages th
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/messages-open.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/messages-open.png" />
+</p>
+
 
 <br>
 <br>
 <br>
 
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/messages-open-2.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/messages-open-2.png" />
+</p>
 
 <br>
 <hr>
@@ -394,17 +401,18 @@ User can manage his own advertisements or favourites in specified tab which can 
 </p>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/advertisements.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/advertisements.png" />
+</p>
+
 
 <br>
 <br>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/favourites.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/favourites.png" />
+</p>
 
 
 <hr>
@@ -434,30 +442,30 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/email-1.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/email-1.png" />
+</p>
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/email-2.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/email-2.png" />
+</p>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/email-3.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/email-3.png" />
+</p>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/email-4.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/email-4.png" />
+</p>
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/email-5.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/email-5.png" />
+</p>
 
 <br>
 
@@ -474,19 +482,19 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <br>
 
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/fb-metatag-1.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/fb-metatag-1.png" />
+</p>
 <br>
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/fb-metatag-2.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/fb-metatag-2.png" />
+</p>
 <br>
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/fb-metatag-3.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/fb-metatag-3.png" />
+</p>
 <br>
-<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
-    <img src="readme-files/fb-metatag-4.png" alt="User Panel Screenshot">
-</div>
+<p align="center">
+  <img src="readme-files/fb-metatag-4.png" />
+</p>
 
