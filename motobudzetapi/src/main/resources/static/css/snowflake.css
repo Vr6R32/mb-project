@@ -21,5 +21,4 @@
     animation-name: fall;
     animation-timing-function: linear;
     animation: fall 8s linear infinite, sway 3s ease-in-out infinite alternate;
-
 }

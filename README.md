@@ -197,9 +197,7 @@ Here are the steps to follow:
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/423147411_698521395799102_238197426782614510_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=YfwN3QWE9O0AX84Ylo3&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQYO_DevqbMdF0f9ItjW3FCLdoh7ATiyjqk2jo7JJ64Rg&oe=65E81748">
-</p>
+![](readme-files/navbar.png)
 
 <h1 align="center">Zoom in-out & dark-light mode section</h1>
 
@@ -211,9 +209,10 @@ Here are the steps to follow:
 </p>
 
 <br>
-<p align="center">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422466624_1575198149972618_3612689015995557063_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=xQ5NemmzGesAX8Gmg2k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdR2hCGVKtKohMlNdGwlwa752tX5kFqteBIOneC5QSloYA&oe=65E8030E">
-</p>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/user-panel.png" alt="User Panel Screenshot">
+</div>
 
 
 <h1 align="center">Management Button</h1>
@@ -226,16 +225,21 @@ Here are the steps to follow:
 </p>
 
 <br>
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421569127_2698926376932505_7001156687979102144_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=MhJ7li3WJV4AX9B_Zqb&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQxd6AlUmbkI1KbNM8ZYKJOwQD0d2-TPxrKAV4JoujExQ&oe=65E82ADD">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422610907_1332604710712368_7509768594715880137_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=21G_VPOd7poAX9wNWQd&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRm5KlGIr72D-CkUSAQ-g1ta_HG5hzvuLdEv8ZcePkDSA&oe=65E81BFA">
- 
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/admin-panel.png" alt="User Panel Screenshot">
+</div>
+
+<br>
+<br>
 <p align="center">
 When admin management user enters into advertisement that status needs to be resolved , an verification panel occurs.<br>
 </p>
+<br>
 
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421531962_351118654382827_1098160725967692080_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=jTuZ6-_KiskAX8bLPk-&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRsNgYTgi80KGBMtd_Ww6YaK7yDX91rp2iz1mScKnyJzA&oe=65E808AC">
-
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advert-verification.png" alt="User Panel Screenshot">
+</div>
 
 <br>
 <hr>
@@ -256,16 +260,27 @@ When admin management user enters into advertisement that status needs to be res
 
 <br>
 
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422917132_374871275150249_4980121352853950744_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=EM5y7FWP1c0AX-Ttbwn&_nc_oc=AQkm2mXq6iyAqYBPQ9XcOYpCKw3_D8Pf6B2QaCcttVvGVaDHa-oD6-4zSIc6U7DxMBU&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQ_fQWPcwxGh7wdB80OQ7l8ISih2vE1eDELCybrgdl-Qw&oe=65E81759">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421433460_230513610128028_258298521341429348_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=rvCTnzpw3q4AX9cVl8g&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTbFUusZgSv7vtCpA5lMBX6mqp8NdVMebTeOw35XyrlPA&oe=65E80032">
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/search-form-1.png" alt="User Panel Screenshot">
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/search-form-2.png" alt="User Panel Screenshot">
+</div>
 
 
 <p align="center">
 On the bottom of homepage we can find last uploaded advertisements which are being filtered by descending order.
 </p>
 
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426133342_405427435236223_5536719586035504641_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=cDwOMbBFRncAX-hPGYj&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTeIcPmuTf2GTS_dc-O0Wv5xphGWg0unejlcBxvC5uowA&oe=65EAA546">
-
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/last-uploaded.png" alt="User Panel Screenshot">
+</div>
 
 <br>
 <hr>
@@ -282,9 +297,15 @@ On the bottom of homepage we can find last uploaded advertisements which are bei
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/422903158_879793593945063_6814196973439269125_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=vqVN65GhEzcAX8Ma3BW&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdTamUnCDKX23ZdtReGyChfofuU11T8hIZ6vbmAE5wv27g&oe=65E7F6BF"><img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/422452287_413045284447150_5068046255466262118_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=RC84mcNrQTsAX9KwsbZ&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQI8XbYKbvjPCf0vrIUQPxrd8hobc90vaEJOTDb92oC0Q&oe=65E7F3AA">
- </p>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advertisement-layout-1.png" alt="User Panel Screenshot">
+</div>
+
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advertisement-layout-2.png" alt="User Panel Screenshot">
+</div>
+
 
  
 <br>
@@ -303,9 +324,10 @@ On the bottom of homepage we can find last uploaded advertisements which are bei
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/423105650_1780116722450997_7640040345684711473_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=rDwV9q9ANngAX9bZc8k&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQuw4PW7OtalMIfwosBZx8q9S7SldJX0MUkxRF_45HFUg&oe=65E7D5B1">
-</p>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advertisement-form.png" alt="User Panel Screenshot">
+</div>
+
 
 
 <br>
@@ -316,9 +338,9 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421695291_1485639528683820_374135017219074944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=0sgOdAkkf7sAX_cHMud&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdSk_A0kvdBeQoqfC6fArKqzMTOpVrGUdbBkViO3Dny2-g&oe=65E7FF9F">
-</p>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advertisement-form-editor.png" alt="User Panel Screenshot">
+</div>
 
 <br>
 <hr>
@@ -336,10 +358,9 @@ Create & edit form comes with a nice text formatting editor for creating a descr
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/423062794_422504793542248_1369098636429791305_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5aqLPsiwE5IAX_-BGfT&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQ9C-6lai2QZ4xAS_ROVpepB_m3vMAxa008Z4aFpTxjCw&oe=65E8045D">
-</p>
-
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/messages.png" alt="User Panel Screenshot">
+</div>
 <br>
 
 <p align="center">
@@ -348,9 +369,18 @@ We can easily enter picked chat with a left click and display set of messages th
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421681127_7169175966496745_2842020596038635088_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=lWag90VUhVkAX-eb8vX&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdTG73Vi2X3TktDvud8zqURl9FJhqg5Io8_XODwPoRFSvQ&oe=65E81E1C">
-</p>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/messages-open.png" alt="User Panel Screenshot">
+</div>
+
+<br>
+<br>
+<br>
+
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/messages-open-2.png" alt="User Panel Screenshot">
+</div>
 
 <br>
 <hr>
@@ -364,11 +394,19 @@ User can manage his own advertisements or favourites in specified tab which can 
 </p>
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/421837276_926134135664151_1174917246925344725_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=7ysFHpkQS40AX-UhUwd&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQzYFuWKzNAql6ApkMQkh3SxVbXpRB5CbmY1ftozrS9wQ&oe=65E7EF6F">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/421493289_210657532069479_4197790199393250240_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=d8wfO9tdzjAAX93a45M&_nc_oc=AQmJmikj5i96HxrE6-4gGyPTN4Tk12J9drVr7bhRympfDjWButdw86iSmQlEqk2Yk7s&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRnIEJd54lneoWIqbGdHc9qqf-fTREUk9hLJliuZKd6ag&oe=65E814CC">
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/advertisements.png" alt="User Panel Screenshot">
+</div>
 
-</p>
+<br>
+<br>
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/favourites.png" alt="User Panel Screenshot">
+</div>
+
+
 <hr>
 
 <h1 align="center">Asynchronous mailing service</h1>
@@ -393,16 +431,33 @@ User can manage his own advertisements or favourites in specified tab which can 
 
 <br>
 
-<p align="center">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/426807304_322062893636099_1287820160081465929_n.png?stp=dst-png_s2048x2048&_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5WoELij58bsAX85T95_&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdTuJBAoYdG796POSgezBnBq5p_gGAEAPtTnPtVb4st-wA&oe=65F2BC7E">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/426715838_919687946151721_9131697903424628067_n.png?stp=dst-png_s2048x2048&_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=XNByxPi4dbsAX_Vy-VS&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQ_TXITvzR7Y_Sb0Azw08wCC_VVEUsyW4BUNpjg97ynNg&oe=65F2BEFD">
+
 <br>
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/423036509_1833572503782083_5473750886199136916_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=A6pMBLeeTLIAX-ebhsd&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdSs2A73k7vu3k50frQtqJ1Wn8JOGOG3JJ7f6Fl_2RkPVQ&oe=65E7F8CB">
-<img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/422783272_398823966119665_7372210058124691296_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=lYLXPXwMYeYAX-xLyLe&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdQ7XNVSG1iiOc4tyUPqkr5UIXc9UVeLujDOxzy-32sBwA&oe=65E81CB0">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422708941_399342009261369_3259540669228235302_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=77WZvHn0jbEAX-lLcP-&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdT-ucyuBhRrGPq8nYMtTtZBVLvMaQ1tr2eEdgbgn_f0tg&oe=65E8242F">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422756691_772547801112505_8098600164563021112_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=1gJLRwTfRF0AX9-RkqH&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdQuj_6_02Q7L8Ni5hmPCnM5_6M6AMwWz2GnFO_0-Cf-3Q&oe=65E80453">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/422882021_413539157870731_7506296841668719040_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=jbhOWzfaYswAX_OzdaZ&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdSF3AEhgyqT1xm989ro3S0vbI45HmDhQKkbWWrG91oCdQ&oe=65E7FA4C">
-</p>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/email-1.png" alt="User Panel Screenshot">
+</div>
+
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/email-2.png" alt="User Panel Screenshot">
+</div>
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/email-3.png" alt="User Panel Screenshot">
+</div>
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/email-4.png" alt="User Panel Screenshot">
+</div>
+<br>
+
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/email-5.png" alt="User Panel Screenshot">
+</div>
 
 <br>
 
@@ -417,12 +472,21 @@ User can manage his own advertisements or favourites in specified tab which can 
 2. Meta tags contain pictures and some description of site or specified advertisement<br>
 </p>
 
-<p align="center">
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426720604_1103082880897929_258655246820775960_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=3bRk8GYMSMUAX_rtGIm&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdTpCBYqRcReoePUjKiwY5eisMmUmS7_OhadR3-SlAgH_Q&oe=65FE7378">
 <br>
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/426833066_2080429175673127_6361307846383199271_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=5t5mHGqKgG8AX8mCLLR&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRlZN7sMnidVT1aBfSMTAw3TLG-9DFttfktt0frJ9jyNg&oe=65FE8C4F">
-<br>
-<img src="https://scontent.fwaw3-1.fna.fbcdn.net/v/t1.15752-9/429101611_1796181394214758_3614352600299081160_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=wKdwYmb8SKsAX8nHLTT&_nc_ht=scontent.fwaw3-1.fna&oh=03_AdRDyHr6iqryIR3Pvia4GwIqgaVnnub3EZAbcpd_zD-7Aw&oe=65FE78CA"><img src="https://scontent.fwaw3-2.fna.fbcdn.net/v/t1.15752-9/429022842_412576094640428_3184806122587294638_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=QT0G9ntymWIAX-J18RC&_nc_ht=scontent.fwaw3-2.fna&oh=03_AdR3sSJ9AkyvyXQyU21ku6W_4GVxUxPziOUnW2ojKHl6xQ&oe=65FE6EF7">
 
-</p>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/fb-metatag-1.png" alt="User Panel Screenshot">
+</div>
+<br>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/fb-metatag-2.png" alt="User Panel Screenshot">
+</div>
+<br>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/fb-metatag-3.png" alt="User Panel Screenshot">
+</div>
+<br>
+<div class="image-container" style="display: flex;justify-content: center;align-items: center;">
+    <img src="readme-files/fb-metatag-4.png" alt="User Panel Screenshot">
+</div>
 

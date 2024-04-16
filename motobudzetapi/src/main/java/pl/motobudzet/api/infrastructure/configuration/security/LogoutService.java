@@ -20,7 +20,6 @@ public class LogoutService implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-
         RequestCookies requestCookies = RequestCookies.extractCookiesFromRequest(request.getCookies());
         tokenRepository.setTokensExpiredAndRevoked(requestCookies.accessToken(), requestCookies.refreshToken());
         HttpHeaders httpHeaders = jwtService.buildHttpTokenHeaders("", "", 0, 0);
